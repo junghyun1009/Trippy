@@ -28,7 +28,7 @@
               <div class="block">
                 <span class="demonstration">여행 기간</span>
                 <el-date-picker
-                  v-model="datePick"
+                  v-model="newOption.datePick"
                   type="daterange"
                   range-separator="To"
                   start-placeholder="Start date"
@@ -40,7 +40,7 @@
             <!-- 옵션: 일행 타입 -->
             <div class="party-type">
               <span class="demonstration">일행 타입</span>
-              <el-radio-group v-model="partyType">
+              <el-radio-group v-model="newOption.partyType">
                 <el-radio label="가족">가족</el-radio>
                 <el-radio label="커플">커플</el-radio>
                 <el-radio label="친구">친구</el-radio>
@@ -51,13 +51,13 @@
             <!-- 옵션: 인원 수 -->
             <div class="member-num">
               <span class="demonstration">인원 수</span>
-              <el-input-number v-model="num" :min="1" :max="10"/>
+              <el-input-number v-model="newOption.memberNum" :min="1" :max="10"/>
             </div>
 
           <!-- 옵션: 이동수단 -->
             <div class="transport-type">
               <span class="demonstration">이동 수단</span>
-              <el-checkbox-group v-model="transportationList">
+              <el-checkbox-group v-model="newOption.transportationList">
                 <el-checkbox label="뚜벅이" />
                 <el-checkbox label="대중교통" />
                 <el-checkbox label="따릉이" />
@@ -74,34 +74,72 @@
         </el-collapse-item>
       </el-collapse>
     </div>
+    <div class="story-form">
+      <p class="demonstration">스토리</p>
+      <story-form :storyForm="storyForm"></story-form>
+      <el-button @click="add()">add story</el-button>
+      <hr>
+    </div>
+    
+    <div v-for="(input, k) in inputs" :key="k">
+      <story-form :storyForm="storyForm"></story-form>
+      <el-button @click="remove(k)" v-show="k || ( !k && inputs.length > 1)">delete</el-button>
+      <el-button @click="add()" v-show="k == inputs.length-1">add story</el-button>
+      <hr>
+    </div>
   </div>
 </template>
 
 <script>
+import StoryForm from "./StoryForm.vue"
 
 export default {
   name: 'DiaryForm',
+  components: {
+    StoryForm
+  },
+  props: {
+    diary: Object,
+    action: String
+  },
   data() {
     return {
-      datePick: '',
-      partyType: '가족',
-      num: 1,
-      transportationList: [],
+      newOption: {
+        datePick: this.diary.option.datePick,
+        partyType: this.diary.option.partyType,
+        memberNum: this.diary.option.memberNum,
+        transportationList: this.diary.option.transportationList,
+      },
+      storyForm: {
+        place: '',
+        photo: [],
+        content: '',
+        rate: 0
+      },
+      inputs: []
     }
   },
   computed: {
     partyTag() {
-      const party = this.partyType
+      const party = this.newOption.partyType
       return party
     },
     transportationTag() {
-      const transportation = this.transportationList
+      const transportation = this.newOption.transportationList
       return transportation
     }
   },
   methods: {
     handleClose(tag) {
       this.transportationList.splice(this.transportationList.indexOf(tag), 1)
+    },
+    remove(index) {
+      console.log(this.inputs)
+      console.log(index)
+      this.inputs.splice(index, 1)
+    },
+    add() {
+      this.inputs.push(this.storyForm)
     }
   }
 }
@@ -163,5 +201,11 @@ export default {
   color: var(--el-text-color-secondary);
   font-size: 14px;
   margin: 5px 20px 0 0;
+}
+.story-form .demonstration {
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
+  margin: 10px 20px 0 0;
+  text-align: left;
 }
 </style>
