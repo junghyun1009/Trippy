@@ -2,13 +2,11 @@
   <div>
     <div>
       <el-tag
-        v-for="tag in tags"
-        :key="tag.name"
         class="mx-1"
         closable
-        :type="tag.type"
+        type=''
       >
-        {{ tag.name }}
+        {{ optionTag }}
       </el-tag>
     </div>
     <!-- 옵션:여행 기간 -->
@@ -30,24 +28,29 @@
     <div class="party-type">
       <span class="demonstration">일행 타입</span>
       <el-radio-group v-model="radio">
-        <el-radio :label="3">가족</el-radio>
-        <el-radio :label="6">커플</el-radio>
-        <el-radio :label="9">친구</el-radio>
-        <el-radio :label="12">개인</el-radio>
+        <el-radio label="가족">가족</el-radio>
+        <el-radio label="커플">커플</el-radio>
+        <el-radio label="친구">친구</el-radio>
+        <el-radio label="개인">개인</el-radio>
       </el-radio-group>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
 
 export default {
   name: 'DiaryForm',
   data() {
     return {
-      value1: ref(''),
-      radio: ref(3)
+      value1: '',
+      radio: '가족',
+    }
+  },
+  computed: {
+    optionTag() {
+      const party = this.radio
+      return party
     }
   }
 }
