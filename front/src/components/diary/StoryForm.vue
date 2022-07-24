@@ -12,10 +12,14 @@
       <span>별점</span>
       <el-rate v-model="newStory.rate" allow-half />
     </div>
+    <div>
+      <el-button @click="saveStory">임시저장</el-button>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'StoryForm',
   props: {
@@ -29,6 +33,13 @@ export default {
         content: this.storyForm.content,
         rate: this.storyForm.rate
       }
+    }
+  },
+  methods: {
+    ...mapActions(['createStory']),
+    saveStory() {
+      this.createStory(this.newStory)
+      console.log(this.$store.state.story)
     }
   }
 }
