@@ -13,13 +13,13 @@
       <el-rate v-model="newStory.rate" allow-half />
     </div>
     <div>
-      <el-button @click="saveStory">임시저장</el-button>
+      <!-- <el-button @click="saveStory">임시저장</el-button> -->
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+// import { mapActions } from 'vuex'
 export default {
   name: 'StoryForm',
   props: {
@@ -36,11 +36,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['createStory']),
-    saveStory() {
-      this.createStory(this.newStory)
-      console.log(this.$store.state.story)
-    }
+    // ...mapActions(['createStory']),
+    // saveStory() {
+    //   this.createStory(this.newStory)
+    //   console.log(this.$store.state.story)
+    // }
   }
 }
 </script>
