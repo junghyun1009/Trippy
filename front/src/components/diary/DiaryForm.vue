@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     handleClose(tag) {
-      this.transportationList.splice(this.transportationList.indexOf(tag), 1)
+      this.newOption.transportationList.splice(this.newOption.transportationList.indexOf(tag), 1)
     },
     remove(index) {
       console.log(this.inputs)
