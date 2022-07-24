@@ -25,7 +25,7 @@ export default {
     return {
       newStory: {
         place: this.storyForm.place,
-        photo: this.storyForm.photp,
+        photo: this.storyForm.photo,
         content: this.storyForm.content,
         rate: this.storyForm.rate
       }
