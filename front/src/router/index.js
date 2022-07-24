@@ -21,7 +21,13 @@ const routes = [
     path: '/diary/create',
     name: 'diaryCreate',
     component: DiaryCreateView
-  }
+  },
+  {
+    path: '/diary/create',
+    name: 'diaryCreate',
+    component: DiaryCreateView
+  },
+
 ]
 
 const router = createRouter({
