@@ -76,16 +76,7 @@
     </div>
     <div class="story-form">
       <p class="demonstration">스토리</p>
-      <story-form :storyForm="storyForm"></story-form>
-      <el-button @click="add()">add story</el-button>
-      <hr>
-    </div>
-    
-    <div v-for="(input, k) in inputs" :key="k">
-      <story-form :storyForm="storyForm"></story-form>
-      <el-button @click="remove(k+1)" v-show="inputs.length >= 1">delete</el-button>
-      <el-button @click="add()" v-show="inputs.length >= 1">add story</el-button>
-      <hr>
+      <story-form></story-form>
     </div>
   </div>
 </template>
@@ -116,7 +107,6 @@ export default {
         content: '',
         rate: 0
       },
-      inputs: []
     }
   },
   computed: {
@@ -133,15 +123,6 @@ export default {
     handleClose(tag) {
       this.newOption.transportationList.splice(this.newOption.transportationList.indexOf(tag), 1)
     },
-    remove(index) {
-      console.log(this.inputs)
-      console.log(index)
-      this.inputs.splice(this.inputs.indexOf(index), 1)
-    },
-    add() {
-      this.inputs.push(this.storyForm)
-      console.log(this.inputs.length)
-    }
   }
 }
 </script>
