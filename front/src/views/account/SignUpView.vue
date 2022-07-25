@@ -12,6 +12,8 @@
       <p>비밀번호</p>
       <el-input v-model="userinfo.password" type="password" placeholder="비밀번호" show-password></el-input>
       <el-input v-model="userinfo.passwordCheck" type="password" placeholder="비밀번호 확인" show-password></el-input>
+
+      <!-- 비밀번호와 비밀번호 확인되지 않으면 자동으로 매치되는지 확인하는 기능 -->
       <account-error-list></account-error-list>
     </div>
 
@@ -48,14 +50,13 @@
     </div>
 
     <br>
-    <el-button type="primary">회원가입</el-button>
+    <el-button type="primary" @click="toSignUpOption()">회원가입</el-button>
 
   </div>
 </template>
 
 <script>
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
-
 
 export default {
   components: { 
@@ -84,7 +85,12 @@ export default {
             ], 
         }
     },
+    methods: {
+      toSignUpOption() {
+        this.$router.push('/signup/option')
+      }
     }
+  }
 
 </script>
 
