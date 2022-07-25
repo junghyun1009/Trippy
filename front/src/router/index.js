@@ -3,7 +3,8 @@ import HomeView from '../views/HomeView.vue'
 
 import DiaryCreateView from '../views/diary/DiaryCreateView.vue'
 import LoginView from '@/views/account/LoginView.vue'
-import SignUpView from '@/views/account/LoginView.vue'
+import SignUpView from '@/views/account/SignUpView.vue'
+import SignUpOptionView from '@/views/account/SignUpOptionView.vue'
 import PasswordFindView from '@/views/account/PasswordFindView.vue'
 
 
@@ -35,6 +36,11 @@ const routes = [
     path: '/signup',
     name: 'signUp',
     component: SignUpView
+  },
+  {
+    path: '/signup/option',
+    name: 'signUpOption',
+    component: SignUpOptionView
   },
   {
     path: '/passwordfind',
