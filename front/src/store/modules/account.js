@@ -1,4 +1,4 @@
-export default ({
+export default {
   state: {
   },
   getters: {
@@ -9,4 +9,4 @@ export default ({
   },
   modules: {
   }
-})
+}
