@@ -17,6 +17,7 @@ export default {
     return {
       diary: {
         pk: null,
+        title: '',
         option: {
           datePick: '',
           partyType: '가족',

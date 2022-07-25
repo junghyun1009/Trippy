@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div>
+      <span>제목</span>
+      <el-input v-model="newTitle" class="w-50 m-2" placeholder="제목을 입력하세요." />
+    </div>
     <div class="demo-collapse">
       <el-collapse>
         <el-collapse-item title="장소" name="1">
@@ -95,17 +99,12 @@ export default {
   },
   data() {
     return {
+      newTitle: this.diary.title,
       newOption: {
         datePick: this.diary.option.datePick,
         partyType: this.diary.option.partyType,
         memberNum: this.diary.option.memberNum,
         transportationList: this.diary.option.transportationList,
-      },
-      storyForm: {
-        place: '',
-        photo: [],
-        content: '',
-        rate: 0
       },
     }
   },
