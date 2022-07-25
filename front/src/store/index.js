@@ -1,13 +1,14 @@
-import { createStore } from 'vuex';
-
-import account from '@/store/modules/account.js'
-import company from '@/store/modules/company.js'
-import diary from '@/store/modules/diary.js'
+import { createStore } from 'vuex'
 
 export default createStore({
-  modules: {
-    account,
-    company,
-    diary,
+  state: {
   },
-});
+  getters: {
+  },
+  mutations: {
+  },
+  actions: {
+  },
+  modules: {
+  }
+})
