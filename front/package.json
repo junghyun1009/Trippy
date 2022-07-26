@@ -12,6 +12,7 @@
     "element-plus": "^2.2.10",
     "vue": "^3.2.37",
     "vue-router": "^4.0.3",
+    "vue3-google-map": "^0.13.2",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
