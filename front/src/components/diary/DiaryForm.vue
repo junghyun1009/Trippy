@@ -74,7 +74,7 @@
           </el-collapse-item>
           <el-collapse-item title="루트" name="3">
             <div>
-              루트
+              <route-form></route-form>
             </div>
           </el-collapse-item>
         </el-collapse>
@@ -92,11 +92,13 @@
 
 <script>
 import { mapActions } from 'vuex'
+import RouteForm from "./RouteForm.vue"
 import StoryForm from "./StoryForm.vue"
 
 export default {
   name: 'DiaryForm',
   components: {
+    RouteForm,
     StoryForm
   },
   props: {
