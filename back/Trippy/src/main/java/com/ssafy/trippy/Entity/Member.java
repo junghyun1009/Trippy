@@ -10,7 +10,9 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -45,10 +47,9 @@ public class Member {
     @NotBlank(message="성별은 필수값입니다.")
     private String gender;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, length=15)
     @NotBlank(message="생일은 필수값입니다.")
-    private Timestamp birth;
+    private String birth;
 
     //    @JsonIgnore
     private String img_path;
@@ -56,15 +57,9 @@ public class Member {
     //    @JsonIgnore
     private String desc;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false, length=15)
-    @NotBlank(message="생성일자는 필수값입니다.")
-    private Timestamp createAt;
+    private LocalDateTime createAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false, length=15)
-    @NotBlank(message="수정날짜는 필수값입니다.")
-    private Timestamp updateAt;
+    private LocalDateTime updateAt;
 
 
 

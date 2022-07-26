@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,23 +26,19 @@ public class MemberBadge {
     @NotBlank(message="멤버 뱃지 설명은 필수입니다.")
     private String desc;
 
-    @Column(nullable = false)
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name = "MENBER_ID")
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @Column(nullable = false)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="BADGE_ID")
     private Badge badge;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @NotBlank(message="생성일은 필수입니다.")
-    private Timestamp createdAt;
+    @Column(nullable = false, length=15)
+    @NotBlank(message="생성일자는 필수값입니다.")
+    private LocalDateTime createAt;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @NotBlank(message="수정일은 필수입니다.")
-    private Timestamp updatedAt;
+    @Column(nullable = false, length=15)
+    @NotBlank(message="수정날짜는 필수값입니다.")
+    private LocalDateTime updateAt;
 }
