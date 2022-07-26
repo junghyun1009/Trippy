@@ -11,7 +11,7 @@
         <div v-if="!newStory.photoList.length">
           <div>이미지</div>
             <div>
-              <label for="file">일반 사진 등록</label>
+              <label for="file">사진 등록</label>
               <input type="file" id="file" ref="files" @change="uploadPhoto(k)" multiple />
             </div>
         </div>
@@ -54,7 +54,6 @@ export default {
         {
           place: '',
           photoList: [],
-          photoPreview: [],
           content: '',
           rate: null
         }
@@ -71,7 +70,6 @@ export default {
       const newOne = {
         place: addedOne.place,
         photoList: addedOne.photoList,
-        photoPreview: addedOne.photoPreview,
         content: addedOne.content,
         rate: addedOne.rate
       }
@@ -79,20 +77,19 @@ export default {
       this.newStories.push({
         place: '',
         photoList: [],
-        photoPreview: [],
         content: '',
         rate: null
       })
     },
     removeStory(index) {
-      console.log(index)
+      // console.log(index)
       this.deleteStory(index)
       this.newStories.splice(index, 1)
     },
     uploadPhoto(index) {
       let addedPhotoList = this.newStories[index].photoList
-      console.log(this.$refs.files)
-      console.log(this.$refs.files[index].files)
+      // console.log(this.$refs.files)
+      // console.log(this.$refs.files[index].files)
       for (let i = 0; i < this.$refs.files[index].files.length; i++) {
         addedPhotoList = [
           ...addedPhotoList,
@@ -109,8 +106,8 @@ export default {
     },
     addPhoto(index) {
       let addedPhotoList = this.newStories[index].photoList
-      console.log(this.$refs.files)
-      console.log(this.$refs.files[index].files)
+      // console.log(this.$refs.files)
+      // console.log(this.$refs.files[index].files)
       for (let i = 0; i < this.$refs.files[index].files.length; i++) {
         addedPhotoList = [
           ...addedPhotoList,
