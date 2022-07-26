@@ -1,17 +1,23 @@
 package com.ssafy.trippy.Entity;
 
 import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Badge {
+public class Badge extends BaseEntity{
     @Id
     @GeneratedValue
     @Column(name="BADGE_ID")
@@ -25,11 +31,7 @@ public class Badge {
     @NotBlank(message = "뱃지 설명은 필수입니다.")
     private String desc;
 
-    @NotBlank(message="생성일은 필수입니다.")
-    private LocalDateTime createdAt;
 
-    @NotBlank(message="수정일은 필수입니다.")
-    private LocalDateTime updatedAt;
 
 
 }

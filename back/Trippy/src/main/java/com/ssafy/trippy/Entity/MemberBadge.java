@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-public class MemberBadge {
+public class MemberBadge extends BaseEntity{
     @Id
     @GeneratedValue
     @Column(name="MEMBER_BADGE_ID")
@@ -27,18 +27,12 @@ public class MemberBadge {
     private String desc;
 
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "MENBER_ID")
     private Member member;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="BADGE_ID")
     private Badge badge;
 
-    @Column(nullable = false, length=15)
-    @NotBlank(message="생성일자는 필수값입니다.")
-    private LocalDateTime createAt;
 
-    @Column(nullable = false, length=15)
-    @NotBlank(message="수정날짜는 필수값입니다.")
-    private LocalDateTime updateAt;
 }
