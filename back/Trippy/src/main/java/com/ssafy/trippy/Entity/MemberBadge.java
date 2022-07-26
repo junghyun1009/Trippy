@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-public class MemberBadge {
+public class MemberBadge extends BaseEntity{
     @Id
     @GeneratedValue
     @Column(name="MEMBER_BADGE_ID")
@@ -25,23 +26,13 @@ public class MemberBadge {
     @NotBlank(message="멤버 뱃지 설명은 필수입니다.")
     private String desc;
 
-    @Column(nullable = false)
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "MENBER_ID")
     private Member member;
 
-    @Column(nullable = false)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="BADGE_ID")
     private Badge badge;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @NotBlank(message="생성일은 필수입니다.")
-    private Timestamp createdAt;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @NotBlank(message="수정일은 필수입니다.")
-    private Timestamp updatedAt;
 }
