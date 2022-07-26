@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,13 +25,11 @@ public class Badge {
     @NotBlank(message = "뱃지 설명은 필수입니다.")
     private String desc;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @NotBlank(message="생성일은 필수입니다.")
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @NotBlank(message="수정일은 필수입니다.")
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
 
 
 }

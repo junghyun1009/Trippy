@@ -30,7 +30,7 @@ public class Member {
     private String name;
 
     //    @JsonIgnore
-    @Column(name="PW", nullable = false, length=15)
+    @Column(nullable = false, length=15)
     @NotBlank(message="비밀번호는 필수값입니다.")
     private String password;
 
