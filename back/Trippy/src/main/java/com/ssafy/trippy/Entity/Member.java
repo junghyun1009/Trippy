@@ -66,4 +66,6 @@ public class Member extends BaseEntity {
     private List<LikePost> likePosts = new ArrayList<>();
 
 
+
+
 }
