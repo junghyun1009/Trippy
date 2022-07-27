@@ -6,6 +6,7 @@ import LoginView from '@/views/account/LoginView.vue'
 import SignUpView from '@/views/account/SignUpView.vue'
 import SignUpOptionView from '@/views/account/SignUpOptionView.vue'
 import PasswordFindView from '@/views/account/PasswordFindView.vue'
+import PasswordChangeView from '@/views/account/PasswordChangeView.vue'
 
 
 const routes = [
@@ -46,6 +47,11 @@ const routes = [
     path: '/passwordfind',
     name: 'passwordFind',
     component: PasswordFindView
+  },
+  {
+    path: '/passwordchange',
+    name: 'passwordChange',
+    component: PasswordChangeView
   },
 
   
