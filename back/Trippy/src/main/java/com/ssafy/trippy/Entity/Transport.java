@@ -4,11 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -18,8 +16,11 @@ public class Transport extends BaseEntity{
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
-    @NotBlank(message="운송수단을 입력하세요")
+//    @Column(nullable = false)
+//    @NotBlank(message="운송수단을 입력하세요")
     private String name;
 
+    public Transport(String name) {
+        this.name = name;
+    }
 }
