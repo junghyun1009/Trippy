@@ -91,15 +91,24 @@ export default {
       // console.log(this.$refs.files)
       // console.log(this.$refs.files[index].files)
       for (let i = 0; i < this.$refs.files[index].files.length; i++) {
-        addedPhotoList = [
-          ...addedPhotoList,
-          {
-            file: this.$refs.files[index].files[i],
-            preview: URL.createObjectURL(this.$refs.files[index].files[i]),
-          }
-        ]
+        let photo = this.$refs.files[index].files[i]
+        console.log(photo)
+        if (photo.type.substr(0, 5) === "image") {
+          addedPhotoList = [
+            ...addedPhotoList,
+            {
+              file: this.$refs.files[index].files[i],
+              preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+            }
+          ]
+        } else {
+          alert("사진 파일만 추가 가능합니다")
+        }
       }
       this.newStories[index].photoList = addedPhotoList
+      let fileInput = document.getElementById("file")
+      fileInput.value = ''
+      console.log(this.newStories[index].photoList)
     },
     removePhoto(index, num) {
       this.newStories[index].photoList.splice(num, 1)
@@ -109,15 +118,22 @@ export default {
       // console.log(this.$refs.files)
       // console.log(this.$refs.files[index].files)
       for (let i = 0; i < this.$refs.files[index].files.length; i++) {
-        addedPhotoList = [
-          ...addedPhotoList,
-          {
-            file: this.$refs.files[index].files[i],
-            preview: URL.createObjectURL(this.$refs.files[index].files[i]),
-          }
-        ]
+        let photo = this.$refs.files[index].files[i]
+        if (photo.type.substr(0, 5) === "image") {
+          addedPhotoList = [
+            ...addedPhotoList,
+            {
+              file: this.$refs.files[index].files[i],
+              preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+            }
+          ]
+        } else {
+          alert("사진 파일만 추가 가능합니다")
+        }
       }
       this.newStories[index].photoList = addedPhotoList
+      let fileInput = document.getElementById("file")
+      fileInput.value = ''
     },
   }
 }

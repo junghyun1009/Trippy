@@ -1,25 +1,34 @@
 <template>
   <div>
+    <div class="route-div">
+      <input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0">
+      <el-button @click="addMarkers" :disabled="routeNames.length === 0">
+        <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#F16B51" icon-name="maplocation">
+          <map-location/>
+        </icon-base>
+      </el-button>
+      <el-button @click="initMap" :disabled="flag === 0">루트 추가하기</el-button>
+    </div>
+    <div id="map" style="height: 480px; position: relative; overflow: hidden;"></div>
     <div>
       <el-tag v-for="(route, idx) in routeNames" :key="idx" class="mx-1"
       closable :disable-route="false" type='' @close="removeRoute(idx)">
         {{ route }}
       </el-tag>
-      <br>
-      <el-button @click="addMarkers">지도 위에 루트 표시하기</el-button>
-      <el-button @click="initMap" :disabled="flag === 0">루트 추가하기</el-button>
-      <input id="pac-input" class="controls" type="text" placeholder="Search Box" v-show="flag === 0">
     </div>
-    <div id="map" style="height: 480px; position: relative; overflow: hidden;"></div>
   </div>
 </template>
 
 <script>
 /* eslint-disable no-undef */
-import { mapActions, mapGetters } from 'vuex' 
+import { mapActions, mapGetters } from 'vuex'
+import MapLocation from '@/components/icon/MapLocation.vue'
 
 export default {
   name: 'RouteForm',
+  components: {
+    MapLocation
+  },
   data() {
     return {
       flag: 0
@@ -102,14 +111,19 @@ export default {
 </script>
 
 <style>
+.route-div {
+  text-align: left;
+}
 #pac-input {
   background-color: #fff;
-  font-family: Roboto;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 300;
-  margin-left: 12px;
   padding: 0 11px 0 13px;
   text-overflow: ellipsis;
   width: 400px;
+  height: 30px;
+  box-shadow: none;
+  border: solid 1px var(--el-border-color);
+  border-radius: 5px;
 }
 </style>
