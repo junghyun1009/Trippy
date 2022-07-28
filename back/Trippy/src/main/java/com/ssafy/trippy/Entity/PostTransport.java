@@ -24,5 +24,8 @@ public class PostTransport extends BaseEntity{
     @JoinColumn(name="TRANSPORT_ID")
     private Transport transport;
 
-
+    public PostTransport(Post post, Transport transport) {
+        this.post = post;
+        this.transport = transport;
+    }
 }
