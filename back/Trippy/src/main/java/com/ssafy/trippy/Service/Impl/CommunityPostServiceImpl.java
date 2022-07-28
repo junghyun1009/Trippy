@@ -41,9 +41,8 @@ public class CommunityPostServiceImpl implements CommunityPostService {
     @Transactional
     @Override
     public void updateCommunityPost(Long id, UpdateCommunityPostDto updateCommunityPostDto) {
-        CommunityPost communityPost = communityPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id="+id));
-        Location location = new Location(updateCommunityPostDto.getCountryName(), updateCommunityPostDto.getCityName(),
-                updateCommunityPostDto.getLatitude(), updateCommunityPostDto.getLongitude());
+        CommunityPost communityPost = communityPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 동행찾기글이 없습니다. id="+id));
+        Long locationId = locationRepository.findIdByCityNameAndCountryName(updateCommunityPostDto.getCityName(), updateCommunityPostDto.getCountryName());
 
         communityPost.update(updateCommunityPostDto.getTitle(),
                 updateCommunityPostDto.getDescription(),
@@ -57,14 +56,14 @@ public class CommunityPostServiceImpl implements CommunityPostService {
                 updateCommunityPostDto.getEndAge(),
                 updateCommunityPostDto.getGender(),
                 updateCommunityPostDto.isLocal(),
-                location);
+                Location.builder().id(locationId).build());
     }
 
     @Override
     public List<ResponseCommunityPostDto> getAllCommunityPost() {
         List<CommunityPost> communityPosts = communityPostRepository.findAll();
         List<ResponseCommunityPostDto> communityPostDtos = communityPosts.stream()
-                .map(m -> new ResponseCommunityPostDto())
+                .map(m -> new ResponseCommunityPostDto(m))
                 .collect(Collectors.toList());
         return communityPostDtos;
     }

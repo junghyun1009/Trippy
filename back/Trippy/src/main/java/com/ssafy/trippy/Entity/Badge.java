@@ -1,6 +1,7 @@
 package com.ssafy.trippy.Entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,7 +27,10 @@ public class Badge extends BaseEntity{
 //    @NotBlank(message = "뱃지 설명은 필수입니다.")
     private String desc;
 
-    public Badge(String name) {
+    @Builder
+    public Badge(Long id, String name, String desc) {
+        this.id = id;
         this.name = name;
+        this.desc = desc;
     }
 }
