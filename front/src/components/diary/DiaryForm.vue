@@ -1,101 +1,114 @@
 <template>
   <div>
-    <div class="demo-collapse">
-      <el-collapse>
-        <el-collapse-item title="장소" name="1">
-          <div>
-            장소
-          </div>
-        </el-collapse-item>
-        <el-collapse-item name="2">
-          <template #title>
-            <span>옵션</span>
-            <!-- 태그 -->
+    <form action="submit">
+      <div>
+        <span>제목</span>
+        <el-input v-model="newDiary.newTitle" class="w-50 m-2" placeholder="제목을 입력하세요." />
+      </div>
+      <div class="demo-collapse">
+        <el-collapse>
+          <el-collapse-item title="장소" name="1">
             <div>
-              <el-tag class="mx-1" type=''>
-                {{ partyTag }}
-              </el-tag>
-              <el-tag v-for="trans in transportationTag" :key="trans" class="mx-1" 
-              closable :disable-transitions="false" type='' @close="handleClose(trans)">
-                {{ trans }}
-              </el-tag>
+              장소
             </div>
-          </template>
-          <div>
+          </el-collapse-item>
+          <el-collapse-item name="2">
+            <template #title>
+              <span>옵션</span>
+              <!-- 태그 -->
+              <div>
+                <el-tag class="mx-1" type=''>
+                  {{ partyTag }}
+                </el-tag>
+                <el-tag v-for="trans in transportationTag" :key="trans" class="mx-1" 
+                closable :disable-transitions="false" type='' @close="handleClose(trans)">
+                  {{ trans }}
+                </el-tag>
+              </div>
+            </template>
+            <div>
 
-            <!-- 옵션:여행 기간 -->
-            <div class="date-picker">
-              <div class="block">
-                <span class="demonstration">여행 기간</span>
-                <el-date-picker
-                  v-model="newOption.datePick"
-                  type="daterange"
-                  range-separator="To"
-                  start-placeholder="Start date"
-                  end-placeholder="End date"
-                />
+              <!-- 옵션:여행 기간 -->
+              <div class="date-picker">
+                <div class="block">
+                  <span class="demonstration">여행 기간</span>
+                  <el-date-picker
+                    v-model="newDiary.newOption.datePick"
+                    type="daterange"
+                    range-separator="To"
+                    start-placeholder="Start date"
+                    end-placeholder="End date"
+                  />
+                </div>
+              </div>
+
+              <!-- 옵션: 일행 타입 -->
+              <div class="party-type">
+                <span class="demonstration">일행 타입</span>
+                <el-radio-group v-model="newDiary.newOption.partyType">
+                  <el-radio label="가족">가족</el-radio>
+                  <el-radio label="커플">커플</el-radio>
+                  <el-radio label="친구">친구</el-radio>
+                  <el-radio label="개인">개인</el-radio>
+                </el-radio-group>
+              </div>
+
+              <!-- 옵션: 인원 수 -->
+              <div class="member-num">
+                <span class="demonstration">인원 수</span>
+                <el-input-number v-model="newDiary.newOption.memberNum" :min="1" :max="10"/>
+              </div>
+
+            <!-- 옵션: 이동수단 -->
+              <div class="transport-type">
+                <span class="demonstration">이동 수단</span>
+                <el-checkbox-group v-model="newDiary.newOption.transportationList">
+                  <el-checkbox label="뚜벅이" />
+                  <el-checkbox label="대중교통" />
+                  <el-checkbox label="따릉이" />
+                  <el-checkbox label="택시" />
+                  <el-checkbox label="자차" />
+                </el-checkbox-group>
               </div>
             </div>
-
-            <!-- 옵션: 일행 타입 -->
-            <div class="party-type">
-              <span class="demonstration">일행 타입</span>
-              <el-radio-group v-model="newOption.partyType">
-                <el-radio label="가족">가족</el-radio>
-                <el-radio label="커플">커플</el-radio>
-                <el-radio label="친구">친구</el-radio>
-                <el-radio label="개인">개인</el-radio>
-              </el-radio-group>
+          </el-collapse-item>
+          <el-collapse-item name="3">
+            <template #title>
+              <span>루트</span>
+              <!-- 태그 -->
+              <div>
+                <el-tag v-for="(route, idx) in routeNames" :key="idx" class="mx-1"
+                :disable-route="false" type=''>
+                  {{ route }}
+                </el-tag>
+              </div>
+            </template>
+            <div>
+              <route-form></route-form>
             </div>
-
-            <!-- 옵션: 인원 수 -->
-            <div class="member-num">
-              <span class="demonstration">인원 수</span>
-              <el-input-number v-model="newOption.memberNum" :min="1" :max="10"/>
-            </div>
-
-          <!-- 옵션: 이동수단 -->
-            <div class="transport-type">
-              <span class="demonstration">이동 수단</span>
-              <el-checkbox-group v-model="newOption.transportationList">
-                <el-checkbox label="뚜벅이" />
-                <el-checkbox label="대중교통" />
-                <el-checkbox label="따릉이" />
-                <el-checkbox label="택시" />
-                <el-checkbox label="자차" />
-              </el-checkbox-group>
-            </div>
-          </div>
-        </el-collapse-item>
-        <el-collapse-item title="루트" name="3">
-          <div>
-            루트
-          </div>
-        </el-collapse-item>
-      </el-collapse>
-    </div>
-    <div class="story-form">
-      <p class="demonstration">스토리</p>
-      <story-form :storyForm="storyForm"></story-form>
-      <el-button @click="add()">add story</el-button>
-      <hr>
-    </div>
-    
-    <div v-for="(input, k) in inputs" :key="k">
-      <story-form :storyForm="storyForm"></story-form>
-      <el-button @click="remove(k)" v-show="k || ( !k && inputs.length > 1)">delete</el-button>
-      <el-button @click="add()" v-show="k == inputs.length-1">add story</el-button>
-      <hr>
-    </div>
+          </el-collapse-item>
+        </el-collapse>
+      </div>
+      <div class="story-form">
+        <p class="demonstration">스토리</p>
+        <story-form></story-form>
+      </div>
+      <div>
+        <el-button @click="onSubmit">{{ action }}</el-button>
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import RouteForm from "./RouteForm.vue"
 import StoryForm from "./StoryForm.vue"
 
 export default {
   name: 'DiaryForm',
   components: {
+    RouteForm,
     StoryForm
   },
   props: {
@@ -104,42 +117,37 @@ export default {
   },
   data() {
     return {
-      newOption: {
-        datePick: this.diary.option.datePick,
-        partyType: this.diary.option.partyType,
-        memberNum: this.diary.option.memberNum,
-        transportationList: this.diary.option.transportationList,
-      },
-      storyForm: {
-        place: '',
-        photo: [],
-        content: '',
-        rate: 0
-      },
-      inputs: []
+      newDiary: {
+        newTitle: this.diary.title,
+        newOption: {
+          datePick: this.diary.option.datePick,
+          partyType: this.diary.option.partyType,
+          memberNum: this.diary.option.memberNum,
+          transportationList: this.diary.option.transportationList,
+        },
+      }
     }
   },
   computed: {
+    ...mapGetters(['routeNames']),
     partyTag() {
-      const party = this.newOption.partyType
+      const party = this.newDiary.newOption.partyType
       return party
     },
     transportationTag() {
-      const transportation = this.newOption.transportationList
+      const transportation = this.newDiary.newOption.transportationList
       return transportation
     }
   },
   methods: {
+    ...mapActions(['createDiary']),
     handleClose(tag) {
-      this.transportationList.splice(this.transportationList.indexOf(tag), 1)
+      this.newDiary.newOption.transportationList.splice(this.newDiary.newOption.transportationList.indexOf(tag), 1)
     },
-    remove(index) {
-      console.log(this.inputs)
-      console.log(index)
-      this.inputs.splice(index, 1)
-    },
-    add() {
-      this.inputs.push(this.storyForm)
+    onSubmit() {
+      if (this.action === 'create') {
+        this.createDiary(this.newDiary)
+      }
     }
   }
 }
