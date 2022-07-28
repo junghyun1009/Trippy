@@ -1,9 +1,9 @@
 <template>
   <div>
     <form action="submit">
-      <div>
+      <div class="title-box">
         <span>제목</span>
-        <el-input v-model="newDiary.newTitle" class="w-50 m-2" placeholder="제목을 입력하세요." />
+        <el-input v-model="newDiary.newTitle" class="input-box" placeholder="제목을 입력하세요." />
       </div>
       <div class="demo-collapse">
         <el-collapse>
@@ -17,10 +17,10 @@
               <span>옵션</span>
               <!-- 태그 -->
               <div>
-                <el-tag class="mx-1" type=''>
+                <el-tag class="option-tag" type=''>
                   {{ partyTag }}
                 </el-tag>
-                <el-tag v-for="trans in transportationTag" :key="trans" class="mx-1" 
+                <el-tag v-for="trans in transportationTag" :key="trans" class="option-tag" 
                 closable :disable-transitions="false" type='' @close="handleClose(trans)">
                   {{ trans }}
                 </el-tag>
@@ -109,7 +109,7 @@ export default {
   name: 'DiaryForm',
   components: {
     RouteForm,
-    StoryForm
+    StoryForm,
   },
   props: {
     diary: Object,
@@ -154,6 +154,19 @@ export default {
 </script>
 
 <style scoped>
+.title-box {
+  text-align: left;
+  color: var(--el-text);
+  font-size: 14px;
+}
+.input-box {
+  width: 500px;
+  margin-left: 15px;
+  margin-bottom: 10px;
+}
+.option-tag {
+  margin-left: 10px;
+}
 .date-picker {
   display: flex;
   width: 100%;

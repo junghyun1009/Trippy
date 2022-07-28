@@ -9,7 +9,7 @@ import SignUpOptionView from '@/views/account/SignUpOptionView.vue'
 import PasswordFindView from '@/views/account/PasswordFindView.vue'
 import PasswordChangeView from '@/views/account/PasswordChangeView.vue'
 
-import ProfileView from '@/views/profile/ProfileView'
+// import ProfileView from '@/views/profile/ProfileView'
 
 
 const routes = [
