@@ -1,0 +1,75 @@
+<template>
+  <div>
+    <div class="user-info">
+      <el-avatar :size="100" class="user-info"> user </el-avatar>
+      <div>
+        <h2>username</h2>
+        <div class="user-follow">
+          <div class="user-follow">
+            <p>팔로워</p>
+            <p>{{ followerList.length }}</p>
+          </div>
+          <div class="user-follow">
+            <p>팔로잉</p>
+            <p>{{ followingList.length }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <el-button v-if="isFollow===false" type="primary" @click="followNow()">팔로우</el-button>
+    <el-button v-else type="primary" plain @click="unfollowNow()">팔로잉</el-button>
+    <div class="user-info">
+      <p>소개글</p>
+    </div>
+    <el-tabs
+    v-model="activeName"
+    type="card"
+    class="demo-tabs"
+    @tab-click="handleClick"
+  >
+      <el-tab-pane label="My Diary">
+        <!-- 내가 쓴 일지 목록 -->
+      </el-tab-pane>
+      <el-tab-pane label="My Likes">
+        <!-- 내가 좋아요 누른 일지 목록 -->
+      </el-tab-pane>
+      <el-tab-pane label="My Companions">
+        <!-- 내가 북마크한 동행 찾기 목록 -->
+      </el-tab-pane>
+    </el-tabs>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ProfileView',
+  data() {
+    return {
+      isFollow: false,
+      followerList: [],
+      followingList: [],
+    }
+  },
+  methods: {
+    followNow() {
+      this.isFollow = !this.isFollow
+    },
+    unfollowNow() {
+      this.isFollow = !this.isFollow
+    }
+  },
+}
+</script>
+
+<style>
+.user-info,
+.user-follow {
+  display: flex;
+  margin: 0 15px;
+}
+
+.user-follow:first-child {
+  margin-right: 15px;
+}
+</style>
