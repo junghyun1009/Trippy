@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,5 +23,8 @@ public class Follow extends BaseEntity{
     @JoinColumn(name = "follower")
     private Member follower;
 
-
+    public Follow(Member following, Member follower) {
+        this.following = following;
+        this.follower = follower;
+    }
 }

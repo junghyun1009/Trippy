@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,18 +22,16 @@ public class Bookmark extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="COMMUNITY_POST_ID")
-    private Post post;
+    private CommunityPost communityPost;
 
+//    public void setMember(Member member) {
+//        this.member = member;
+//        if(member.getBookmarks().contains(this)) {
+//            member.getBookmarks().remove(this);
+//        }else{
+//            member.getBookmarks().add(this);
+//        }
+//    }
 
-    public void setMember(Member member) {
-        this.member = member;
-        member.getBookmarks().add(this);
-    }
-
-    public Bookmark createBookmark(Member member) {
-        Bookmark bookmark = new Bookmark();
-        bookmark.setMember(member);
-        return bookmark;
-    }
 
 }

@@ -4,7 +4,8 @@
       <p>이메일</p>
       <el-input v-model="userinfo.email" placeholder="username@email.com"></el-input>
       <el-button type="primary" >인증하기</el-button>
-      <account-error-list></account-error-list>
+      <account-error-list :errorMessage="emailError"></account-error-list>
+      <account-error-list :errorMessage="nicknameError"></account-error-list>
 
     </div>
 
@@ -14,13 +15,13 @@
       <el-input v-model="userinfo.passwordCheck" type="password" placeholder="비밀번호 확인" show-password></el-input>
 
       <!-- 비밀번호와 비밀번호 확인되지 않으면 자동으로 매치되는지 확인하는 기능 -->
-      <account-error-list></account-error-list>
+      <account-error-list :errorMessage="passwordMatchError"></account-error-list>
     </div>
 
     <div class="nickname">
       <p>닉네임</p>
       <el-input v-model="userinfo.nickname" placeholder="사용할 별명을 입력해주세요"></el-input>
-      <account-error-list></account-error-list>
+      <account-error-list :errorMessage="nicknameError"></account-error-list>
     </div>
 
     <div class="gender">
@@ -57,6 +58,7 @@
 
 <script>
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
+import { userErrorMessage } from '@/common/constant.js'
 
 export default {
   components: { 
@@ -83,6 +85,9 @@ export default {
                     label: '여성',
                 },
             ], 
+            emailError: userErrorMessage.emailError,
+            nicknameError: userErrorMessage.nicknameError,
+            alreadyRegistered: userErrorMessage.alreadyRegistered
         }
     },
     methods: {

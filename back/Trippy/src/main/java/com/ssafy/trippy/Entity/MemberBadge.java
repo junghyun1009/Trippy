@@ -5,9 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -18,12 +15,12 @@ public class MemberBadge extends BaseEntity{
     @Column(name="MEMBER_BADGE_ID")
     private Long id;
 
-    @Column(nullable = false)
-    @NotBlank(message="멤버 뱃지 이름은 필수입니다.")
+//    @Column(nullable = false)
+//    @NotBlank(message="멤버 뱃지 이름은 필수입니다.")
     private String name;
 
-    @Column(nullable = false)
-    @NotBlank(message="멤버 뱃지 설명은 필수입니다.")
+//    @Column(nullable = false)
+//    @NotBlank(message="멤버 뱃지 설명은 필수입니다.")
     private String desc;
 
     @ManyToOne(fetch= FetchType.LAZY)
@@ -34,5 +31,8 @@ public class MemberBadge extends BaseEntity{
     @JoinColumn(name="BADGE_ID")
     private Badge badge;
 
-
+    public MemberBadge(Member member, Badge badge) {
+        this.member = member;
+        this.badge = badge;
+    }
 }

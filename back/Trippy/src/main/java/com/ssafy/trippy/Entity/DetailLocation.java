@@ -41,7 +41,8 @@ public class DetailLocation extends BaseEntity{
     @JoinColumn(name="LOCATION_ID")
     private Location location;
 
-
-
-
+    public DetailLocation(Post post, Location location) {
+        this.post = post;
+        this.location = location;
+    }
 }
