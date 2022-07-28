@@ -8,6 +8,10 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -31,31 +35,31 @@ public class Member extends BaseEntity implements UserDetails {
     @Column(name="MEMBER_ID")
     private Long id;
 
-    @Column(nullable = false)
-    @Length(min=1, max=20,message="이름 사이즈를 확인하세요")
-    @NotBlank(message="이름은 필수값입니다.")
+//    @Column(nullable = false)
+//    @Length(min=1, max=20,message="이름 사이즈를 확인하세요")
+//    @NotBlank(message="이름은 필수값입니다.")
     private String name;
 
 //    @JsonIgnore
-    @Column(nullable = false)
-    @NotBlank(message="비밀번호는 필수값입니다.")
+//    @Column(nullable = false, length=15)
+//    @NotBlank(message="비밀번호는 필수값입니다.")
     private String password;
 
-    @Column(nullable = false, length=60)
-    @Length(min=1, max=50,message="이메일 사이즈를 확인하세요")
-    @NotBlank(message="이메일은 필수값입니다.")
+//    @Column(nullable = false, length=60)
+//    @Length(min=1, max=50,message="이메일 사이즈를 확인하세요")
+//    @NotBlank(message="이메일은 필수값입니다.")
     private String email;
 
-    @Column(nullable = false, length=15)
-    @NotBlank(message="핸드폰 번호는 필수값입니다.")
+//    @Column(nullable = false, length=15)
+//    @NotBlank(message="핸드폰 번호는 필수값입니다.")
     private String phone;
 
-    @Column(nullable = false, length=2)
-    @NotNull
+//    @Column(nullable = false, length=2)
+//    @NotBlank(message="성별은 필수값입니다.")
     private int gender;
 
-    @Column(nullable = false, length=15)
-    @NotNull
+//    @Column(nullable = false, length=15)
+//    @NotBlank(message="생일은 필수값입니다.")
     private LocalDateTime birth;
 
 //    @JsonIgnore
@@ -73,6 +77,20 @@ public class Member extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy="member")
     private List<LikePost> likePosts = new ArrayList<>();
 
+    @Builder
+    public Member(Long id, String name, String password, String email, String phone, int gender, LocalDateTime birth, String img_path, String desc, List<Bookmark> bookmarks, List<LikePost> likePosts) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.gender = gender;
+        this.birth = birth;
+        this.img_path = img_path;
+        this.desc = desc;
+        this.bookmarks = bookmarks;
+        this.likePosts = likePosts;
+    }
     public void encodePassword(String encodedPassword){
         this.password = encodedPassword;
     }

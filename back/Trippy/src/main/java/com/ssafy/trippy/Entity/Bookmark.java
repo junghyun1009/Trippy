@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,24 +24,14 @@ public class Bookmark extends BaseEntity {
     @JoinColumn(name="COMMUNITY_POST_ID")
     private CommunityPost communityPost;
 
-    @Column(nullable = false, length=15)
-    @NotBlank(message="생성일자는 필수값입니다.")
-    private LocalDateTime createAt;
+//    public void setMember(Member member) {
+//        this.member = member;
+//        if(member.getBookmarks().contains(this)) {
+//            member.getBookmarks().remove(this);
+//        }else{
+//            member.getBookmarks().add(this);
+//        }
+//    }
 
-    @Column(nullable = false, length=15)
-    @NotBlank(message="수정날짜는 필수값입니다.")
-    private LocalDateTime updateAt;
-
-
-    public void setMember(Member member) {
-        this.member = member;
-        member.getBookmarks().add(this);
-    }
-
-    public Bookmark createBookmark(Member member) {
-        Bookmark bookmark = new Bookmark();
-        bookmark.setMember(member);
-        return bookmark;
-    }
 
 }
