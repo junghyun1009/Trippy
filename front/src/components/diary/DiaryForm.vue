@@ -72,7 +72,17 @@
               </div>
             </div>
           </el-collapse-item>
-          <el-collapse-item title="루트" name="3">
+          <el-collapse-item name="3">
+            <template #title>
+              <span>루트</span>
+              <!-- 태그 -->
+              <div>
+                <el-tag v-for="(route, idx) in routeNames" :key="idx" class="mx-1"
+                :disable-route="false" type=''>
+                  {{ route }}
+                </el-tag>
+              </div>
+            </template>
             <div>
               <route-form></route-form>
             </div>
@@ -91,7 +101,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import RouteForm from "./RouteForm.vue"
 import StoryForm from "./StoryForm.vue"
 
@@ -119,6 +129,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['routeNames']),
     partyTag() {
       const party = this.newDiary.newOption.partyType
       return party
