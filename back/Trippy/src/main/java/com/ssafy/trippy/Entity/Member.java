@@ -1,6 +1,7 @@
 package com.ssafy.trippy.Entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -56,8 +57,18 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy="member")
     private List<LikePost> likePosts = new ArrayList<>();
 
-    public Member(String email) {
+    @Builder
+    public Member(Long id, String name, String password, String email, String phone, int gender, LocalDateTime birth, String img_path, String desc, List<Bookmark> bookmarks, List<LikePost> likePosts) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
         this.email = email;
+        this.phone = phone;
+        this.gender = gender;
+        this.birth = birth;
+        this.img_path = img_path;
+        this.desc = desc;
+        this.bookmarks = bookmarks;
+        this.likePosts = likePosts;
     }
-
 }
