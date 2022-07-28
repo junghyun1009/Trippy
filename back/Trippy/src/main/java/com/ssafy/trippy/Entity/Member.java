@@ -1,9 +1,6 @@
 package com.ssafy.trippy.Entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -71,4 +68,5 @@ public class Member extends BaseEntity {
         this.bookmarks = bookmarks;
         this.likePosts = likePosts;
     }
+
 }
