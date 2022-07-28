@@ -7,7 +7,8 @@
     </div>
 
     <br>
-    <el-button type="primary">완료</el-button>
+    <!-- 완료하면 로그인 페이지로 이동 -->
+    <el-button type="primary" @click="$router.push('/login')">완료</el-button>
   </div>
 </template>
 

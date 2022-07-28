@@ -2,26 +2,43 @@
   <div>
     <div class="email">
       <p>이메일</p>
-      <el-input v-model="userinfo.email" placeholder="username@email.com"></el-input>
-      <el-button type="primary" >인증하기</el-button>
-      <account-error-list :errorMessage="emailError"></account-error-list>
-      <account-error-list :errorMessage="nicknameError"></account-error-list>
+      <el-input  id="email"
+      v-model="userinfo.email" 
+      placeholder="username@email.com"
+      ></el-input>
+      <el-button type="primary" @click="checkEmail()">인증하기</el-button>
+      <account-error-list :errorMessage="emailError" v-if="!emailFormat"></account-error-list>
 
     </div>
 
     <div class="password">
       <p>비밀번호</p>
-      <el-input v-model="userinfo.password" type="password" placeholder="비밀번호" show-password></el-input>
-      <el-input v-model="userinfo.passwordCheck" type="password" placeholder="비밀번호 확인" show-password></el-input>
+      <el-input v-model="userinfo.password" 
+        type="password" 
+        id="password"
+        placeholder="비밀번호" 
+        autocomplete="off"
+        maxlength="20"
+        @blur="checkPasswordValidity"
+        show-password
+        />
+      <el-input v-model="userinfo.passwordCheck" 
+        type="password" 
+        placeholder="비밀번호 확인" 
+        autocomplete="off"
+        maxlength="20"
+        @blur="checkPasswordMatch"
+        />
 
       <!-- 비밀번호와 비밀번호 확인되지 않으면 자동으로 매치되는지 확인하는 기능 -->
-      <account-error-list :errorMessage="passwordMatchError"></account-error-list>
+      <account-error-list :errorMessage="passwordValidityError" v-if="!passwordFormat"></account-error-list>
+      <account-error-list :errorMessage="passwordMatchError" v-if="!passwordMatch"></account-error-list>
     </div>
 
     <div class="nickname">
       <p>닉네임</p>
-      <el-input v-model="userinfo.nickname" placeholder="사용할 별명을 입력해주세요"></el-input>
-      <account-error-list :errorMessage="nicknameError"></account-error-list>
+      <el-input v-model="userinfo.nickname" placeholder="사용할 별명을 입력해주세요" maxlength="10"  @blur="checkNickname"></el-input>
+      <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
     </div>
 
     <div class="gender">
@@ -86,13 +103,53 @@ export default {
                 },
             ], 
             emailError: userErrorMessage.emailError,
+            passwordMatchError: userErrorMessage.passwordMatchError,
+            passwordValidityError: userErrorMessage.passwordValidityError,
             nicknameError: userErrorMessage.nicknameError,
-            alreadyRegistered: userErrorMessage.alreadyRegistered
+            alreadyRegistered: userErrorMessage.alreadyRegistered,
+            emailFormat: true,
+            passwordFormat: true,
+            passwordMatch: true,
+            nicknameFormat: true,
         }
     },
     methods: {
       toSignUpOption() {
         this.$router.push('/signup/option')
+      },
+      checkEmail() {
+      var inputEmail = document.getElementById('email').value;
+      var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+      if (regEmail.test(inputEmail) === false) {
+        this.emailFormat = false;
+      } else {
+        this.emailFormat = true
+      }        
+      },
+      checkPasswordMatch() {
+        if (this.userinfo.password === this.userinfo.passwordCheck) {
+          this.passwordMatch = true
+        } else {
+          this.passwordMatch = false
+        }
+      },
+      checkPasswordValidity() {
+        var inputPassword = document.getElementById('password').value;
+        console.log(inputPassword)
+        var regPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+        if (regPassword.test(inputPassword)) {
+          this.passwordFormat = true
+          } else {
+            this.passwordFormat = false
+          }
+      },
+      checkNickname() {
+        var regNickname = /^([0-9]|[a-z]|[A-Z]|[가-힣]).{1,10}$/;
+        if (regNickname.test(this.userinfo.nickname)) {
+          this.nicknameFormat = true
+        } else {
+          this.nicknameFormat = false
+        }
       }
     }
   }
