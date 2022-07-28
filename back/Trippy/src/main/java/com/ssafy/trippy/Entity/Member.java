@@ -2,10 +2,7 @@ package com.ssafy.trippy.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import net.bytebuddy.asm.Advice;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,10 +19,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
+@ToString
 public class Member extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue
@@ -65,8 +64,8 @@ public class Member extends BaseEntity implements UserDetails {
 //    @JsonIgnore
     private String desc;
 
-
-    private String role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     @OneToMany(mappedBy="member")
     private List<Bookmark> bookmarks = new ArrayList<>();
@@ -86,7 +85,9 @@ public class Member extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(this.role));
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override

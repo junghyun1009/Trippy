@@ -5,4 +5,6 @@ import com.ssafy.trippy.Entity.Member;
 public interface MemberService {
 
     Member signup(Member member);
+
+    Member findByEmail(String email);
 }

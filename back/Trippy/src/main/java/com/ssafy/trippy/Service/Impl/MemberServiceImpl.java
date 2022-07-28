@@ -16,10 +16,18 @@ public class MemberServiceImpl implements MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
+    @Override
     public Member signup(Member member) {
         String rawPassword = member.getPassword();
         String encodedPassword = passwordEncoder.encode(rawPassword);
         member.encodePassword(encodedPassword);
         return memberRepository.save(member);
+    }
+
+    @Override
+    public Member findByEmail(String email) {
+        System.out.println(email);
+        System.out.println(memberRepository.findByEmail(email).get());
+        return memberRepository.findByEmail(email).get();
     }
 }
