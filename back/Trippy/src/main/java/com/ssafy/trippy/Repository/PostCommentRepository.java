@@ -1,7 +1,7 @@
 package com.ssafy.trippy.Repository;
 
-import com.ssafy.trippy.Entity.Post;
-import com.ssafy.trippy.Entity.PostComment;
+import com.ssafy.trippy.Domain.Post;
+import com.ssafy.trippy.Domain.PostComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

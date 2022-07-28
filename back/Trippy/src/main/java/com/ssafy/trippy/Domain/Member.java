@@ -1,10 +1,7 @@
-package com.ssafy.trippy.Entity;
+package com.ssafy.trippy.Domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import net.bytebuddy.asm.Advice;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,13 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +21,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @ToString
-public class Member extends BaseEntity implements UserDetails {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name="MEMBER_ID")
@@ -90,51 +82,5 @@ public class Member extends BaseEntity implements UserDetails {
         this.desc = desc;
         this.bookmarks = bookmarks;
         this.likePosts = likePosts;
-    }
-    public void encodePassword(String encodedPassword){
-        this.password = encodedPassword;
-    }
-
-    @Override
-    public String getPassword(){
-        return this.password;
-    }
-
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public String getUsername() {
-        return this.email;
-    }
-
-    @Override
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public boolean isEnabled() {
-        return true;
     }
 }

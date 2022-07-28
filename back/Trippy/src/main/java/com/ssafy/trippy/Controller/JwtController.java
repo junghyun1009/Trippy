@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class JwtController {
 
-    @PostMapping("/valid")
+    @PostMapping("/api/valid")
     public String isValid(){
         return "검증 성공";
     }

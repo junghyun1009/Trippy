@@ -1,6 +1,5 @@
-package com.ssafy.trippy.Entity;
+package com.ssafy.trippy.Domain;
 
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

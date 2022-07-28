@@ -43,7 +43,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/*/login", "/*/join").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("*/api/*").authenticated()
                 .anyRequest().hasRole("USER")
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
