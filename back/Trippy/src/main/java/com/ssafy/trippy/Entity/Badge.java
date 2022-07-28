@@ -30,8 +30,4 @@ public class Badge extends BaseEntity{
     @Column(nullable = false)
     @NotBlank(message = "뱃지 설명은 필수입니다.")
     private String desc;
-
-
-
-
 }

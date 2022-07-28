@@ -4,7 +4,8 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-
+  profiles:
+    include: jwt
   jpa:
     hibernate:
       ddl-auto: create
@@ -17,3 +18,5 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+

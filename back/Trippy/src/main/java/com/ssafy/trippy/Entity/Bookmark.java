@@ -22,9 +22,9 @@ public class Bookmark extends BaseEntity {
     @JoinColumn(name="MEMBER_ID")
     private Member member;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="COMMUNITY_POST_ID")
-//    private Post post;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="COMMUNITY_POST_ID")
+    private CommunityPost communityPost;
 
     @Column(nullable = false, length=15)
     @NotBlank(message="생성일자는 필수값입니다.")
