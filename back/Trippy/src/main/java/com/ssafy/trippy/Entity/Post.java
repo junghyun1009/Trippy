@@ -1,12 +1,11 @@
 package com.ssafy.trippy.Entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,28 +19,28 @@ public class Post extends BaseEntity{
     @Column(name="POST_ID")
     private Long id;
 
-    @Column(name="IS_DELETE",nullable = false)
-    @NotBlank(message="삭제 여부를 입력하세요")
+//    @Column(name="IS_DELETE",nullable = false)
+//    @NotBlank(message="삭제 여부를 입력하세요")
     private Byte isDelete;
 
-    @Column(nullable = false)
-    @NotBlank(message="일행타입을 입력하세요")
+//    @Column(nullable = false)
+//    @NotBlank(message="일행타입을 입력하세요")
     private int company;
 
-    @Column(nullable = false)
-    @NotBlank(message="일행수를 입력하세요")
+//    @Column(nullable = false)
+//    @NotBlank(message="일행수를 입력하세요")
     private int count;
 
-    @Column(nullable = false)
-    @NotBlank(message="시작날짜를 입력하세요")
+//    @Column(nullable = false)
+//    @NotBlank(message="시작날짜를 입력하세요")
     private LocalDateTime startDate;
 
-    @Column(nullable = false)
-    @NotBlank(message="끝나는 날짜를 입력하세요")
+//    @Column(nullable = false)
+//    @NotBlank(message="끝나는 날짜를 입력하세요")
     private LocalDateTime endDate;
 
-    @Column(name="REPRESENTIVE_IMG",nullable = false)
-    @NotBlank(message="대표이미지를 입력하세요")
+//    @Column(name="REPRESENTIVE_IMG",nullable = false)
+//    @NotBlank(message="대표이미지를 입력하세요")
     private int representiveImg;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,5 +53,9 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy="post")
     private List<DetailLocation> detailLocations = new ArrayList<>();
 
-
+    @Builder
+    public Post(int company, Member member) {
+        this.company = company;
+        this.member = member;
+    }
 }
