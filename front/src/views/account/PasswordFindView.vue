@@ -4,9 +4,9 @@
     <div v-if="!userinfo.verificationCode" class="email">
       <h4>이메일</h4>
       <p>trippy에 가입한 이메일을 작성해주세요</p>
-      <el-input v-model="userinfo.email" type="email" placeholder="username@email.com"></el-input>
+      <el-input v-model="userinfo.email" type="email" id="email" placeholder="username@email.com" @blur="checkEmail()"></el-input>
       <el-button type="primary" @click="countdownTimer(), addCode()">인증번호 받기</el-button>
-      <account-error-list :errorMessage="emailError"></account-error-list>
+      <account-error-list :errorMessage="emailError" v-if="!emailFormat"></account-error-list>
     </div>
 
     <!-- 이메일로 인증번호 보낸 이후 노출 -->
@@ -58,32 +58,49 @@ export default {
             timeCounter: 180,
             resTimeData: '',
             wrongVerificationCode: userErrorMessage.wrongVerificationCode,
-            emailError: userErrorMessage.emailError
+            emailError: userErrorMessage.emailError,
+            emailFormat: true,
         }
     },
 	methods: {
     ...mapActions(['fromPasswordFindView']),
 
+    checkEmail() {
+    var inputEmail = document.getElementById('email').value;
+    var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+    if (regEmail.test(inputEmail) === false) {
+      this.emailFormat = false;
+    } else {
+      this.emailFormat = true
+    }        
+    },
 
     // 이거는 verification code 보냈을 때 분기할 수 있게 가라로 만들어 놓은거
     // 나중에 back에서 보내오는 정보에 따라서 코드 수정 필요
     addCode() {
-      this.userinfo.verificationCode = 1
-      console.log(this.userinfo.verificationCode)
+      if ( this.emailFormat == false ) {
+        this.userinfo.verificationCode = false
+      } else {
+        this.userinfo.verificationCode = true
+      }
     },
     countdownTimer() {
-      if (this.timeCounter > 0) {
+      if (this.timeCounter >= 0) {
         setTimeout(() => {
           this.timeCounter -= 1
           this.countdownTimer()
           this.resTimeData = this.prettyTime()
         }, 1000)
+      } else {
+        this.timeCounter = 0
       }
     },
     countdownReset() {
-      this.timeCounter = 180
-      if (this.timeCounter == 180){
+      if (this.timeCounter <= 0){
+        this.timeCounter = 3
         this.countdownTimer()
+      } else {
+        this.timeCounter = 3
       }
     },
     pad(n, width) {

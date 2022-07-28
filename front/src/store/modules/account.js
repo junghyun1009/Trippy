@@ -17,7 +17,8 @@ export default {
       console.log(this.getters.fromPasswordFindView)
       console.log('hello')
       router.push('/passwordchange')
-    }
+    },
+
   },
   modules: {
   }
