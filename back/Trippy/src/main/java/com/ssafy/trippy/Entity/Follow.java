@@ -1,6 +1,7 @@
 package com.ssafy.trippy.Entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,14 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name="subscribe_uk",
+                        columnNames = {"following", "follower"}
+                )
+        }
+)
 public class Follow extends BaseEntity{
     @Id
     @GeneratedValue
@@ -23,7 +32,9 @@ public class Follow extends BaseEntity{
     @JoinColumn(name = "follower")
     private Member follower;
 
-    public Follow(Member following, Member follower) {
+    @Builder
+    public Follow(Long id, Member following, Member follower) {
+        this.id = id;
         this.following = following;
         this.follower = follower;
     }
