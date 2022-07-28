@@ -37,13 +37,13 @@
 
     <div class="nickname">
       <p>닉네임</p>
-      <el-input v-model="userinfo.nickname" placeholder="사용할 별명을 입력해주세요" maxlength="10"  @blur="checkNickname"></el-input>
+      <el-input v-model="userinfo.nickname" id="nickname" placeholder="사용할 별명을 입력해주세요" maxlength="10"  @blur="checkNickname"></el-input>
       <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
     </div>
 
     <div class="gender">
       <p>성별</p>
-      <el-select v-model="userinfo.gender" class="m-2" placeholder="Select">
+      <el-select v-model="userinfo.gender" class="m-2" id="gender" placeholder="Select">
       <el-option
         v-for="item in options"
         :key="item.value"
@@ -60,6 +60,7 @@
           <br>
             <el-date-picker
               v-model="userinfo.birthDate"
+              id="birthdate"
               type="date"
               placeholder="생년월일을 선택해주세요!"
             />
@@ -68,7 +69,7 @@
     </div>
 
     <br>
-    <el-button type="primary" @click="toSignUpOption()">회원가입</el-button>
+    <el-button type="primary" @click="checkBlank()">회원가입</el-button>
 
   </div>
 </template>
@@ -114,9 +115,9 @@ export default {
         }
     },
     methods: {
-      toSignUpOption() {
-        this.$router.push('/signup/option')
-      },
+      // toSignUpOption() {
+      //   this.$router.push('/signup/option')
+      // },
       checkEmail() {
       var inputEmail = document.getElementById('email').value;
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -148,6 +149,18 @@ export default {
           this.nicknameFormat = true
         } else {
           this.nicknameFormat = false
+        }
+      },
+      checkBlank() {
+        var emailBlank = document.getElementById('email').value
+        var passwordBlank = document.getElementById('password').value
+        var nicknameBlank = document.getElementById('nickname').value
+        var genderBlank = document.getElementById('gender').value
+        var birthdateBlank = document.getElementById('birthdate').value
+        if ( emailBlank == '' | passwordBlank == '' | nicknameBlank == '' | genderBlank == '' | birthdateBlank == '' ) {
+          alert("빈 칸 없이 모든 필드를 채워주세요!")
+        } else {
+          this.$router.push('/signup/option')
         }
       }
     }

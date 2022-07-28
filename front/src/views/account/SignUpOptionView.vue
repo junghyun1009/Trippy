@@ -62,6 +62,7 @@ export default {
     removePhoto() {
       this.profilePhoto = {}
     },
+    
   }
 }
 </script>
