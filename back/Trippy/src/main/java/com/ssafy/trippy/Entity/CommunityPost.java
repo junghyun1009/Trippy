@@ -1,10 +1,12 @@
 package com.ssafy.trippy.Entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
@@ -73,8 +75,39 @@ public class CommunityPost extends BaseEntity{
     @JoinColumn(name="LOCATION_ID")
     private Location location;
 
-    public CommunityPost(Member member, String title) {
+    @Builder
+    public CommunityPost(Long id, String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, int gender, boolean isLocal, Member member, Location location) {
+        this.id = id;
         this.title = title;
+        this.description = description;
+        this.category = category;
+        this.meetingTime = meetingTime;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.recruitVolume = recruitVolume;
+        this.recruitCurrentVolume = recruitCurrentVolume;
+        this.startAge = startAge;
+        this.endAge = endAge;
+        this.gender = gender;
+        this.isLocal = isLocal;
         this.member = member;
+        this.location = location;
+    }
+    
+    // update문
+    public void update(String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, int gender, boolean isLocal, Location location) {
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.meetingTime = meetingTime;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.recruitVolume = recruitVolume;
+        this.recruitCurrentVolume = recruitCurrentVolume;
+        this.startAge = startAge;
+        this.endAge = endAge;
+        this.gender = gender;
+        this.isLocal = isLocal;
+        this.location = location;
     }
 }

@@ -1,6 +1,7 @@
 package com.ssafy.trippy.Entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,8 +35,11 @@ public class Location extends BaseEntity {
 //    @NotBlank(message="위도를 입력하세요")
     private Double longitude;
 
-    public Location(String countryName, String cityName) {
+    @Builder
+    public Location(String countryName, String cityName, Double latitude, Double longitude) {
         this.countryName = countryName;
         this.cityName = cityName;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

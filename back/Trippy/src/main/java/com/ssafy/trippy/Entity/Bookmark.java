@@ -22,7 +22,7 @@ public class Bookmark extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="COMMUNITY_POST_ID")
-    private Post post;
+    private CommunityPost communityPost;
 
 //    public void setMember(Member member) {
 //        this.member = member;
@@ -33,8 +33,5 @@ public class Bookmark extends BaseEntity {
 //        }
 //    }
 
-    public Bookmark(Member member, Post post) {
-        this.member = member;
-        this.post = post;
-    }
+
 }
