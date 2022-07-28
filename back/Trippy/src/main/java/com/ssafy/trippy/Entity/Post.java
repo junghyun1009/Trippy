@@ -19,6 +19,8 @@ public class Post extends BaseEntity{
     @Column(name="POST_ID")
     private Long id;
 
+    private String title;
+
 //    @Column(name="IS_DELETE",nullable = false)
 //    @NotBlank(message="삭제 여부를 입력하세요")
     private Byte isDelete;
@@ -54,8 +56,32 @@ public class Post extends BaseEntity{
     private List<DetailLocation> detailLocations = new ArrayList<>();
 
     @Builder
-    public Post(int company, Member member) {
+    public Post(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations) {
+        this.id = id;
+        this.title = title;
+        this.isDelete = isDelete;
         this.company = company;
+        this.count = count;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.representiveImg = representiveImg;
         this.member = member;
+        this.postTransports = postTransports;
+        this.detailLocations = detailLocations;
+    }
+
+    public void update(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations){
+        this.id = id;
+        this.title = title;
+        this.isDelete = isDelete;
+        this.company = company;
+        this.count = count;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.representiveImg = representiveImg;
+        this.member = member;
+        this.postTransports = postTransports;
+        this.detailLocations = detailLocations;
+
     }
 }
