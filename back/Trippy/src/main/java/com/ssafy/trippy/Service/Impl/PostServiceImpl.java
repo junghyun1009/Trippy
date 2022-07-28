@@ -24,7 +24,7 @@ public class PostServiceImpl implements PostService {
 
 
     // 모든 post찾기
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<ResponsePostDto> findAll() {
         List<Post> all = postRepository.findAll();
@@ -48,7 +48,7 @@ public class PostServiceImpl implements PostService {
     }
 
     // 유저(본인)가 작성한 게시글 조회
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<ResponsePostDto> findAllByMember(Member member) {
         List<Post> posts = postRepository.findAllByMember(member);

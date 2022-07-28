@@ -58,7 +58,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
                 updateCommunityPostDto.isLocal(),
                 Location.builder().id(locationId).build());
     }
-
+    @Transactional(readOnly = true)
     @Override
     public List<ResponseCommunityPostDto> getAllCommunityPost() {
         List<CommunityPost> communityPosts = communityPostRepository.findAll();
