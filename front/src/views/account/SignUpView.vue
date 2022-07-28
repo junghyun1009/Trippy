@@ -135,7 +135,6 @@ export default {
       },
       checkPasswordValidity() {
         var inputPassword = document.getElementById('password').value;
-        console.log(inputPassword)
         var regPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
         if (regPassword.test(inputPassword)) {
           this.passwordFormat = true
