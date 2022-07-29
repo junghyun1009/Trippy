@@ -97,10 +97,10 @@ export default {
     },
     countdownReset() {
       if (this.timeCounter <= 0){
-        this.timeCounter = 3
+        this.timeCounter = 180
         this.countdownTimer()
       } else {
-        this.timeCounter = 3
+        this.timeCounter = 180
       }
     },
     pad(n, width) {

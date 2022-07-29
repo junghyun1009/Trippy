@@ -9,7 +9,7 @@
       <p>새 비밀번호</p>
       <el-input v-model="userinfo.newPassword" type="password" placeholder="비밀번호" @blur="checkPasswordValidity"></el-input>
       <el-input v-model="userinfo.newPasswordCheck" type="password" placeholder="비밀번호 확인" @blur="checkPasswordMatch"></el-input>
-              <el-button type="primary" @click="changePassword">인증확인</el-button>
+              <el-button type="primary" @click="changePassword()">비밀번호 변경하기</el-button>
       <!-- 비밀번호와 비밀번호 확인되지 않으면 자동으로 매치되는지 확인하는 기능 -->
       <account-error-list :errorMessage="passwordValidityError" v-if="!passwordFormat"></account-error-list>
       <account-error-list :errorMessage="passwordMatchError" v-if="!passwordMatch"></account-error-list>
@@ -51,7 +51,7 @@ export default {
       }
     },
     checkPasswordValidity() {
-      var regPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$/;
+      var regPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
       if (regPassword.test(this.userinfo.newPassword)) {
         this.passwordFormat = true
       } else {
@@ -59,7 +59,8 @@ export default {
       }
     },
     changePassword() {
-      if (this.userinfo.passwordFormat == true, this.userinfo.passwordMatch == true) {
+      if (this.passwordFormat == true, this.passwordMatch == true) {
+        alert('비밀번호가 변경되었습니다')
         this.$router.push('/login')
       }
     }
