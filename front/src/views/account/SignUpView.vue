@@ -37,14 +37,15 @@
 
     <div class="nickname">
       <p>닉네임</p>
-      <el-input v-model="userinfo.nickname" placeholder="사용할 별명을 입력해주세요" maxlength="10"  @blur="checkNickname"></el-input>
+      <el-input id="nickname" v-model="userinfo.nickname" placeholder="사용할 별명을 입력해주세요" maxlength="10"  @blur="checkNickname"></el-input>
       <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
     </div>
 
     <div class="gender">
       <p>성별</p>
-      <el-select v-model="userinfo.gender" class="m-2" placeholder="Select">
-      <el-option
+      <el-select id="gender" v-model="userinfo.gender" class="m-2" placeholder="Select">
+      <el-option 
+
         v-for="item in options"
         :key="item.value"
         :label="item.label"
@@ -59,6 +60,7 @@
           <span class="demonstration">생년월일</span>
           <br>
             <el-date-picker
+              id="birthdate"
               v-model="userinfo.birthDate"
               type="date"
               placeholder="생년월일을 선택해주세요!"
@@ -68,7 +70,7 @@
     </div>
 
     <br>
-    <el-button type="primary" @click="toSignUpOption()">회원가입</el-button>
+    <el-button type="primary" @click="checkBlank()">회원가입</el-button>
 
   </div>
 </template>
@@ -114,18 +116,16 @@ export default {
         }
     },
     methods: {
-      toSignUpOption() {
-        this.$router.push('/signup/option')
-      },
       checkEmail() {
       var inputEmail = document.getElementById('email').value;
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
       if (regEmail.test(inputEmail) === false) {
-        this.emailFormat = false;
+        this.emailFormat = false;                          
       } else {
         this.emailFormat = true
       }        
       },
+
       checkPasswordMatch() {
         if (this.userinfo.password === this.userinfo.passwordCheck) {
           this.passwordMatch = true
@@ -133,9 +133,9 @@ export default {
           this.passwordMatch = false
         }
       },
+
       checkPasswordValidity() {
         var inputPassword = document.getElementById('password').value;
-        console.log(inputPassword)
         var regPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
         if (regPassword.test(inputPassword)) {
           this.passwordFormat = true
@@ -143,14 +143,32 @@ export default {
             this.passwordFormat = false
           }
       },
+
       checkNickname() {
         var regNickname = /^([0-9]|[a-z]|[A-Z]|[가-힣]).{1,10}$/;
+        var blank = /''/
         if (regNickname.test(this.userinfo.nickname)) {
+          this.nicknameFormat = true
+        } else if (blank.test(this.userinfo.nickname)) {
           this.nicknameFormat = true
         } else {
           this.nicknameFormat = false
         }
-      }
+      },
+
+      checkBlank() {
+        var emailBlank = document.getElementById('email').value
+        var passwordBlank = document.getElementById('password').value
+        var nicknameBlank = document.getElementById('nickname').value
+        var genderBlank = document.getElementById('gender').value
+        var birthdateBlank = document.getElementById('birthdate').value
+        if ( emailBlank == '' | passwordBlank == '' | nicknameBlank == '' | genderBlank == '' | birthdateBlank == '' ) {
+          alert("빈 칸 없이 모든 필드를 채워주세요!")
+        } else {
+          this.$router.push('/signup/option')
+        }
+      },
+
     }
   }
 
