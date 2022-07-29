@@ -17,7 +17,6 @@
       </div>
     </div>
 
-
     <div class="description">
       <p>소개</p>
       <el-input v-model="userinfo.description" placeholder="자신을 소개해주세요!(선택)"></el-input>
@@ -25,7 +24,7 @@
 
     <br>
     <!-- 완료하면 로그인 페이지로 이동 -->
-    <el-button type="primary" @click="$router.push('/login')">완료</el-button>
+    <el-button type="primary" @click="finishSignUp()">완료</el-button>
   </div>
 </template>
 
@@ -58,9 +57,12 @@ export default {
       let fileInput = document.getElementById("file")
       fileInput.value = ''
     },
-
     removePhoto() {
       this.profilePhoto = {}
+    },
+    finishSignUp() {
+      this.$router.push('/login')
+      alert('회원가입을 축하합니다!')
     },
     
   }
@@ -68,7 +70,6 @@ export default {
 </script>
 
 <style scoped>
-
 img {
   width: 150px;
   height: 150px;
