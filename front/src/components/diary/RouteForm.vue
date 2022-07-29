@@ -2,16 +2,20 @@
   <div>
     <div class="route-div">
       <input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0">
-      <el-button @click="addMarkers" :disabled="routeNames.length === 0">
-        <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#F16B51" icon-name="maplocation">
+      <el-button type="primary" @click="addMarkers" :disabled="routeNames.length === 0">
+        <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#fff" icon-name="maplocation">
           <map-location/>
         </icon-base>
       </el-button>
-      <el-button @click="initMap" :disabled="flag === 0">루트 추가하기</el-button>
+      <el-button type="primary" @click="initMap" :disabled="flag === 0">
+        <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#fff" icon-name="plusicon">
+          <plus-icon/>
+        </icon-base>  
+      </el-button>
     </div>
     <div id="map" style="height: 480px; position: relative; overflow: hidden;"></div>
-    <div>
-      <el-tag v-for="(route, idx) in routeNames" :key="idx" class="mx-1"
+    <div class="route-tag-group">
+      <el-tag v-for="(route, idx) in routeNames" :key="idx" class="route-tag"
       closable :disable-route="false" type='' @close="removeRoute(idx)">
         {{ route }}
       </el-tag>
@@ -23,11 +27,13 @@
 /* eslint-disable no-undef */
 import { mapActions, mapGetters } from 'vuex'
 import MapLocation from '@/components/icon/MapLocation.vue'
+import PlusIcon from '@/components/icon/PlusIcon.vue'
 
 export default {
   name: 'RouteForm',
   components: {
-    MapLocation
+    MapLocation,
+    PlusIcon
   },
   data() {
     return {
@@ -110,9 +116,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .route-div {
   text-align: left;
+  margin-bottom: 10px;
 }
 #pac-input {
   background-color: #fff;
@@ -125,5 +132,13 @@ export default {
   box-shadow: none;
   border: solid 1px var(--el-border-color);
   border-radius: 5px;
+  margin-right: 10px;
+}
+.route-tag-group {
+  margin-top: 10px;
+  text-align: left;
+}
+.route-tag {
+  margin-left: 10px;
 }
 </style>
