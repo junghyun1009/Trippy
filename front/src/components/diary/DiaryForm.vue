@@ -77,7 +77,7 @@
               <span>루트</span>
               <!-- 태그 -->
               <div>
-                <el-tag v-for="(route, idx) in routeNames" :key="idx" class="mx-1"
+                <el-tag class="option-tag" v-for="(route, idx) in routeNames" :key="idx"
                 :disable-route="false" type=''>
                   {{ route }}
                 </el-tag>
@@ -90,7 +90,7 @@
         </el-collapse>
       </div>
       <div class="story-form">
-        <p class="demonstration">스토리</p>
+        <p class="title-box">스토리</p>
         <story-form></story-form>
       </div>
       <div>
@@ -160,7 +160,7 @@ export default {
   font-size: 14px;
 }
 .input-box {
-  width: 500px;
+  width: 300px;
   margin-left: 15px;
   margin-bottom: 10px;
 }
