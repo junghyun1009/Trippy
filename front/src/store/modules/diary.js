@@ -29,9 +29,10 @@ export default ({
       console.log(state.routeGeocodes)
       console.log(state.routeNames)
     },
-    CREATE_STORY(state, story) {
+    CREATE_STORY(state, [index, story]) {
+      // console.log(index)
       state.story = story
-      state.stories.push(state.story)
+      state.stories.splice(index, 1, story)
       console.log(state.story)
       console.log(state.stories)
     },
@@ -58,8 +59,8 @@ export default ({
     deleteRoute({ commit }, routeIdx) {
       commit('DELETE_ROUTE', routeIdx)
     },
-    createStory({ commit }, story) {
-      commit('CREATE_STORY', story)
+    createStory({ commit }, [index, story]) {
+      commit('CREATE_STORY', [index, story])
     },
     deleteStory({ commit }, index) {
       commit('DELETE_STORY', index)
