@@ -13,9 +13,7 @@ export default {
   actions: {
     fromPasswordFindView({commit}, ) {
       commit('FROM_PASSWORD_FIND_VIEW')
-      console.log('hi')
       console.log(this.getters.fromPasswordFindView)
-      console.log('hello')
       router.push('/passwordchange')
     },
 
