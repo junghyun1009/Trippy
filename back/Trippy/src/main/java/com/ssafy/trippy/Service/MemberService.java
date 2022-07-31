@@ -2,13 +2,26 @@ package com.ssafy.trippy.Service;
 
 import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestMemberDto;
+import com.ssafy.trippy.Dto.Response.ResponseLoginDto;
 import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
+import com.ssafy.trippy.Dto.Update.UpdateMemberDto;
 
 public interface MemberService {
 
     ResponseMemberDto signup(RequestMemberDto requestMemberDto);
 
-    ResponseMemberDto login(String email,String password);
+    ResponseLoginDto login(String email, String password);
 
-    public boolean chkDuplicate(String email);
+    ResponseLoginDto reIssueAccessToken(String email, String refreshToken);
+
+    boolean chkDuplicate(String email);
+
+    void deleteMember(Long id);
+
+    void updateMember(Long id, UpdateMemberDto updateMemberDto);
+
+    ResponseMemberDto selectMember(Long id);
+
+    void logout(Long id, String accessToken);
+
 }

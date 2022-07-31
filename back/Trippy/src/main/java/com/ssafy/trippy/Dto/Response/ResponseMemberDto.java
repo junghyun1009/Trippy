@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 @ToString
-public class ResponseMemberDto implements UserDetails {
+public class ResponseMemberDto {
 
     private Long id;
     private String name;
@@ -31,7 +31,6 @@ public class ResponseMemberDto implements UserDetails {
     private LocalDateTime birth;
     private String img_path;
     private String desc;
-    private List<String> roles = new ArrayList<>();
 
     //Entity -> Dto
     public ResponseMemberDto(Member member){
@@ -44,49 +43,6 @@ public class ResponseMemberDto implements UserDetails {
         this.birth = member.getBirth();
         this.img_path = member.getImg_path();
         this.desc = member.getDesc();
-        this.roles = member.getRoles();
     }
 
-    @Override
-    public String getPassword(){
-        return this.password;
-    }
-
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public String getUsername() {
-        return this.email;
-    }
-
-    @Override
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public boolean isEnabled() {
-        return true;
-    }
 }

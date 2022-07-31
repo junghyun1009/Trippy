@@ -42,8 +42,9 @@ public class SecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/*/login", "/*/join").permitAll()
-                .antMatchers("*/api/*").authenticated()
+                .antMatchers("/**/login", "/**/join/**", "/**/logout/**").permitAll()
+                .antMatchers("/**/api/**").authenticated()
+//                .antMatchers("/**").permitAll()
                 .anyRequest().hasRole("USER")
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);

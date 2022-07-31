@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class UpdateMemberDto {
 
     private String name;
-    private String password;
     private String email;
     private String phone;
     private int gender;
@@ -20,7 +19,6 @@ public class UpdateMemberDto {
 
     public UpdateMemberDto(String name,String password,String email,String phone,int gender,LocalDateTime birth,String img_path,String desc){
         this.name = name;
-        this.password = password;
         this.email = email;
         this.phone = phone;
         this.gender = gender;

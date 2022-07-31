@@ -1,8 +1,11 @@
 package com.ssafy.trippy.Service.Impl;
 
+import com.ssafy.trippy.Config.JwtProvider;
 import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestMemberDto;
+import com.ssafy.trippy.Dto.Response.ResponseLoginDto;
 import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
+import com.ssafy.trippy.Dto.Update.UpdateMemberDto;
 import com.ssafy.trippy.Repository.MemberRepository;
 import com.ssafy.trippy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,8 @@ public class MemberServiceImpl implements MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final JwtProvider jwtProvider;
+
     @Override
     public ResponseMemberDto signup(RequestMemberDto requestMemberDto) {
         if(chkDuplicate(requestMemberDto.getEmail())){
@@ -29,18 +34,53 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public ResponseMemberDto login(String email,String password) {
-        ResponseMemberDto responseMemberDto = new ResponseMemberDto(memberRepository.findByEmail(email).get());
-        if(responseMemberDto == null){
+    public ResponseLoginDto login(String email, String password) {
+        Member member = memberRepository.findByEmail(email).get();
+        if(member == null){
             throw new IllegalArgumentException("email을 확인하세요.");
         }
-        if(!passwordEncoder.matches(password, responseMemberDto.getPassword())){
+        if(!passwordEncoder.matches(password, member.getPassword())){
             throw new IllegalArgumentException("password를 확인하세요.");
         }
-        return responseMemberDto;
+        String accessToken = jwtProvider.createAccessToken(member.getUsername(), member.getRoles());
+        String refreshToken = jwtProvider.createRefreshToken(member.getUsername(), member.getRoles());
+        return new ResponseLoginDto(accessToken, refreshToken);
     }
 
+    @Override
+    public ResponseLoginDto reIssueAccessToken(String email, String refreshToken) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        jwtProvider.checkRefreshToken(email, refreshToken);
+        String accessToken = jwtProvider.createAccessToken(member.getEmail(), member.getRoles());
+        return new ResponseLoginDto(accessToken, refreshToken);
+    }
+
+    @Override
     public boolean chkDuplicate(String email){
         return memberRepository.existsByEmail(email);
+    }
+
+    @Override
+    public void deleteMember(Long id){
+        memberRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateMember(Long id, UpdateMemberDto updateMemberDto){
+        Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("아이디가 존재하지 않습니다."));
+        member.update(updateMemberDto);
+        memberRepository.save(member);
+    }
+
+    @Override
+    public ResponseMemberDto selectMember(Long id){
+        Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("아이디가 존재하지 않습니다."));
+        return new ResponseMemberDto(member);
+    }
+
+    @Override
+    public void logout(Long id, String accessToken) {
+        Member member = memberRepository.findById(id).get();
+        jwtProvider.logout(member.getEmail(), accessToken);
     }
 }

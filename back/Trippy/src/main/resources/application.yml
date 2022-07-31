@@ -13,7 +13,23 @@ spring:
       hibernate:
         #        show_sql: true
         format_sql: true
-
+  mail:
+    host: smtp.naver.com
+    port: 465
+  #  -----본인 계정 정보 ------
+    username:
+    password:
+  #  -------------------------
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.trust: smtp.naver.com
+  redis:
+    host: localhost
+    port: 6379
+  jwt:
+    blacklist:
+      access-token: BlackList_AccessToken_
 logging:
   level:
     org.hibernate.SQL: debug

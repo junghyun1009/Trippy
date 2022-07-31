@@ -1,6 +1,7 @@
 package com.ssafy.trippy.Domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssafy.trippy.Dto.Update.UpdateMemberDto;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @ToString
-public class Member extends BaseEntity {
+public class Member extends BaseEntity implements UserDetails{
     @Id
     @GeneratedValue
     @Column(name="MEMBER_ID")
@@ -82,5 +83,58 @@ public class Member extends BaseEntity {
         this.desc = desc;
         this.bookmarks = bookmarks;
         this.likePosts = likePosts;
+    }
+
+    public void update(UpdateMemberDto updateMemberDto){
+        this.name = updateMemberDto.getName();
+        this.email = updateMemberDto.getEmail();
+        this.phone = updateMemberDto.getPhone();
+        this.gender = updateMemberDto.getGender();
+        this.birth = updateMemberDto.getBirth();
+        this.img_path = updateMemberDto.getImg_path();
+        this.desc = updateMemberDto.getDesc();
+    }
+
+    @Override
+    public String getPassword(){
+        return this.password;
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public boolean isEnabled() {
+        return true;
     }
 }
