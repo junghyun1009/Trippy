@@ -42,9 +42,14 @@ export default ({
     },
     CREATE_DIARY(state, diary) {
       state.diary = diary
-      state.diary.stories = state.stories
+      state.diary.geocodes = state.routeGeocodes
       state.diary.routes = state.routeNames
+      state.diary.stories = state.stories
       state.diaries.push(state.diary)
+      // 초기화
+      state.routeGeocodes = []
+      state.routeNames = []
+      state.stories = []
       console.log(state.diary)
       console.log(state.diaries)
     }
