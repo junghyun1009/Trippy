@@ -4,6 +4,7 @@ import com.ssafy.trippy.Entity.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class RequestPostDto {
     private Long id;
