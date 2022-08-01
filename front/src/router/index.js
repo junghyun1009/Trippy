@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
 
 import DiaryCreateView from '../views/diary/DiaryCreateView.vue'
+import DiaryDetailView from '../views/diary/DiaryDetailView.vue'
 
 import LoginView from '@/views/account/LoginView.vue'
 import SignUpView from '@/views/account/SignUpView.vue'
@@ -30,6 +31,12 @@ const routes = [
     path: '/diary/create',
     name: 'diaryCreate',
     component: DiaryCreateView
+  },
+  {
+    path: '/diary',
+    // 나중에 pk 추가하기
+    name: 'diaryDetail',
+    component: DiaryDetailView
   },
   {
     path: '/login',
