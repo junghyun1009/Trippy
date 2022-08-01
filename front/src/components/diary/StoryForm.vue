@@ -48,8 +48,8 @@
       </div>
       
       <el-button @click="saveStory(k)">save story</el-button>
-      <el-button @click="removeStory(k)" v-show="(stories.length >= 1) && k!=0">delete</el-button>
-      <el-button @click="addStory()" v-show="stories.length <= 10" :disabled="k != newStories.length - 1">add story</el-button>
+      <el-button @click="removeStory(k)" v-show="(newStories.length >= 1) && k!=0">delete</el-button>
+      <el-button @click="addStory()" v-show="newStories.length < 10" :disabled="k != newStories.length - 1">add story</el-button>
       <hr>
     </div>
   </div>
@@ -95,13 +95,17 @@ export default {
     },
 
     addStory() {
-      this.newStories.push({
-        pk: 0,
-        place: '',
-        photoList: [],
-        content: '',
-        rate: null
-      })
+      if (this.newStories[this.newStories.length - 1].place === '' || this.newStories[this.newStories.length - 1].content === '') {
+        alert('내용 작성 후 스토리를 추가해주세요!')
+      } else {
+        this.newStories.push({
+          pk: 0,
+          place: '',
+          photoList: [],
+          content: '',
+          rate: null
+        })
+      }
     },
 
     removeStory(index) {

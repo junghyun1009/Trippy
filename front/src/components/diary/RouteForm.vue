@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="route-div">
-      <input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0">
+      <input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0 && routeNames.length < 10">
       <el-button type="primary" @click="addMarkers" :disabled="routeNames.length === 0">
         <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#fff" icon-name="maplocation">
           <map-location/>
