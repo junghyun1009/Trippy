@@ -1,6 +1,8 @@
 package com.ssafy.trippy.Service.Impl;
 
+import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Dto.Request.RequestCommunityPostDto;
+import com.ssafy.trippy.Dto.Request.RequestLocationDto;
 import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
 import com.ssafy.trippy.Dto.Update.UpdateCommunityPostDto;
 import com.ssafy.trippy.Domain.CommunityPost;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,31 +33,31 @@ public class CommunityPostServiceImpl implements CommunityPostService {
 
     @Transactional
     @Override
-    public void deleteCommunityPost(RequestCommunityPostDto requestCommunityPostDto) {
-        communityPostRepository.delete(requestCommunityPostDto.toEntity());
+    public void deleteCommunityPost(Long id) {
+        communityPostRepository.deleteById(id);
 
     }
 
     @Transactional
     @Override
     public void updateCommunityPost(Long id, UpdateCommunityPostDto updateCommunityPostDto) {
-//        CommunityPost communityPost = communityPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id="+id));
-//        Location location = new Location(updateCommunityPostDto.getCountryName(), updateCommunityPostDto.getCityName(),
-//                updateCommunityPostDto.getLatitude(), updateCommunityPostDto.getLongitude());
-//
-//        communityPost.update(updateCommunityPostDto.getTitle(),
-//                updateCommunityPostDto.getDescription(),
-//                updateCommunityPostDto.getCategory(),
-//                updateCommunityPostDto.getMeetingTime(),
-//                updateCommunityPostDto.getStartDate(),
-//                updateCommunityPostDto.getEndDate(),
-//                updateCommunityPostDto.getRecruitVolume(),
-//                updateCommunityPostDto.getRecruitCurrentVolume(),
-//                updateCommunityPostDto.getStartAge(),
-//                updateCommunityPostDto.getEndAge(),
-//                updateCommunityPostDto.getGender(),
-//                updateCommunityPostDto.isLocal(),
-//                location);
+        CommunityPost communityPost = communityPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id="+id));
+        System.out.println("updateCommunityPostDto.getLocation_id() = " + updateCommunityPostDto.toString());
+        Optional<Location> location = locationRepository.findById(updateCommunityPostDto.getLocation_id());
+
+        communityPost.update(updateCommunityPostDto.getTitle(),
+                updateCommunityPostDto.getDescription(),
+                updateCommunityPostDto.getCategory(),
+                updateCommunityPostDto.getMeetingTime(),
+                updateCommunityPostDto.getStartDate(),
+                updateCommunityPostDto.getEndDate(),
+                updateCommunityPostDto.getRecruitVolume(),
+                updateCommunityPostDto.getRecruitCurrentVolume(),
+                updateCommunityPostDto.getStartAge(),
+                updateCommunityPostDto.getEndAge(),
+                updateCommunityPostDto.getGender(),
+                updateCommunityPostDto.isLocal(),
+                location.get());
     }
 
     @Override
@@ -64,5 +67,11 @@ public class CommunityPostServiceImpl implements CommunityPostService {
                 .map(m -> new ResponseCommunityPostDto())
                 .collect(Collectors.toList());
         return communityPostDtos;
+    }
+
+    @Override
+    public ResponseCommunityPostDto findCommunityPost(Long id) {
+        Optional<CommunityPost> communityPost = communityPostRepository.findById(id);
+        return new ResponseCommunityPostDto(communityPost.get());
     }
 }

@@ -1,6 +1,7 @@
 package com.ssafy.trippy.Dto.Response;
 
 import com.ssafy.trippy.Domain.CommunityPost;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,10 +10,8 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class ResponseCommunityPostDto {
-    private Long id;
     private String title;
     private String description;
-    private String memberId;
     private int category;
     private String countryName;
     private String cityName;
@@ -28,10 +27,8 @@ public class ResponseCommunityPostDto {
 
 
     public ResponseCommunityPostDto(CommunityPost communityPost) {
-        this.id = communityPost.getId();
         this.title = communityPost.getTitle();
         this.description = communityPost.getDescription();
-        this.memberId = communityPost.getMember().getName();
         this.category = communityPost.getCategory();
         this.countryName = communityPost.getLocation().getCountryName();
         this.cityName = communityPost.getLocation().getCityName();
@@ -45,7 +42,6 @@ public class ResponseCommunityPostDto {
         this.gender = communityPost.getGender();
         this.isLocal = communityPost.isLocal();
     }
-
 
 
 }
