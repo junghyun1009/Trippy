@@ -12,6 +12,7 @@ import PasswordChangeView from '@/views/account/PasswordChangeView.vue'
 
 // import ProfileView from '@/views/profile/ProfileView'
 
+import CommunityCreateView from '@/views/community/CommunityCreateView.vue'
 
 const routes = [
   {
@@ -63,6 +64,11 @@ const routes = [
     name: 'passwordChange',
     component: PasswordChangeView
   },
+  {
+    path: '/community/create',
+    name: 'communityCreate',
+    component: CommunityCreateView
+  }
 
   
 ]
