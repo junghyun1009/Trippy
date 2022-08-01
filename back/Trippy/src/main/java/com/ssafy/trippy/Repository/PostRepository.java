@@ -12,5 +12,6 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByCompany(int count);
     List<Post> findAllByMember(Member member);
-    Post findById(Post post);
+
+//    void deletePostByPost
 }
