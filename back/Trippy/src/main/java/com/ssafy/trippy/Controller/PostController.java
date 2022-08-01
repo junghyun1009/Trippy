@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Controller;
 
+import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Dto.Update.UpdatePostDto;
@@ -48,6 +49,19 @@ public class PostController {
         List<ResponsePostDto> responsePostDtos = postService.findAll();
         return new ResponseEntity<List<ResponsePostDto>>(responsePostDtos, HttpStatus.OK);
     }
+
+    @GetMapping("/detail/{post_id}")
+    public ResponseEntity<?> detailPost(@PathVariable("post_id") Long post_id){
+        ResponsePostDto responsePostDto = postService.findPostId(post_id);
+        return new ResponseEntity<ResponsePostDto>(responsePostDto,HttpStatus.OK);
+    }
+
+    @GetMapping("/memberDetail/{member_id}")
+    public ResponseEntity<?> getAllMemberPost(@PathVariable("member_id") Long member_id){
+        List<ResponsePostDto> responsePostDtos = postService.findAllByMember(Member.builder().id(member_id).build());
+        return new ResponseEntity<List<ResponsePostDto>>(responsePostDtos,HttpStatus.OK);
+    }
+
 
 
 
