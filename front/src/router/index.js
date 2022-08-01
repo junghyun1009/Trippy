@@ -14,6 +14,8 @@ import PasswordChangeView from '@/views/account/PasswordChangeView.vue'
 
 import CommunityCreateView from '@/views/community/CommunityCreateView.vue'
 
+import BadgeListView from '../views/badge/BadgeListView.vue'
+
 const routes = [
   {
     path: '/',
@@ -68,7 +70,13 @@ const routes = [
     path: '/community/create',
     name: 'communityCreate',
     component: CommunityCreateView
-  }
+  },
+  {
+    path: '/badge',
+    name: 'badgeList',
+    component: BadgeListView
+  },
+  
 
   
 ]
