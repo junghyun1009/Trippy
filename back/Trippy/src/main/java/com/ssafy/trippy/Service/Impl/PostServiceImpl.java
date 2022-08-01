@@ -1,13 +1,16 @@
 package com.ssafy.trippy.Service.Impl;
 
+import com.ssafy.trippy.Domain.Member;
+import com.ssafy.trippy.Domain.Post;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
-import com.ssafy.trippy.Entity.Member;
-import com.ssafy.trippy.Entity.Post;
+import com.ssafy.trippy.Dto.Update.UpdatePostDto;
 import com.ssafy.trippy.Repository.MemberRepository;
 import com.ssafy.trippy.Repository.PostRepository;
 import com.ssafy.trippy.Service.PostService;
+import com.sun.mail.iap.Response;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,33 +78,40 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public Long savePost(RequestPostDto requestPostDto) {
+        System.out.println("requestPostDto.getMemberId() = " + requestPostDto.getMember_id());
+        Member member = memberRepository.findById(requestPostDto.getMember_id()).get();
+        requestPostDto.setMember_id(member.getId());
         return postRepository.save(requestPostDto.toEntity()).getId();
     }
 
     // post 삭제
     @Transactional
     @Override
-    public void deletePost(RequestPostDto requestPostDto) {
-        postRepository.delete(requestPostDto.toEntity());
+    public void deletePost(Long id) {
+        postRepository.deleteById(id);
     }
 
     // post 수정
     @Transactional
     @Override
-    public void updatePost(Long id, RequestPostDto requestPostDto) {
+    public void updatePost(Long id, UpdatePostDto updatePostDto) {
         Post post = postRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id="+id));
-        Optional<Member> member = memberRepository.findById(requestPostDto.getMemberId());
-        post.update(requestPostDto.getId(),
-                requestPostDto.getTitle(),
-                requestPostDto.getIsDelete(),
-                requestPostDto.getCompany(),
-                requestPostDto.getCount(),
-                requestPostDto.getStartDate(),
-                requestPostDto.getEndDate(),
-                requestPostDto.getRepresentiveImg(),
-                member.get(),
-                requestPostDto.getPostTransports(),
-                requestPostDto.getDetailLocations());
+        post.update(
+                updatePostDto.getTitle(),
+                updatePostDto.getIsDelete(),
+                updatePostDto.getCompany(),
+                updatePostDto.getCount(),
+                updatePostDto.getStartDate(),
+                updatePostDto.getEndDate(),
+                updatePostDto.getRepresentiveImg(),
+                updatePostDto.getPostTransports(),
+                updatePostDto.getDetailLocations());
+    }
+
+    @Override
+    public ResponsePostDto findPostId(Long id) {
+        Post post= postRepository.findById(id).get();
+        return new ResponsePostDto(post);
     }
 
 }

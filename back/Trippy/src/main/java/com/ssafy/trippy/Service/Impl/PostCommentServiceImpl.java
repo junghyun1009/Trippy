@@ -1,10 +1,10 @@
 package com.ssafy.trippy.Service.Impl;
 
+import com.ssafy.trippy.Domain.Post;
+import com.ssafy.trippy.Domain.PostComment;
 import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostCommentDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
-import com.ssafy.trippy.Entity.Post;
-import com.ssafy.trippy.Entity.PostComment;
 import com.ssafy.trippy.Repository.PostCommentRepository;
 import com.ssafy.trippy.Service.PostCommentService;
 import jdk.nashorn.internal.ir.RuntimeNode;

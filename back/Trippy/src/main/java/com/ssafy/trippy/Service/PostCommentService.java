@@ -1,10 +1,9 @@
 package com.ssafy.trippy.Service;
 
+import com.ssafy.trippy.Domain.Post;
 import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostCommentDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
-import com.ssafy.trippy.Entity.Post;
-import com.ssafy.trippy.Entity.PostComment;
 
 import java.util.List;
 

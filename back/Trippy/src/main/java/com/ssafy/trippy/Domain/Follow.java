@@ -1,4 +1,4 @@
-package com.ssafy.trippy.Entity;
+package com.ssafy.trippy.Domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,14 +10,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name="subscribe_uk",
-                        columnNames = {"following", "follower"}
-                )
-        }
-)
 public class Follow extends BaseEntity{
     @Id
     @GeneratedValue

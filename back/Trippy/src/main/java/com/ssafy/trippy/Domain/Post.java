@@ -1,4 +1,4 @@
-package com.ssafy.trippy.Entity;
+package com.ssafy.trippy.Domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -70,8 +70,7 @@ public class Post extends BaseEntity{
         this.detailLocations = detailLocations;
     }
 
-    public void update(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations){
-        this.id = id;
+    public void update(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, List<PostTransport> postTransports, List<DetailLocation> detailLocations){
         this.title = title;
         this.isDelete = isDelete;
         this.company = company;
@@ -79,7 +78,6 @@ public class Post extends BaseEntity{
         this.startDate = startDate;
         this.endDate = endDate;
         this.representiveImg = representiveImg;
-        this.member = member;
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;
 

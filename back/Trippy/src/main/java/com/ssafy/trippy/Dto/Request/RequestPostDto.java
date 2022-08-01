@@ -1,9 +1,13 @@
 package com.ssafy.trippy.Dto.Request;
 
-import com.ssafy.trippy.Entity.*;
+import com.ssafy.trippy.Domain.DetailLocation;
+import com.ssafy.trippy.Domain.Member;
+import com.ssafy.trippy.Domain.Post;
+import com.ssafy.trippy.Domain.PostTransport;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -14,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class RequestPostDto {
     private Long id;
@@ -24,7 +29,7 @@ public class RequestPostDto {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private int representiveImg;
-    private Long memberId;
+    private Long member_id;
     private List<PostTransport> postTransports;
     private List<DetailLocation> detailLocations;
 
@@ -34,7 +39,7 @@ public class RequestPostDto {
                 .company(company)
                 .endDate(endDate)
                 .postTransports(postTransports)
-                .member(Member.builder().id(memberId).build())
+                .member(Member.builder().id(member_id).build())
                 .count(count)
                 .startDate(startDate)
                 .detailLocations(detailLocations)
@@ -54,7 +59,7 @@ public class RequestPostDto {
         this.startDate = startDate;
         this.endDate = endDate;
         this.representiveImg = representiveImg;
-        this.memberId = memberId;
+        this.member_id = member_id;
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;
     }
