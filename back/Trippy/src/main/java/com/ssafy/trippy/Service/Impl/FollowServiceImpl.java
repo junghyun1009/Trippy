@@ -1,9 +1,8 @@
 //package com.ssafy.trippy.Service.Impl;
 //
+//import com.ssafy.trippy.Domain.Follow;
 //import com.ssafy.trippy.Dto.Exception.CustomApiException;
 //import com.ssafy.trippy.Dto.Response.ResponseFollowDto;
-//import com.ssafy.trippy.Entity.Follow;
-//import com.ssafy.trippy.Entity.Member;
 //import com.ssafy.trippy.Repository.FollowRepository;
 //import com.ssafy.trippy.Service.FollowService;
 //import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@
 //    @Transactional
 //    @Override
 //    public void follow(long followingId, long followerId) {
-//        if(followRepository.findFollowByFollowingAndFollower(followingId, followerId)!= null) throw new CustomApiException("이미 팔로우하셨습니다");
+//        if(followRepository.findFollowByFollowingIdAndFollowerId(followingId, followerId)!= null) throw new CustomApiException("이미 팔로우하셨습니다");
 //        followRepository.follow(followerId, followerId);
 //    }
 //

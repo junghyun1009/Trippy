@@ -1,8 +1,6 @@
 package com.ssafy.trippy.Dto.Response;
 
-import com.ssafy.trippy.Entity.CommunityPost;
-import com.ssafy.trippy.Entity.Location;
-import com.ssafy.trippy.Entity.Member;
+import com.ssafy.trippy.Domain.CommunityPost;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

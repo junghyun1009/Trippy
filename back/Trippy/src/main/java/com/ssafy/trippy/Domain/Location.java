@@ -1,4 +1,4 @@
-package com.ssafy.trippy.Entity;
+package com.ssafy.trippy.Domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,7 +36,7 @@ public class Location extends BaseEntity {
     private Double longitude;
 
     @Builder
-    public Location(Long id,String countryName, String cityName, Double latitude, Double longitude) {
+    public Location(Long id, String countryName, String cityName, Double latitude, Double longitude) {
         this.id = id;
         this.countryName = countryName;
         this.cityName = cityName;

@@ -1,6 +1,6 @@
 package com.ssafy.trippy.Service.Impl;
 
-import com.ssafy.trippy.Entity.Transport;
+import com.ssafy.trippy.Domain.Transport;
 import com.ssafy.trippy.Repository.TransportRepository;
 import com.ssafy.trippy.Service.TransportService;
 import lombok.RequiredArgsConstructor;

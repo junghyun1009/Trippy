@@ -129,7 +129,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['routeNames']),
+    ...mapGetters(['routeNames', 'stories']),
     partyTag() {
       const party = this.newDiary.newOption.partyType
       return party
@@ -146,7 +146,12 @@ export default {
     },
     onSubmit() {
       if (this.action === 'create') {
-        this.createDiary(this.newDiary)
+        if (this.newDiary.newTitle && this.newDiary.newOption.datePick.length && this.newDiary.newOption.transportationList.length
+        && this.routeNames.length && this.stories.length) {
+          this.createDiary(this.newDiary)
+        } else {
+          alert("빈 칸 없이 모든 필드를 채워주세요!")
+        }
       }
     }
   }

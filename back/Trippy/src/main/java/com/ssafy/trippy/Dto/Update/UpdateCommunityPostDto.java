@@ -1,8 +1,5 @@
 package com.ssafy.trippy.Dto.Update;
 
-import com.ssafy.trippy.Entity.CommunityPost;
-import com.ssafy.trippy.Entity.Location;
-import com.ssafy.trippy.Entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

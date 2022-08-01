@@ -1,4 +1,4 @@
-package com.ssafy.trippy.Entity;
+package com.ssafy.trippy.Domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
