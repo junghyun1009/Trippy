@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,15 +62,35 @@ public class CommunityPostServiceImpl implements CommunityPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResponseCommunityPostDto> getAllCommunityPost() {
         List<CommunityPost> communityPosts = communityPostRepository.findAll();
-        List<ResponseCommunityPostDto> communityPostDtos = communityPosts.stream()
-                .map(m -> new ResponseCommunityPostDto())
-                .collect(Collectors.toList());
+        List<ResponseCommunityPostDto> communityPostDtos = new ArrayList<>();
+        for (CommunityPost communityPost : communityPosts) {
+            Location location = locationRepository.findById(communityPost.getLocation().getId()).get();
+            ResponseCommunityPostDto responseCommunityPostDto = ResponseCommunityPostDto.builder()
+                    .category(communityPost.getCategory())
+                    .cityName(location.getCityName())
+                    .countryName(location.getCountryName())
+                    .description(communityPost.getDescription())
+                    .endAge(communityPost.getEndAge())
+                    .startAge(communityPost.getStartAge())
+                    .endDate(communityPost.getEndDate())
+                    .gender(communityPost.getGender())
+                    .isLocal(communityPost.isLocal())
+                    .meetingTime(communityPost.getMeetingTime())
+                    .recruitCurrentVolume(communityPost.getRecruitCurrentVolume())
+                    .recruitVolume(communityPost.getRecruitVolume())
+                    .startDate(communityPost.getStartDate())
+                    .title(communityPost.getTitle())
+                    .build();
+            communityPostDtos.add(responseCommunityPostDto);
+        }
         return communityPostDtos;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseCommunityPostDto findCommunityPost(Long id) {
         Optional<CommunityPost> communityPost = communityPostRepository.findById(id);
         return new ResponseCommunityPostDto(communityPost.get());

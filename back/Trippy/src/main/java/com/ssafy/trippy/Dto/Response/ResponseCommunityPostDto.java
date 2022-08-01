@@ -43,5 +43,21 @@ public class ResponseCommunityPostDto {
         this.isLocal = communityPost.isLocal();
     }
 
-
+    @Builder
+    public ResponseCommunityPostDto(String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, int gender, boolean isLocal) {
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.countryName = countryName;
+        this.cityName = cityName;
+        this.meetingTime = meetingTime;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.recruitVolume = recruitVolume;
+        this.recruitCurrentVolume = recruitCurrentVolume;
+        this.startAge = startAge;
+        this.endAge = endAge;
+        this.gender = gender;
+        this.isLocal = isLocal;
+    }
 }
