@@ -1,6 +1,7 @@
 package com.ssafy.trippy.Domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,7 +39,10 @@ public class PostComment extends BaseEntity {
     @JoinColumn(name="POST_ID")
     private Post post;
 
-    public PostComment(String content, Post post) {
+    @Builder
+    public PostComment(Long id, LocalDateTime regDt,String content, Post post) {
+        this.id = id;
+        this.regDt = regDt;
         this.content = content;
         this.post = post;
     }
