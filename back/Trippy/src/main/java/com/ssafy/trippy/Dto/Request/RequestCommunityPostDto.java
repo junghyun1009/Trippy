@@ -14,9 +14,9 @@ public class RequestCommunityPostDto {
     private Long id;
     private String title;
     private String description;
-    private Long memberId;
+    private Long member_id;
     private int category;
-    private Long locationId;
+    private Long location_id;
 //    private String countryName;
 //    private String cityName;
 //    private Double latitude;
@@ -42,8 +42,8 @@ public class RequestCommunityPostDto {
                 .endAge(endAge)
                 .endDate(endDate)
                 .gender(gender)
-                .location(Location.builder().id(locationId).build())
-                .member(Member.builder().id(memberId).build())
+                .location(Location.builder().id(location_id).build())
+                .member(Member.builder().id(member_id).build())
                 .meetingTime(meetingTime)
                 .recruitVolume(recruitVolume)
                 .startAge(startAge)
