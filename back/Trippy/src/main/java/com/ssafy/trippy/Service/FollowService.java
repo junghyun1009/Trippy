@@ -1,13 +1,13 @@
-//package com.ssafy.trippy.Service;
-//
-//import com.ssafy.trippy.Dto.Response.ResponseFollowDto;
-//
-//import java.util.List;
-//
-//public interface FollowService {
-//    void follow(long followingId, long followerId);
-//    void unfollow(long followingId, long followerId);
-//    List<ResponseFollowDto> getFollowerList(Long memberId, Long followerId);
+package com.ssafy.trippy.Service;
+
+import com.ssafy.trippy.Dto.Request.RequestFollowDto;
+import com.ssafy.trippy.Dto.Response.ResponseFollowDto;
+
+import java.util.List;
+
+public interface FollowService {
+    ResponseFollowDto follow(RequestFollowDto requestFollowDto);
+    void unfollow(RequestFollowDto requestFollowDto);
+    List<ResponseFollowDto> getFollowerList(Long memberId);
 //    List<ResponseFollowDto> getFollowingList(Long memberId, Long followingId);
-//
-//}
+}
