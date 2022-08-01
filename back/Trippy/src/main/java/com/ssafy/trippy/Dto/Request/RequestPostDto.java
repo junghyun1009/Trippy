@@ -29,7 +29,7 @@ public class RequestPostDto {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private int representiveImg;
-    private Long memberId;
+    private Long member_id;
     private List<PostTransport> postTransports;
     private List<DetailLocation> detailLocations;
 
@@ -39,7 +39,7 @@ public class RequestPostDto {
                 .company(company)
                 .endDate(endDate)
                 .postTransports(postTransports)
-                .member(Member.builder().id(memberId).build())
+                .member(Member.builder().id(member_id).build())
                 .count(count)
                 .startDate(startDate)
                 .detailLocations(detailLocations)
@@ -59,7 +59,7 @@ public class RequestPostDto {
         this.startDate = startDate;
         this.endDate = endDate;
         this.representiveImg = representiveImg;
-        this.memberId = memberId;
+        this.member_id = member_id;
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;
     }
