@@ -1,7 +1,8 @@
 package com.ssafy.trippy.Dto.Response;
 
-import com.ssafy.trippy.Entity.Follow;
-import com.ssafy.trippy.Entity.Member;
+
+import com.ssafy.trippy.Domain.Follow;
+import com.ssafy.trippy.Domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
