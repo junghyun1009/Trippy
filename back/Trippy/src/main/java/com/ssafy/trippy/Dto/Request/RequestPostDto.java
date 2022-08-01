@@ -1,6 +1,9 @@
 package com.ssafy.trippy.Dto.Request;
 
-import com.ssafy.trippy.Entity.*;
+import com.ssafy.trippy.Domain.DetailLocation;
+import com.ssafy.trippy.Domain.Member;
+import com.ssafy.trippy.Domain.Post;
+import com.ssafy.trippy.Domain.PostTransport;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,9 +1,8 @@
 package com.ssafy.trippy.Dto.Request;
 
-import com.ssafy.trippy.Entity.CommunityPost;
-import com.ssafy.trippy.Entity.Location;
-import com.ssafy.trippy.Entity.Member;
-import lombok.Builder;
+import com.ssafy.trippy.Domain.CommunityPost;
+import com.ssafy.trippy.Domain.Location;
+import com.ssafy.trippy.Domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +17,10 @@ public class RequestCommunityPostDto {
     private Long memberId;
     private int category;
     private Long locationId;
+//    private String countryName;
+//    private String cityName;
+//    private Double latitude;
+//    private Double longitude;
     private LocalDateTime meetingTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -50,22 +53,6 @@ public class RequestCommunityPostDto {
                 .build();
     }
 
-    @Builder
-    public RequestCommunityPostDto(Long id, String title, String description, Long memberId, int category, Long locationId, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, int gender, boolean isLocal) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.memberId = memberId;
-        this.category = category;
-        this.locationId = locationId;
-        this.meetingTime = meetingTime;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.recruitVolume = recruitVolume;
-        this.recruitCurrentVolume = recruitCurrentVolume;
-        this.startAge = startAge;
-        this.endAge = endAge;
-        this.gender = gender;
-        this.isLocal = isLocal;
-    }
+
+
 }

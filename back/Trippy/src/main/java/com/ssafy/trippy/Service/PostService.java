@@ -1,9 +1,9 @@
 package com.ssafy.trippy.Service;
 
 
+import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
-import com.ssafy.trippy.Entity.Member;
 
 import java.util.List;
 

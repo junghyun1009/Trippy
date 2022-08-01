@@ -1,4 +1,4 @@
-package com.ssafy.trippy.Entity;
+package com.ssafy.trippy.Domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
