@@ -24,14 +24,14 @@ public class Bookmark extends BaseEntity {
     @JoinColumn(name="COMMUNITY_POST_ID")
     private CommunityPost communityPost;
 
-//    public void setMember(Member member) {
-//        this.member = member;
-//        if(member.getBookmarks().contains(this)) {
-//            member.getBookmarks().remove(this);
-//        }else{
-//            member.getBookmarks().add(this);
-//        }
-//    }
+    public void setMember(Member member) {
+        this.member = member;
+        if(member.getBookmarks().contains(this)) {
+            member.getBookmarks().remove(this);
+        }else{
+            member.getBookmarks().add(this);
+        }
+    }
 
 
 }
