@@ -1,4 +1,4 @@
-import store from '../store'
+// import store from '../store'
 
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
@@ -155,8 +155,8 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
-  const { isLoggedIn } = store.getters
+// router.beforeEach((to, from, next) => {
+//   const { isLoggedIn } = store.getters
 
   const authPages = [
     'diaryEdit', 'diaryDetail', 'diaryComment',
@@ -164,14 +164,21 @@ router.beforeEach((to, from, next) => {
     'community', 'communityEdit', 'communityDetail', 'communityCreate',
     'badgeList'
   ]
+//   const authPages = [
+//     'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
+//     'profile', 'profileEdit', 
+//     'community', 'communityEdit', 'communityDetail', 'communityCreate',
+//     'badgeList'
+//   ]
 
-  const isAuthRequired = authPages.includes(to.name)
+//   const isAuthRequired = authPages.includes(to.name)
   
-  if ( isAuthRequired && !isLoggedIn ) {
-    next({ name: 'login' })
-  } else {
-    next()
-  }
-})
+//   if ( isAuthRequired && !isLoggedIn ) {
+//     alert('로그인을 해주세요!')
+//     next({ name: 'login' })
+//   } else {
+//     next()
+//   }
+// })
 
 export default router
