@@ -24,7 +24,7 @@ export default {
         option: {
           gender: '',
           age: 0,
-          isLocal: false,
+          isLocal: false
         }
       }
     }
