@@ -158,12 +158,6 @@ const router = createRouter({
 // router.beforeEach((to, from, next) => {
 //   const { isLoggedIn } = store.getters
 
-  const authPages = [
-    'diaryEdit', 'diaryDetail', 'diaryComment',
-    'profile', 'profileEdit', 
-    'community', 'communityEdit', 'communityDetail', 'communityCreate',
-    'badgeList'
-  ]
 //   const authPages = [
 //     'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
 //     'profile', 'profileEdit', 
