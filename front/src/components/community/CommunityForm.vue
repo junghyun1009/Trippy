@@ -32,17 +32,17 @@
           </div>
         </template>
         <el-form-item label="성별">
-          <el-radio-group v-model="newPost.gender">
+          <el-radio-group v-model="newPost.newOption.gender">
             <el-radio label="누구나" />
             <el-radio label="여성만" />
             <el-radio label="남성만" />
           </el-radio-group>
         </el-form-item>
         <el-form-item label="나이">
-          <el-slider v-model="newPost.age" range />
+          <el-slider v-model="newPost.newOption.age" range />
         </el-form-item>
         <el-form-item label="지역 제한">
-          <el-switch v-model="newPost.isLocal" />
+          <el-switch v-model="newPost.newOption.isLocal" />
         </el-form-item>
       </el-collapse-item>
     </el-collapse>
@@ -67,9 +67,11 @@ export default {
         desc: this.post.desc,
         dateTime: this.post.dateTime,
         recruit_volume: this.post.recruit_volume,
-        gender: this.post.option.gender,
-        age: this.post.option.age,
-        isLocal: this.post.option.isLocal
+        newOption: {
+          gender: this.post.option.gender,
+          age: this.post.option.age,
+          isLocal: this.post.option.isLocal
+        }
       }
     }
   },
