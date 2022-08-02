@@ -1,13 +1,7 @@
 package com.ssafy.trippy.Dto.Request;
 
-import com.ssafy.trippy.Domain.DetailLocation;
-import com.ssafy.trippy.Domain.Member;
-import com.ssafy.trippy.Domain.Post;
-import com.ssafy.trippy.Domain.PostTransport;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ssafy.trippy.Domain.*;
+import lombok.*;
 
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -19,9 +13,9 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class RequestPostDto {
-    private Long id;
     private String title;
     private Byte isDelete;
     private int company;
@@ -31,18 +25,21 @@ public class RequestPostDto {
     private int representiveImg;
     private Long member_id;
     private List<PostTransport> postTransports;
-    private List<DetailLocation> detailLocations;
+    private List<RequestDetailLocationDto> detailLocations;
 
     public Post toEntity() {
+        List<DetailLocation> detailLocationList = new ArrayList<>();
+        for (RequestDetailLocationDto detailLocation : detailLocations) {
+            detailLocationList.add(detailLocation.toEntity());
+        }
         return Post.builder()
-                .id(id)
                 .company(company)
                 .endDate(endDate)
                 .postTransports(postTransports)
                 .member(Member.builder().id(member_id).build())
                 .count(count)
                 .startDate(startDate)
-                .detailLocations(detailLocations)
+                .detailLocations(detailLocationList)
                 .title(title)
                 .isDelete(isDelete)
                 .representiveImg(representiveImg)
@@ -50,8 +47,7 @@ public class RequestPostDto {
     }
 
     @Builder
-    public RequestPostDto(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Long memberId, List<PostTransport> postTransports, List<DetailLocation> detailLocations) {
-        this.id = id;
+    public RequestPostDto(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Long memberId, List<PostTransport> postTransports, List<RequestDetailLocationDto> detailLocations) {
         this.title = title;
         this.isDelete = isDelete;
         this.company = company;

@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -52,7 +54,7 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy = "transport" )
     private List<PostTransport> postTransports = new ArrayList<>();
 
-    @OneToMany(mappedBy="post")
+    @OneToMany(mappedBy="post", cascade = CascadeType.REMOVE)
     private List<DetailLocation> detailLocations = new ArrayList<>();
 
     @Builder

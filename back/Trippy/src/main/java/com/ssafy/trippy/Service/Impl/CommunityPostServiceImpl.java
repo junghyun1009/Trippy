@@ -2,7 +2,6 @@ package com.ssafy.trippy.Service.Impl;
 
 import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Dto.Request.RequestCommunityPostDto;
-import com.ssafy.trippy.Dto.Request.RequestLocationDto;
 import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
 import com.ssafy.trippy.Dto.Update.UpdateCommunityPostDto;
 import com.ssafy.trippy.Domain.CommunityPost;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
