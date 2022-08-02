@@ -1,4 +1,5 @@
 import router from "@/router"
+import axios from "axios"
 
 export default ({
   state: {
@@ -73,9 +74,7 @@ export default ({
       state.routeGeocodes = []
       state.routeNames = []
       state.stories = []
-      router.push({
-        name: 'diaryDetail'
-      })
+
       console.log(state.diary)
       console.log(state.diaries)
     }
@@ -96,8 +95,20 @@ export default ({
     deleteStory({ commit }, index) {
       commit('DELETE_STORY', index)
     },
-    createDiary({ commit }, diary) {
-      commit('CREATE_DIARY', diary)
+    createDiary({ commit, getters }, diary) {
+      // commit('CREATE_DIARY', diary)
+      axios({
+        url: 'http://localhost:8000/posts',
+        method: 'post',
+        data: diary,
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        commit('CREATE_DIARY', res.data)
+        router.push({
+          name: 'diaryDetail'
+        })
+      })
     }
   },
 })
