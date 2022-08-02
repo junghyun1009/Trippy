@@ -168,6 +168,7 @@ router.beforeEach((to, from, next) => {
   const isAuthRequired = authPages.includes(to.name)
   
   if ( isAuthRequired && !isLoggedIn ) {
+    alert('로그인을 해주세요!')
     next({ name: 'login' })
   } else {
     next()

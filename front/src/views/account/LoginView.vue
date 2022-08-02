@@ -19,6 +19,7 @@
 <script>
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
 import { userErrorMessage } from '@/common/constant.js'
+import { mapActions } from 'vuex'
 
 export default {
     name: 'LoginView',
@@ -37,6 +38,7 @@ export default {
       }
     },
     methods: {
+      ...mapActions(['login']),
       checkEmail() {
       var inputEmail = document.getElementById('email').value;
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
