@@ -22,7 +22,7 @@ export default {
         dateTime: [],
         recruit_volume: '',
         option: {
-          gender: '',
+          gender: '누구나',
           age: 0,
           isLocal: false
         }
