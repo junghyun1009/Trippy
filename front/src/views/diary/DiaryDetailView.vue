@@ -59,6 +59,14 @@ export default {
             map: map,
         });
       })
+      const routePath = new google.maps.Polyline({
+        path: this.temp.geocodes,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+      })
+      routePath.setMap(map)
     },
   },
   mounted() {
