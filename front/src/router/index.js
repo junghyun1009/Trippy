@@ -21,7 +21,7 @@ import ProfileEditView from '@/views/profile/ProfileEditView.vue'
 import CommunityCreateView from '@/views/community/CommunityCreateView.vue'
 import CommunityView from '@/views/community/CommunityView.vue'
 import CommunityDetailView from '@/views/community/CommunityDetailView.vue'
-import CommunityEditView from '@/views/community/CommunityEditView.vue'
+// import CommunityEditView from '@/views/community/CommunityEditView.vue'
 
 import BadgeListView from '../views/badge/BadgeListView.vue'
 
@@ -131,11 +131,11 @@ const routes = [
     name: 'communityCreate',
     component: CommunityCreateView
   },
-  {
-    path: '/community/edit',
-    name: 'communityEdit',
-    component: CommunityEditView
-  },
+  // {
+  //   path: '/community/edit',
+  //   name: 'communityEdit',
+  //   component: CommunityEditView
+  // },
 
   
   {
@@ -158,6 +158,12 @@ const router = createRouter({
 // router.beforeEach((to, from, next) => {
 //   const { isLoggedIn } = store.getters
 
+  const authPages = [
+    'diaryEdit', 'diaryDetail', 'diaryComment',
+    'profile', 'profileEdit', 
+    'community', 'communityEdit', 'communityDetail', 'communityCreate',
+    'badgeList'
+  ]
 //   const authPages = [
 //     'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
 //     'profile', 'profileEdit', 
