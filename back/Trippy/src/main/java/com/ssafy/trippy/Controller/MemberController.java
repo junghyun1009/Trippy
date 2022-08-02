@@ -55,14 +55,16 @@ public class MemberController {
 
     // 회원 삭제
     @DeleteMapping("/api/remove/{id}")
-    public void removeMember(@PathVariable Long id){
+    public ResponseEntity<?> removeMember(@PathVariable Long id){
         memberService.deleteMember(id);
+        return new ResponseEntity<>("회원삭제성공", HttpStatus.OK);
     }
 
     // 회원 수정
     @PutMapping("/api/modify/{id}")
-    public void modifyMember(@PathVariable Long id, @RequestBody UpdateMemberDto updateMemberDto){
+    public ResponseEntity<?> modifyMember(@PathVariable Long id, @RequestBody UpdateMemberDto updateMemberDto){
         memberService.updateMember(id,updateMemberDto);
+        return new ResponseEntity<>("회원수정성공", HttpStatus.OK);
     }
 
     // 회원 정보 받아오기

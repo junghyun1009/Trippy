@@ -24,11 +24,11 @@
       <el-collapse-item title="장소">
         <div>장소</div>
       </el-collapse-item>
-      <el-collapse-item title="모집 조건">
-        <template>
-          <span>모집 조건</span>
+      <el-collapse-item>
+        <template #title>
           <div>
-            <el-tag>조건1</el-tag>
+            <span>모집 조건</span>
+            <el-tag class="option-tag" v-for="option in optionTag" :key="option">{{ option }}</el-tag>
           </div>
         </template>
         <el-form-item label="성별">
@@ -39,7 +39,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="나이">
-          <el-slider v-model="newPost.newOption.age" range />
+          <el-slider v-model="newPost.newOption.age" range :min="19" :max="50"/>
         </el-form-item>
         <el-form-item label="지역 제한">
           <el-switch v-model="newPost.newOption.isLocal" />
@@ -75,14 +75,35 @@ export default {
       }
     }
   },
+  computed: {
+    optionTag() {
+      const gender = this.newPost.newOption.gender
+      const start_age = this.newPost.newOption.age[0]
+      const end_age = this.newPost.newOption.age[1]
+      let age = start_age + '~' + end_age
+      if (start_age === undefined && end_age === undefined || start_age === 19 && end_age === 50) {
+        age = '누구나'
+      }
+      const isLocal = this.newPost.newOption.isLocal
+      let local = ''
+      if (isLocal === false) {
+        local = '어디서나'
+      } else {
+        local = '같은 지역만'
+      }
+      return [gender, age, local]
+    }
+  },
   methods: {
     onSubmit() {
       console.log(this.newPost)
     }
-  }
+  },
 }
 </script>
 
-<style>
-
+<style scoped>
+.option-tag {
+  margin-left: 10px;
+}
 </style>

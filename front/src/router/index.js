@@ -1,4 +1,4 @@
-import store from '../store'
+// import store from '../store'
 
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
@@ -21,7 +21,7 @@ import ProfileEditView from '@/views/profile/ProfileEditView.vue'
 import CommunityCreateView from '@/views/community/CommunityCreateView.vue'
 import CommunityView from '@/views/community/CommunityView.vue'
 import CommunityDetailView from '@/views/community/CommunityDetailView.vue'
-import CommunityEditView from '@/views/community/CommunityEditView.vue'
+// import CommunityEditView from '@/views/community/CommunityEditView.vue'
 
 import BadgeListView from '../views/badge/BadgeListView.vue'
 
@@ -131,11 +131,11 @@ const routes = [
     name: 'communityCreate',
     component: CommunityCreateView
   },
-  {
-    path: '/community/edit',
-    name: 'communityEdit',
-    component: CommunityEditView
-  },
+  // {
+  //   path: '/community/edit',
+  //   name: 'communityEdit',
+  //   component: CommunityEditView
+  // },
 
   
   {
@@ -155,23 +155,24 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
-  const { isLoggedIn } = store.getters
+// router.beforeEach((to, from, next) => {
+//   const { isLoggedIn } = store.getters
 
-  const authPages = [
-    'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
-    'profile', 'profileEdit', 
-    'community', 'communityEdit', 'communityDetail', 'communityCreate',
-    'badgeList'
-  ]
+//   const authPages = [
+//     'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
+//     'profile', 'profileEdit', 
+//     'community', 'communityEdit', 'communityDetail', 'communityCreate',
+//     'badgeList'
+//   ]
 
-  const isAuthRequired = authPages.includes(to.name)
+//   const isAuthRequired = authPages.includes(to.name)
   
-  if ( isAuthRequired && !isLoggedIn ) {
-    next({ name: 'login' })
-  } else {
-    next()
-  }
-})
+//   if ( isAuthRequired && !isLoggedIn ) {
+//     alert('로그인을 해주세요!')
+//     next({ name: 'login' })
+//   } else {
+//     next()
+//   }
+// })
 
 export default router
