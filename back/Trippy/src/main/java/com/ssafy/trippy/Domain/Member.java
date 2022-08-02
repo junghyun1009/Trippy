@@ -64,10 +64,10 @@ public class Member extends BaseEntity implements UserDetails{
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy="member")
+    @OneToMany(mappedBy="member", cascade = CascadeType.ALL)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
-    @OneToMany(mappedBy="member")
+    @OneToMany(mappedBy="member", cascade = CascadeType.ALL)
     private List<LikePost> likePosts = new ArrayList<>();
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)

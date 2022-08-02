@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequestMapping("/follow")
+@CrossOrigin("*")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 public class FollowController {
     private final FollowService followService;
+    private static final String SUCCESS = "success";
 
     @PostMapping
     public ResponseEntity<?> follow(@RequestBody RequestFollowDto requestFollowDto){
@@ -28,7 +30,7 @@ public class FollowController {
     @PostMapping("/undo")
     public ResponseEntity<?> unfollow(@RequestBody RequestFollowDto requestFollowDto){
         followService.unfollow(requestFollowDto);
-        return new ResponseEntity<String>("언팔성공", HttpStatus.OK);
+        return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
     }
 
     @GetMapping("/follower/{member_id}")
