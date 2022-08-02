@@ -4,7 +4,7 @@
 
 <script>
 export default {
-    name: 'ProfileEditView'
+    name: 'NotFound404View'
 }
 </script>
 

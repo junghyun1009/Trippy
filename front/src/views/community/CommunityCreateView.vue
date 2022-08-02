@@ -8,7 +8,7 @@
 <script>
 import CommunityForm from '@/components/community/CommunityForm.vue'
 export default {
-    name: 'CommunityCreate',
+    name: 'CommunityCreateView',
     components: {
         CommunityForm
     }
