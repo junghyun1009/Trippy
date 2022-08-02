@@ -25,7 +25,7 @@
           </div>
         </el-menu-item>
         <el-menu-item index="2">
-          <div @click="visible = true" class="menu-icon">
+          <div @click="visible=true" class="menu-icon">
             <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#fff" icon-name="menuicon">
               <menu-icon/>
             </icon-base>
@@ -36,17 +36,17 @@
         <!-- 로그인한 유저 -->
         <p>프로필 사진</p>
         <p>'유저 이름'의 로그</p>
-        <router-link :to="{ name: 'profileEdit' }">프로필 수정</router-link>
+        <router-link :to="{ name: 'profileEdit' }" @click="visible =false">프로필 수정</router-link>
         <span> | 로그아웃</span>
         <hr>
-        <router-link :to="{ name: 'diaryCreate' }">다이어리 작성</router-link>
+        <router-link :to="{ name: 'diaryCreate' }" @click="visible =false">다이어리 작성</router-link>
         <br>
-        <router-link :to="{ name: 'community' }">동행 구하기</router-link>
+        <router-link :to="{ name: 'community' }" @click="visible =false">동행 구하기</router-link>
         <hr>
         <!-- 로그인 안 한 유저 -->
-        <router-link :to="{ name: 'login' }">로그인</router-link>
+        <router-link :to="{ name: 'login' }" @click="visible =false">로그인</router-link>
         <br>
-        <router-link :to="{ name: 'signUp' }">회원가입</router-link>
+        <router-link :to="{ name: 'signUp' }" @click="visible =false">회원가입</router-link>
 
       </el-drawer>
 
