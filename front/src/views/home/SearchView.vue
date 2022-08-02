@@ -1,10 +1,12 @@
 <template>
-  <div></div>
+  <div>
+
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'ProfileEditView'
+    name: 'SearchView'
 }
 </script>
 
