@@ -3,7 +3,7 @@
     <form action="submit">
       <div class="title-box">
         <span>제목</span>
-        <el-input v-model="newDiary.newTitle" class="input-box" placeholder="제목을 입력하세요." />
+        <el-input v-model="newDiary.title" class="input-box" placeholder="제목을 입력하세요." />
       </div>
       <div class="demo-collapse">
         <el-collapse>
@@ -33,7 +33,7 @@
                 <div class="block">
                   <span class="demonstration">여행 기간</span>
                   <el-date-picker
-                    v-model="newDiary.newOption.datePick"
+                    v-model="newDiary.season"
                     type="daterange"
                     range-separator="To"
                     start-placeholder="Start date"
@@ -45,7 +45,7 @@
               <!-- 옵션: 일행 타입 -->
               <div class="party-type">
                 <span class="demonstration">일행 타입</span>
-                <el-radio-group v-model="newDiary.newOption.partyType">
+                <el-radio-group v-model="newDiary.company">
                   <el-radio label="가족">가족</el-radio>
                   <el-radio label="커플">커플</el-radio>
                   <el-radio label="친구">친구</el-radio>
@@ -56,13 +56,13 @@
               <!-- 옵션: 인원 수 -->
               <div class="member-num">
                 <span class="demonstration">인원 수</span>
-                <el-input-number v-model="newDiary.newOption.memberNum" :min="1" :max="10"/>
+                <el-input-number v-model="newDiary.count" :min="1" :max="10"/>
               </div>
 
             <!-- 옵션: 이동수단 -->
               <div class="transport-type">
                 <span class="demonstration">이동 수단</span>
-                <el-checkbox-group v-model="newDiary.newOption.transportationList">
+                <el-checkbox-group v-model="newDiary.transport">
                   <el-checkbox label="뚜벅이" />
                   <el-checkbox label="대중교통" />
                   <el-checkbox label="따릉이" />
@@ -118,35 +118,33 @@ export default {
   data() {
     return {
       newDiary: {
-        newTitle: this.diary.title,
-        newOption: {
-          datePick: this.diary.option.datePick,
-          partyType: this.diary.option.partyType,
-          memberNum: this.diary.option.memberNum,
-          transportationList: this.diary.option.transportationList,
-        },
+        title: this.diary.title,
+        season: this.diary.season,
+        company: this.diary.company,
+        count: this.diary.count,
+        transport: this.diary.transport,
       }
     }
   },
   computed: {
     ...mapGetters(['routeNames', 'stories']),
     partyTag() {
-      const party = this.newDiary.newOption.partyType
+      const party = this.newDiary.company
       return party
     },
     transportationTag() {
-      const transportation = this.newDiary.newOption.transportationList
+      const transportation = this.newDiary.transport
       return transportation
     }
   },
   methods: {
     ...mapActions(['createDiary']),
     handleClose(tag) {
-      this.newDiary.newOption.transportationList.splice(this.newDiary.newOption.transportationList.indexOf(tag), 1)
+      this.newDiary.transport.splice(this.newDiary.transport.indexOf(tag), 1)
     },
     onSubmit() {
       if (this.action === 'create') {
-        if (this.newDiary.newTitle && this.newDiary.newOption.datePick.length && this.newDiary.newOption.transportationList.length
+        if (this.newDiary.title && this.newDiary.season.length && this.newDiary.transport.length
         && this.routeNames.length && this.stories.length) {
           this.createDiary(this.newDiary)
         } else {

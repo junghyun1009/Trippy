@@ -9,10 +9,11 @@ import java.util.List;
 
 public interface CommunityPostService {
     Long saveCommunityPost(RequestCommunityPostDto requestCommunityPostDto);
-    void deleteCommunityPost(RequestCommunityPostDto requestCommunityPostDto);
+    void deleteCommunityPost(Long id);
 
     void updateCommunityPost(Long id, UpdateCommunityPostDto updateCommunityPostDto);
 
     List<ResponseCommunityPostDto> getAllCommunityPost();
+    ResponseCommunityPostDto findCommunityPost(Long id);
 
 }
