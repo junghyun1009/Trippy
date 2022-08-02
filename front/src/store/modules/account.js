@@ -4,7 +4,8 @@ import axios from 'axios'
 
 export default {
   state: {
-    accessToken: this.$cookies.get("refreshToken") || '',
+    //this.$cookies.get("refreshToken") ||
+    accessToken:  '',
     currentUser: '',
     profile: {},
     authError: null,
@@ -81,7 +82,7 @@ export default {
       if (getters.isLoggedIn) {
         axios({
           // 여기 pk 넣는 형식 정확히 모르겠음
-          url: 'http://localhost:8000/members/api/{id}',
+          url: 'http://localhost:8000/members/api/`${userid}`',
           method: 'get',
           headers: getters.authHeader,
         })
@@ -114,6 +115,14 @@ export default {
       commit('FROM_PASSWORD_FIND_VIEW')
       console.log(this.getters.fromPasswordFindView)
       router.push('/passwordchange')
+    },
+
+    deleteAccount({ getters }) {
+      axios({
+        url: 'http://localhost:8000/members/api/remove',
+        method: 'delete',
+        headers: getters.authHeader,
+      })
     }
   },
   modules: {
