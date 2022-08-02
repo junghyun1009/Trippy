@@ -1,18 +1,21 @@
 <template>
   <div>
     <!-- 없는 회원정보 -->
-    <el-input v-model="userinfo.description" placeholder="이메일" id="email" ></el-input>
-    <br>
-    <br>
-    <el-input v-model="userinfo.password" type="password" placeholder="비밀번호" show-password></el-input>
-    <br><br>
-    <el-button type="primary" @click="checkEmail()">로그인</el-button>
-    <br><br>
-    <router-link :to="{ name: 'signUp' }">회원가입</router-link>
-    |
-    <router-link :to="{ name: 'passwordFind' }">비밀번호 찾기</router-link>
-    <account-error-list :errorMessage="emailError" v-show="!emailFormat"></account-error-list>
-    <account-error-list :errorMessage="loginError" v-show="authentication == false"></account-error-list>
+    <form @submin.prevent="login()">
+      <el-input v-model="userinfo.description" placeholder="이메일" id="email" ></el-input>
+      <br>
+      <br>
+      <el-input v-model="userinfo.password" type="password" placeholder="비밀번호" show-password></el-input>
+      <br><br>
+      <el-button type="primary" @click="checkEmail()">로그인</el-button>
+      <br><br>
+      <router-link :to="{ name: 'signUp' }">회원가입</router-link>
+      |
+      <router-link :to="{ name: 'passwordFind' }">비밀번호 찾기</router-link>
+      <account-error-list :errorMessage="emailError" v-show="!emailFormat"></account-error-list>
+      <account-error-list :errorMessage="loginError" v-show="authentication == false"></account-error-list>
+    </form>
+
   </div>
 </template>
 
