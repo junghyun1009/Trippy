@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export default {
   state: {
-    accessToken: '',
+    accessToken: this.$cookies.get("refreshToken") || '',
     currentUser: '',
     profile: {},
     authError: null,
@@ -93,6 +93,21 @@ export default {
           }
         })
       }
+    },
+
+    logout({ getters, dispatch }) {
+      axios({
+        url: 'http://localhost:8000/members/logout',
+        method: 'post',
+        headers: getters.authHeader,
+      })
+      .then(() => {
+        dispatch('removeToken')
+        router.push({ name: 'home' })
+      })
+      .catch( err => {
+        console.error(err.response)
+      })
     },
 
     fromPasswordFindView({commit}, ) {
