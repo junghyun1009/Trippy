@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "FOLLOWING_ID", "FOLLOWER_ID"}))
 public class Follow extends BaseEntity{
     @Id
     @GeneratedValue
@@ -17,11 +18,11 @@ public class Follow extends BaseEntity{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "following")
+    @JoinColumn(name = "FOLLOWING_ID")
     private Member following;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower")
+    @JoinColumn(name = "FOLLOWER_ID")
     private Member follower;
 
     @Builder
