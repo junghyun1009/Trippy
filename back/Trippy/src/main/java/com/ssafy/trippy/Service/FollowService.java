@@ -8,6 +8,8 @@ import java.util.List;
 public interface FollowService {
     ResponseFollowDto follow(RequestFollowDto requestFollowDto);
     void unfollow(RequestFollowDto requestFollowDto);
-    List<ResponseFollowDto> getFollowerList(Long memberId);
-//    List<ResponseFollowDto> getFollowingList(Long memberId, Long followingId);
+    List<ResponseFollowDto> getFollowers(Long memberId);
+    List<ResponseFollowDto> getFollowings(Long memberId);
+    Long getFollowersCnt(Long memberId);
+    Long getFollowingsCnt(Long memberId);
 }

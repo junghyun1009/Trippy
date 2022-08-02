@@ -31,27 +31,36 @@ public class FollowServiceImpl implements FollowService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResponseFollowDto> getFollowerList(Long memberId) {
-        List<Follow> followList = followRepository.findAllByFollwerId(memberId);
+    public List<ResponseFollowDto> getFollowers(Long memberId) {
+        List<Follow> followList = followRepository.findAllByFollowerId(memberId);
         List<ResponseFollowDto> responseFollowDtoList = new ArrayList<>();
         for (Follow follow : followList) {
             responseFollowDtoList.add(new ResponseFollowDto(follow));
         }
         return responseFollowDtoList;
     }
-//
-//    @Transactional(readOnly = true)
-//    @Override
-//    public List<ResponseFollowDto> getFollowingList(Long memberId, Long followingId) {
-//        List<Follow> followList = followRepository.findAllByFollowingIdAndMemberId(memberId, followingId);
-//        List<ResponseFollowDto> responseFollowDtoList = new ArrayList<>();
-//        for (Follow follow : followList) {
-//            ResponseFollowDto dto = ResponseFollowDto.builder()
-//                    .id(follow.getId())
-//                    .follower(follow.getFollower())
-//                    .following(follow.getFollowing()).build();
-//            responseFollowDtoList.add(dto);
-//        }
-//        return responseFollowDtoList;
-//    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ResponseFollowDto> getFollowings(Long memberId) {
+        List<Follow> followList = followRepository.findAllByFollowingId(memberId);
+        List<ResponseFollowDto> responseFollowDtoList = new ArrayList<>();
+        for (Follow follow : followList) {
+            responseFollowDtoList.add(new ResponseFollowDto(follow));
+        }
+        return responseFollowDtoList;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Long getFollowersCnt(Long memberId) {
+        return followRepository.countByFollowerId(memberId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Long getFollowingsCnt(Long memberId) {
+        return followRepository.countByFollowingId(memberId);
+    }
+
 }

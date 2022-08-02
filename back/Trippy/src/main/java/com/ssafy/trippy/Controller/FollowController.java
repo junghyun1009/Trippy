@@ -31,9 +31,27 @@ public class FollowController {
         return new ResponseEntity<String>("언팔성공", HttpStatus.OK);
     }
 
-    @GetMapping("/follower")
-    public ResponseEntity<?> getFollowers(@PathVariable Long memberId){
-        List<ResponseFollowDto> responseFollowDtos = followService.getFollowerList(memberId);
+    @GetMapping("/follower/{member_id}")
+    public ResponseEntity<?> getFollowers(@PathVariable("member_id") Long memberId){
+        List<ResponseFollowDto> responseFollowDtos = followService.getFollowers(memberId);
         return new ResponseEntity<>(responseFollowDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/following/{member_id}")
+    public ResponseEntity<?> getFollowings(@PathVariable("member_id") Long memberId){
+        List<ResponseFollowDto> responseFollowDtos = followService.getFollowings(memberId);
+        return new ResponseEntity<>(responseFollowDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/follower/cnt/{member_id}")
+    public ResponseEntity<?> getFollowersCnt(@PathVariable("member_id") Long memberId){
+        Long responseCnt = followService.getFollowersCnt(memberId);
+        return new ResponseEntity<Long>(responseCnt, HttpStatus.OK);
+    }
+
+    @GetMapping("/following/cnt/{member_id}")
+    public ResponseEntity<?> getFollowingsCnt(@PathVariable("member_id") Long memberId){
+        Long responseCnt = followService.getFollowingsCnt(memberId);
+        return new ResponseEntity<Long>(responseCnt, HttpStatus.OK);
     }
 }

@@ -70,6 +70,12 @@ public class Member extends BaseEntity implements UserDetails{
     @OneToMany(mappedBy="member")
     private List<LikePost> likePosts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+    private List<Follow> followers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL)
+    private List<Follow> followings = new ArrayList<>();
+
     @Builder
     public Member(Long id, String name, String password, String email, String phone, int gender, LocalDateTime birth, String img_path, String desc, List<Bookmark> bookmarks, List<LikePost> likePosts) {
         this.id = id;
