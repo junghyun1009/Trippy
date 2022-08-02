@@ -21,13 +21,14 @@ export default {
         desc: '',
         dateTime: [],
         recruit_volume: '',
-        gender: '',
-        age: 0,
-        isLocal: false
+        option: {
+          gender: '',
+          age: 0,
+          isLocal: false
+        }
       }
     }
   }
-
 }
 </script>
 
