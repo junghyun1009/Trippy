@@ -3,15 +3,20 @@
     <div>
       <el-menu
         :default-active="activeIndex"
-        active-text-color="#ffd04b"
         class="el-menu-demo"
         mode="horizontal"
         :ellipsis="false"
-        @select="handleSelect"
       >
         <el-menu-item index="0"><span class="trippyLogo" @click="$router.push('/')">TRIPPY</span></el-menu-item>
         <div class="flex-grow" />
         <el-menu-item index="1">
+          <el-button v-if="flag===0" @click="showSearchBar">search</el-button>
+          <div v-else>
+            <el-input v-model="searchPlace" placeholder="어디로 떠날까요?" @keyup.enter="showInput"></el-input>
+            <el-button @click="closeSearchBar">x</el-button>
+          </div>
+        </el-menu-item>
+        <el-menu-item index="2">
           <p @click="visible = true">
             Hamburger
           </p>
@@ -34,6 +39,7 @@
           </el-drawer>
         </el-menu-item>
       </el-menu>
+
     </div>
   </div>
 </template>
@@ -46,17 +52,22 @@ export default {
   name: "NavBar",
   data () {
     return {
-      visible: false
+      visible: false,
+      flag: 0,
+      searchPlace: '',
+      activeIndex: ref('3')
     }
   },
 	methods: {
-		handleSelect(key, keyPath) {
-			var activeIndex = ref('1');
-			console.log(activeIndex)
-			var activeIndex2 = ref('1');
-			console.log(activeIndex2)
-			console.log(key, keyPath)
-		}
+    showSearchBar() {
+      this.flag = 1
+    },
+    closeSearchBar() {
+      this.flag = 0
+    },
+    showInput() {
+      console.log(this.searchPlace)
+    }
 	}
 
 
