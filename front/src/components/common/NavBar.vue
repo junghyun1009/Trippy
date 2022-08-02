@@ -34,19 +34,27 @@
       </el-menu>
       <el-drawer v-model="visible" :show-close="true" :modal="false" size="70%">
         <!-- 로그인한 유저 -->
-        <p>프로필 사진</p>
-        <p>'유저 이름'의 로그</p>
-        <router-link :to="{ name: 'profileEdit' }" @click="visible =false">프로필 수정</router-link>
-        <span> | 로그아웃</span>
-        <hr>
-        <router-link :to="{ name: 'diaryCreate' }" @click="visible =false">다이어리 작성</router-link>
-        <br>
-        <router-link :to="{ name: 'community' }" @click="visible =false">동행 구하기</router-link>
-        <hr>
+        <!-- <div v-if="isLoggedIn"> -->
+        <div>
+          <router-link :to="{ name: 'profile' }" @click="visible =false">
+            <el-avatar :size="100" :src="profile.img_path" />
+          </router-link>
+          <p>{{ profile.name }}의 로그</p>
+          <router-link :to="{ name: 'profileEdit' }" @click="visible =false">프로필 수정</router-link>
+          <span> | 로그아웃</span>
+          <hr>
+          <router-link :to="{ name: 'diaryCreate' }" @click="visible =false">다이어리 작성</router-link>
+          <br>
+          <router-link :to="{ name: 'community' }" @click="visible =false">동행 구하기</router-link>
+          <hr>
+        </div>
         <!-- 로그인 안 한 유저 -->
-        <router-link :to="{ name: 'login' }" @click="visible =false">로그인</router-link>
-        <br>
-        <router-link :to="{ name: 'signUp' }" @click="visible =false">회원가입</router-link>
+        <!-- <div v-else> -->
+        <div>
+          <router-link :to="{ name: 'login' }" @click="visible =false">로그인</router-link>
+          <br>
+          <router-link :to="{ name: 'signUp' }" @click="visible =false">회원가입</router-link>
+        </div>
 
       </el-drawer>
 
@@ -59,10 +67,16 @@ import { ref } from 'vue'
 import SearchBar from '@/components/icon/SearchBar.vue'
 import MenuIcon from '@/components/icon/MenuIcon.vue'
 import CloseIcon from '@/components/icon/CloseIcon.vue'
+import { mapGetters } from 'vuex'
 
 
 export default {
   name: "NavBar",
+  components: {
+    SearchBar,
+    MenuIcon,
+    CloseIcon
+  },
   data () {
     return {
       visible: false,
@@ -71,10 +85,8 @@ export default {
       activeIndex: ref('3')
     }
   },
-  components: {
-    SearchBar,
-    MenuIcon,
-    CloseIcon
+  computed: {
+    ...mapGetters(['isLoggedIn', 'profile'])
   },
 	methods: {
     showSearchBar() {
