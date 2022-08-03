@@ -33,8 +33,13 @@ export default ({
     routeNames: state => state.routeNames,
     stories: state => state.stories,
     story: state => state.story,
+    diaries: state => state.diaries,
     diary: state => state.diary,
-    diaryTemp: state => state.diaryTemp
+    diaryTemp: state => state.diaryTemp,
+    // 이 친구 긴가민가
+    isAuthor: (state, getters) => {
+      return state.diary.member_id?.name === getters.currentUser.name
+    }
   },
   mutations: {
     ADD_GEOCODE(state, geocode) {
@@ -67,6 +72,7 @@ export default ({
       state.diary.geocodes = state.routeGeocodes
       state.diary.routes = state.routeNames
       state.diary.stories = state.stories
+      // 얘는 지워도 될 것 같은데 일단 실험해봐야 함
       state.diaries.push(state.diary)
       // 초기화
       state.routeGeocodes = []
@@ -75,28 +81,38 @@ export default ({
 
       console.log(state.diary)
       console.log(state.diaries)
-    }
+    },
+    SET_DIARY(state, diary) {
+      state.diary = diary
+    },
   },
   actions: {
+    // 일지 CREATE
+    // 위도 경도 추가
     addGeocode({ commit }, geocode) {
       commit('ADD_GEOCODE', geocode)
     },
+    // 루트 추가
     addRoute({ commit }, route) {
       commit('ADD_ROUTE', route)
     },
+    // 루트 삭제
     deleteRoute({ commit }, routeIdx) {
       commit('DELETE_ROUTE', routeIdx)
     },
+    // 스토리 저장
     createStory({ commit }, [index, story]) {
       commit('CREATE_STORY', [index, story])
     },
+    // 스토리 삭제
     deleteStory({ commit }, index) {
       commit('DELETE_STORY', index)
     },
+    // 일지 저장
     createDiary({ commit, getters }, diary) {
       // commit('CREATE_DIARY', diary)
       axios({
-        url: 'http://localhost:8000/posts',
+        url: 'http://localhost:8000/posts/api',
         method: 'post',
         data: diary,
         headers: getters.authHeader,
@@ -107,6 +123,38 @@ export default ({
           name: 'diaryDetail'
         })
       })
+    },
+
+    // 일지 READ
+    // 단일 일지
+    fetchDiary({ commit, getters }, diaryPk) {
+      axios({
+        url: `http://localhost:8000/posts/detail/${diaryPk}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then(res => commit('SET_DIARY', res.data))
+      .catch(err => {
+        console.error(err.response)
+        if (err.response.status === 404) {
+          router.push({ name: 'notFound404' })
+        }
+      })
+    },
+
+    // 일지 UPDATE
+    // 일지 DELETE
+    deleteDiary({ commit, getters }, diaryPk) {
+      axios({
+        url: `http://localhost:8000/posts/api/${diaryPk}`,
+        method: 'delete',
+        headers: getters.authHeader
+      })
+      .then(() => {
+        commit('SET_DIARY', {})
+        router.push({ name: 'home' })
+      })
+      .catch(err => console.error(err.response))
     }
   },
 })
