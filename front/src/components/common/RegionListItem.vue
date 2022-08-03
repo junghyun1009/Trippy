@@ -3,7 +3,7 @@
     <div class="regions"
         data-flickity='{ "pageDots": false }'>
         <div class="region">
-            <div class="image" id="all" @click="showAll()"><span>전체</span></div>
+            <div class="image" id="all"><span>전체</span></div>
         </div>
 
         <div class="region">
@@ -30,9 +30,6 @@
 export default {
   name: 'RegionListItem',
   methods: {
-    showAll() {
-      alert('여기에 필터링 로직짜기')
-    }
   }
 }
 </script>
