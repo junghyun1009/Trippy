@@ -4,7 +4,7 @@
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
     <div class="diary-detail-header">
       <div class="title-icons">
-        <h3>{{ temp.newTitle }}</h3>
+        <h3>{{ diaryTemp.title }}</h3>
         <div class="icons">
           <!-- 로그인한 유저와 글 쓴 유저가 같다면 -->
           <router-link :to="{ name: 'diaryEdit' }">
@@ -30,16 +30,16 @@
 
         </div>
       </div>
-      <el-tag>{{ temp.newOption.datePick[0].substr(5, 10) }}-{{ temp.newOption.datePick[1].substr(5, 10) }}</el-tag>
-      <el-tag>{{ temp.newOption.partyType }} ({{ temp.newOption.memberNum }}명)</el-tag>
-      <el-tag v-for="(trans, idx) in temp.newOption.transportationList" :key="idx">{{ trans }}</el-tag>
+      <el-tag>{{ diaryTemp.season[0].substr(5, 10) }}-{{ diaryTemp.season[1].substr(5, 10) }}</el-tag>
+      <el-tag>{{ diaryTemp.company }} ({{ diaryTemp.count }}명)</el-tag>
+      <el-tag v-for="(trans, idx) in diaryTemp.transport" :key="idx">{{ trans }}</el-tag>
     </div>
 
     <div id="map" style="height: 480px; position: relative; overflow: hidden;"></div>
-    <el-tag v-for="(route, idx) in temp.routes" :key="idx">{{ idx + 1}}. {{ route }}</el-tag>
+    <el-tag v-for="(route, idx) in diaryTemp.routes" :key="idx">{{ idx + 1}}. {{ route }}</el-tag>
 
     <div>
-      <div v-for="(story, idx) in temp.stories" :key="idx">
+      <div v-for="(story, idx) in diaryTemp.stories" :key="idx">
         <div>
           <h3>{{ story.pk }}. {{ story.place }}</h3>
           <el-rate disabled v-model=story.rate></el-rate>
@@ -82,7 +82,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['temp']),
+    ...mapGetters(['diaryTemp']),
     photoUrl(file) {
       const newUrl = URL.createObjectURL(file)
       return newUrl
@@ -91,11 +91,11 @@ export default {
   methods: {
     addMarkers() {
       const map = new google.maps.Map(document.getElementById("map"), {
-          center: this.temp.geocodes[0],
+          center: this.diaryTemp.geocodes[0],
           zoom: 10,
       });
-      this.temp.geocodes.forEach((each) => {
-        let labelNum = (this.temp.geocodes.indexOf(each)+1).toString()
+      this.diaryTemp.geocodes.forEach((each) => {
+        let labelNum = (this.diaryTemp.geocodes.indexOf(each)+1).toString()
         new google.maps.Marker({
             position: each,
             label: labelNum,
@@ -103,7 +103,7 @@ export default {
         });
       })
       const routePath = new google.maps.Polyline({
-        path: this.temp.geocodes,
+        path: this.diaryTemp.geocodes,
         geodesic: true,
         strokeColor: '#FF0000',
         strokeOpacity: 1.0,
