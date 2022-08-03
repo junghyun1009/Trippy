@@ -1,13 +1,12 @@
 package com.ssafy.trippy.Domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 public class PostTransport extends BaseEntity{
 
@@ -24,8 +23,18 @@ public class PostTransport extends BaseEntity{
     @JoinColumn(name="TRANSPORT_ID")
     private Transport transport;
 
+    @Builder
     public PostTransport(Post post, Transport transport) {
         this.post = post;
+        this.transport = transport;
+    }
+
+    public void setPost(Post post){
+        this.post = post;
+        post.getPostTransports().add(this);
+    }
+
+    public void update(Transport transport){
         this.transport = transport;
     }
 }

@@ -4,6 +4,7 @@ import com.ssafy.trippy.Domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
 @Getter

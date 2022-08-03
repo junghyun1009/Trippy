@@ -1,9 +1,6 @@
 package com.ssafy.trippy.Domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,10 +9,12 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 public class Transport extends BaseEntity{
     @Id
     @GeneratedValue
+    @Column(name="TRANSPORT_ID")
     private Long id;
 
     @Column(nullable = false)
@@ -27,4 +26,5 @@ public class Transport extends BaseEntity{
         this.id = id;
         this.name = name;
     }
+
 }
