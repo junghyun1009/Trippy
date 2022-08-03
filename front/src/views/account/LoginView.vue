@@ -36,8 +36,10 @@ export default {
         },
         loginError: userErrorMessage.loginError,
         emailError: userErrorMessage.emailError,
+        notMember: userErrorMessage.notMember,
         emailFormat: true,
         authentication: null,
+        isMember: true,
       }
     },
     methods: {
@@ -50,11 +52,17 @@ export default {
       } else {
         // 만약 이메일 형식이 같다면 로그인 화면으로 ㄱㄱ -- 이건 나중에 auth 되면 바꿔야 함
         this.$router.push('/')
-      }        
-    },  
+        }        
+      },  
       checkAuthentication() {
         if ( this.authentication == false) {
           this.authentication = false;
+        }
+      },
+      // 일단 어떤 로직을 짜야할지 몰라서 ... 함수만 만들어놓음 (일단 다 넘어가긴 함)
+      checkMember() {
+        if (this.isMember == true) {
+          this.isMember = false;
         }
       }
     }

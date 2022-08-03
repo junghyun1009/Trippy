@@ -161,7 +161,6 @@ export default {
           this.nicknameFormat = false
         }
       },
-
       checkBlank() {
         var emailBlank = document.getElementById('email').value
         var passwordBlank = document.getElementById('password').value

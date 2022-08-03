@@ -33,11 +33,11 @@
 export default {
   name: "SignUpOptionView",
   data() {
-    return {
-      userinfo: {
-        description: '',
-      },
-      profilePhoto: {},
+      return { 
+        userinfo: {
+          description: '',
+        },
+        profilePhoto: {},
     }
   },
   methods: {
@@ -46,10 +46,10 @@ export default {
       let photo = this.$refs.files.files[0]
       if (photo.type.substr(0, 5) === "image") {
         this.profilePhoto = 
-        {
-          file: this.$refs.files.files[0],
-          preview: URL.createObjectURL(this.$refs.files.files[0]),
-        }
+          {
+            file: this.$refs.files.files[0],
+            preview: URL.createObjectURL(this.$refs.files.files[0]),
+          }
       } else {
         alert("사진 파일만 추가 가능합니다")
       }
