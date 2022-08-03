@@ -1,6 +1,7 @@
 package com.ssafy.trippy.Dto.Request;
 
 import com.ssafy.trippy.Domain.Member;
+import io.swagger.annotations.ApiParam;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,20 +10,27 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class RequestMemberDto {
-    private Long id;
+
+    @ApiParam(value = "사용자 이름")
     private String name;
+    @ApiParam(value = "비밀번호")
     private String password;
+    @ApiParam(value = "이메일")
     private String email;
+    @ApiParam(value = "전화번호")
     private String phone;
+    @ApiParam(value = "성별")
     private int gender;
+    @ApiParam(value = "생일")
     private LocalDateTime birth;
+    @ApiParam(value = "프로필 이미지 경로")
     private String img_path;
+    @ApiParam(value = "설명")
     private String desc;
 
     // DTO -> ENTITY
     public Member toEntity(){
         return Member.builder()
-                .id(id)
                 .name(name)
                 .password(password)
                 .email(email)
