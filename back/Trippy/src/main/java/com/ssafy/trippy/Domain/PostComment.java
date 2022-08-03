@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Domain;
 
+import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,33 +20,33 @@ public class PostComment extends BaseEntity {
     @Column(name="COMMENT_ID")
     private Long id;
 
-//    @Column(nullable = false)
-//    @NotBlank(message="내용을 입력하세요")
     private String content;
 
-//    @Column(name="REG_DT",nullable = false)
-//    @NotBlank(message="등록날짜를 입력하세요")
     private LocalDateTime regDt;
 
-
-//    @Column(name="IS_DELELTE", nullable = false)
-//    @NotBlank(message="삭제여부를 입력하세요요")
-    private Byte isDelete;
-
-    // 대댓글 나중에
-    private Long parent;
-    private Long rootComment;
-    private Long childComment;
-
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="POST_ID")
     private Post post;
 
-    @Builder
-    public PostComment(Long id, LocalDateTime regDt,String content, Post post) {
-        this.id = id;
-        this.regDt = regDt;
-        this.content = content;
-        this.post = post;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="MEMBER_ID")
+    private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="parent_id")
+    private PostComment parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<PostComment> children = new ArrayList<>();
+
+    public static PostComment createComment(String content, Post post, Member member, PostComment parent){
+        PostComment postComment = new PostComment();
+        postComment.content = content;
+        postComment.post = post;
+        postComment.member = member;
+        postComment.content = content;
+        postComment.parent = parent;
+        return postComment;
     }
+
+
 }

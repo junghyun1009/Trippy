@@ -57,8 +57,11 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy="post", cascade = CascadeType.REMOVE)
     private List<DetailLocation> detailLocations = new ArrayList<>();
 
+    @OneToMany(mappedBy="post")
+    private List<PostComment> postComments = new ArrayList<>();
+
     @Builder
-    public Post(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations) {
+    public Post(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations, List<PostComment> postComments) {
         this.id = id;
         this.title = title;
         this.isDelete = isDelete;
@@ -70,6 +73,7 @@ public class Post extends BaseEntity{
         this.member = member;
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;
+        this.postComments = postComments;
     }
 
     public void update(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, List<PostTransport> postTransports, List<DetailLocation> detailLocations){

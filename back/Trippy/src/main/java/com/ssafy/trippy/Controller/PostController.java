@@ -1,6 +1,7 @@
 package com.ssafy.trippy.Controller;
 
 import com.ssafy.trippy.Domain.DetailLocation;
+import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestDetailLocationDto;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
