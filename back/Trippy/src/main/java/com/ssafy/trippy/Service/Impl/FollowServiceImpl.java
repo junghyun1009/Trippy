@@ -26,6 +26,9 @@ public class FollowServiceImpl implements FollowService {
     }
     @Override
     public void unfollow(RequestFollowDto requestFollowDto) {
+        if(!followRepository.existsByFollowerIdAndFollowingId(requestFollowDto.getFollowerId(),requestFollowDto.getFollowingId())){
+            throw new IllegalArgumentException("존재하지 않는 팔로우");
+        }
         followRepository.deleteByFollowerIdAndFollowingId(requestFollowDto.getFollowerId(),requestFollowDto.getFollowingId());
     }
 

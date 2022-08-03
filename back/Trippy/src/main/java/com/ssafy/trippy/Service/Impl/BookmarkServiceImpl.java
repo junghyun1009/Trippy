@@ -36,6 +36,9 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     @Override
     public void deleteBookmark(RequestBookmarkDto requestBookmarkDto) {
+        if(!bookmarkRepository.existsByMemberIdAndCommunityPostId(requestBookmarkDto.getMemberId(),requestBookmarkDto.getCommunityPostId())){
+            throw new IllegalArgumentException("존재하지 않는 북마크");
+        }
         bookmarkRepository.deleteByMemberIdAndCommunityPostId(requestBookmarkDto.getMemberId(),requestBookmarkDto.getCommunityPostId());
     }
 }
