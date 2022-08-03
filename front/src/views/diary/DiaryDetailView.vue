@@ -3,7 +3,33 @@
     <!-- temp -> diary로 바꿔 -->
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
     <div class="diary-detail-header">
-      <h3>{{ temp.newTitle }}</h3>
+      <div class="title-icons">
+        <h3>{{ temp.newTitle }}</h3>
+        <div class="icons">
+          <!-- 로그인한 유저와 글 쓴 유저가 같다면 -->
+          <router-link :to="{ name: 'diaryEdit' }">
+            <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#F16B51" icon-name="editicon">
+              <edit-icon/>
+            </icon-base>
+          </router-link>
+          <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#F16B51" icon-name="deleteicon">
+            <delete-icon/>
+          </icon-base>
+          <!-- 여기부터는 공통 -->
+          <icon-base v-if="!isLiked" viewBox="0 0 512 512" width="24" height="24" iconColor="#F16B51" icon-name="emptyheart" @click="isLiked=1">
+            <empty-heart/>
+          </icon-base>
+          <icon-base v-else viewBox="0 0 512 512" width="24" height="24" iconColor="#F16B51" icon-name="filledheart" @click="isLiked=0">
+            <filled-heart/>
+          </icon-base>
+          <router-link :to="{ name: 'diaryComment' }">
+            <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#F16B51" icon-name="commenticon">
+              <comment-icon/>
+            </icon-base>
+          </router-link>
+
+        </div>
+      </div>
       <el-tag>{{ temp.newOption.datePick[0].substr(5, 10) }}-{{ temp.newOption.datePick[1].substr(5, 10) }}</el-tag>
       <el-tag>{{ temp.newOption.partyType }} ({{ temp.newOption.memberNum }}명)</el-tag>
       <el-tag v-for="(trans, idx) in temp.newOption.transportationList" :key="idx">{{ trans }}</el-tag>
@@ -35,9 +61,26 @@
 <script>
 /* eslint-disable no-undef */
 import { mapGetters } from 'vuex'
+import EditIcon from '@/components/icon/EditIcon.vue'
+import DeleteIcon from '@/components/icon/DeleteIcon.vue'
+import EmptyHeart from '@/components/icon/EmptyHeart.vue'
+import FilledHeart from '@/components/icon/FilledHeart.vue'
+import CommentIcon from '@/components/icon/CommentIcon.vue'
 
 export default {
   name: 'DiaryDetailView',
+  components: {
+    EditIcon,
+    DeleteIcon,
+    EmptyHeart,
+    FilledHeart,
+    CommentIcon
+  },
+  data() {
+    return {
+      isLiked: 0
+    }
+  },
   computed: {
     ...mapGetters(['temp']),
     photoUrl(file) {
@@ -59,6 +102,14 @@ export default {
             map: map,
         });
       })
+      const routePath = new google.maps.Polyline({
+        path: this.temp.geocodes,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+      })
+      routePath.setMap(map)
     },
   },
   mounted() {
@@ -70,10 +121,25 @@ export default {
 <style scoped>
 
 .diary-detail-header {
-  position: fixed;
-  top: 0;
   width: 100%;
   background-color: bisque;
+  padding: 0 0 20px 0;
+}
+
+.diary-detail-header > h3 {
+  margin-bottom: 10px;
+}
+
+.title-icons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.icons {
+  width: 120px;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 </style>
