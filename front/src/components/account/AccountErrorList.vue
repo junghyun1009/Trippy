@@ -1,14 +1,19 @@
 <template>
   <div>
-    아이디 혹은 비밀번호가 옳지 않습니다
+    <p v-if="errorMessage !== ''">{{ errorMessage }}</p>
   </div>
 </template>
+
+
 
 <script>
 export default {
     name: 'AccountErrorList.vue',
-    computed: {
-        
+    props: {
+      errorMessage: {
+        type: String,
+        default: ''
+      },
     }
 }
 </script>

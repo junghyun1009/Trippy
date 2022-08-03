@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/trippy
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  profiles:
+    include: jwt
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+  mail:
+    host: smtp.naver.com
+    port: 465
+  #  -----본인 계정 정보 ------
+    username:
+    password:
+  #  -------------------------
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.trust: smtp.naver.com
+  redis:
+    host: localhost
+    port: 6379
+  jwt:
+    blacklist:
+      access-token: BlackList_AccessToken_
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
