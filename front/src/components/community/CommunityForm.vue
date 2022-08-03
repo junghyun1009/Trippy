@@ -5,10 +5,10 @@
     </el-form-item>
     <el-form-item label="카테고리">
       <el-select v-model="newPost.category" placeholder="어떤 활동을 같이 하고 싶나요?">
-        <el-option label="밥/카페" value="eating"></el-option>
-        <el-option label="동행" value="gowith"></el-option>
-        <el-option label="파티" value="party"></el-option>
-        <el-option label="이동수단 셰어" value="transport"></el-option>
+        <el-option label="밥/카페" value="밥/카페"></el-option>
+        <el-option label="동행" value="동행"></el-option>
+        <el-option label="파티" value="파티"></el-option>
+        <el-option label="이동수단 셰어" value="이동수단 셰어"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="활동 내용">
@@ -80,7 +80,7 @@ export default {
       const gender = this.newPost.newOption.gender
       const start_age = this.newPost.newOption.age[0]
       const end_age = this.newPost.newOption.age[1]
-      let age = start_age + '~' + end_age
+      let age = start_age + '~' + end_age + '살'
       if (start_age === undefined && end_age === undefined || start_age === 19 && end_age === 50) {
         age = '누구나'
       }

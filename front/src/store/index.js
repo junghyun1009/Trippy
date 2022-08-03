@@ -1,13 +1,13 @@
 import { createStore } from 'vuex';
 
 import account from '@/store/modules/account.js'
-import company from '@/store/modules/company.js'
+import community from '@/store/modules/community.js'
 import diary from '@/store/modules/diary.js'
 
 export default createStore({
   modules: {
     account,
-    company,
+    community,
     diary,
   },
 });
