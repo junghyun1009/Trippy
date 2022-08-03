@@ -62,7 +62,7 @@ export default {
     computed: {
       ...mapGetters(['temp']),
       recruitState() {
-        return '모집중'
+        return '모집 중'
       },
       recruitCount() {
         return 3

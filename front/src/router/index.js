@@ -21,7 +21,7 @@ import ProfileEditView from '@/views/profile/ProfileEditView.vue'
 import CommunityCreateView from '@/views/community/CommunityCreateView.vue'
 import CommunityView from '@/views/community/CommunityView.vue'
 import CommunityDetailView from '@/views/community/CommunityDetailView.vue'
-// import CommunityEditView from '@/views/community/CommunityEditView.vue'
+import CommunityEditView from '@/views/community/CommunityEditView.vue'
 
 import BadgeListView from '../views/badge/BadgeListView.vue'
 
@@ -122,7 +122,8 @@ const routes = [
   },
 
   {
-    path: '/community/:communityId',
+    path: '/community/detail',
+        // 나중에 pk 추가하기
     name: 'communityDetail',
     component: CommunityDetailView
   },
@@ -131,11 +132,11 @@ const routes = [
     name: 'communityCreate',
     component: CommunityCreateView
   },
-  // {
-  //   path: '/community/edit',
-  //   name: 'communityEdit',
-  //   component: CommunityEditView
-  // },
+  {
+    path: '/community/edit',
+    name: 'communityEdit',
+    component: CommunityEditView
+  },
 
   
   {

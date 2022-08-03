@@ -9,5 +9,5 @@ export default createStore({
     account,
     community,
     diary,
-  },
+  }
 });

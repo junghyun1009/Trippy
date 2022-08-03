@@ -11,7 +11,7 @@ export default ({
         gender: '여성만',
         age: [25, 30],
         isLocal: true
-      }
+      },
     }
   },
   getters: {
