@@ -6,7 +6,7 @@ export default {
   state: {
     //this.$cookies.get("refreshToken") ||
     accessToken:  '',
-    currentUser: '',
+    currentUser: {},
     profile: {},
     authError: null,
     fromPasswordFindView: false,
@@ -41,18 +41,18 @@ export default {
         method: 'post',
         data: userinfo,
       })
-      .then( res => {
-        // accessToken은 state에 저장
-        const accessToken = res.data.access_token
-        dispatch('saveToken', accessToken)
-        // refreshToken은 쿠키에 저장
-        const refreshToken = res.data.refresh_token
-        this.$cookies.set("refreshToken", refreshToken)
-        dispatch('fetchCurrentUser')
-        router.push({ name: 'home' })
+        .then( res => {
+          // accessToken은 state에 저장
+          const accessToken = res.data.access_token
+          dispatch('saveToken', accessToken)
+          // refreshToken은 쿠키에 저장
+          const refreshToken = res.data.refresh_token
+          this.$cookies.set("refreshToken", refreshToken)
+          dispatch('fetchCurrentUser')
+          router.push({ name: 'home' })
       })
-      .catch(err => {
-        console.error(err)
+        .catch(err => {
+          console.error(err)
       })
     },
 
@@ -62,35 +62,36 @@ export default {
         method: 'post',
         data: userinfo
       })
-      .then( res => {
-        // accessToken은 state에 저장
-        const accessToken = res.data.access_token
-        dispatch('saveToken', accessToken)
-        // refreshToken은 쿠키에 저장
-        const refreshToken = res.data.refresh_token
-        this.$cookies.set("refreshToken", refreshToken)
-        dispatch('fetchCurrentUser')
-        router.push({ name: 'login' })
+        .then( res => {
+          // accessToken은 state에 저장
+          const accessToken = res.data.access_token
+          dispatch('saveToken', accessToken)
+          // refreshToken은 쿠키에 저장
+          const refreshToken = res.data.refresh_token
+          this.$cookies.set("refreshToken", refreshToken)
+          dispatch('fetchCurrentUser')
+          router.push({ name: 'login' })
       })
-      .catch(err => {
-        console.error(err.response.data)
-        commit('SET_AUTH_ERROR', err.response.data)
+        .catch(err => {
+          console.error(err.response.data)
+          commit('SET_AUTH_ERROR', err.response.data)
       })
     },
 
-    fetchCurrentUser({ getters, dispatch, commit }) {
+    fetchCurrentUser({ getters, dispatch, commit }, username) {
       if (getters.isLoggedIn) {
         axios({
           // 여기 pk 넣는 형식 정확히 모르겠음
-          url: 'http://localhost:8000/members/api/`${userid}`',
+          // @PathVariable email ???
+          url: 'http://localhost:8000/members/api/' + username,
           method: 'get',
           headers: getters.authHeader,
         })
-        .then(res => commit('SET_CURRENT_USER', res.data))
-        .catch(err => {
-          if (err.response.status === 400) {
-            dispatch('removeToken')
-            router.push({ name: 'login' })
+          .then(res => commit('SET_CURRENT_USER', res.data))
+          .catch(err => {
+            if (err.response.status === 400) {
+              dispatch('removeToken')
+              router.push({ name: 'login' })
           }
         })
       }
@@ -102,12 +103,34 @@ export default {
         method: 'post',
         headers: getters.authHeader,
       })
-      .then(() => {
-        dispatch('removeToken')
-        router.push({ name: 'home' })
+        .then(() => {
+          dispatch('removeToken')
+          router.push({ name: 'home' })
       })
-      .catch( err => {
-        console.error(err.response)
+        .catch( err => {
+          console.error(err.response)
+      })
+    },
+
+    updateUserinfo({ commit }, userinfo) {
+      axios({
+        url: 'http://localhost:8000//members/api/modify',
+        method: 'put',
+        data: userinfo
+      })
+        .then(res => {
+          commit('SET_CURRENT_USER', res.data)
+        })
+        .catch( err => {
+          console.error(err.response)
+      })
+    },
+    
+    deleteAccount({ getters }) {
+      axios({
+        url: 'http://localhost:8000/members/api/remove',
+        method: 'delete',
+        headers: getters.authHeader,
       })
     },
 
@@ -117,12 +140,15 @@ export default {
       router.push('/passwordchange')
     },
 
-    deleteAccount({ getters }) {
+    updatePassword({ getters }, userinfo) {
       axios({
-        url: 'http://localhost:8000/members/api/remove',
-        method: 'delete',
+        url: '/http://localhost:8000/members/changepw',
+        method: 'put',
         headers: getters.authHeader,
+        // @PathVariable email ???
+        data: userinfo.newPassword
       })
+        .then()
     }
   },
   modules: {
