@@ -1,17 +1,22 @@
 <template>
   <div>
     <form action="submit">
+      <!-- 제목 -->
       <div class="title-box">
         <span>제목</span>
         <el-input v-model="newDiary.title" class="input-box" placeholder="제목을 입력하세요." />
       </div>
+
       <div class="demo-collapse">
         <el-collapse>
+          <!-- 장소 -->
           <el-collapse-item title="장소" name="1">
             <div>
               장소
             </div>
           </el-collapse-item>
+
+          <!-- 옵션 -->
           <el-collapse-item name="2">
             <template #title>
               <span>옵션</span>
@@ -26,14 +31,14 @@
                 </el-tag>
               </div>
             </template>
-            <div>
 
+            <div>
               <!-- 옵션:여행 기간 -->
               <div class="date-picker">
                 <div class="block">
                   <span class="demonstration">여행 기간</span>
                   <el-date-picker
-                    v-model="newDiary.season"
+                    v-model="datePick"
                     type="daterange"
                     range-separator="To"
                     start-placeholder="Start date"
@@ -72,33 +77,107 @@
               </div>
             </div>
           </el-collapse-item>
+
+          <!-- 루트 -->
           <el-collapse-item name="3">
             <template #title>
               <span>루트</span>
               <!-- 태그 -->
-              <div v-if="action===create">
-                <el-tag class="option-tag" v-for="(route, idx) in routeNames" :key="idx"
+              <div>
+                <el-tag class="option-tag" v-for="(route, idx) in newDiary.routes" :key="idx"
                 :disable-route="false" type=''>
-                  {{ route }}
-                </el-tag>
-              </div>
-              <div v-else>
-                <el-tag class="option-tag" v-for="(route, idx) in diaryTemp.routes" :key="idx"
-                :disable-route="false" type=''>
-                  {{ route }}
+                  {{ route.routeName }}
                 </el-tag>
               </div>
             </template>
+            
+            <!-- 지도 -->
             <div>
-              <route-form></route-form>
+              <div class="route-div">
+                <input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0 && newDiary.routes.length < 10">
+                <el-button type="primary" @click="addMarkers" :disabled="newDiary.routes.length === 0">
+                  <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#fff" icon-name="maplocation">
+                    <map-location/>
+                  </icon-base>
+                </el-button>
+                <el-button type="primary" @click="initMap" :disabled="flag === 0">
+                  <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#fff" icon-name="plusicon">
+                    <plus-icon/>
+                  </icon-base>  
+                </el-button>
+              </div>
+              <div id="map" style="height: 480px; position: relative; overflow: hidden;"></div>
+              <div class="route-tag-group">
+                <el-tag v-for="(route, idx) in newDiary.routes" :key="idx" class="route-tag"
+                closable :disable-route="false" type='' @close="removeRoute(idx)">
+                  {{ route.routeName }}
+                </el-tag>
+              </div>
             </div>
           </el-collapse-item>
         </el-collapse>
       </div>
+
+      <!-- 스토리 -->
       <div class="story-form">
         <p class="title-box">스토리</p>
-        <story-form :action="action"></story-form>
+
+        <div>
+          <div v-for="(newStory, k) in newStories" :key="k">
+            <div class="title-box">
+              <span>상세 장소</span>
+              <el-input v-model="newStory.place" class="input-box" id="title-input-box" placeholder="상세 장소를 입력하세요." />
+            </div>
+
+            <div class="photo-content-div">
+              <div>
+                <div v-if="newStory.photoList.length === 0" class="photo-div">
+                  <label :for=k>
+                    <icon-base viewBox="0 0 1024 1024" width="50" height="50" iconColor="#409EFF" icon-name="addphoto" class="photo-icon">
+                      <add-photo/>
+                    </icon-base>
+                  </label>
+                  <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="uploadPhoto(k)" multiple />
+                </div>
+                <div v-else class="photo-preview">
+                  <input class="photo-input" type="file" :id=k ref="files" @change="addPhoto(k)" multiple />
+                  <el-carousel trigger="click" height="150px" :autoplay=false :initial-index=1 indicator-position="none">
+                    <el-carousel-item>
+                      <label :for=k>
+                        <icon-base viewBox="0 0 1024 1024" width="50" height="50" iconColor="#409EFF" icon-name="addphoto" class="photo-icon">
+                          <add-photo/>
+                        </icon-base>
+                      </label>
+                    </el-carousel-item>
+                    <el-carousel-item v-for="(photo, index) in newStory.photoList" :key="index" class="file-preview-wrapper">
+                      <img :src="photo.preview" :alt="photo.preview"/>
+                      <el-button class="remove-photo" @click="removePhoto(k, index)">
+                        x
+                      </el-button>
+                    </el-carousel-item>
+                  </el-carousel>
+                </div>
+              </div>
+
+              <div>
+                <el-input v-model="newStory.content" maxlength="500"
+                placeholder="내용을 입력해주세요." show-word-limit type="textarea" rows=7 resize="none" class="content-input"/>
+              </div>
+            </div>
+
+            <div class="rate-div">
+              <span>별점</span>
+              <el-rate v-model="newStory.rate" allow-half />
+            </div>
+            
+            <el-button @click="removeStory(k)" v-show="(newStories.length >= 1) && k!=0">delete</el-button>
+            <el-button @click="addStory()" v-show="newStories.length < 10" :disabled="k != newStories.length - 1">add story</el-button>
+            <hr>
+          </div>
+        </div>
+
       </div>
+
       <div>
         <el-button @click="onSubmit">{{ action }}</el-button>
       </div>
@@ -107,15 +186,18 @@
 </template>
 
 <script>
+/* eslint-disable no-undef */
 import { mapActions, mapGetters } from 'vuex'
-import RouteForm from "./RouteForm.vue"
-import StoryForm from "./StoryForm.vue"
+import MapLocation from '@/components/icon/MapLocation.vue'
+import PlusIcon from '@/components/icon/PlusIcon.vue'
+import AddPhoto from '@/components/icon/AddPhoto.vue'
 
 export default {
   name: 'DiaryForm',
   components: {
-    RouteForm,
-    StoryForm,
+    MapLocation,
+    PlusIcon,
+    AddPhoto
   },
   props: {
     diary: Object,
@@ -123,13 +205,28 @@ export default {
   },
   data() {
     return {
-      // 날짜를 새로운 변수에 받아와서 0번 인덱스, 1번 인덱스를 newDiary 안에 따로 저장
+      datePick: [this.diary.startDate, this.diary.endDate],
+      flag: 0,
+      route: {},
+      newStories: [
+        ...this.diary.stories,
+        { 
+          pk: 0,
+          place: '',
+          photoList: [],
+          content: '',
+          rate: null
+        }
+      ],      
       newDiary: {
         title: this.diary.title,
-        season: this.diary.season,
+        startDate: this.diary.startDate,
+        endDate: this.diary.endDate,
         company: this.diary.company,
         count: this.diary.count,
         transport: this.diary.transport,
+        routes: this.diary.routes,
+        stories: this.diary.stories
       }
     }
   },
@@ -147,20 +244,195 @@ export default {
   },
   methods: {
     ...mapActions(['createDiary']),
+
     handleClose(tag) {
       this.newDiary.transport.splice(this.newDiary.transport.indexOf(tag), 1)
     },
+
+    initMap() {
+      this.flag = 0
+      const map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 37.5642135 ,lng: 127.0016985 },
+          zoom: 13,
+      });
+      const input = document.getElementById("pac-input");
+      const autocomplete = new google.maps.places.Autocomplete(input, {
+          fields: ["place_id", "geometry", "name", "formatted_address"],
+      });
+      autocomplete.bindTo("bounds", map);
+
+      const geocoder = new google.maps.Geocoder();
+      const marker = new google.maps.Marker({ map: map });
+      autocomplete.addListener("place_changed", () => {
+          const place = autocomplete.getPlace();
+          if (!place.place_id) {
+              return;
+          }
+          geocoder
+              .geocode({ placeId: place.place_id })
+              .then(({ results }) => {
+              map.setZoom(15);
+              map.setCenter(results[0].geometry.location)
+
+              marker.setPlace({
+                  placeId: place.place_id,
+                  location: results[0].geometry.location,
+              })
+
+              let routeName = place.name
+              let geocode = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }
+
+              this.addRoute(routeName, geocode)
+
+              marker.setVisible(true)
+          })
+              .catch((e) => window.alert("Geocoder failed due to: " + e))
+      input.value = ''
+      });
+    },
+
+    addRoute(routeName, geocode) {
+      this.route.routeNum = this.newDiary.routes.length + 1
+      this.route.routeName = routeName
+      this.route.geocode = geocode
+      this.newDiary.routes.push(this.route)
+      this.route = {}
+      console.log(this.newDiary.routes)
+    },
+
+    addMarkers() {
+      this.flag = 1
+      const map = new google.maps.Map(document.getElementById("map"), {
+          center: this.newDiary.routes[this.newDiary.routes.length - 1].geocode,
+          zoom: 13,
+      });
+      const geocodes = []
+      // console.log(this.routeGeocodes)
+      this.newDiary.routes.forEach((each) => {
+        // console.log(each)
+        let labelNum = (each.routeNum).toString()
+        geocodes.push(each.geocode)
+        new google.maps.Marker({
+            position: each.geocode,
+            label: labelNum,
+            map: map,
+        });
+      })
+      console.log(geocodes)
+      const routePath = new google.maps.Polyline({
+        path: geocodes,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+      })
+      routePath.setMap(map)
+    },
+
+    removeRoute(index) {
+      this.newDiary.routes.splice(index, 1)
+      this.geocodes.splice(index, 1)
+      this.newDiary.routes.forEach((each) => {
+        each.routeNum = this.newDiary.routes.indexOf(each) + 1
+      })
+      this.addMarkers()
+    },
+
+    addStory() {
+      if (this.newStories[this.newStories.length - 1].place === '' || this.newStories[this.newStories.length - 1].content === '') {
+        alert('내용 작성 후 스토리를 추가해주세요!')
+      } else {
+        this.newStories.push({
+          pk: 0,
+          place: '',
+          photoList: [],
+          content: '',
+          rate: null
+        })
+      }
+    },
+
+    removeStory(index) {
+      this.newStories.splice(index, 1)
+    },
+
+    uploadPhoto(index) {
+      // console.log(index)
+      let addedPhotoList = this.newStories[index].photoList
+      // console.log(this.$refs.files)
+      // console.log(this.$refs.files[index].files)
+      for (let i = 0; i < this.$refs.files[index].files.length; i++) {
+        let photo = this.$refs.files[index].files[i]
+        // console.log(photo)
+        if (photo.type.substr(0, 5) === "image") {
+          addedPhotoList = [
+            ...addedPhotoList,
+            {
+              file: this.$refs.files[index].files[i],
+              preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+            }
+          ]
+        } else {
+          alert("사진 파일만 추가 가능합니다")
+        }
+      }
+      this.newStories[index].photoList = addedPhotoList
+      // let fileInput = document.getElementById("file")
+      // fileInput.value = ''
+      // console.log(this.newStories[index].photoList)
+    },
+
+    removePhoto(index, num) {
+      this.newStories[index].photoList.splice(num, 1)
+    },
+
+    addPhoto(index) {
+      console.log('add', index)
+      let addedPhotoList = this.newStories[index].photoList
+      console.log(this.$refs.files)
+      console.log(this.$refs.files[index].files)
+      for (let i = 0; i < this.$refs.files[index].files.length; i++) {
+        let photo = this.$refs.files[index].files[i]
+        if (photo.type.substr(0, 5) === "image") {
+          addedPhotoList = [
+            ...addedPhotoList,
+            {
+              file: this.$refs.files[index].files[i],
+              preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+            }
+          ]
+        } else {
+          alert("사진 파일만 추가 가능합니다")
+        }
+      }
+      this.newStories[index].photoList = addedPhotoList
+      // let fileInput = document.getElementById("file")
+      // fileInput.value = ''
+    },
+
     onSubmit() {
       if (this.action === 'create') {
-        if (this.newDiary.title && this.newDiary.season.length && this.newDiary.transport.length
-        && this.routeNames.length && this.stories.length) {
+        // 날짜 변환해서 저장
+        this.newDiary.startDate = this.datePick[0]
+        this.newDiary.endDate = this.datePick[1]
+        this.newStories.forEach((each) => {
+          each.pk = this.newStories.indexOf(each) + 1
+        })
+        this.newDiary.stories = this.newStories
+
+        if (this.newDiary.title && this.datePick.length && this.newDiary.transport.length
+        && this.newDiary.routes.length && this.newDiary.stories.length) {
           this.createDiary(this.newDiary)
         } else {
           alert("빈 칸 없이 모든 필드를 채워주세요!")
         }
       }
     }
-  }
+  },
+  
+  mounted() {
+    this.initMap()
+  },
 }
 </script>
 
@@ -239,5 +511,91 @@ export default {
   font-size: 14px;
   margin: 10px 20px 0 0;
   text-align: left;
+}
+.route-div {
+  text-align: left;
+  margin-bottom: 10px;
+}
+#pac-input {
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 400px;
+  height: 30px;
+  box-shadow: none;
+  border: solid 1px var(--el-border-color);
+  border-radius: 5px;
+  margin-right: 10px;
+}
+.route-tag-group {
+  margin-top: 10px;
+  text-align: left;
+}
+.route-tag {
+  margin-left: 10px;
+}
+.title-box {
+  text-align: left;
+  color: var(--el-text);
+  font-size: 14px;
+  /* margin-left: 85px; */
+}
+.input-box {
+  width: 300px;
+  margin-left: 15px;
+  margin-bottom: 10px;
+}
+.photo-content-div {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+.photo-div {
+  text-align: center;
+  align-content: center;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.photo-input {
+  visibility: hidden;
+}
+.photo-icon {
+  margin-top: 30px;
+}
+.photo-preview {
+  width: 150px;
+}
+.file-preview-wrapper>img {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 150px;
+  height: 150px;
+}
+.remove-photo {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+}
+.add-photo {
+  align-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.content-input {
+  margin-left: 10px;
+  height: 150px;
+  width: 300px;
+}
+.rate-div {
+  margin: 10px 0;
 }
 </style>
