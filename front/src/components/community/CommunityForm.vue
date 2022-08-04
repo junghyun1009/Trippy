@@ -14,8 +14,11 @@
     <el-form-item label="활동 내용">
       <el-input v-model="newPost.desc" type="textarea" />
     </el-form-item>
-    <el-form-item label="날짜/시간">
-      <el-date-picker v-model="newPost.dateTime" type="datetimerange"/>
+    <el-form-item label="날짜">
+      <el-date-picker v-model="newPost.date" type="daterange"/>
+    </el-form-item>
+    <el-form-item label="시간">
+      <el-time-picker v-model="newPost.time" :disabled-seconds="disabledSeconds"/>
     </el-form-item>
     <el-form-item label="인원">
       <el-input-number v-model="newPost.recruit_volume" :min="1" :max="10"/>
@@ -65,7 +68,8 @@ export default {
         title: this.post.title,
         category: this.post.category,
         desc: this.post.desc,
-        dateTime: this.post.dateTime,
+        date: this.post.date,
+        time: this.post.time,
         recruit_volume: this.post.recruit_volume,
         newOption: {
           gender: this.post.option.gender,
@@ -92,11 +96,21 @@ export default {
         local = '같은 지역만'
       }
       return [gender, age, local]
-    }
+    },
   },
   methods: {
     onSubmit() {
       console.log(this.newPost)
+    },
+    makeRange(start, end) {
+      const result = []
+      for (let i = start; i <= end; i ++) {
+        result.push(i)
+      }
+      return result
+    },
+    disabledSeconds() {
+      return this.makeRange(1, 59)
     }
   },
 }
