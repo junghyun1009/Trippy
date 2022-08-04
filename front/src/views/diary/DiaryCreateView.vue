@@ -17,10 +17,13 @@ export default {
     return {
       diary: {
         title: '',
-        season: [],
+        startDate: '',
+        endDate: '',
         company: '가족',
         count: 1,
         transport: [],
+        routes: [],
+        stories: []
       }
     }
   }
