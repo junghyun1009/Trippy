@@ -35,7 +35,7 @@ public class PostComment extends BaseEntity {
     @JoinColumn(name="parent_id")
     private PostComment parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<PostComment> children = new ArrayList<>();
 
     public static PostComment createComment(String content, Post post, Member member, PostComment parent){
@@ -46,6 +46,11 @@ public class PostComment extends BaseEntity {
         postComment.content = content;
         postComment.parent = parent;
         return postComment;
+    }
+
+    public void update(String content, LocalDateTime regDt) {
+        this.content = content;
+        this.regDt =regDt;
     }
 
 

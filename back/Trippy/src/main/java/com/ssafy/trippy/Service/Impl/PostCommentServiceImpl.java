@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Service.Impl;
 
+import com.ssafy.trippy.Advice.Exception.CommentNotFoundException;
 import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Domain.Post;
 import com.ssafy.trippy.Domain.PostComment;
@@ -28,10 +29,11 @@ public class PostCommentServiceImpl {
     private final PostRepository postRepository;
 
     public List<RequestPostCommentDto> findPostCommentByPostId(Long postId){
-        postRepository.findById(postId);
+        postRepository.findById(postId).orElseThrow(()-> new CommentNotFoundException("해당 게시글의 댓글을 찾을 수가 없습니다."));
         return convertNestedStructure(postCommentRepository.findPostCommentByPostId(postId));
     }
 
+    // 댓글 추가
     @Transactional
     public RequestPostCommentDto createComment(ResponsePostCommentDto responsePostCommentDto){
         PostComment comment = postCommentRepository.save(
@@ -44,7 +46,28 @@ public class PostCommentServiceImpl {
         return RequestPostCommentDto.convertCommentToDto(comment);
     }
 
+    //댓글 삭제
+    @Transactional
+    public void deleteComment(Long commentId){
+        PostComment postComment = postCommentRepository.findPostCommentByIdWithParent(commentId).orElseThrow(()-> new CommentNotFoundException("해당 댓글을 찾을 수가 없습니다."));
+        postCommentRepository.delete(postComment);
+    }
 
+    //댓글 수정
+    @Transactional
+    public void updateComment(Long commentId, RequestPostCommentDto requestPostCommentDto) {
+        PostComment postComment = postCommentRepository.findById(commentId).orElseThrow(()-> new CommentNotFoundException("해당 댓글을 찾을 수가 없습니다."));
+        postComment.update(requestPostCommentDto.getContent(), requestPostCommentDto.getRegDt());
+    }
+
+    // 조상 댓글 찾기
+    private PostComment getDeletableAncestorComment(PostComment postComment) {
+        PostComment parent = postComment.getParent();
+        if(parent != null && parent.getChildren().size() == 1){
+            return getDeletableAncestorComment(parent);
+        }
+        return postComment;
+    }
 
     private List<RequestPostCommentDto> convertNestedStructure(List<PostComment> postComments){
         List<RequestPostCommentDto> result = new ArrayList<>();
