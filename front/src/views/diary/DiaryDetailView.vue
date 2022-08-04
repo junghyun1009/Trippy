@@ -80,6 +80,12 @@
       </div>
     </div>
 
+  <hr>
+  <br>
+
+  <!-- comment? -->
+  <diary-comment-view></diary-comment-view>
+
   </div>
 </template>
 
@@ -91,6 +97,7 @@ import DeleteIcon from '@/components/icon/DeleteIcon.vue'
 import EmptyHeart from '@/components/icon/EmptyHeart.vue'
 import FilledHeart from '@/components/icon/FilledHeart.vue'
 import CommentIcon from '@/components/icon/CommentIcon.vue'
+import DiaryCommentView from '@/views/diary/DiaryCommentView.vue'
 
 export default {
   name: 'DiaryDetailView',
@@ -99,7 +106,8 @@ export default {
     DeleteIcon,
     EmptyHeart,
     FilledHeart,
-    CommentIcon
+    CommentIcon,
+    DiaryCommentView,
   },
   data() {
     return {
