@@ -1,6 +1,7 @@
 <template>
   <div>
     <h3>동행 찾기</h3>
+    <span @click="getLocation()">현재 위치</span>
 
     <router-link :to="{ name: 'communityDetail' }">
       <!-- v-for 추가예정 -->
@@ -25,6 +26,12 @@
 import { mapGetters } from 'vuex'
 export default {
     name: 'CommunityView',
+    data() {
+      return {
+        position: {},
+        
+      }
+    },
     computed: {
       ...mapGetters(['temp']),
       recruitState() {
@@ -49,6 +56,20 @@ export default {
         const start_date = start_year + '-' + start_month.toString().padStart(2, '0') + '-' + start_day
         const end_date = end_year + '-' + end_month.toString().padStart(2, '0') + '-' + end_day
         return [start_date, end_date]
+      }
+    },
+    methods: {
+      getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(this.getLocationValue)
+          console.log(this.position)
+        } else {
+          alert('위치 정보를 찾을 수 없습니다.')
+        }
+      },
+      getLocationValue(position) {
+        this.position.latitude = position.coords.latitude
+        this.position.longitude = position.coords.longitude
       }
     }
 }
