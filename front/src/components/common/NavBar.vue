@@ -47,6 +47,8 @@
           <br>
           <router-link :to="{ name: 'community' }" @click="visible =false">동행 구하기</router-link>
           <hr>
+          <router-link :to="{ name: 'chatList' }" @click="visible =false">채팅</router-link>
+
         </div>
         <!-- 로그인 안 한 유저 -->
         <!-- <div v-else> -->
