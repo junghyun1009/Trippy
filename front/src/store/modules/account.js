@@ -37,7 +37,7 @@ export default {
 
     login({ dispatch }, userinfo) {
       axios({
-        url: 'http://localhost:8000/members/login',
+        url: 'http:// i7a506.p.ssafy.io/members/login',
         method: 'post',
         data: userinfo,
       })
@@ -58,7 +58,7 @@ export default {
 
     signup({ commit, dispatch }, userinfo) {
       axios({
-        url: 'http://localhost:8000/members/signup',
+        url: 'http:// i7a506.p.ssafy.io/members/join',
         method: 'post',
         data: userinfo
       })
@@ -83,7 +83,7 @@ export default {
         axios({
           // 여기 pk 넣는 형식 정확히 모르겠음
           // @PathVariable email ???
-          url: 'http://localhost:8000/members/api/' + username,
+          url: 'http:// i7a506.p.ssafy.io' + username,
           method: 'get',
           headers: getters.authHeader,
         })
@@ -99,7 +99,7 @@ export default {
 
     logout({ getters, dispatch }) {
       axios({
-        url: 'http://localhost:8000/members/logout',
+        url: 'http:// i7a506.p.ssafy.io/members/logout',
         method: 'post',
         headers: getters.authHeader,
       })
@@ -114,7 +114,7 @@ export default {
 
     updateUserinfo({ commit }, userinfo) {
       axios({
-        url: 'http://localhost:8000//members/api/modify',
+        url: 'http:// i7a506.p.ssafy.io//members/api/modify',
         method: 'put',
         data: userinfo
       })
@@ -128,7 +128,7 @@ export default {
     
     deleteAccount({ getters }) {
       axios({
-        url: 'http://localhost:8000/members/api/remove',
+        url: 'http:// i7a506.p.ssafy.io/members/api/remove',
         method: 'delete',
         headers: getters.authHeader,
       })
@@ -142,7 +142,7 @@ export default {
 
     updatePassword({ getters }, userinfo) {
       axios({
-        url: '/http://localhost:8000/members/changepw',
+        url: '/http:// i7a506.p.ssafy.io/members/changepw',
         method: 'put',
         headers: getters.authHeader,
         // @PathVariable email ???
