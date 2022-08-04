@@ -55,7 +55,7 @@ public class DetailLocation extends BaseEntity{
         this.post = post;
         this.location = location;
     }
-    public void setPost(Post post){
+    public void setDetailPost(Post post){
         this.post = post;
         post.getDetailLocations().add(this);
     }

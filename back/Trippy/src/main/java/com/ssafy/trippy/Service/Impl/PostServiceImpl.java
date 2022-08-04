@@ -135,7 +135,7 @@ public class PostServiceImpl implements PostService {
         List<DetailLocation> detailLocation = requestPostDto.toEntity().getDetailLocations();
         List<DetailLocation> detailLocations = new ArrayList<>();
         for(DetailLocation detail:detailLocation){
-            detail.setPost(post);
+            detail.setDetailPost(post);;
             detailLocations.add(detail);
         }
 

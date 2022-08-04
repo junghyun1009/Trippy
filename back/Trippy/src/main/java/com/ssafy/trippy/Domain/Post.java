@@ -60,6 +60,7 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy="post")
     private List<PostComment> postComments = new ArrayList<>();
 
+
     @Builder
     public Post(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations, List<PostComment> postComments) {
         this.id = id;
