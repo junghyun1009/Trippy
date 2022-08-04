@@ -28,4 +28,13 @@ public class PostTransport extends BaseEntity{
         this.post = post;
         this.transport = transport;
     }
+    public void setPost(Post post){
+        this.post = post;
+        post.getPostTransports().add(this);
+    }
+
+    public void update(Transport transport){
+        this.transport = transport;
+    }
+
 }
