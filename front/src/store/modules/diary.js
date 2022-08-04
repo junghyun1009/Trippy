@@ -9,6 +9,7 @@ export default ({
     stories: [],
     story: {},
     diaries: [],
+    comments: [],
     diary: {},
     diaryTemp: {
       title: '제주도 3박 4일 여행',
@@ -36,6 +37,7 @@ export default ({
     story: state => state.story,
     diaries: state => state.diaries,
     diary: state => state.diary,
+    comments: state => state.comments,
     diaryTemp: state => state.diaryTemp,
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
@@ -85,6 +87,9 @@ export default ({
     },
     SET_DIARY(state, diary) {
       state.diary = diary
+    },
+    SET_COMMENTS(state, comments) {
+      state.comments = comments
     },
   },
   actions: {
@@ -156,6 +161,69 @@ export default ({
         router.push({ name: 'home' })
       })
       .catch(err => console.error(err.response))
+    },
+
+
+    // 일지 comment 
+    createComment({ getters, commit }, diaryPk, content) {
+      const comment = { content }
+      axios({
+        url: `http://localhost:8000/comments/post/${diaryPk}`,
+        method: 'post',
+        data: comment,
+        headers: getters.authHeader
+      })
+      .then( res => {
+        commit('SET_COMMENTS'),
+        res.data
+        router.push('DiaryCommentView')
+      })
+      .catch(err => console.error(err.response))
+    },
+
+    updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
+      const comment = { content, diaryPk, commentPk }
+      axios({
+        url:'http://localhost:8000/comments/api/post',
+        method: 'put',
+        data: comment,
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        commit('SET_COMMENTS', res.data)
+      })
+      .catch(err => console.error(err.response))
     }
   },
+
+  fetchComment({ getters, commit}, diaryPk) {
+    axios({
+      url: `http://localhost:8000/comments/post/${diaryPk}`,
+      method: 'get',
+      headers: getters.authHeader
+    })
+    .then( res => {
+      commit('SET_COMMENTS', res.data)
+    })
+    .catch(err => {
+      if (err.response.status === 404) {
+        router.push({ name: 'notFound404'})
+      }
+    })
+  },
+
+  deleteComment({ getters, commit}, diaryPk, commentPk) {
+    if (confirm('정말 삭제하시겠습니까?')) {
+      axios({
+        url: `http://localhost:8000/comments/post/`,
+        method: 'delete',
+        data: {diaryPk, commentPk},
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        commit('SET_COMMENTS', res.data)
+      })
+      .catch(err => console.error(err.response))
+    }
+  }
 })
