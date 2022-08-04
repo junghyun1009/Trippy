@@ -16,14 +16,11 @@ export default {
   data() {
     return {
       diary: {
-        pk: null,
         title: '',
-        option: {
-          datePick: [],
-          partyType: '가족',
-          memberNum: 1,
-          transportationList: [],
-        }
+        season: [],
+        company: '가족',
+        count: 1,
+        transport: [],
       }
     }
   }

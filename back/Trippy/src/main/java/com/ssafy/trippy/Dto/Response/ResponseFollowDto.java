@@ -1,6 +1,7 @@
 package com.ssafy.trippy.Dto.Response;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.trippy.Domain.Follow;
 import com.ssafy.trippy.Domain.Member;
 import lombok.Builder;
@@ -12,19 +13,15 @@ import lombok.NoArgsConstructor;
 public class ResponseFollowDto {
     private Long id;
 
-    private Member following;
+    @JsonProperty("following_id")
+    private Long followingId;
 
-    private Member follower;
+    @JsonProperty("follower_id")
+    private Long followerId;
 
     public ResponseFollowDto(Follow follow){
         this.id = follow.getId();
-        this.following = follow.getFollowing();
-        this.follower = follow.getFollower();
-    }
-    @Builder
-    public ResponseFollowDto(Long id, Member following, Member follower) {
-        this.id = id;
-        this.following = following;
-        this.follower = follower;
+        this.followingId = follow.getFollowing().getId();
+        this.followerId = follow.getFollower().getId();
     }
 }

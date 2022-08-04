@@ -8,6 +8,8 @@ import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Dto.Update.UpdateMemberDto;
 import com.ssafy.trippy.Service.MailService;
 import com.ssafy.trippy.Service.MemberService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,10 @@ public class MemberController {
     private final MemberService memberService;
     private final MailService mailService;
 
+
     // 회원가입
+    @ApiOperation(value = "회원가입")
+    @ApiImplicitParam(name = "userData", value = "유저의 정보를 담은 객체")
     @PostMapping("/join")
     public ResponseEntity<ResponseMemberDto> join(@RequestBody RequestMemberDto requestMemberDto){
         ResponseMemberDto responseMemberDto = memberService.signup(requestMemberDto);
@@ -55,14 +60,16 @@ public class MemberController {
 
     // 회원 삭제
     @DeleteMapping("/api/remove/{id}")
-    public void removeMember(@PathVariable Long id){
+    public ResponseEntity<?> removeMember(@PathVariable Long id){
         memberService.deleteMember(id);
+        return new ResponseEntity<>("회원삭제성공", HttpStatus.OK);
     }
 
     // 회원 수정
     @PutMapping("/api/modify/{id}")
-    public void modifyMember(@PathVariable Long id, @RequestBody UpdateMemberDto updateMemberDto){
+    public ResponseEntity<?> modifyMember(@PathVariable Long id, @RequestBody UpdateMemberDto updateMemberDto){
         memberService.updateMember(id,updateMemberDto);
+        return new ResponseEntity<>("회원수정성공", HttpStatus.OK);
     }
 
     // 회원 정보 받아오기

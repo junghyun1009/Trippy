@@ -1,4 +1,5 @@
 import router from "@/router"
+import axios from "axios"
 
 export default ({
   state: {
@@ -7,15 +8,14 @@ export default ({
     stories: [],
     story: {},
     diaries: [],
+    comments: [],
     diary: {},
-    temp: {
-      newTitle: '제주도 3박 4일 여행',
-      newOption: {
-        datePick: ['2022-07-01', '2022-07-04'],
-        partyType: '친구',
-        memberNum: 4,
-        transportationList: ['뚜벅이', '대중교통']
-      },
+    diaryTemp: {
+      title: '제주도 3박 4일 여행',
+      season: ['2022-07-01', '2022-07-04'],
+      company: '친구',
+      count: 4,
+      transport: ['뚜벅이', '대중교통'],
       geocodes: [
         {lat: 33.51041350000001, lng: 126.4913534},
         {lat: 33.461609, lng: 126.3105212},
@@ -24,7 +24,7 @@ export default ({
       ],
       routes: ['제주국제공항', '한담해변', '랜디스도넛 제주애월점', '곽지해수욕장'],
       stories: [
-        {pk: 1, place: "제주 국제 공항", photoList: [ {file: "[object File]", preview: "blob:http://localhost:8080/860d3d41-0f52-4a36-943a-8820f15cb044" } ], content: "111", rate: 3 }, 
+        {pk: 1, place: "제주 국제 공항", photoList: [ {file: "[object File]", preview: "https://www.okinawa.halekulani.com/lang_module/images/home/img_main-sp.jpg" } ], content: "111", rate: 3 }, 
         {pk: 2, place: "한담해변", photoList: [ {file: "[object File]", preview: "blob:http://localhost:8080/a3e66b80-2256-4034-bab0-f24ae67c0dfc" } ], content: "222", rate: 5 }
       ]
     },
@@ -34,8 +34,14 @@ export default ({
     routeNames: state => state.routeNames,
     stories: state => state.stories,
     story: state => state.story,
+    diaries: state => state.diaries,
     diary: state => state.diary,
-    temp: state => state.temp
+    comments: state => state.comments,
+    diaryTemp: state => state.diaryTemp,
+    // 이 친구 긴가민가
+    isAuthor: (state, getters) => {
+      return state.diary.member_id?.name === getters.currentUser.name
+    }
   },
   mutations: {
     ADD_GEOCODE(state, geocode) {
@@ -68,36 +74,155 @@ export default ({
       state.diary.geocodes = state.routeGeocodes
       state.diary.routes = state.routeNames
       state.diary.stories = state.stories
+      // 얘는 지워도 될 것 같은데 일단 실험해봐야 함
       state.diaries.push(state.diary)
       // 초기화
       state.routeGeocodes = []
       state.routeNames = []
       state.stories = []
-      router.push({
-        name: 'diaryDetail'
-      })
+
       console.log(state.diary)
       console.log(state.diaries)
-    }
+    },
+    SET_DIARY(state, diary) {
+      state.diary = diary
+    },
+    SET_COMMENTS(state, comments) {
+      state.comments = comments
+    },
   },
   actions: {
+    // 일지 CREATE
+    // 위도 경도 추가
     addGeocode({ commit }, geocode) {
       commit('ADD_GEOCODE', geocode)
     },
+    // 루트 추가
     addRoute({ commit }, route) {
       commit('ADD_ROUTE', route)
     },
+    // 루트 삭제
     deleteRoute({ commit }, routeIdx) {
       commit('DELETE_ROUTE', routeIdx)
     },
+    // 스토리 저장
     createStory({ commit }, [index, story]) {
       commit('CREATE_STORY', [index, story])
     },
+    // 스토리 삭제
     deleteStory({ commit }, index) {
       commit('DELETE_STORY', index)
     },
-    createDiary({ commit }, diary) {
-      commit('CREATE_DIARY', diary)
+    // 일지 저장
+    createDiary({ commit, getters }, diary) {
+      // commit('CREATE_DIARY', diary)
+      axios({
+        url: 'http://localhost:8000/posts/api',
+        method: 'post',
+        data: diary,
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        commit('CREATE_DIARY', res.data)
+        router.push({
+          name: 'diaryDetail'
+        })
+      })
+    },
+
+    // 일지 READ
+    // 단일 일지
+    fetchDiary({ commit, getters }, diaryPk) {
+      axios({
+        url: `http://localhost:8000/posts/detail/${diaryPk}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then(res => commit('SET_DIARY', res.data))
+      .catch(err => {
+        console.error(err.response)
+        if (err.response.status === 404) {
+          router.push({ name: 'notFound404' })
+        }
+      })
+    },
+
+    // 일지 UPDATE
+    // 일지 DELETE
+    deleteDiary({ commit, getters }, diaryPk) {
+      axios({
+        url: `http://localhost:8000/posts/api/${diaryPk}`,
+        method: 'delete',
+        headers: getters.authHeader
+      })
+      .then(() => {
+        commit('SET_DIARY', {})
+        router.push({ name: 'home' })
+      })
+      .catch(err => console.error(err.response))
+    },
+
+
+    // 일지 comment 
+    createComment({ getters, commit }, diaryPk, content) {
+      const comment = { content }
+      axios({
+        url: `http://localhost:8000/comments/post/${diaryPk}`,
+        method: 'post',
+        data: comment,
+        headers: getters.authHeader
+      })
+      .then( res => {
+        commit('SET_COMMENTS'),
+        res.data
+        router.push('DiaryCommentView')
+      })
+      .catch(err => console.error(err.response))
+    },
+
+    updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
+      const comment = { content, diaryPk, commentPk }
+      axios({
+        url:'http://localhost:8000/comments/api/post',
+        method: 'put',
+        data: comment,
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        commit('SET_COMMENTS', res.data)
+      })
+      .catch(err => console.error(err.response))
     }
   },
+
+  fetchComment({ getters, commit}, diaryPk) {
+    axios({
+      url: `http://localhost:8000/comments/post/${diaryPk}`,
+      method: 'get',
+      headers: getters.authHeader
+    })
+    .then( res => {
+      commit('SET_COMMENTS', res.data)
+    })
+    .catch(err => {
+      if (err.response.status === 404) {
+        router.push({ name: 'notFound404'})
+      }
+    })
+  },
+
+  deleteComment({ getters, commit}, diaryPk, commentPk) {
+    if (confirm('정말 삭제하시겠습니까?')) {
+      axios({
+        url: `http://localhost:8000/comments/post/`,
+        method: 'delete',
+        data: {diaryPk, commentPk},
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        commit('SET_COMMENTS', res.data)
+      })
+      .catch(err => console.error(err.response))
+    }
+  }
 })

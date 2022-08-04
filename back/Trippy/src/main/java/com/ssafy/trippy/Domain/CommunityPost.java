@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -74,6 +76,9 @@ public class CommunityPost extends BaseEntity{
     @JoinColumn(name="LOCATION_ID")
     private Location location;
 
+    @OneToMany(mappedBy = "communityPost",cascade = CascadeType.ALL)
+    private List<Bookmark> bookmarks = new ArrayList<>();
+
     @Builder
     public CommunityPost(Long id, String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, int gender, boolean isLocal, Member member, Location location) {
         this.id = id;
@@ -92,7 +97,7 @@ public class CommunityPost extends BaseEntity{
         this.member = member;
         this.location = location;
     }
-    
+
     // update문
     public void update(String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, int gender, boolean isLocal, Location location) {
         this.title = title;
@@ -109,4 +114,5 @@ public class CommunityPost extends BaseEntity{
         this.isLocal = isLocal;
         this.location = location;
     }
+
 }

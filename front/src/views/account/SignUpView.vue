@@ -1,5 +1,7 @@
 <template>
   <div>
+
+    <form @submit.prevent="signup(userinfo)">
     <div class="email">
       <p>이메일</p>
       <el-input  id="email"
@@ -22,7 +24,7 @@
         @blur="checkPasswordValidity"
         show-password
         />
-      <el-input v-model="userinfo.passwordCheck" 
+      <el-input v-model="passwordCheck" 
         type="password" 
         placeholder="비밀번호 확인" 
         autocomplete="off"
@@ -37,7 +39,7 @@
 
     <div class="nickname">
       <p>닉네임</p>
-      <el-input id="nickname" v-model="userinfo.nickname" placeholder="사용할 별명을 입력해주세요" maxlength="10"  @blur="checkNickname"></el-input>
+      <el-input id="nickname" v-model="userinfo.name" placeholder="사용할 별명을 입력해주세요" maxlength="10"  @blur="checkNickname"></el-input>
       <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
     </div>
 
@@ -61,7 +63,7 @@
           <br>
             <el-date-picker
               id="birthdate"
-              v-model="userinfo.birthDate"
+              v-model="userinfo.birth"
               type="date"
               placeholder="생년월일을 선택해주세요!"
             />
@@ -71,6 +73,7 @@
 
     <br>
     <el-button type="primary" @click="checkBlank()">회원가입</el-button>
+  </form>
 
   </div>
 </template>
@@ -78,6 +81,7 @@
 <script>
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
 import { userErrorMessage } from '@/common/constant.js'
+import { mapActions } from 'vuex'
 
 export default {
   components: { 
@@ -89,10 +93,9 @@ export default {
             userinfo: {
                 email: '',
                 password: '',
-                passwordCheck: '',
-                nickname: '',
+                name: '',
                 gender: '',
-                birthDate: '',
+                birth: '',
             },
             options: [
                 {
@@ -113,9 +116,12 @@ export default {
             passwordFormat: true,
             passwordMatch: true,
             nicknameFormat: true,
+            passwordCheck: '',
         }
     },
     methods: {
+      ...mapActions(['signup']),
+      
       checkEmail() {
       var inputEmail = document.getElementById('email').value;
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -147,15 +153,14 @@ export default {
       checkNickname() {
         var regNickname = /^([0-9]|[a-z]|[A-Z]|[가-힣]).{1,10}$/;
         var blank = /''/
-        if (regNickname.test(this.userinfo.nickname)) {
+        if (regNickname.test(this.userinfo.name)) {
           this.nicknameFormat = true
-        } else if (blank.test(this.userinfo.nickname)) {
+        } else if (blank.test(this.userinfo.name)) {
           this.nicknameFormat = true
         } else {
           this.nicknameFormat = false
         }
       },
-
       checkBlank() {
         var emailBlank = document.getElementById('email').value
         var passwordBlank = document.getElementById('password').value
