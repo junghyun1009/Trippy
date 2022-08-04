@@ -76,8 +76,14 @@
             <template #title>
               <span>루트</span>
               <!-- 태그 -->
-              <div>
+              <div v-if="action===create">
                 <el-tag class="option-tag" v-for="(route, idx) in routeNames" :key="idx"
+                :disable-route="false" type=''>
+                  {{ route }}
+                </el-tag>
+              </div>
+              <div v-else>
+                <el-tag class="option-tag" v-for="(route, idx) in diaryTemp.routes" :key="idx"
                 :disable-route="false" type=''>
                   {{ route }}
                 </el-tag>
@@ -91,7 +97,7 @@
       </div>
       <div class="story-form">
         <p class="title-box">스토리</p>
-        <story-form></story-form>
+        <story-form :action="action"></story-form>
       </div>
       <div>
         <el-button @click="onSubmit">{{ action }}</el-button>
@@ -117,6 +123,7 @@ export default {
   },
   data() {
     return {
+      // 날짜를 새로운 변수에 받아와서 0번 인덱스, 1번 인덱스를 newDiary 안에 따로 저장
       newDiary: {
         title: this.diary.title,
         season: this.diary.season,
@@ -127,7 +134,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['routeNames', 'stories']),
+    // update할 때 diaryTemp 대신 해당 pk 다이어리 가져와야 함 -> 편집 창으로 들어오면 해당 pk 다이어리 내용 fetch하는 함수
+    ...mapGetters(['routeNames', 'stories', 'diaryTemp']),
     partyTag() {
       const party = this.newDiary.company
       return party

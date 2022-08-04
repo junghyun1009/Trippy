@@ -1,5 +1,6 @@
 import router from "@/router"
 import axios from "axios"
+// import _ from 'lodash'
 
 export default ({
   state: {
@@ -39,7 +40,8 @@ export default ({
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
       return state.diary.member_id?.name === getters.currentUser.name
-    }
+    },
+    // isDiary: state => !_.isEmpty(state.diary)
   },
   mutations: {
     ADD_GEOCODE(state, geocode) {
@@ -74,13 +76,12 @@ export default ({
       state.diary.stories = state.stories
       // 얘는 지워도 될 것 같은데 일단 실험해봐야 함
       state.diaries.push(state.diary)
+      console.log(state.diary)
+      console.log(state.diaries)
       // 초기화
       state.routeGeocodes = []
       state.routeNames = []
       state.stories = []
-
-      console.log(state.diary)
-      console.log(state.diaries)
     },
     SET_DIARY(state, diary) {
       state.diary = diary
@@ -112,7 +113,7 @@ export default ({
     createDiary({ commit, getters }, diary) {
       // commit('CREATE_DIARY', diary)
       axios({
-        url: 'http://localhost:8000/posts/api',
+        url: 'http://localhost:8000/posts/',
         method: 'post',
         data: diary,
         headers: getters.authHeader,
