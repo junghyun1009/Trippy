@@ -1,7 +1,7 @@
 <template>
   <el-form action="submit">
-    <el-form-item label="제목" placeholder="제목을 입력하세요.">
-      <el-input v-model="newPost.title" />
+    <el-form-item label="제목">
+      <el-input v-model="newPost.title" placeholder="제목을 입력하세요." />
     </el-form-item>
     <el-form-item label="카테고리">
       <el-select v-model="newPost.category" placeholder="어떤 활동을 같이 하고 싶나요?">
@@ -12,7 +12,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="활동 내용">
-      <el-input v-model="newPost.desc" type="textarea" />
+      <el-input v-model="newPost.desc" type="textarea" placeholder="간단히 하고 싶은 활동을 설명해주세요." />
     </el-form-item>
     <el-form-item label="날짜">
       <el-date-picker v-model="newPost.date" type="daterange"/>
@@ -52,6 +52,9 @@
     <el-form-item>
       <el-button @click="onSubmit">{{ action }}</el-button>
     </el-form-item>
+    <el-form-item label="모임 장소">
+      <el-input v-model="newPost.place" placeholder="모임 장소를 입력하세요." />
+    </el-form-item>
   </el-form>
 </template>
 
@@ -75,7 +78,8 @@ export default {
           gender: this.post.option.gender,
           age: this.post.option.age,
           isLocal: this.post.option.isLocal
-        }
+        },
+        place: this.post.place,
       }
     }
   },
