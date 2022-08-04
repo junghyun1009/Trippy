@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -25,6 +26,8 @@ public class ResponsePostDto {
     private List<PostTransport> postTransports;
     private List<DetailLocation> detailLocations;
 
+    private List<ResponsePostCommentDto> comments;
+
     public ResponsePostDto (Post post){
         this.id=post.getId();
         this.title = post.getTitle();
@@ -37,6 +40,7 @@ public class ResponsePostDto {
         this.memberId = post.getMember().getId();
         this.postTransports = post.getPostTransports();
         this.detailLocations = post.getDetailLocations();
+        this.comments = post.getPostComments().stream().map(ResponsePostCommentDto::new).collect(Collectors.toList());
     }
 
     @Builder

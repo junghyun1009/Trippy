@@ -29,7 +29,17 @@
 <script>
 export default {
   name: 'RegionListItem',
+  data() {
+    return {
+      
+    }
+  },
   methods: {
+  },
+  created() {
+    window.onpopstate = function () {
+    location.reload()
+    };
   }
 }
 </script>

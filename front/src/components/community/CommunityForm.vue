@@ -1,7 +1,7 @@
 <template>
   <el-form action="submit">
-    <el-form-item label="제목" placeholder="제목을 입력하세요.">
-      <el-input v-model="newPost.title" />
+    <el-form-item label="제목">
+      <el-input v-model="newPost.title" placeholder="제목을 입력하세요." />
     </el-form-item>
     <el-form-item label="카테고리">
       <el-select v-model="newPost.category" placeholder="어떤 활동을 같이 하고 싶나요?">
@@ -12,10 +12,13 @@
       </el-select>
     </el-form-item>
     <el-form-item label="활동 내용">
-      <el-input v-model="newPost.desc" type="textarea" />
+      <el-input v-model="newPost.desc" type="textarea" placeholder="간단히 하고 싶은 활동을 설명해주세요." />
     </el-form-item>
-    <el-form-item label="날짜/시간">
-      <el-date-picker v-model="newPost.dateTime" type="datetimerange"/>
+    <el-form-item label="날짜">
+      <el-date-picker v-model="newPost.date" type="daterange"/>
+    </el-form-item>
+    <el-form-item label="시간">
+      <el-time-picker v-model="newPost.time" :disabled-seconds="disabledSeconds"/>
     </el-form-item>
     <el-form-item label="인원">
       <el-input-number v-model="newPost.recruit_volume" :min="1" :max="10"/>
@@ -49,6 +52,9 @@
     <el-form-item>
       <el-button @click="onSubmit">{{ action }}</el-button>
     </el-form-item>
+    <el-form-item label="모임 장소">
+      <el-input v-model="newPost.place" placeholder="모임 장소를 입력하세요." />
+    </el-form-item>
   </el-form>
 </template>
 
@@ -65,13 +71,15 @@ export default {
         title: this.post.title,
         category: this.post.category,
         desc: this.post.desc,
-        dateTime: this.post.dateTime,
+        date: this.post.date,
+        time: this.post.time,
         recruit_volume: this.post.recruit_volume,
         newOption: {
           gender: this.post.option.gender,
           age: this.post.option.age,
           isLocal: this.post.option.isLocal
-        }
+        },
+        place: this.post.place,
       }
     }
   },
@@ -92,11 +100,21 @@ export default {
         local = '같은 지역만'
       }
       return [gender, age, local]
-    }
+    },
   },
   methods: {
     onSubmit() {
       console.log(this.newPost)
+    },
+    makeRange(start, end) {
+      const result = []
+      for (let i = start; i <= end; i ++) {
+        result.push(i)
+      }
+      return result
+    },
+    disabledSeconds() {
+      return this.makeRange(1, 59)
     }
   },
 }

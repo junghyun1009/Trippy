@@ -3,6 +3,10 @@
     <search-bar></search-bar>
     <region-list></region-list>
     <recommend-list></recommend-list>
+
+    <p>팔로우 하고 있는</p>
+    <p>ㅇㅇㅇ 님이 추천하는 코스</p>
+    <recommend-list></recommend-list>
     
     <br>
     <br>
