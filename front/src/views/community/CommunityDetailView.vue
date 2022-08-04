@@ -1,8 +1,22 @@
 <template>
   <div>
     <div class="detail-header">
+      <div>
+        <el-tag class="tag">{{ temp.category }}</el-tag>
+        <el-tag class="tag">장소</el-tag>
+      </div>
+      <router-link :to="{ name: 'profile' }">
+        <div class="profile">
+          <el-avatar :size="50" src="" />
+          <span>나유저</span>
+        </div>
+      </router-link>
+      <hr>
+    <div class="title">
+      <span>{{ recruitState }}</span>
+      <h4>{{ temp.title }}</h4>
+    </div>
      <div class="title-icons">
-       <h3>{{ temp.title }}</h3>
         <div class="icons">
           <!-- 로그인한 유저와 글 쓴 유저가 같다면 -->
           <router-link :to="{ name: 'communityEdit' }">
@@ -21,20 +35,19 @@
             <filled-heart/>
           </icon-base>
         </div>
-      </div>
-        <el-tag>{{ temp.category }}</el-tag>
-        <el-tag v-for="option in optionTag" :key="option">{{ option }}</el-tag>
-        <el-tag>{{ convertDate[0] }} ~ {{ convertDate[1] }}</el-tag>
-      <div>
-        <h4>{{ recruitState }}</h4>
-        <p>모집: {{ recruitCount}} / {{ temp.recruit_volume }}</p>
-      </div>
     </div>
 
+      <div class="option">
+        <p>{{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 | {{ temp.option.gender }}</p>
+        <p>{{ convertDate[0] }} ~ {{ convertDate[1] }}, {{ convertTime }}</p>
+        <p>{{ temp.place }}</p>
+      </div>
+    </div>
+    <p>{{ this.temp.desc }}</p>
+    <hr>
     <div>
-      <el-descriptions>
-        <el-descriptions-item label="활동 내용">{{ temp.desc }}</el-descriptions-item>
-      </el-descriptions>
+      <p>{{ recruitCount}} / {{ temp.recruit_volume }}명 참여</p>
+      <el-avatar :size="50" src="" />
     </div>
     <el-button>참가하기</el-button>
   </div>
@@ -107,10 +120,28 @@ export default {
 </script>
 
 <style scoped>
+* {
+  text-align: left;
+}
+
 .detail-header {
   width: 100%;
   background-color: bisque;
   padding: 0 0 20px 0;
+}
+
+.tag {
+  margin:10px 10px 10px 0;
+}
+
+.tag:first-child {
+  margin-left: 10px;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
 }
 
 .diary-detail-header > h3 {
