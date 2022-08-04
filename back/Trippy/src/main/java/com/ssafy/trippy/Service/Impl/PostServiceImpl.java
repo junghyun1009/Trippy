@@ -1,14 +1,10 @@
 package com.ssafy.trippy.Service.Impl;
 
-import com.ssafy.trippy.Domain.DetailLocation;
-import com.ssafy.trippy.Domain.Member;
-import com.ssafy.trippy.Domain.Post;
+import com.ssafy.trippy.Domain.*;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Dto.Update.UpdatePostDto;
-import com.ssafy.trippy.Repository.DetailLocationRepository;
-import com.ssafy.trippy.Repository.MemberRepository;
-import com.ssafy.trippy.Repository.PostRepository;
+import com.ssafy.trippy.Repository.*;
 import com.ssafy.trippy.Service.PostService;
 import com.sun.mail.iap.Response;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +23,15 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final DetailLocationRepository detailLocationRepository;
+    private final PostTransportRepository postTransportRepository;
+
+    private final TransportRepository transportRepository;
+
+    private final Long busId = 1L;
+    private final Long walkId = 2L;
+    private final Long taxiId = 3L;
+
+
 
 
     // 모든 post찾기
@@ -84,9 +89,17 @@ public class PostServiceImpl implements PostService {
         Member member = memberRepository.findById(requestPostDto.getMember_id()).get();
         requestPostDto.setMember_id(member.getId());
         Post post = postRepository.save(requestPostDto.toEntity());
+
+        System.out.println("requestPostDto = " + requestPostDto.getPostTransports().get(0).getTransport().getName());
+        System.out.println("requestPostDto = " + requestPostDto.getPostTransports().get(0).getTransport().getId());
+
         for (DetailLocation detailLocation:requestPostDto.toEntity().getDetailLocations()){
             detailLocation.setPost(post);
             detailLocationRepository.save(detailLocation);
+        }
+        for(PostTransport postTransport:requestPostDto.toEntity().getPostTransports()){
+            postTransport.setPost(post);
+            postTransportRepository.save(postTransport);
         }
 
     }
@@ -104,6 +117,21 @@ public class PostServiceImpl implements PostService {
     public void updatePost(Long id, RequestPostDto requestPostDto) {
         Post post = postRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id="+id));
         List<DetailLocation> detailLocationList = post.getDetailLocations();
+
+        // PostTransport 테이블에도 수정된 값 넣어주기
+        for (PostTransport postTransport : requestPostDto.toEntity().getPostTransports()) {
+            if(postTransport.getTransport().getName().equals("버스")){
+                postTransport.getTransport().builder().id(busId).build();
+            }else if(postTransport.getTransport().getName().equals("택시")) {
+                postTransport.getTransport().builder().id(walkId).build();
+            }else {
+                postTransport.getTransport().builder().id(taxiId).build();
+            }
+        }
+
+
+
+        // detailLocation 테이블에도 수정된 값 넣어주기
         List<DetailLocation> detailLocation = requestPostDto.toEntity().getDetailLocations();
         List<DetailLocation> detailLocations = new ArrayList<>();
         for(DetailLocation detail:detailLocation){
@@ -116,7 +144,20 @@ public class PostServiceImpl implements PostService {
                     detailLocations.get(i).getDetailLocationName(),
                     detailLocations.get(i).getRating(),
                     detailLocations.get(i).getImgPath());
-            System.out.println(detailLocationList.get(i).toString());
+        }
+
+        // PostTransport 테이블에도 수정된 값 넣어주기
+        List<PostTransport> oldPostTransport = postTransportRepository.findAllPostTransportByPost(post);
+        List<PostTransport> postTransport = requestPostDto.toEntity().getPostTransports();
+        List<PostTransport> changePostTransportList= new ArrayList<>();
+        for(PostTransport postTrans:postTransport){
+            postTrans.setPost(post);
+            changePostTransportList.add(postTrans);
+        }
+        System.out.println("changePostTransportList.toString() = " + changePostTransportList.toString());
+
+        for (int i = 0; i < postTransport.size(); i++) {
+            oldPostTransport.get(i).update(changePostTransportList.get(i).getTransport());
         }
 
         post.update(
@@ -127,9 +168,9 @@ public class PostServiceImpl implements PostService {
                 requestPostDto.getStartDate(),
                 requestPostDto.getEndDate(),
                 requestPostDto.getRepresentiveImg(),
-                requestPostDto.getPostTransports(),
+                postTransport,
                 detailLocations);
-
+//        System.out.println(postTransportRepository.findAll().toString());
         }
 
 
