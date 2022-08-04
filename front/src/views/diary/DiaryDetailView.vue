@@ -63,22 +63,43 @@
     <div id="map" style="height: 480px; position: relative; overflow: hidden;"></div>
     <el-tag v-for="(route, idx) in diaryTemp.routes" :key="idx">{{ idx + 1}}. {{ route }}</el-tag>
 
-    <div>
+    <!-- <div>
       <div v-for="(story, idx) in diaryTemp.stories" :key="idx">
         <div>
           <h3>{{ story.pk }}. {{ story.place }}</h3>
           <el-rate disabled v-model=story.rate></el-rate>
           <el-carousel trigger="click" height="150px" :autoplay=false>
             <el-carousel-item v-for="(photo, index) in story.photoList" :key="index">
-              {{ photo }}
+              {{ photo }} -->
               <!-- <img :src="photoUrl(photo.file)" :alt="photo.preview"/> -->
+            <!-- </el-carousel-item>
+          </el-carousel>
+          <p>{{ story.content }}</p>
+        </div>
+      </div>
+    </div> -->
+
+    <div>
+      <el-tabs tab-position="right" :stretch="true" class="story-tab">
+        <el-tab-pane v-for="(story, idx) in diaryTemp.stories" :key="idx" :label="story.place">
+          <h3>{{ story.pk }}. {{ story.place }}</h3>
+          <el-rate disabled v-model=story.rate></el-rate>
+          <el-carousel trigger="click" height="150px" :autoplay=false>
+            <el-carousel-item v-for="(photo, index) in story.photoList" :key="index">
+              <!-- {{ photo }} -->
+              <img :src="photo.preview" :alt="photo.preview"/>
             </el-carousel-item>
           </el-carousel>
           <p>{{ story.content }}</p>
-
-        </div>
-      </div>
+        </el-tab-pane>
+      </el-tabs>
     </div>
+
+  <hr>
+  <br>
+
+  <!-- comment? -->
+  <diary-comment-view></diary-comment-view>
 
   </div>
 </template>
@@ -91,6 +112,7 @@ import DeleteIcon from '@/components/icon/DeleteIcon.vue'
 import EmptyHeart from '@/components/icon/EmptyHeart.vue'
 import FilledHeart from '@/components/icon/FilledHeart.vue'
 import CommentIcon from '@/components/icon/CommentIcon.vue'
+import DiaryCommentView from '@/views/diary/DiaryCommentView.vue'
 
 export default {
   name: 'DiaryDetailView',
@@ -99,7 +121,8 @@ export default {
     DeleteIcon,
     EmptyHeart,
     FilledHeart,
-    CommentIcon
+    CommentIcon,
+    DiaryCommentView,
   },
   data() {
     return {
@@ -190,6 +213,11 @@ export default {
 .profile-div > span {
   margin-left: 10px;
   font-size: 20px;
+}
+
+.story-tab {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 </style>
