@@ -9,7 +9,8 @@
         background-color="#F16B51"
         text-color="#fff"
       >
-        <el-menu-item index="0"><span class="trippyLogo" @click="$router.go('/')">TRIPPY</span></el-menu-item>
+
+        <el-menu-item index="0"><a href="/" class="trippyLogo">TRIPPY</a></el-menu-item>
         <div class="flex-grow" />
         <el-menu-item index="1">
           <div v-if="flag===0" @click="showSearchBar" class="menu-icon">
@@ -125,6 +126,7 @@ export default {
 	font-family: 'Alfa Slab One', cursive;
 	font-weight: 300;
 	font-size: 20px;
+  text-decoration: none;
   }
 
 .flex-grow {

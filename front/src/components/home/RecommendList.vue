@@ -12,6 +12,9 @@ export default {
   components: { 
       RecommendListItem 
   },
+  props: {
+    diary: Object,
+  }
 }
 </script>
 

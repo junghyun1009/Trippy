@@ -1,25 +1,25 @@
 <template>
   <div>
     <div class="regions"
-        data-flickity='{ "pageDots": false }'>
+        data-flickity='{ "pageDots": false, "cellAlign": "left" }'>
         <div class="region">
-            <div class="image" id="all"><span>전체</span></div>
+            <div class="image" id="all" ><span @click="diaryFilter(this.target)">전체</span></div>
         </div>
 
         <div class="region">
-            <div class="image" id="seoul"><span>서울</span></div>
+            <div class="image" id="seoul" ><span @click="diaryFilter(this)">서울</span></div>
         </div>
 
         <div class="region">
-            <div class="image" id="jeju"><span>제주</span></div>
+            <div class="image" id="jeju"><span @click="diaryFilter(this)">제주</span></div>
         </div>
 
         <div class="region">
-            <div class="image" id="busan"><span>부산</span></div>
+            <div class="image" id="busan"><span @click="diaryFilter(this)">부산</span></div>
         </div>
 
         <div class="region">
-            <div class="image" id="tokyo"><span>도쿄</span></div>
+            <div class="image" id="tokyo"><span @click="diaryFilter(this)">도쿄</span></div>
         </div>
     </div>
 
@@ -31,10 +31,32 @@ export default {
   name: 'RegionListItem',
   data() {
     return {
-      
+
     }
   },
   methods: {
+    diaryFilter() {
+      console.log(event.currentTarget.innerText)
+      if ( event.currentTarget.innerText == '전체') {
+        console.log('all')
+        // 모든 일지를 axios로 호출해서 뿌림
+      } 
+      else if ( event.currentTarget.innerText == '서울') {
+        console.log('seoul')
+        // 모든 일지를 axios로 호출해서 가져오면
+        // 오 근데 도시별 게시물 전체조회가 있네...???
+        // 그러면 백에서 걍 호출해주면될거같기도함-- 나중에 api 완성돼야 알수있을듯
+      }
+      else if ( event.currentTarget.innerText == '제주') {
+        console.log('jeju')
+      }
+      else if ( event.currentTarget.innerText == '부산') {
+        console.log('busan')
+      }
+      else if ( event.currentTarget.innerText == '도쿄') {
+        console.log('tokyo')
+      }
+    }
   },
   created() {
     window.onpopstate = function () {
