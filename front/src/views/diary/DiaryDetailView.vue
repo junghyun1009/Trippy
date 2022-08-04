@@ -51,7 +51,7 @@
           <el-button v-else @click="isFollowed=0">팔로잉</el-button>
           <br>
           <!-- 여기는 공통 -->
-          <el-tag>{{ diaryTemp.season[0].substr(5, 10) }}-{{ diaryTemp.season[1].substr(5, 10) }}</el-tag>
+          <el-tag>{{ diaryTemp.startDate.substr(5, 10) }}-{{ diaryTemp.endDate.substr(5, 10) }}</el-tag>
           <el-tag>{{ diaryTemp.company }} ({{ diaryTemp.count }}명)</el-tag>
           <br>
           <el-tag v-for="(trans, idx) in diaryTemp.transport" :key="idx">{{ trans }}</el-tag>
@@ -61,7 +61,7 @@
 
 
     <div id="map" style="height: 480px; position: relative; overflow: hidden;"></div>
-    <el-tag v-for="(route, idx) in diaryTemp.routes" :key="idx">{{ idx + 1}}. {{ route }}</el-tag>
+    <el-tag v-for="(route, idx) in diaryTemp.routes" :key="idx">{{ routeNum }}. {{ routeName }}</el-tag>
 
     <!-- <div>
       <div v-for="(story, idx) in diaryTemp.stories" :key="idx">
@@ -144,19 +144,21 @@ export default {
     ...mapActions(['fetchDiary', 'deleteDiary']),
     addMarkers() {
       const map = new google.maps.Map(document.getElementById("map"), {
-          center: this.diaryTemp.geocodes[0],
+          center: this.diaryTemp.routes[0].geocode,
           zoom: 10,
       });
-      this.diaryTemp.geocodes.forEach((each) => {
-        let labelNum = (this.diaryTemp.geocodes.indexOf(each)+1).toString()
+      const geocodes = []
+      this.diaryTemp.routes.forEach((each) => {
+        let labelNum = (each.routeNum).toString()
+        geocodes.push(each.geocode)
         new google.maps.Marker({
-            position: each,
+            position: each.geocode,
             label: labelNum,
             map: map,
         });
       })
       const routePath = new google.maps.Polyline({
-        path: this.diaryTemp.geocodes,
+        path: geocodes,
         geodesic: true,
         strokeColor: '#FF0000',
         strokeOpacity: 1.0,
