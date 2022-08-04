@@ -1,7 +1,5 @@
 package com.ssafy.trippy.Dto.Update;
 
-import com.ssafy.trippy.Domain.Location;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

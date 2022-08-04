@@ -114,4 +114,5 @@ public class CommunityPost extends BaseEntity{
         this.isLocal = isLocal;
         this.location = location;
     }
+
 }
