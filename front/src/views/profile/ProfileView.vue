@@ -1,17 +1,15 @@
 <template>
-  <div>
+  <div class="container">
     <div class="user-info">
       <el-avatar :size="100" class="user-info"> user </el-avatar>
       <div>
         <h2>username</h2>
         <div class="user-follow">
           <div class="user-follow">
-            <p>팔로워</p>
-            <p>{{ followerList.length }}</p>
+            <followers-list/>
           </div>
           <div class="user-follow">
-            <p>팔로잉</p>
-            <p>{{ followingList.length }}</p>
+            <followings-list/>
           </div>
         </div>
       </div>
@@ -21,6 +19,7 @@
     <el-button v-else type="primary" plain @click="unfollowNow()">팔로잉</el-button>
     <div class="user-info">
       <p>소개글</p>
+
     </div>
     <el-tabs
     v-model="activeName"
@@ -42,8 +41,15 @@
 </template>
 
 <script>
+import FollowersList from '@/components/profile/FollowersList.vue'
+import FollowingsList from '@/components/profile/FollowingsList.vue'
+
 export default {
   name: 'ProfileView',
+  components: {
+    FollowersList,
+    FollowingsList,
+  },
   data() {
     return {
       isFollow: false,
@@ -71,5 +77,9 @@ export default {
 
 .user-follow:first-child {
   margin-right: 15px;
+}
+
+.container {
+  margin-top: 15px;
 }
 </style>

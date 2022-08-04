@@ -30,6 +30,9 @@ spring:
   jwt:
     blacklist:
       access-token: BlackList_AccessToken_
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 logging:
   level:
     org.hibernate.SQL: debug

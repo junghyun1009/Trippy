@@ -1,47 +1,43 @@
 package com.ssafy.trippy.Dto.Request;
 
+import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Domain.Post;
 import com.ssafy.trippy.Domain.PostComment;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
-public class RequestPostCommentDto {
+@AllArgsConstructor
+public class RequestPostCommentDto implements Serializable {
+
     private Long id;
-
     private String content;
-
     private LocalDateTime regDt;
+    private Long memberId;
+    private String email;
+    private List<RequestPostCommentDto> children = new ArrayList<>();
 
-
-    private Byte isDelete;
-
-    // 대댓글 나중에
-    private Long parent;
-    private Long rootComment;
-    private Long childComment;
-
-    private Post post;
-
-    public PostComment toEntity() {
-        return PostComment.builder()
-                .id(id)
-                .post(Post.builder().id(post.getId()).build())
-                .content(content)
-                .regDt(regDt)
-                .build();
-
-    }
-
-    @Builder
-    public RequestPostCommentDto(Long id, String content, LocalDateTime regDt, Post post) {
+    public RequestPostCommentDto(Long id, String content, Long memberId, String email) {
         this.id = id;
         this.content = content;
-        this.regDt = regDt;
-        this.post = post;
+        this.memberId = memberId;
+        this.email = email;
+
     }
+
+    public static RequestPostCommentDto convertCommentToDto(PostComment postComment){
+        return new RequestPostCommentDto(postComment.getId(), postComment.getContent(), postComment.getMember().getId(),
+                postComment.getMember().getEmail());
+
+    }
+
+
+
+
 }

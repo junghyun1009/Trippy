@@ -8,6 +8,8 @@ import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Dto.Update.UpdateMemberDto;
 import com.ssafy.trippy.Service.MailService;
 import com.ssafy.trippy.Service.MemberService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,10 @@ public class MemberController {
     private final MemberService memberService;
     private final MailService mailService;
 
+
     // 회원가입
+    @ApiOperation(value = "회원가입")
+    @ApiImplicitParam(name = "userData", value = "유저의 정보를 담은 객체")
     @PostMapping("/join")
     public ResponseEntity<ResponseMemberDto> join(@RequestBody RequestMemberDto requestMemberDto){
         ResponseMemberDto responseMemberDto = memberService.signup(requestMemberDto);
