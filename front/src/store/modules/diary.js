@@ -15,10 +15,10 @@ export default ({
       count: 4,
       transport: ['뚜벅이', '대중교통'],
       routes: [
-        {routeNum: 1, routeName: '제주국제공항', geocode: {lat: 33.51041350000001, lng: 126.4913534}},
-        {routeNum: 2, routeName: '한담해변', geocode: {lat: 33.461609, lng: 126.3105212}},
-        {routeNum: 3, routeName: '랜디스도넛 제주애월점', geocode: {lat: 33.4611909, lng: 126.3116327}},
-        {routeNum: 4, routeName: '곽지해수욕장', geocode: {lat: 33.450902, lng: 126.3057298}}
+        {routeNum: 1, routeName: '제주국제공항',lat: 33.51041350000001, lng: 126.4913534},
+        {routeNum: 2, routeName: '한담해변', lat: 33.461609, lng: 126.3105212},
+        {routeNum: 3, routeName: '랜디스도넛 제주애월점', lat: 33.4611909, lng: 126.3116327},
+        {routeNum: 4, routeName: '곽지해수욕장', lat: 33.450902, lng: 126.3057298}
       ],
       stories: [
         {pk: 1, place: "제주 국제 공항", photoList: [ {file: "[object File]", preview: "https://www.okinawa.halekulani.com/lang_module/images/home/img_main-sp.jpg" } ], content: "111", rate: 3 }, 
