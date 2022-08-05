@@ -23,37 +23,39 @@
     <el-form-item label="인원">
       <el-input-number v-model="newPost.recruit_volume" :min="1" :max="10"/>
     </el-form-item>
-    <el-collapse>
-      <el-collapse-item title="장소">
-        <div>장소</div>
-      </el-collapse-item>
-      <el-collapse-item>
-        <template #title>
-          <div>
-            <span>모집 조건</span>
-            <el-tag class="option-tag" v-for="option in optionTag" :key="option">{{ option }}</el-tag>
-          </div>
-        </template>
-        <el-form-item label="성별">
-          <el-radio-group v-model="newPost.newOption.gender">
-            <el-radio label="누구나" />
-            <el-radio label="여성만" />
-            <el-radio label="남성만" />
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="나이">
-          <el-slider v-model="newPost.newOption.age" range :min="19" :max="50"/>
-        </el-form-item>
-        <el-form-item label="지역 제한">
-          <el-switch v-model="newPost.newOption.isLocal" />
-        </el-form-item>
-      </el-collapse-item>
-    </el-collapse>
     <el-form-item>
-      <el-button @click="onSubmit">{{ action }}</el-button>
+      <el-collapse class="collapse">
+        <el-collapse-item title="장소">
+          <div>장소</div>
+        </el-collapse-item>
+        <el-collapse-item>
+          <template #title>
+            <div>
+              <span>모집 조건</span>
+              <el-tag class="option-tag" v-for="option in optionTag" :key="option">{{ option }}</el-tag>
+            </div>
+          </template>
+          <el-form-item label="성별">
+            <el-radio-group v-model="newPost.newOption.gender">
+              <el-radio label="누구나" />
+              <el-radio label="여성만" />
+              <el-radio label="남성만" />
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="나이">
+            <el-slider class="slider" v-model="newPost.newOption.age" range :min="19" :max="70"/>
+          </el-form-item>
+          <el-form-item label="지역 제한">
+            <el-switch v-model="newPost.newOption.isLocal" />
+          </el-form-item>
+        </el-collapse-item>
+      </el-collapse>
     </el-form-item>
     <el-form-item label="모임 장소">
       <el-input v-model="newPost.place" placeholder="모임 장소를 입력하세요." />
+    </el-form-item>
+    <el-form-item>
+      <el-button @click="onSubmit">{{ action }}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -89,7 +91,7 @@ export default {
       const start_age = this.newPost.newOption.age[0]
       const end_age = this.newPost.newOption.age[1]
       let age = start_age + '~' + end_age + '살'
-      if (start_age === undefined && end_age === undefined || start_age === 19 && end_age === 50) {
+      if (start_age === undefined && end_age === undefined || start_age === 19 && end_age === 70) {
         age = '누구나'
       }
       const isLocal = this.newPost.newOption.isLocal
@@ -123,5 +125,15 @@ export default {
 <style scoped>
 .option-tag {
   margin-left: 10px;
+}
+
+.collapse {
+  width: 100%;
+}
+
+.slider {
+  position: relative;
+  left: 0.5rem;
+  width: 95%;
 }
 </style>
