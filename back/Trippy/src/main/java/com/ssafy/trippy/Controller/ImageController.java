@@ -23,13 +23,14 @@ public class ImageController {
 
     private final MemberService memberService;
 
+//  추후에 업로드 형식에 따라 param받는 형식 고려(현재는 postman이 requestpart에 호환)
     @PostMapping("/upload")
     public ResponseImageDto upload(@RequestPart(value = "file") MultipartFile file){
         System.out.println(file);
         return imageService.uploadImage(file,null);
     }
     @PostMapping("/upload/member/{member_id}")
-    public ResponseEntity<?> updateUserProfile(@RequestBody MultipartFile file, @PathVariable("member_id") Long memberId)  {
+    public ResponseEntity<?> updateUserProfile(@RequestPart(value = "file") MultipartFile file, @PathVariable("member_id") Long memberId)  {
         System.out.println(file);
         ResponseImageDto responseImageDto = imageService.uploadImage(file,null);
         if(responseImageDto.getFileName()==null) {
@@ -39,6 +40,7 @@ public class ImageController {
         UpdateMemberDto updateMemberDto = new UpdateMemberDto(responseMemberDto.getName(), responseMemberDto.getEmail(),
                 responseMemberDto.getPhone(), responseMemberDto.getGender(),responseMemberDto.getBirth(),responseImageDto.getFileName(),responseMemberDto.getDesc());
         memberService.updateMember(memberId, updateMemberDto);
+        imageService.deleteImage(responseMemberDto.getImg_path());
         return new ResponseEntity<>(responseImageDto,HttpStatus.OK);
     }
 

@@ -48,8 +48,8 @@ public class ImageServiceImpl implements ImageService {
     public void deleteImage(String destinationFileName){
         File file = new File(fileUrl + destinationFileName);
         if(file.exists()) {
-            imageRespository.deleteByFileName(destinationFileName);
             file.delete();
+            imageRespository.deleteByFileName(destinationFileName);
         }
     }
 
