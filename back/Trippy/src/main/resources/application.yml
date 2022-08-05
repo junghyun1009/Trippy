@@ -1,18 +1,14 @@
 spring:
   datasource:
-    #    url: jdbc:h2:tcp://localhost/~/trippy
-    #    username: sa
-    #    password:
-    #    driver-class-name: org.h2.Driver
-    url: jdbc:mysql://127.0.0.1:3306/yg?serverTimezone=UTC&characterEncoding=UTF-8
-    username: ssafy
-    password: ssafy
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:tcp://localhost/~/trippy
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
   profiles:
     include: jwt
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         #        show_sql: true

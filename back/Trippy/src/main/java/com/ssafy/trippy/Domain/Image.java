@@ -1,9 +1,6 @@
 package com.ssafy.trippy.Domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +10,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Image {
     @Id
     @GeneratedValue
@@ -26,4 +24,14 @@ public class Image {
 
     @Column(nullable = false)
     private String fileUrl;
+
+    @Column(nullable = false)
+    private Long detailLocationId;
+
+    public Image(String fileName, String fileOriName, String fileUrl, Long detailLocationId) {
+        this.fileName = fileName;
+        this.fileOriName = fileOriName;
+        this.fileUrl = fileUrl;
+        this.detailLocationId = detailLocationId;
+    }
 }
