@@ -61,7 +61,7 @@
 
 
     <div id="map" style="height: 480px; position: relative; overflow: hidden;"></div>
-    <el-tag v-for="(route, idx) in diaryTemp.routes" :key="idx">{{ routeNum }}. {{ routeName }}</el-tag>
+    <el-tag v-for="(route, idx) in diaryTemp.routes" :key="idx">{{ route.routeNum }}. {{ route.routeName }}</el-tag>
 
     <!-- <div>
       <div v-for="(story, idx) in diaryTemp.stories" :key="idx">
@@ -144,15 +144,15 @@ export default {
     ...mapActions(['fetchDiary', 'deleteDiary']),
     addMarkers() {
       const map = new google.maps.Map(document.getElementById("map"), {
-          center: this.diaryTemp.routes[0].geocode,
+          center: {lat: this.diaryTemp.routes[0].lat, lng: this.diaryTemp.routes[0].lng},
           zoom: 10,
       });
       const geocodes = []
       this.diaryTemp.routes.forEach((each) => {
         let labelNum = (each.routeNum).toString()
-        geocodes.push(each.geocode)
+        geocodes.push({lat: each.lat, lng: each.lng})
         new google.maps.Marker({
-            position: each.geocode,
+            position: {lat: each.lat, lng: each.lng},
             label: labelNum,
             map: map,
         });
