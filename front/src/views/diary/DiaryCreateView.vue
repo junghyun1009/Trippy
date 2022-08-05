@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Diary Create</h1>
     <diary-form :diary="diary" action="create"></diary-form>
   </div>
 </template>
