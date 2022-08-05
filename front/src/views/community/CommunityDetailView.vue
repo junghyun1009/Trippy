@@ -1,8 +1,22 @@
 <template>
   <div>
     <div class="detail-header">
+      <div>
+        <el-tag class="tag">{{ temp.category }}</el-tag>
+        <el-tag class="tag">장소</el-tag>
+      </div>
+      <router-link :to="{ name: 'profile' }">
+        <div class="profile">
+          <el-avatar :size="50" src="" />
+          <span>나유저</span>
+        </div>
+      </router-link>
+      <hr>
+    <div class="title">
+      <span>{{ recruitState }}</span>
+      <h4>{{ temp.title }}</h4>
+    </div>
      <div class="title-icons">
-       <h3>{{ temp.title }}</h3>
         <div class="icons">
           <!-- 로그인한 유저와 글 쓴 유저가 같다면 -->
           <router-link :to="{ name: 'communityEdit' }">
@@ -21,19 +35,19 @@
             <filled-heart/>
           </icon-base>
         </div>
-      </div>
-        <el-tag>{{ temp.category }}</el-tag>
-        <el-tag v-for="option in optionTag" :key="option">{{ option }}</el-tag>
-      <div>
-        <h4>{{ recruitState }}</h4>
-        <p>모집: {{ recruitCount}} / {{ temp.recruit_volume }}</p>
-      </div>
     </div>
 
+      <div class="option">
+        <p>{{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 | {{ temp.option.gender }}</p>
+        <p>{{ convertDate[0] }} ~ {{ convertDate[1] }}, {{ convertTime }}</p>
+        <p>{{ temp.place }}</p>
+      </div>
+    </div>
+    <p>{{ this.temp.desc }}</p>
+    <hr>
     <div>
-      <el-descriptions>
-        <el-descriptions-item label="활동 내용">{{ temp.desc }}</el-descriptions-item>
-      </el-descriptions>
+      <p>{{ recruitCount}} / {{ temp.recruit_volume }}명 참여</p>
+      <el-avatar :size="50" src="" />
     </div>
     <el-button>참가하기</el-button>
   </div>
@@ -83,16 +97,51 @@ export default {
           local = '같은 지역만'
         }
         return [gender, age, local]
+      },
+      convertDate() {
+        const months = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}
+        const start_year = this.temp.date[0].substr(11, 4)
+        let start_month = this.temp.date[0].substr(4,3)
+        const start_day = this.temp.date[0].substr(8,2)
+        const end_year = this.temp.date[1].substr(11, 4)
+        let end_month = this.temp.date[1].substr(4,3)
+        const end_day = this.temp.date[1].substr(8,2)
+        if (start_month in months || end_month in months) {
+          start_month = months[start_month]
+          end_month = months[end_month]
+        }
+        
+        const start_date = start_year + '-' + start_month.toString().padStart(2, '0') + '-' + start_day
+        const end_date = end_year + '-' + end_month.toString().padStart(2, '0') + '-' + end_day
+        return [start_date, end_date]
       }
-    }
+    },
 }
 </script>
 
 <style scoped>
+* {
+  text-align: left;
+}
+
 .detail-header {
   width: 100%;
   background-color: bisque;
   padding: 0 0 20px 0;
+}
+
+.tag {
+  margin:10px 10px 10px 0;
+}
+
+.tag:first-child {
+  margin-left: 10px;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
 }
 
 .diary-detail-header > h3 {

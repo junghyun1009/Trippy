@@ -2,6 +2,8 @@
   <div>
 		<p>지금 트리피에서 핫한 여행코스</p>
 		<region-list-item></region-list-item>
+		<br>
+		<br>
   </div>
 </template>
 
@@ -12,7 +14,8 @@ export default {
   name: 'RegionList',
 	components: {
 		RegionListItem
-	}
+	},
+
 }
 </script>
 

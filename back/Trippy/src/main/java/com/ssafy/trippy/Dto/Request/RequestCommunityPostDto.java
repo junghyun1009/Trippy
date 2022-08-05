@@ -1,7 +1,6 @@
 package com.ssafy.trippy.Dto.Request;
 
 import com.ssafy.trippy.Domain.CommunityPost;
-import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +41,6 @@ public class RequestCommunityPostDto {
                 .endAge(endAge)
                 .endDate(endDate)
                 .gender(gender)
-                .location(Location.builder().id(location_id).build())
                 .member(Member.builder().id(member_id).build())
                 .meetingTime(meetingTime)
                 .recruitVolume(recruitVolume)

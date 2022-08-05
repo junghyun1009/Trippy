@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
 @Getter
