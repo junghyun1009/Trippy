@@ -22,6 +22,7 @@ import CommunityCreateView from '@/views/community/CommunityCreateView.vue'
 import CommunityView from '@/views/community/CommunityView.vue'
 import CommunityDetailView from '@/views/community/CommunityDetailView.vue'
 import CommunityEditView from '@/views/community/CommunityEditView.vue'
+import ChatListView from '@/views/community/ChatListView.vue'
 
 import BadgeListView from '../views/badge/BadgeListView.vue'
 
@@ -143,6 +144,12 @@ const routes = [
     path: '/badge',
     name: 'badgeList',
     component: BadgeListView
+  },
+  
+  {
+    path: '/chat',
+    name: 'chatList',
+    component: ChatListView
   },
   
 
