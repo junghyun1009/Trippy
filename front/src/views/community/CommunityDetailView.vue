@@ -1,73 +1,59 @@
 <template>
   <div>
-    <div class="detail-header">
+    <div class="header">
       <div>
         <el-tag class="tag">{{ temp.category }}</el-tag>
         <el-tag class="tag">장소</el-tag>
       </div>
-      <router-link :to="{ name: 'profile' }">
+      <router-link class="router" :to="{ name: 'profile' }">
         <div class="profile">
-          <el-avatar :size="50" src="" />
+          <el-avatar class="profile-image" :size="40" src="" />
           <span>나유저</span>
         </div>
       </router-link>
       <hr>
+    </div> 
     <div class="title">
-      <span>{{ recruitState }}</span>
+      <span class="state">{{ recruitState }}</span>
       <h4>{{ temp.title }}</h4>
     </div>
-     <div class="title-icons">
-        <div class="icons">
-          <!-- 로그인한 유저와 글 쓴 유저가 같다면 -->
-          <router-link :to="{ name: 'communityEdit' }">
-            <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#F16B51" icon-name="editicon">
-              <edit-icon/>
-            </icon-base>
-          </router-link>
-          <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#F16B51" icon-name="deleteicon">
-            <delete-icon/>
-          </icon-base>
-          <!-- 여기부터는 공통 -->
-          <icon-base v-if="!isBookmark" viewBox="0 0 512 512" width="24" height="24" iconColor="#F16B51" icon-name="emptyheart" @click="isBookmark=true">
-            <empty-heart/>
-          </icon-base>
-          <icon-base v-else viewBox="0 0 512 512" width="24" height="24" iconColor="#F16B51" icon-name="filledheart" @click="isBookmark=false">
-            <filled-heart/>
-          </icon-base>
-        </div>
+    <div class="option">
+      <p class="icon">
+        <span class="material-symbols-outlined">groups</span>
+        {{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 | {{ temp.option.gender }}
+      </p>
+      <p class="icon">
+        <span class="material-symbols-outlined">event_note</span>
+        {{ convertDate[0] }} ~ {{ convertDate[1] }}, {{ convertTime }}
+      </p>
+      <p class="icon">
+        <span class="material-symbols-outlined">location_on</span>
+        {{ temp.place }}
+      </p>
     </div>
-
-      <div class="option">
-        <p>{{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 | {{ temp.option.gender }}</p>
-        <p>{{ convertDate[0] }} ~ {{ convertDate[1] }}, {{ convertTime }}</p>
-        <p>{{ temp.place }}</p>
-      </div>
+    
+    <div class="content">
+      <p class="description">{{ this.temp.desc }}</p>
+      <hr>
     </div>
-    <p>{{ this.temp.desc }}</p>
-    <hr>
-    <div>
-      <p>{{ recruitCount}} / {{ temp.recruit_volume }}명 참여</p>
-      <el-avatar :size="50" src="" />
+    <div class="member">
+      <p class="member-count">
+        <span>{{ recruitCount }}</span>
+        / {{ temp.recruit_volume }}명 참여
+      </p>
+      <el-avatar :size="40" src="" />
     </div>
-    <el-button>참가하기</el-button>
+    <div class="participation">
+      <el-button class="button">참가하기</el-button>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import EditIcon from '@/components/icon/EditIcon.vue'
-import DeleteIcon from '@/components/icon/DeleteIcon.vue'
-import EmptyHeart from '@/components/icon/EmptyHeart.vue'
-import FilledHeart from '@/components/icon/FilledHeart.vue'
 
 export default {
     name: 'CommunityDetailView',
-    components: {
-      EditIcon,
-      DeleteIcon,
-      EmptyHeart,
-      FilledHeart,
-    },
     data() {
       return {
         isBookmark: true
@@ -76,7 +62,7 @@ export default {
     computed: {
       ...mapGetters(['temp']),
       recruitState() {
-        return '모집 중'
+        return '모집중'
       },
       recruitCount() {
         return 3
@@ -122,41 +108,98 @@ export default {
 <style scoped>
 * {
   text-align: left;
+  box-sizing: border-box;
+  margin: 0;
 }
 
-.detail-header {
-  width: 100%;
-  background-color: bisque;
-  padding: 0 0 20px 0;
+hr {
+  border: 0;
+  height: 0;
+  border-top: 1px solid #d9d9d9;
+}
+
+.header {
+  padding: 0.5rem;
 }
 
 .tag {
-  margin:10px 10px 10px 0;
+  margin-right: 0.3rem;
+  margin-bottom: 1rem;
 }
 
-.tag:first-child {
-  margin-left: 10px;
+.router {
+  text-decoration: none;
 }
 
 .profile {
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-bottom: 1rem;
 }
 
-.diary-detail-header > h3 {
-  margin-bottom: 10px;
+.profile-image {
+  margin-right: 0.3rem;
 }
 
-.title-icons {
+.title {
   display: flex;
-  justify-content: space-around;
   align-items: center;
+  padding: 0.5rem;
+  font-size: 1.2rem;
 }
 
-.icons {
-  width: 120px;
+.state {
+  font-weight: bold;
+  color: #F16B51;
+  margin-right: 0.3rem;
+}
+
+.option {
+  padding: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.icon {
   display: flex;
-  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.icon > span {
+  margin-right: 0.3rem;
+}
+
+.content {
+  padding: 0.5rem;
+}
+
+.description {
+  margin-bottom: 1rem;
+}
+
+.member {
+  padding: 0.5rem;
+}
+
+.member-count {
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+}
+
+.member-count > span {
+  color: #F16B51;
+  font-weight: 400;
+}
+
+.participation {
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  position: fixed;
+  width: 90%;
+  bottom: 1rem;
 }
 </style>
