@@ -24,11 +24,12 @@ public class  ResponsePostCommentDto {
     private Long memberId;
     private Long parentId;
 
+    @Builder
     public ResponsePostCommentDto(PostComment postComment) {
         this.content = postComment.getContent();
         this.email = postComment.getMember().getEmail();
         this.postId = postComment.getPost().getId();
-        this.parentId = postComment.getParent().getId();
+        this.parentId = postComment.getParent()== null ? 0 : postComment.getParent().getId();
         this.memberId = postComment.getMember().getId();
         this.regDt = postComment.getRegDt();
     }

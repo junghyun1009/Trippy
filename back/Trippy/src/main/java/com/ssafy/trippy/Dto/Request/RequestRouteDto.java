@@ -29,6 +29,7 @@ public class RequestRouteDto {
     public Route toEntity() {
         return Route.builder().
                 id(id)
+                .routeName(routeName)
                 .index(index)
                 .lat(lat)
                 .lng(lng)

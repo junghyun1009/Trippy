@@ -17,22 +17,14 @@ public class ResponseRouteDto {
     private Double lng;
     private Double lat;
 
-//    private Geocode geocode;
 
+    @Builder
     public ResponseRouteDto(Route route){
         this.routeName = route.getRouteName();
         this.index = route.getIndex();
         this.lng = route.getLng();
         this.lat = route.getLat();
-//        this.geocode = route.getGeocode();
     }
 
-    @Builder
-    public ResponseRouteDto(String routeName,int index, Double lat, Double lng) {
-        this.routeName = routeName;
-        this.index = index;
-        this.lat = lat;
-        this.lng = lng;
-//        this.geocode = geocode;
-    }
+
 }

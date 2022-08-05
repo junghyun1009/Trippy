@@ -14,6 +14,7 @@ import javax.persistence.Id;
 public class Transport extends BaseEntity{
     @Id
     @GeneratedValue
+    @Column(name="TRANSPORT_ID")
     private Long id;
 
     @Column(nullable = false)
@@ -25,4 +26,5 @@ public class Transport extends BaseEntity{
         this.id = id;
         this.name = name;
     }
+
 }

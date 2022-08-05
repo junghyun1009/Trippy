@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -11,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@ToString
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 public class Post extends BaseEntity{
     @Id
@@ -60,7 +60,6 @@ public class Post extends BaseEntity{
 
     @OneToMany(mappedBy="post")
     private List<PostComment> postComments = new ArrayList<>();
-
 
 
     @Builder

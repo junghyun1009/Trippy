@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Getter
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-@ToString
 public class DetailLocation extends BaseEntity{
 
     @Id
@@ -54,10 +54,6 @@ public class DetailLocation extends BaseEntity{
         this.imgPath = imgPath;
         this.post = post;
         this.location = location;
-    }
-    public void setDetailPost(Post post){
-        this.post = post;
-        post.getDetailLocations().add(this);
     }
 
     public void update(String detailLocationContent, String detailLocationName, float rating, String imgPath){

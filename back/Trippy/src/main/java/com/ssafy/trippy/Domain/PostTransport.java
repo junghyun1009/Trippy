@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,6 +32,11 @@ public class PostTransport extends BaseEntity{
     public void setPost(Post post){
         this.post = post;
         post.getPostTransports().add(this);
+    }
+
+    public void setTransport(Transport transport){
+        this.transport = transport;
+
     }
 
     public void update(Transport transport){

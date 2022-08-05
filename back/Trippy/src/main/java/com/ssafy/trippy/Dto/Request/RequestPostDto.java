@@ -24,7 +24,7 @@ public class RequestPostDto {
     private LocalDateTime endDate;
     private int representiveImg;
     private Long member_id;
-    private List<PostTransport> postTransports;
+    private List<RequestPostTransPortDto> postTransports;
     private List<RequestDetailLocationDto> detailLocations;
 
     private List<RequestRouteDto> routes;
@@ -38,10 +38,14 @@ public class RequestPostDto {
         for (RequestRouteDto requestRouteDto:routes){
             routeList.add(requestRouteDto.toEntity());
         }
+        List<PostTransport> postTransportList = new ArrayList<>();
+        for(RequestPostTransPortDto requestPostTransPortDto:postTransports){
+            postTransportList.add(requestPostTransPortDto.toEntity());
+        }
         return Post.builder()
                 .company(company)
                 .endDate(endDate)
-                .postTransports(postTransports)
+                .postTransports(postTransportList)
                 .member(Member.builder().id(member_id).build())
                 .count(count)
                 .startDate(startDate)
@@ -54,7 +58,7 @@ public class RequestPostDto {
     }
 
     @Builder
-    public RequestPostDto(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Long memberId, List<PostTransport> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes) {
+    public RequestPostDto(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Long memberId, List<RequestPostTransPortDto> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes) {
         this.title = title;
         this.isDelete = isDelete;
         this.company = company;

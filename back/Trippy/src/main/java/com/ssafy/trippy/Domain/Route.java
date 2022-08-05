@@ -1,12 +1,12 @@
 package com.ssafy.trippy.Domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@ToString
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 public class Route {
     @Id
@@ -21,10 +21,7 @@ public class Route {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="POST_ID")
     private Post post;
-
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="geocode_id")
-//    private Geocode geocode;
+;
 
     @Builder
     public Route(Long id, String routeName, int index, Post post, Double lat, Double lng) {

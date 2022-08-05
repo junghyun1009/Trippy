@@ -1,9 +1,6 @@
 package com.ssafy.trippy.Dto.Response;
 
-import com.ssafy.trippy.Domain.DetailLocation;
-import com.ssafy.trippy.Domain.Post;
-import com.ssafy.trippy.Domain.PostTransport;
-import com.ssafy.trippy.Domain.Route;
+import com.ssafy.trippy.Domain.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,48 +14,32 @@ import java.util.stream.Collectors;
 public class ResponsePostDto {
     private Long id;
     private String title;
-    private Byte isDelete;
     private int company;
     private int count;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private int representiveImg;
-    private Long memberId;
-    private List<PostTransport> postTransports;
-    private List<DetailLocation> detailLocations;
+    private String email;
+    private List<ResponseTransport> transportName;
+    private List<ResponseDetailLocationDto> detailLocations;
 
     private List<ResponsePostCommentDto> comments;
     private List<ResponseRouteDto> routes;
 
-    public ResponsePostDto (Post post){
-        this.id=post.getId();
+
+    @Builder
+    public ResponsePostDto(Post post) {
+        this.id = post.getId();
         this.title = post.getTitle();
-        this.isDelete = post.getIsDelete();
-        this.company=post.getCompany();
+        this.company = post.getCompany();
         this.count = post.getCount();
         this.startDate = post.getStartDate();
         this.endDate = post.getEndDate();
         this.representiveImg = post.getRepresentiveImg();
-        this.memberId = post.getMember().getId();
-        this.postTransports = post.getPostTransports();
-        this.detailLocations = post.getDetailLocations();
-        this.comments = post.getPostComments().stream().map(ResponsePostCommentDto::new).collect(Collectors.toList());
-        this.routes = post.getRoutes().stream().map(ResponseRouteDto::new).collect(Collectors.toList());
-    }
-
-    @Builder
-    public ResponsePostDto(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Long memberId, List<PostTransport> postTransports, List<DetailLocation> detailLocations,List<ResponseRouteDto> routes) {
-        this.id = id;
-        this.title = title;
-        this.isDelete = isDelete;
-        this.company = company;
-        this.count = count;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.representiveImg = representiveImg;
-        this.memberId = memberId;
-        this.postTransports = postTransports;
-        this.detailLocations = detailLocations;
-        this.routes = routes;
+        this.email = post.getMember().getEmail();
+        this.transportName = Converter.convertTransportList(Converter.convertTransportsToPostTransports(post.getPostTransports()));
+        this.detailLocations = Converter.convertDetailLocationList(post.getDetailLocations());
+        this.comments = Converter.convertPostCommentList(post.getPostComments());
+        this.routes = Converter.convertRouteList(post.getRoutes());
     }
 }
