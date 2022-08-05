@@ -100,9 +100,11 @@ public class Member extends BaseEntity implements UserDetails{
         this.img_path = updateMemberDto.getImg_path();
         this.desc = updateMemberDto.getDesc();
     }
+
     public void updatePw(String pw){
         this.password = pw;
     }
+
     @Override
     public String getPassword(){
         return this.password;
