@@ -16,7 +16,7 @@
         </div>
         <div class="option">
           <p>{{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 {{ temp.option.gender }} 참여 가능</p>
-          <p>{{ convertDate[0] }} ~ {{ convertDate[1] }}, {{ convertTime }}</p>
+          <p>{{ temp.date[0] }} ~ {{ temp.date[1] }}, {{ temp.time }}</p>
           <p>{{ recruitCount}} / {{ temp.recruit_volume }}명 참여</p>
         </div>
         <div class="content">
@@ -47,27 +47,6 @@ export default {
       recruitCount() {
         return 3
       },
-      convertDate() {
-        const months = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}
-        const start_year = this.temp.date[0].substr(11, 4)
-        let start_month = this.temp.date[0].substr(4,3)
-        const start_day = this.temp.date[0].substr(8,2)
-        const end_year = this.temp.date[1].substr(11, 4)
-        let end_month = this.temp.date[1].substr(4,3)
-        const end_day = this.temp.date[1].substr(8,2)
-        if (start_month in months || end_month in months) {
-          start_month = months[start_month]
-          end_month = months[end_month]
-        }
-        
-        const start_date = start_year + '-' + start_month.toString().padStart(2, '0') + '-' + start_day
-        const end_date = end_year + '-' + end_month.toString().padStart(2, '0') + '-' + end_day
-        return [start_date, end_date]
-      },
-      convertTime() {
-        const time = this.temp.time.substr(16, 5)
-        return time
-      },
       convertDesc() {
         let length = 55
         let desc = ''
@@ -96,6 +75,8 @@ export default {
 
 <style scoped>
 * {
+  box-sizing: border-box;
+  margin: 0;
   text-decoration: none;
 }
 
