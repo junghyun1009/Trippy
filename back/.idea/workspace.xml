@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a741a4e-e2b6-4bf9-a179-14f532b20520" name="Changes" comment="" />
+    <list default="true" id="62600a0f-cb8b-4a15-b523-a2a262350f4e" name="Changes" comment="[S07P12A506-118][BE] feat: add Redis, Jwt">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,24 +41,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/SSAFY/Desktop/S07P12A506/back/Trippy",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "spring.configuration.checksum": "9454cae3a2fb577e85bc45303d28e603"
-  }
-}]]></component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Trippy" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+  </component>
   <component name="RunManager">
     <configuration name="TrippyApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="Trippy.main" />
@@ -69,7 +61,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="0a741a4e-e2b6-4bf9-a179-14f532b20520" name="Changes" comment="" />
+      <changelist id="62600a0f-cb8b-4a15-b523-a2a262350f4e" name="Changes" comment="[S07P12A506-118][BE] feat: add Redis, Jwt" />
       <created>1658722864446</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -80,6 +72,8 @@
       <workItem from="1659311107522" duration="951000" />
       <workItem from="1659312089677" duration="140000" />
       <workItem from="1659312251347" duration="13000" />
+      <workItem from="1659404480796" duration="86000" />
+      <workItem from="1659404583404" duration="333000" />
     </task>
     <servers />
   </component>
@@ -96,5 +90,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
