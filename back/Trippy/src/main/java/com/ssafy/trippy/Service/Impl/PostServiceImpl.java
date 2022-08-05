@@ -2,6 +2,7 @@ package com.ssafy.trippy.Service.Impl;
 
 import com.ssafy.trippy.Domain.*;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
+import com.ssafy.trippy.Dto.Request.RequestRouteDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Dto.Update.UpdatePostDto;
 import com.ssafy.trippy.Repository.*;
@@ -26,6 +27,8 @@ public class PostServiceImpl implements PostService {
     private final PostTransportRepository postTransportRepository;
 
     private final TransportRepository transportRepository;
+    private final RouteRepository routeRepository;
+//    private final GeocodeRepository geocodeRepository;
 
     private final Long busId = 1L;
     private final Long walkId = 2L;
@@ -86,20 +89,26 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public void savePost(RequestPostDto requestPostDto) {
+        System.out.println(requestPostDto.toEntity().getRoutes().toString());
+        System.out.println(requestPostDto.toEntity().getDetailLocations().toString());
         Member member = memberRepository.findById(requestPostDto.getMember_id()).get();
         requestPostDto.setMember_id(member.getId());
         Post post = postRepository.save(requestPostDto.toEntity());
 
-        System.out.println("requestPostDto = " + requestPostDto.getPostTransports().get(0).getTransport().getName());
-        System.out.println("requestPostDto = " + requestPostDto.getPostTransports().get(0).getTransport().getId());
 
         for (DetailLocation detailLocation:requestPostDto.toEntity().getDetailLocations()){
             detailLocation.setPost(post);
             detailLocationRepository.save(detailLocation);
         }
+
         for(PostTransport postTransport:requestPostDto.toEntity().getPostTransports()){
             postTransport.setPost(post);
             postTransportRepository.save(postTransport);
+        }
+
+        for(Route route:requestPostDto.toEntity().getRoutes()){
+            route.setRoutePost(post);
+            routeRepository.save(route);
         }
 
     }
@@ -129,8 +138,6 @@ public class PostServiceImpl implements PostService {
             }
         }
 
-
-
         // detailLocation 테이블에도 수정된 값 넣어주기
         List<DetailLocation> detailLocation = requestPostDto.toEntity().getDetailLocations();
         List<DetailLocation> detailLocations = new ArrayList<>();
@@ -154,10 +161,18 @@ public class PostServiceImpl implements PostService {
             postTrans.setPost(post);
             changePostTransportList.add(postTrans);
         }
-        System.out.println("changePostTransportList.toString() = " + changePostTransportList.toString());
 
         for (int i = 0; i < postTransport.size(); i++) {
             oldPostTransport.get(i).update(changePostTransportList.get(i).getTransport());
+        }
+
+        // Route 테이블에도 수정된 값 넣어주기.
+        List<Route> oldRoute = routeRepository.findAllByPostId(post.getId());
+        List<RequestRouteDto> requestRouteDtos = requestPostDto.getRoutes();
+        for (int i = 0; i<oldRoute.size();i++) {
+            oldRoute.get(i).setRoutePost(post);
+            oldRoute.get(i).update(requestRouteDtos.get(i).getRouteName(),requestRouteDtos.get(i).getIndex(),
+                    requestRouteDtos.get(i).getLat(),requestRouteDtos.get(i).getLng());
         }
 
         post.update(
@@ -169,8 +184,8 @@ public class PostServiceImpl implements PostService {
                 requestPostDto.getEndDate(),
                 requestPostDto.getRepresentiveImg(),
                 postTransport,
-                detailLocations);
-//        System.out.println(postTransportRepository.findAll().toString());
+                detailLocations,
+                oldRoute);
         }
 
 

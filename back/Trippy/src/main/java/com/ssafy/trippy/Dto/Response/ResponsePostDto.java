@@ -3,6 +3,7 @@ package com.ssafy.trippy.Dto.Response;
 import com.ssafy.trippy.Domain.DetailLocation;
 import com.ssafy.trippy.Domain.Post;
 import com.ssafy.trippy.Domain.PostTransport;
+import com.ssafy.trippy.Domain.Route;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public class ResponsePostDto {
     private List<DetailLocation> detailLocations;
 
     private List<ResponsePostCommentDto> comments;
+    private List<ResponseRouteDto> routes;
 
     public ResponsePostDto (Post post){
         this.id=post.getId();
@@ -41,10 +43,11 @@ public class ResponsePostDto {
         this.postTransports = post.getPostTransports();
         this.detailLocations = post.getDetailLocations();
         this.comments = post.getPostComments().stream().map(ResponsePostCommentDto::new).collect(Collectors.toList());
+        this.routes = post.getRoutes().stream().map(ResponseRouteDto::new).collect(Collectors.toList());
     }
 
     @Builder
-    public ResponsePostDto(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Long memberId, List<PostTransport> postTransports, List<DetailLocation> detailLocations) {
+    public ResponsePostDto(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Long memberId, List<PostTransport> postTransports, List<DetailLocation> detailLocations,List<ResponseRouteDto> routes) {
         this.id = id;
         this.title = title;
         this.isDelete = isDelete;
@@ -56,5 +59,6 @@ public class ResponsePostDto {
         this.memberId = memberId;
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;
+        this.routes = routes;
     }
 }

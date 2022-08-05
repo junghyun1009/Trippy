@@ -1,9 +1,6 @@
 package com.ssafy.trippy.Domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -14,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 public class Post extends BaseEntity{
     @Id
@@ -51,6 +49,9 @@ public class Post extends BaseEntity{
     @JoinColumn(name="MEMBER_ID")
     private Member member;
 
+    @OneToMany(mappedBy="post")
+    private List<Route> routes = new ArrayList<>();
+
     @OneToMany(mappedBy = "transport" )
     private List<PostTransport> postTransports = new ArrayList<>();
 
@@ -61,8 +62,9 @@ public class Post extends BaseEntity{
     private List<PostComment> postComments = new ArrayList<>();
 
 
+
     @Builder
-    public Post(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations, List<PostComment> postComments) {
+    public Post(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations, List<PostComment> postComments, List<Route> routes) {
         this.id = id;
         this.title = title;
         this.isDelete = isDelete;
@@ -75,9 +77,10 @@ public class Post extends BaseEntity{
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;
         this.postComments = postComments;
+        this.routes = routes;
     }
 
-    public void update(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, List<PostTransport> postTransports, List<DetailLocation> detailLocations){
+    public void update(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, List<PostTransport> postTransports, List<DetailLocation> detailLocations,List<Route> routes){
         this.title = title;
         this.isDelete = isDelete;
         this.company = company;
@@ -87,6 +90,6 @@ public class Post extends BaseEntity{
         this.representiveImg = representiveImg;
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;
-
+        this.routes = routes;
     }
 }

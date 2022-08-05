@@ -9,6 +9,7 @@ import com.ssafy.trippy.Dto.Update.UpdatePostDto;
 import com.ssafy.trippy.Service.DetailLocationService;
 import com.ssafy.trippy.Service.MemberService;
 import com.ssafy.trippy.Service.PostService;
+import com.ssafy.trippy.Service.RouteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.sql.Update;

@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Dto.Request;
 
+//import com.ssafy.trippy.Domain.Geocode;
 import com.ssafy.trippy.Domain.Post;
 import com.ssafy.trippy.Domain.Route;
 import lombok.Builder;
@@ -17,10 +18,13 @@ import javax.persistence.ManyToOne;
 public class RequestRouteDto {
     private Long id;
     private String routeName;
-    private Double lat;
-    private Double lng;
     private int index;
     private Long postId;
+
+    private Double lng;
+    private Double lat;
+
+//    private Long geocodeId;
 
     public Route toEntity() {
         return Route.builder().
@@ -33,12 +37,13 @@ public class RequestRouteDto {
     }
 
     @Builder
-    public RequestRouteDto(Long id, String routeName, Double lat, Double lng, int index, Long postId) {
+    public RequestRouteDto(Long id, String routeName,int index, Long postId, Double lat, Double lng) {
         this.id = id;
         this.routeName = routeName;
-        this.lat = lat;
-        this.lng = lng;
         this.index = index;
         this.postId = postId;
+        this.lat = lat;
+        this.lng = lng;
+//        this.geocodeId = geocodeId;
     }
 }

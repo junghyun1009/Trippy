@@ -27,10 +27,16 @@ public class RequestPostDto {
     private List<PostTransport> postTransports;
     private List<RequestDetailLocationDto> detailLocations;
 
+    private List<RequestRouteDto> routes;
+
     public Post toEntity() {
         List<DetailLocation> detailLocationList = new ArrayList<>();
         for (RequestDetailLocationDto detailLocation : detailLocations) {
             detailLocationList.add(detailLocation.toEntity());
+        }
+        List<Route> routeList = new ArrayList<>();
+        for (RequestRouteDto requestRouteDto:routes){
+            routeList.add(requestRouteDto.toEntity());
         }
         return Post.builder()
                 .company(company)
@@ -43,11 +49,12 @@ public class RequestPostDto {
                 .title(title)
                 .isDelete(isDelete)
                 .representiveImg(representiveImg)
+                .routes(routeList)
                 .build();
     }
 
     @Builder
-    public RequestPostDto(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Long memberId, List<PostTransport> postTransports, List<RequestDetailLocationDto> detailLocations) {
+    public RequestPostDto(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Long memberId, List<PostTransport> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes) {
         this.title = title;
         this.isDelete = isDelete;
         this.company = company;
@@ -58,5 +65,6 @@ public class RequestPostDto {
         this.member_id = member_id;
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;
+        this.routes = routes;
     }
 }

@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Dto.Response;
 
+//import com.ssafy.trippy.Domain.Geocode;
 import com.ssafy.trippy.Domain.Route;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,23 +12,27 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ResponseRouteDto {
     private String routeName;
-    private Double lat;
-    private Double lng;
-
     private int index;
+
+    private Double lng;
+    private Double lat;
+
+//    private Geocode geocode;
 
     public ResponseRouteDto(Route route){
         this.routeName = route.getRouteName();
-        this.lat = route.getLat();
-        this.lng = route.getLng();
         this.index = route.getIndex();
+        this.lng = route.getLng();
+        this.lat = route.getLat();
+//        this.geocode = route.getGeocode();
     }
 
     @Builder
-    public ResponseRouteDto(String routeName, Double lat, Double lng, int index) {
+    public ResponseRouteDto(String routeName,int index, Double lat, Double lng) {
         this.routeName = routeName;
+        this.index = index;
         this.lat = lat;
         this.lng = lng;
-        this.index = index;
+//        this.geocode = geocode;
     }
 }
