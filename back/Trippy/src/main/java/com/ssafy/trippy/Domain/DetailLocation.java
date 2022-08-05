@@ -56,10 +56,12 @@ public class DetailLocation extends BaseEntity{
         this.location = location;
     }
 
+
     public void update(String detailLocationContent, String detailLocationName, float rating, String imgPath){
         this.detailLocationContent = detailLocationContent;
         this.detailLocationName = detailLocationName;
         this.rating = rating;
         this.imgPath = imgPath;
     }
+
 }

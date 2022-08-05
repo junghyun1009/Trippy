@@ -2,6 +2,10 @@
   <div class="home">
     <search-bar></search-bar>
     <region-list></region-list>
+    <recommend-list v-for="diary in diaries" :key="diary.id" :diary="diary"></recommend-list>
+
+    <p>팔로우 하고 있는</p>
+    <p>ㅇㅇㅇ 님이 추천하는 코스</p>
     <recommend-list></recommend-list>
     
     <br>
@@ -13,13 +17,6 @@
     <!-- <router-link :to="{ name: 'profile' }">Profile</router-link> -->
 
     <br><br><br>
-    <!-- <nav>
-      <div class="nav-content" @click="moveToCreateDiary()">
-        <div class="toggle-btn">
-          <i class="bx bx-plus"></i>
-        </div>
-      </div>
-    </nav> -->
 
     <router-link :to="{ name: 'diaryCreate' }" class="float">
       <i class='bx bxs-pencil my-float'></i>
@@ -34,6 +31,7 @@
 import SearchBar from '@/components/common/SearchBar.vue'
 import RecommendList from '@/components/home/RecommendList.vue'
 import RegionList from '@/components/common/RegionList.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'HomeView',
@@ -42,13 +40,17 @@ export default {
     RecommendList,
     RegionList,
   },
-  methods: {
-    moveToCreateDiary() {
-      this.$router.push({
-        name: 'diaryDetail',
-        }
-      )
+  created() {
+    this.showAllDiary()
+  },
+  computed: {
+    ...mapGetters(['GET_ALL_DIARY']),
+    diaries() {
+      return this.$store.state.diaries
     }
+  },
+  methods: {
+    ...mapActions(['showAllDiary'])
     }
   }
 

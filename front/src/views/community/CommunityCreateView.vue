@@ -19,13 +19,15 @@ export default {
         title: '',
         category: [],
         desc: '',
-        dateTime: [],
+        date: [],
+        time: '',
         recruit_volume: '',
         option: {
           gender: '누구나',
           age: 0,
           isLocal: false
-        }
+        },
+        place: '',
       }
     }
   }
