@@ -1,9 +1,17 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://localhost:3306/testdb?serverTimezone=UTC&characterEncoding=UTF-8"
-    username: root
-    password: ssafy506
+# ------- EC2서버 설정---------
+#    url: "jdbc:mysql://localhost:3306/testdb?serverTimezone=UTC&characterEncoding=UTF-8"
+#    username: root
+#    password: ssafy506
+
+# ------- local 설정( 영길)---------
+    url: "jdbc:mysql://127.0.0.1:3306/yg?serverTimezone=UTC&characterEncoding=UTF-8"
+    username: ssafy
+    password: ssafy
+
+# ------기존 h2 설정---------
 #    url: jdbc:h2:tcp://localhost/~/trippy
 #    username: sa
 #    password:
@@ -12,7 +20,7 @@ spring:
     include: jwt
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         #        show_sql: true
@@ -20,10 +28,10 @@ spring:
   mail:
     host: smtp.naver.com
     port: 465
-  #  -----본인 계정 정보 ------
+    #  ——본인 계정 정보 ———
     username:
     password:
-  #  -------------------------
+    #  ————————————
     properties:
       mail.smtp.auth: true
       mail.smtp.ssl.enable: true
