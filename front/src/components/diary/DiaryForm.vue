@@ -140,7 +140,7 @@
                   <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="uploadPhoto(k)" multiple />
                 </div>
                 <div v-else class="photo-preview">
-                  <input class="photo-input" type="file" :id=k ref="files" @change="addPhoto(k)" multiple />
+                  <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="uploadPhoto(k)" multiple />
                   <el-carousel trigger="click" height="150px" :autoplay=false :initial-index=1 indicator-position="none">
                     <el-carousel-item>
                       <label :for=k>
@@ -294,7 +294,8 @@ export default {
     addRoute(routeName, geocode) {
       this.route.routeNum = this.newDiary.routes.length + 1
       this.route.routeName = routeName
-      this.route.geocode = geocode
+      this.route.lat = geocode.lat
+      this.route.lng = geocode.lng
       this.newDiary.routes.push(this.route)
       this.route = {}
       console.log(this.newDiary.routes)
@@ -303,7 +304,7 @@ export default {
     addMarkers() {
       this.flag = 1
       const map = new google.maps.Map(document.getElementById("map"), {
-          center: this.newDiary.routes[this.newDiary.routes.length - 1].geocode,
+          center: { lat: this.newDiary.routes[this.newDiary.routes.length - 1].lat, lng: this.newDiary.routes[this.newDiary.routes.length - 1].lng},
           zoom: 13,
       });
       const geocodes = []
@@ -311,9 +312,9 @@ export default {
       this.newDiary.routes.forEach((each) => {
         // console.log(each)
         let labelNum = (each.routeNum).toString()
-        geocodes.push(each.geocode)
+        geocodes.push({ lat: each.lat, lng: each.lng })
         new google.maps.Marker({
-            position: each.geocode,
+            position: { lat: each.lat, lng: each.lng },
             label: labelNum,
             map: map,
         });
@@ -331,7 +332,6 @@ export default {
 
     removeRoute(index) {
       this.newDiary.routes.splice(index, 1)
-      this.geocodes.splice(index, 1)
       this.newDiary.routes.forEach((each) => {
         each.routeNum = this.newDiary.routes.indexOf(each) + 1
       })
@@ -359,11 +359,12 @@ export default {
     uploadPhoto(index) {
       // console.log(index)
       let addedPhotoList = this.newStories[index].photoList
+      // fileInput.value = index
       // console.log(this.$refs.files)
       // console.log(this.$refs.files[index].files)
       for (let i = 0; i < this.$refs.files[index].files.length; i++) {
         let photo = this.$refs.files[index].files[i]
-        // console.log(photo)
+        console.log(photo)
         if (photo.type.substr(0, 5) === "image") {
           addedPhotoList = [
             ...addedPhotoList,
@@ -377,38 +378,39 @@ export default {
         }
       }
       this.newStories[index].photoList = addedPhotoList
-      // let fileInput = document.getElementById("file")
-      // fileInput.value = ''
-      // console.log(this.newStories[index].photoList)
+      let fileInput = document.getElementsByClassName("photo-input")
+      fileInput[fileInput.length - 1].value = ''
     },
 
     removePhoto(index, num) {
       this.newStories[index].photoList.splice(num, 1)
     },
 
-    addPhoto(index) {
-      console.log('add', index)
-      let addedPhotoList = this.newStories[index].photoList
-      console.log(this.$refs.files)
-      console.log(this.$refs.files[index].files)
-      for (let i = 0; i < this.$refs.files[index].files.length; i++) {
-        let photo = this.$refs.files[index].files[i]
-        if (photo.type.substr(0, 5) === "image") {
-          addedPhotoList = [
-            ...addedPhotoList,
-            {
-              file: this.$refs.files[index].files[i],
-              preview: URL.createObjectURL(this.$refs.files[index].files[i]),
-            }
-          ]
-        } else {
-          alert("사진 파일만 추가 가능합니다")
-        }
-      }
-      this.newStories[index].photoList = addedPhotoList
-      // let fileInput = document.getElementById("file")
-      // fileInput.value = ''
-    },
+    // addPhoto(index) {
+    //   console.log('add', index)
+    //   let addedPhotoList = this.newStories[index].photoList
+    //   let fileInput = document.getElementsByClassName("photo-input-sec")
+    //   console.log(fileInput)
+    //   // console.log(this.$refs.files)
+    //   console.log(this.$refs.files[index].files)
+    //   for (let i = 0; i < this.$refs.files[index].files.length; i++) {
+    //     let photo = this.$refs.files[index].files[i]
+    //     if (photo.type.substr(0, 5) === "image") {
+    //       addedPhotoList = [
+    //         ...addedPhotoList,
+    //         {
+    //           file: this.$refs.files[index].files[i],
+    //           preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+    //         }
+    //       ]
+    //     } else {
+    //       alert("사진 파일만 추가 가능합니다")
+    //     }
+    //   }
+    //   this.newStories[index].photoList = addedPhotoList
+    //   fileInput[0].value = ''
+    //   console.log(fileInput.value)
+    // },
 
     onSubmit() {
       if (this.action === 'create') {
