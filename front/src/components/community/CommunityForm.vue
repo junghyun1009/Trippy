@@ -14,11 +14,14 @@
     <el-form-item label="활동 내용">
       <el-input v-model="newPost.desc" type="textarea" placeholder="간단히 하고 싶은 활동을 설명해주세요." />
     </el-form-item>
+    <!-- <el-form-item label="날짜">
+      <el-date-picker class="calendar" v-model="newPost.date" type="daterange"/>
+    </el-form-item> -->
     <el-form-item label="날짜">
-      <el-date-picker v-model="newPost.date" type="daterange"/>
+      <el-date-picker class="dates" v-model="newPost.date" type="dates" placeholder="활동 시작일과 종료일을 선택해주세요." value-format="YYYY-MM-DD" :disabled-date="disabledDate"/>
     </el-form-item>
     <el-form-item label="시간">
-      <el-time-picker v-model="newPost.time" :disabled-seconds="disabledSeconds"/>
+      <el-time-picker v-model="newPost.time" value-format="HH:mm" :disabled-seconds="disabledSeconds"/>
     </el-form-item>
     <el-form-item label="인원">
       <el-input-number v-model="newPost.recruit_volume" :min="1" :max="10"/>
@@ -32,7 +35,7 @@
           <template #title>
             <div>
               <span>모집 조건</span>
-              <el-tag class="option-tag" v-for="option in optionTag" :key="option">{{ option }}</el-tag>
+              <el-tag class="option-tag" v-for="option in optionTag" :key="option" >{{ option }}</el-tag>
             </div>
           </template>
           <el-form-item label="성별">
@@ -108,6 +111,9 @@ export default {
     onSubmit() {
       console.log(this.newPost)
     },
+    disabledDate(date) {
+      return date.getTime() <= Date.now()
+    },
     makeRange(start, end) {
       const result = []
       for (let i = start; i <= end; i ++) {
@@ -134,6 +140,6 @@ export default {
 .slider {
   position: relative;
   left: 0.5rem;
-  width: 95%;
+  width: 90%;
 }
 </style>
