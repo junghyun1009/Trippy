@@ -7,7 +7,7 @@
     <!-- 만약 PasswordFindView에서 연결되면, 현재 비밀번호는 빼고 노출 -->
     <div class="new_password">
       <p>새 비밀번호</p>
-      <el-input v-model="userinfo.newPassword" type="password" placeholder="비밀번호" @blur="checkPasswordValidity"></el-input>
+      <el-input v-model="userinfo.newPassword"  id="password" type="password" placeholder="비밀번호" @blur="checkPasswordValidity"></el-input>
       <el-input v-model="userinfo.newPasswordCheck" type="password" placeholder="비밀번호 확인" @blur="checkPasswordMatch"></el-input>
               <el-button type="primary" @click="changePassword()">비밀번호 변경하기</el-button>
       <!-- 비밀번호와 비밀번호 확인되지 않으면 자동으로 매치되는지 확인하는 기능 -->
@@ -51,12 +51,13 @@ export default {
       }
     },
     checkPasswordValidity() {
+      var inputPassword = document.getElementById('password').value;
       var regPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
-      if (regPassword.test(this.userinfo.newPassword)) {
+      if (regPassword.test(inputPassword)) {
         this.passwordFormat = true
-      } else {
-        this.passwordFormat = false
-      }
+        } else {
+          this.passwordFormat = false
+        }
     },
     changePassword() {
       if (this.passwordFormat == true, this.passwordMatch == true) {

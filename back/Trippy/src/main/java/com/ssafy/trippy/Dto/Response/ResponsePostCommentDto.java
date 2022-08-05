@@ -1,40 +1,35 @@
 package com.ssafy.trippy.Dto.Response;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.trippy.Domain.Post;
 import com.ssafy.trippy.Domain.PostComment;
 import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
-public class ResponsePostCommentDto {
-
-    private Long id;
+public class  ResponsePostCommentDto {
 
     private String content;
-
-    // memberId
-
-    private Post post;
-
+    private String email;
     private LocalDateTime regDt;
+    private Long postId;
+    private Long memberId;
+    private Long parentId;
 
-    public ResponsePostCommentDto(PostComment postComment){
-        this.id = postComment.getId();
+    public ResponsePostCommentDto(PostComment postComment) {
         this.content = postComment.getContent();
-        this.post = postComment.getPost();
+        this.email = postComment.getMember().getEmail();
+        this.postId = postComment.getPost().getId();
+        this.parentId = postComment.getParent().getId();
+        this.memberId = postComment.getMember().getId();
         this.regDt = postComment.getRegDt();
     }
-    @Builder
-    public ResponsePostCommentDto(Long id, String content, Post post, LocalDateTime regDt){
-        this.id = id;
-        this.content = content;
-        this.post = post;
-        this.regDt = regDt;
-    }
-
 }

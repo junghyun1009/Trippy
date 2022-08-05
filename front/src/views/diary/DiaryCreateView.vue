@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Diary Create</h1>
     <diary-form :diary="diary" action="create"></diary-form>
   </div>
 </template>
@@ -16,14 +15,14 @@ export default {
   data() {
     return {
       diary: {
-        pk: null,
         title: '',
-        option: {
-          datePick: [],
-          partyType: '가족',
-          memberNum: 1,
-          transportationList: [],
-        }
+        startDate: '',
+        endDate: '',
+        company: '가족',
+        count: 1,
+        transport: [],
+        routes: [],
+        stories: []
       }
     }
   }
