@@ -41,19 +41,19 @@ export default {
         method: 'post',
         data: userinfo,
       })
-      .then( res => {
-        // accessToken은 state에 저장
-        const accessToken = res.data.access_token
-        dispatch('saveToken', accessToken)
-        // refreshToken은 쿠키에 저장
-        const refreshToken = res.data.refresh_token
-        this.$cookies.set("refreshToken", refreshToken)
-        dispatch('fetchCurrentUser')
-        router.push({ name: 'home' })
-      })
-      .catch(err => {
-        console.error(err)
-      })
+          .then( res => {
+            // accessToken은 state에 저장
+            const accessToken = res.data.access_token
+            dispatch('saveToken', accessToken)
+            // refreshToken은 쿠키에 저장
+            const refreshToken = res.data.refresh_token
+            this.$cookies.set("refreshToken", refreshToken)
+            dispatch('fetchCurrentUser')
+            router.push({ name: 'home' })
+          })
+          .catch(err => {
+            console.error(err)
+          })
     },
 
     signup({ commit, dispatch }, userinfo) {
@@ -62,20 +62,20 @@ export default {
         method: 'post',
         data: userinfo
       })
-      .then( res => {
-        // accessToken은 state에 저장
-        const accessToken = res.data.access_token
-        dispatch('saveToken', accessToken)
-        // refreshToken은 쿠키에 저장
-        const refreshToken = res.data.refresh_token
-        this.$cookies.set("refreshToken", refreshToken)
-        dispatch('fetchCurrentUser')
-        router.push({ name: 'login' })
-      })
-      .catch(err => {
-        console.error(err.response.data)
-        commit('SET_AUTH_ERROR', err.response.data)
-      })
+          .then( res => {
+            // accessToken은 state에 저장
+            const accessToken = res.data.access_token
+            dispatch('saveToken', accessToken)
+            // refreshToken은 쿠키에 저장
+            const refreshToken = res.data.refresh_token
+            this.$cookies.set("refreshToken", refreshToken)
+            dispatch('fetchCurrentUser')
+            router.push({ name: 'login' })
+          })
+          .catch(err => {
+            console.error(err.response.data)
+            commit('SET_AUTH_ERROR', err.response.data)
+          })
     },
 
     fetchCurrentUser({ getters, dispatch, commit }) {
@@ -86,13 +86,13 @@ export default {
           method: 'get',
           headers: getters.authHeader,
         })
-        .then(res => commit('SET_CURRENT_USER', res.data))
-        .catch(err => {
-          if (err.response.status === 400) {
-            dispatch('removeToken')
-            router.push({ name: 'login' })
-          }
-        })
+            .then(res => commit('SET_CURRENT_USER', res.data))
+            .catch(err => {
+              if (err.response.status === 400) {
+                dispatch('removeToken')
+                router.push({ name: 'login' })
+              }
+            })
       }
     },
 
@@ -102,13 +102,13 @@ export default {
         method: 'post',
         headers: getters.authHeader,
       })
-      .then(() => {
-        dispatch('removeToken')
-        router.push({ name: 'home' })
-      })
-      .catch( err => {
-        console.error(err.response)
-      })
+          .then(() => {
+            dispatch('removeToken')
+            router.push({ name: 'home' })
+          })
+          .catch( err => {
+            console.error(err.response)
+          })
     },
 
     fromPasswordFindView({commit}, ) {
