@@ -53,6 +53,10 @@ export default ({
     SET_COMMENTS(state, comments) {
       state.comments = comments
     },
+
+    // 홈화면에 추천(일단은 전부 띄우는 것)
+    // 근데 diaries에 써도 되는건지 잘 모르겠음?
+    GET_ALL_DIARY(state, diaries) {state.diaries = diaries},
   },
   actions: {
     // 일지 CREATE
@@ -167,5 +171,16 @@ export default ({
       })
       .catch(err => console.error(err.response))
     }
-  }
+  },
+
+  showAllDiary({ commit }) {
+    axios({
+      url: 'http://localhost:8000/posts',
+      method: 'get'
+    })
+    .then((res) => {
+      const allDiary = res.data
+      commit('SHOW_ALL_DIARY', allDiary)
+    })
+  },
 })
