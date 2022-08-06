@@ -9,7 +9,8 @@
         background-color="#F16B51"
         text-color="#fff"
       >
-        <el-menu-item index="0"><span class="trippyLogo" @click="$router.push('/')">TRIPPY</span></el-menu-item>
+
+        <el-menu-item index="0"><a href="/" class="trippyLogo">TRIPPY</a></el-menu-item>
         <div class="flex-grow" />
         <el-menu-item index="1">
           <div v-if="flag===0" @click="showSearchBar" class="menu-icon">
@@ -41,12 +42,14 @@
           </router-link>
           <p>{{ profile.name }}의 로그</p>
           <router-link :to="{ name: 'profileEdit' }" @click="visible =false">프로필 수정</router-link>
-          <span> | 로그아웃</span>
+          <span @click="logout()"> | 로그아웃</span>
           <hr>
           <router-link :to="{ name: 'diaryCreate' }" @click="visible =false">다이어리 작성</router-link>
           <br>
           <router-link :to="{ name: 'community' }" @click="visible =false">동행 구하기</router-link>
           <hr>
+          <router-link :to="{ name: 'chatList' }" @click="visible =false">채팅</router-link>
+
         </div>
         <!-- 로그인 안 한 유저 -->
         <!-- <div v-else> -->
@@ -67,7 +70,7 @@ import { ref } from 'vue'
 import SearchBar from '@/components/icon/SearchBar.vue'
 import MenuIcon from '@/components/icon/MenuIcon.vue'
 import CloseIcon from '@/components/icon/CloseIcon.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 
 export default {
@@ -86,9 +89,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isLoggedIn', 'profile'])
+    ...mapGetters(['isLoggedIn', 'profile',])
   },
 	methods: {
+    ...mapActions(['logout']),
     showSearchBar() {
       this.flag = 1
     },
@@ -122,6 +126,7 @@ export default {
 	font-family: 'Alfa Slab One', cursive;
 	font-weight: 300;
 	font-size: 20px;
+  text-decoration: none;
   }
 
 .flex-grow {
