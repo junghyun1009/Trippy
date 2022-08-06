@@ -7,10 +7,13 @@ import com.ssafy.trippy.Service.ImageService;
 import com.ssafy.trippy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,12 +29,10 @@ public class ImageController {
 //  추후에 업로드 형식에 따라 param받는 형식 고려(현재는 postman이 requestpart에 호환)
     @PostMapping("/upload")
     public ResponseImageDto upload(@RequestPart(value = "file") MultipartFile file){
-        System.out.println(file);
         return imageService.uploadImage(file,null);
     }
     @PostMapping("/upload/member/{member_id}")
     public ResponseEntity<?> updateUserProfile(@RequestPart(value = "file") MultipartFile file, @PathVariable("member_id") Long memberId)  {
-        System.out.println(file);
         ResponseImageDto responseImageDto = imageService.uploadImage(file,null);
         if(responseImageDto.getFileName()==null) {
             return new ResponseEntity<>("이미지가 없습니다.", HttpStatus.BAD_REQUEST);
@@ -42,6 +43,27 @@ public class ImageController {
         memberService.updateMember(memberId, updateMemberDto);
         imageService.deleteImage(responseMemberDto.getImg_path());
         return new ResponseEntity<>(responseImageDto,HttpStatus.OK);
+    }
+
+    @PostMapping("/upload/post/{detail_location_id}")
+    public ResponseEntity<?> updatePostProfile(@RequestPart(value = "file") MultipartFile file, @PathVariable("detail_location_id") Long detailLocId){
+            ResponseImageDto responseImageDto = imageService.uploadImage(file,detailLocId);
+            if(responseImageDto.getFileName()==null) {
+                return new ResponseEntity<>("이미지가 없습니다.", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(responseImageDto,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{image_id}")
+    public ResponseEntity<?> deleteImage(@PathVariable("image_id") Long imageId) {
+        imageService.deleteImage(imageService.getImageById(imageId).getFileName());
+        return new ResponseEntity<>("success",HttpStatus.OK);
+    }
+
+    @GetMapping("/{post_id}")
+    public ResponseEntity<?> getImageByPostId(@PathVariable("post_id") Long postId){
+        List<Resource> resources =  imageService.getImagesByPostId(postId);
+        return new ResponseEntity<>(resources, HttpStatus.OK);
     }
 
 }
