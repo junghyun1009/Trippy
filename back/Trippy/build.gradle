@@ -44,6 +44,7 @@ dependencies {
     //querydsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
 }
 sourceSets {
     main {
@@ -78,3 +79,5 @@ configurations {
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
+
+
