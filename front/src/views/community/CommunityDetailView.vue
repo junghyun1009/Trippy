@@ -17,16 +17,16 @@
       <span class="state">{{ recruitState }}</span>
       <h4>{{ temp.title }}</h4>
     </div>
-    <div class="option">
-      <p class="icon">
+    <div class="options">
+      <p class="option">
         <span class="material-symbols-outlined">groups</span>
         {{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 | {{ temp.option.gender }}
       </p>
-      <p class="icon">
+      <p class="option">
         <span class="material-symbols-outlined">event_note</span>
         {{ temp.date[0] }} ~ {{ temp.date[1] }}, {{ temp.time }}
       </p>
-      <p class="icon">
+      <p class="option">
         <span class="material-symbols-outlined">location_on</span>
         {{ temp.place }}
       </p>
@@ -136,18 +136,18 @@ hr {
   margin-right: 0.3rem;
 }
 
-.option {
+.options {
   padding: 0.5rem;
   font-size: 0.9rem;
 }
 
-.icon {
+.option {
   display: flex;
   align-items: center;
   margin-bottom: 0.3rem;
 }
 
-.icon > span {
+.option > span {
   margin-right: 0.3rem;
 }
 
@@ -189,7 +189,8 @@ hr {
 }
 
 .user > span {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 400;
 }
 
 .participation {
