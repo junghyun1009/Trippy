@@ -1,8 +1,9 @@
 <template>
   <div>
     <h3>동행 찾기</h3>
-    <span @click="getLocation()">현재 위치</span>
+    <span class="material-symbols-outlined location" @click="getLocation">my_location</span>
 
+    <!-- <region-list></region-list> -->
     <router-link :to="{ name: 'communityDetail' }">
       <!-- v-for 추가예정 -->
       <el-card class="card">
@@ -11,13 +12,22 @@
           <el-tag class="tag">장소</el-tag>
         </div>
         <div class="title">
-          <span>{{ recruitState }}</span>
+          <span class="state">{{ recruitState }}</span>
           <h4>{{ temp.title }}</h4>
         </div>
-        <div class="option">
-          <p>{{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 {{ temp.option.gender }} 참여 가능</p>
-          <p>{{ temp.date[0] }} ~ {{ temp.date[1] }}, {{ temp.time }}</p>
-          <p>{{ recruitCount}} / {{ temp.recruit_volume }}명 참여</p>
+        <div class="options">
+          <p class="option">
+            <span class="material-symbols-outlined">groups</span>
+            {{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 {{ temp.option.gender }} 참여 가능
+          </p>
+          <p class="option">
+            <span class="material-symbols-outlined">event_note</span>
+            {{ temp.date[0] }} ~ {{ temp.date[1] }}, {{ temp.time }}
+          </p>
+          <p class="option">
+            <span class="material-symbols-outlined">groups</span>
+            {{ recruitCount}} / {{ temp.recruit_volume }}명 참여
+          </p>
         </div>
         <div class="content">
           <p>{{ convertDesc }}</p>
@@ -31,12 +41,16 @@
 
 <script>
 import { mapGetters } from 'vuex'
+// import RegionList from '@/components/common/RegionList.vue'
+
 export default {
     name: 'CommunityView',
+    components: {
+      // RegionList
+    },
     data() {
       return {
         position: {},
-
       }
     },
     computed: {
@@ -80,24 +94,52 @@ export default {
   text-decoration: none;
 }
 
+.location {
+  position: relative;
+  right: -9.5rem;
+  color: #F16B51;
+}
+
 .card {
   text-align: left;
+  margin-bottom: 0.5rem;
 }
 
 .tag {
-  margin-right: 10px;
+  margin-right: 0.3rem;
+  margin-bottom: 0.5rem;
 }
 
 .title {
   display: flex;
   align-items: center;
+  margin-bottom: 0.5rem;
 }
 
-.title span {
-  margin-right: 5px;
+.state {
+  font-weight: bold;
+  color: #F16B51;
+  margin-right: 0.3rem;
+}
+
+.options {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  margin-right: 0.3rem;
+  margin-bottom: 0.3rem;
+}
+
+.option > span {
+  margin-right: 0.3rem;
 }
 
 .content {
+  font-size: 0.9rem;
   border-radius: 10px;
   background-color: #d9d9d9;
   padding: 10px;
