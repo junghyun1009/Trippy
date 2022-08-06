@@ -21,35 +21,52 @@ import java.util.List;
 public class CommunityPostController {
 
     private final CommunityPostService communityPostService;
-    private static final String SUCCESS = "success";
+    private static final String SUCCESS = "OK";
+    private static final String FAIL = "ERROR";
 
     @PostMapping
-    public ResponseEntity<?> saveCommunityPost(@RequestBody @Valid RequestCommunityPostDto requestCommunityPostDto){
-        communityPostService.saveCommunityPost(requestCommunityPostDto);
+    public ResponseEntity<?> saveCommunityPost(@RequestBody @Valid RequestCommunityPostDto requestCommunityPostDto) {
+        try {
+            communityPostService.saveCommunityPost(requestCommunityPostDto);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
+        }
         return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
     }
 
     @DeleteMapping("/{community_post_id}")
-    public ResponseEntity<?> deleteCommunityPost(@PathVariable("community_post_id") Long id){
-        communityPostService.deleteCommunityPost(id);
+    public ResponseEntity<?> deleteCommunityPost(@PathVariable("community_post_id") Long community_post_id) {
+        try {
+            communityPostService.deleteCommunityPost(community_post_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
+        }
         return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
     }
 
     @PutMapping("/{community_post_id}")
-    public ResponseEntity<?> updateCommunityPost(@PathVariable("community_post_id") Long community_post_id,@RequestBody @Valid UpdateCommunityPostDto updateCommunityPostDto){
-        communityPostService.updateCommunityPost(community_post_id, updateCommunityPostDto);
-        return  new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+    public ResponseEntity<?> updateCommunityPost(@PathVariable("community_post_id") Long community_post_id, @RequestBody @Valid RequestCommunityPostDto requestCommunityPostDto) {
+        try {
+            communityPostService.updateCommunityPost(community_post_id, requestCommunityPostDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
+        }
+        return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCommunityPostList(){
+    public ResponseEntity<?> getAllCommunityPostList() {
         List<ResponseCommunityPostDto> responsePostDtos = communityPostService.getAllCommunityPost();
-        return  new ResponseEntity<List<ResponseCommunityPostDto>>(responsePostDtos, HttpStatus.OK);
+        return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
     }
 
     @GetMapping("/{community_post_id}")
-    public ResponseEntity<?> detailCommunityPost(@PathVariable("community_post_id") Long id){
+    public ResponseEntity<?> detailCommunityPost(@PathVariable("community_post_id") Long id) {
         ResponseCommunityPostDto responseCommunityPostDto = communityPostService.findCommunityPost(id);
-        return new ResponseEntity<ResponseCommunityPostDto>(responseCommunityPostDto, HttpStatus.OK);
+        return new ResponseEntity<>(responseCommunityPostDto, HttpStatus.OK);
     }
 }
