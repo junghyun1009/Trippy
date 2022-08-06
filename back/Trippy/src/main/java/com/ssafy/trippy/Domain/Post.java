@@ -52,7 +52,7 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy="post")
     private List<Route> routes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "transport" )
+    @OneToMany(mappedBy = "post" )
     private List<PostTransport> postTransports = new ArrayList<>();
 
     @OneToMany(mappedBy="post", cascade = CascadeType.REMOVE)

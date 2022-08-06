@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface PostTransportRepository extends JpaRepository<PostTransport, Long> {
     List<PostTransport> findAllPostTransportByPost(Post post);
-    Transport findTransportById(Long id);
+    List<PostTransport> findAllPostTransportByTransport(Transport transport);
 }

@@ -1,18 +1,21 @@
-package com.ssafy.trippy.Dto.Response;
+package com.ssafy.trippy.Dto.Converter;
 
 import com.ssafy.trippy.Domain.*;
+import com.ssafy.trippy.Dto.Response.ResponseDetailLocationDto;
+import com.ssafy.trippy.Dto.Response.ResponsePostCommentDto;
+import com.ssafy.trippy.Dto.Response.ResponseRouteDto;
+import com.ssafy.trippy.Dto.Response.ResponseTransport;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Converter {
     
-    public static List<ResponseTransport> convertTransportList(List<Transport> detailLocationList) {
+    public static List<ResponseTransport> convertTransportList(List<Transport> transportList) {
         List<ResponseTransport> transports = new ArrayList<>();
-        for (Transport transport : detailLocationList) {
+        for (Transport transport : transportList) {
             ResponseTransport dto = ResponseTransport.builder()
                     .transport(transport).build();
-            
             transports.add(dto);
         }
         return transports;

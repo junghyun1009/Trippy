@@ -1,15 +1,17 @@
 package com.ssafy.trippy.Dto.Response;
 
 import com.ssafy.trippy.Domain.*;
+import com.ssafy.trippy.Dto.Converter.Converter;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class ResponsePostDto {
     private Long id;
@@ -18,9 +20,9 @@ public class ResponsePostDto {
     private int count;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private int representiveImg;
+    private int representativeImg;
     private String email;
-    private List<ResponseTransport> transportName;
+    private List<ResponseTransport> name;
     private List<ResponseDetailLocationDto> detailLocations;
 
     private List<ResponsePostCommentDto> comments;
@@ -35,9 +37,9 @@ public class ResponsePostDto {
         this.count = post.getCount();
         this.startDate = post.getStartDate();
         this.endDate = post.getEndDate();
-        this.representiveImg = post.getRepresentiveImg();
+        this.representativeImg = post.getRepresentiveImg();
         this.email = post.getMember().getEmail();
-        this.transportName = Converter.convertTransportList(Converter.convertTransportsToPostTransports(post.getPostTransports()));
+        this.name = Converter.convertTransportList(Converter.convertTransportsToPostTransports(post.getPostTransports()));
         this.detailLocations = Converter.convertDetailLocationList(post.getDetailLocations());
         this.comments = Converter.convertPostCommentList(post.getPostComments());
         this.routes = Converter.convertRouteList(post.getRoutes());

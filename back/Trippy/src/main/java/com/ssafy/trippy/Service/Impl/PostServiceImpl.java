@@ -31,7 +31,7 @@ public class PostServiceImpl implements PostService {
 
     private final TransportRepository transportRepository;
 
-    private final  PostCommentRepository postCommentRepository;
+    private final PostCommentRepository postCommentRepository;
     private final RouteRepository routeRepository;
 
     private final Long busId = 1L;
@@ -45,8 +45,9 @@ public class PostServiceImpl implements PostService {
     public List<ResponsePostDto> findAll() {
         List<Post> all = postRepository.findAll();
         List<ResponsePostDto> responsePostDtoList = new ArrayList<>();
+        // 1) 직접 responsePostDto에 set을 해주자!
         for (Post post : all) {
-            System.out.println(post.getPostTransports().toString());
+            System.out.println("post.getPostTransports().toString() = " + post.getPostTransports().toString());
             ResponsePostDto dto = new ResponsePostDto(post);
             responsePostDtoList.add(dto);
         }
@@ -81,7 +82,6 @@ public class PostServiceImpl implements PostService {
 
         for (PostTransport postTransport : requestPostDto.toEntity().getPostTransports().stream().collect(Collectors.toList())) {
             postTransport.setPost(post);
-//            postTransport.setTransport(transportRepository.findById(id);
             postTransportRepository.save(postTransport);
         }
 
