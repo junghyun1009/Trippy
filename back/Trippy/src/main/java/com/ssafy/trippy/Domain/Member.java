@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-@ToString
 public class Member extends BaseEntity implements UserDetails{
     @Id
     @GeneratedValue

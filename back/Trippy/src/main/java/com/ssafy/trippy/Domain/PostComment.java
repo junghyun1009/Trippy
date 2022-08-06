@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
 import lombok.AccessLevel;
 import lombok.Builder;
