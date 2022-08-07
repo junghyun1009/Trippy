@@ -7,13 +7,19 @@ import com.ssafy.trippy.Service.ImageService;
 import com.ssafy.trippy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.sun.corba.se.impl.util.Version.asString;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -61,8 +67,17 @@ public class ImageController {
     }
 
     @GetMapping("/{post_id}")
-    public ResponseEntity<?> getImageByPostId(@PathVariable("post_id") Long postId){
+    public ResponseEntity<?> getImageByPostId(@PathVariable("post_id") Long postId) {
         List<Resource> resources =  imageService.getImagesByPostId(postId);
-        return new ResponseEntity<>(resources, HttpStatus.OK);
+        List<File> files = new ArrayList<>();
+        for (Resource resource: resources){
+            try {
+                files.add(resource.getFile());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return new ResponseEntity<>(files, HttpStatus.OK);
     }
+
 }
