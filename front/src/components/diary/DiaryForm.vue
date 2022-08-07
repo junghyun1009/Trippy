@@ -186,10 +186,10 @@
                       </el-button> -->
                     </div>
                     <div v-if="newStory.photoList.length<10">
-                      <label :for=k>
+                      <label :for=k+10>
                         <span class="material-symbols-outlined">add_photo_alternate</span>
                       </label>
-                      <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="uploadPhoto(k)" multiple />
+                      <input class="photo-input-add" type="file" :id=k+10 ref="files" accept="image/*" @change="addPhoto(k)" multiple />
                     </div>
                   </div>
                 </el-dialog>
@@ -392,11 +392,11 @@ export default {
       let addedPhotoList = this.newStories[index].photoList
       // console.log(addedPhotoList)
       // fileInput.value = index
-      // console.log(this.$refs.files)
-      // console.log(this.$refs.files[index].files)
+      console.log(this.$refs.files)
+      console.log(this.$refs.files[index].files)
       for (let i = 0; i < this.$refs.files[index].files.length; i++) {
         let photo = this.$refs.files[index].files[i]
-        console.log(photo)
+        // console.log(photo)
         if (photo.type.substr(0, 5) === "image") {
           addedPhotoList = [
             ...addedPhotoList,
@@ -410,8 +410,16 @@ export default {
         }
       }
       this.newStories[index].photoList = addedPhotoList
+      console.log(this.newStories[index].photoList)
       let fileInput = document.getElementsByClassName("photo-input")
+      // // console.log(fileInput)
+      // console.log(fileInput[0].value)
+      // console.log(fileInput[fileInput.length - 1].value)
       fileInput[fileInput.length - 1].value = ''
+      // for (let j = 0; j < fileInput.length; j++) {
+      //   console.log(fileInput[j].value)
+      //   fileInput[j].value = ''
+      // }
     },
 
     removePhoto(index, num) {
@@ -421,31 +429,41 @@ export default {
       this.newStories[index].photoList.splice(num, 1)
     },
 
-    // addPhoto(index) {
-    //   console.log('add', index)
-    //   let addedPhotoList = this.newStories[index].photoList
-    //   let fileInput = document.getElementsByClassName("photo-input-sec")
-    //   console.log(fileInput)
-    //   // console.log(this.$refs.files)
-    //   console.log(this.$refs.files[index].files)
-    //   for (let i = 0; i < this.$refs.files[index].files.length; i++) {
-    //     let photo = this.$refs.files[index].files[i]
-    //     if (photo.type.substr(0, 5) === "image") {
-    //       addedPhotoList = [
-    //         ...addedPhotoList,
-    //         {
-    //           file: this.$refs.files[index].files[i],
-    //           preview: URL.createObjectURL(this.$refs.files[index].files[i]),
-    //         }
-    //       ]
-    //     } else {
-    //       alert("사진 파일만 추가 가능합니다")
-    //     }
-    //   }
-    //   this.newStories[index].photoList = addedPhotoList
-    //   fileInput[0].value = ''
-    //   console.log(fileInput.value)
-    // },
+    addPhoto(index) {
+      // console.log('add', index)
+      let addedPhotoList = this.newStories[index].photoList
+      // let fileInput = document.getElementsByClassName("photo-input-sec")
+      // console.log(fileInput)
+      console.log(this.$refs.files)
+      console.log(this.$refs.files[index].files)
+      for (let i = 0; i < this.$refs.files[index].files.length; i++) {
+        let photo = this.$refs.files[index].files[i]
+        if (photo.type.substr(0, 5) === "image") {
+          addedPhotoList = [
+            ...addedPhotoList,
+            {
+              file: this.$refs.files[index].files[i],
+              preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+            }
+          ]
+        } else {
+          alert("사진 파일만 추가 가능합니다")
+        }
+      }
+      this.newStories[index].photoList = addedPhotoList
+      console.log(this.newStories[index].photoList)
+      let fileInput = document.getElementsByClassName("photo-input-add")
+      // console.log(fileInput[0].value)
+      // console.log(fileInput[fileInput.length - 1].value)
+      // fileInput.forEach((each) => {
+      //   each.value = ''
+      // })
+      fileInput[fileInput.length - 1].value = ''
+      // for (let j = 0; j < fileInput.length; j++) {
+      //   console.log(fileInput[j].value)
+      //   fileInput[j].value = ''
+      // }
+    },
 
     onSubmit() {
       if (this.action === 'create') {
@@ -683,6 +701,10 @@ export default {
   margin-left: 0.5rem;
 }
 .photo-input {
+  width: 0;
+  visibility: hidden;
+}
+.photo-input-add {
   width: 0;
   visibility: hidden;
 }
