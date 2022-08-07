@@ -24,7 +24,7 @@
       </p>
       <p class="option">
         <span class="material-symbols-outlined">event_note</span>
-        {{ temp.date[0] }} ~ {{ temp.date[1] }}, {{ temp.time }}
+        {{ convertDate }}, {{ temp.time }}
       </p>
       <p class="option">
         <span class="material-symbols-outlined">location_on</span>
@@ -76,8 +76,17 @@ export default {
       recruitCount() {
         return 3
       },
+      convertDate() {
+        let date = ''
+        if (!this.temp.isDay) {
+          date = this.temp.start_date + '~' + this.temp.end_date
+        } else {
+          date = this.temp.start_date
+        }
+        return date
+      },
     },
-}
+  }
 </script>
 
 <style scoped>

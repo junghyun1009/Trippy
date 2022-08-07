@@ -18,7 +18,11 @@
       <el-date-picker class="calendar" v-model="newPost.date" type="daterange"/>
     </el-form-item> -->
     <el-form-item label="날짜">
-      <el-date-picker class="dates" v-model="newPost.date" type="dates" placeholder="활동 시작일과 종료일을 선택해주세요." value-format="YYYY-MM-DD" :disabled-date="disabledDate"/>
+      <el-date-picker v-model="newPost.start_date" type="date" placeholder="동행 시작일을 선택해주세요." value-format="YYYY-MM-DD" :disabled-date="disabledStartDate"/>
+      <el-switch class="switch" v-model="newPost.isDay" size="small" active-text="당일"></el-switch>
+    </el-form-item>
+    <el-form-item class="end_date" v-if="!newPost.isDay">
+      <el-date-picker v-model="newPost.end_date" type="date" placeholder="동행 종료일을 선택해주세요." value-format="YYYY-MM-DD" :disabled-date="disabledEndDate"/>
     </el-form-item>
     <el-form-item label="시간">
       <el-time-picker v-model="newPost.time" value-format="HH:mm" :disabled-seconds="disabledSeconds"/>
@@ -76,7 +80,9 @@ export default {
         title: this.post.title,
         category: this.post.category,
         desc: this.post.desc,
-        date: this.post.date,
+        start_date: this.post.start_date,
+        isDay: this.post.isDay,
+        end_date: this.post.end_date,
         time: this.post.time,
         recruit_volume: this.post.recruit_volume,
         newOption: {
@@ -111,8 +117,11 @@ export default {
     onSubmit() {
       console.log(this.newPost)
     },
-    disabledDate(date) {
-      return date.getTime() <= Date.now()
+    disabledStartDate(date) {
+      return date.getTime() < Date.now() - 3600 * 1000 * 24 
+    },
+    disabledEndDate(date) {
+      return date.getTime() < Date.now() 
     },
     makeRange(start, end) {
       const result = []
@@ -129,8 +138,16 @@ export default {
 </script>
 
 <style scoped>
+.switch {
+  margin-left: 0.3rem;
+}
+
+.end_date {
+  margin-left: 2.3rem;
+}
+
 .option-tag {
-  margin-left: 10px;
+  margin-left: 0.3rem;
 }
 
 .collapse {
