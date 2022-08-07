@@ -10,7 +10,7 @@
     </div>
 
     <!-- 이메일로 인증번호 보낸 이후 노출 -->
-    <div v-else>
+    <div class="verification-container" v-else>
       <div class="verification-code">
         <h3>인증번호 입력</h3>
         <!-- 3분 카운트 하는 시계 -->
@@ -124,15 +124,13 @@ export default {
 </script>
 
 <style scoped>
-  * {
-    box-sizing: border-box;
-    margin: 2%;
-    }
+
 
   .container {
     display: flex;
     justify-content: center;
-    margin-top: 40%;
+    margin: 40% 0;
+    padding: 0;
   }
 
   h3 {
@@ -155,15 +153,20 @@ export default {
 
   .verification-code {
     width: 100%;
+    margin: 0;
   }
 
   .verification-guide {
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     font-size: 12px;
+    margin: 0;
   }
 
+.verification-guide span{
+    margin: 0;
+  }
   .verification-code span {
     display: flex;
   }

@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <div class="current-password" v-show="!fromPasswordFindView">
-      <p>현재 비밀번호</p>
+      <h3>현재 비밀번호</h3>
       <el-input v-model="userinfo.currentPassword" type="password" placeholder="비밀번호" show-password></el-input>
     </div>
     <!-- 만약 PasswordFindView에서 연결되면, 현재 비밀번호는 빼고 노출 -->
     <div class="new-password">
-      <span>새 비밀번호</span>
+      <h3>새 비밀번호</h3>
       <el-input v-model="userinfo.newPassword"  id="password" type="password" placeholder="비밀번호" @blur="checkPasswordValidity"></el-input>
       <el-input v-model="userinfo.newPasswordCheck" type="password" placeholder="비밀번호 확인" @blur="checkPasswordMatch"></el-input>
       <!-- 비밀번호와 비밀번호 확인되지 않으면 자동으로 매치되는지 확인하는 기능 -->
@@ -77,6 +77,7 @@ export default {
 
   .container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     margin-top: 40%;
   }
@@ -86,8 +87,11 @@ export default {
     margin-top: 20%;
   }
 
-  .new-password span{
-    color: #F16B51;
+  h3 {
     display: flex;
+    color: #F16B51;
+    font-weight: 500;
   }
+
+
 </style>

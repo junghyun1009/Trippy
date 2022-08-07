@@ -55,6 +55,11 @@ export default {
   }
 
 </script>
+<style>
+:root {
+  --el-color-primary: #F16B51;
+}
+</style>
 
 <style scoped>
 *{padding:0;margin:0;}
