@@ -1,21 +1,19 @@
 <template>
-  <div>
+  <div class="login">
     <!-- 없는 회원정보 -->
-    <form @submin.prevent="login()">
-      <el-input v-model="userinfo.description" placeholder="이메일" id="email" ></el-input>
-      <br>
-      <br>
-      <el-input v-model="userinfo.password" type="password" placeholder="비밀번호" show-password></el-input>
-      <br><br>
-      <el-button type="primary" @click="checkEmail()">로그인</el-button>
-      <br><br>
-      <router-link :to="{ name: 'signUp' }">회원가입</router-link>
-      |
-      <router-link :to="{ name: 'passwordFind' }">비밀번호 찾기</router-link>
-      <account-error-list :errorMessage="emailError" v-show="!emailFormat"></account-error-list>
-      <account-error-list :errorMessage="loginError" v-show="authentication == false"></account-error-list>
-    </form>
-
+    <div class="input-box">
+      <form @submin.prevent="login()">
+          <el-input class="input" v-model="userinfo.description" placeholder="이메일" id="email" ></el-input>
+          <el-input class="input" v-model="userinfo.password" type="password" placeholder="비밀번호" show-password></el-input>
+          <el-button class="input" type="primary" @click="checkEmail()">로그인</el-button>
+        <br><br>
+        <router-link :to="{ name: 'signUp' }">회원가입</router-link>
+        <span>|</span>
+        <router-link :to="{ name: 'passwordFind' }">비밀번호 찾기</router-link>
+        <account-error-list :errorMessage="emailError" v-show="!emailFormat"></account-error-list>
+        <account-error-list :errorMessage="loginError" v-show="authentication == false"></account-error-list>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -69,6 +67,39 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    }
 
+  .login {
+    height: 92vh;
+    background-color: #F16B51;
+    overflow: hidden;
+  }
+
+  .input-box {
+    margin: 0 5%;
+    padding-top: 50%
+  }
+
+  .input {
+    margin: 2% 0;
+  }
+
+  button {
+    width: 100%;
+    margin: 0;
+  }
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+
+  span {
+    color: white;
+    margin: 3%;
+  }
 </style>

@@ -27,20 +27,11 @@ public class Location extends BaseEntity {
 //    @NotBlank(message="도시이름을 입력하세요")
     private String cityName;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="경도을 입력하세요")
-    private Double latitude;
-
-    //    @Column(nullable = false)
-//    @NotBlank(message="위도를 입력하세요")
-    private Double longitude;
 
     @Builder
-    public Location(Long id, String countryName, String cityName, Double latitude, Double longitude) {
+    public Location(Long id, String countryName, String cityName) {
         this.id = id;
         this.countryName = countryName;
         this.cityName = cityName;
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
 }
