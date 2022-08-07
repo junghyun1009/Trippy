@@ -65,5 +65,4 @@ public class ImageController {
         List<Resource> resources =  imageService.getImagesByPostId(postId);
         return new ResponseEntity<>(resources, HttpStatus.OK);
     }
-
 }
