@@ -18,6 +18,9 @@ import java.util.List;
 public class RequestPostDto {
     private String title;
     private Byte isDelete;
+    private String countryName;
+    private String cityName;
+    private Long locationId;
     private int company;
     private int count;
     private LocalDateTime startDate;
@@ -32,6 +35,7 @@ public class RequestPostDto {
     public Post toEntity() {
         List<DetailLocation> detailLocationList = new ArrayList<>();
         for (RequestDetailLocationDto detailLocation : detailLocations) {
+            detailLocation.setLocation_id(locationId);
             detailLocationList.add(detailLocation.toEntity());
         }
         List<Route> routeList = new ArrayList<>();
@@ -56,6 +60,9 @@ public class RequestPostDto {
                 .routes(routeList)
                 .build();
     }
+
+
+
 
     @Builder
     public RequestPostDto(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Long memberId, List<RequestPostTransPortDto> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes) {
