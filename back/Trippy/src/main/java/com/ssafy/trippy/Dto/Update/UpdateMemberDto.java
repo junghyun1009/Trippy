@@ -17,7 +17,7 @@ public class UpdateMemberDto {
     private String img_path;
     private String desc;
 
-    public UpdateMemberDto(String name,String password,String email,String phone,int gender,LocalDateTime birth,String img_path,String desc){
+    public UpdateMemberDto(String name,String email,String phone,int gender,LocalDateTime birth,String img_path,String desc){
         this.name = name;
         this.email = email;
         this.phone = phone;
