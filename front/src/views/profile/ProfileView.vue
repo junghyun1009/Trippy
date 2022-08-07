@@ -1,28 +1,38 @@
 <template>
   <div class="container">
-    <div class="user-info">
+    <div class="background">
       <div class="profile-picture">
-        <el-avatar :size="90" class="user-info"> user </el-avatar>
+        <el-avatar :size="90"> user </el-avatar>
       </div>
-      <div class="username-follow">
-        <h2>username</h2>
-        <div class="user-follow">
-          <div class="user-follow">
-            <followers-list/>
-          </div>
-          <div class="user-follow">
-            <followings-list/>
+    </div>
+    <div class="background-info">
+      <div class="blank"></div>
+      <div class="user-info">
+        <div class="username-follow">
+          <div class="username">
+            <h2>username</h2>
+            <div class="follow-button">
+              <el-button v-if="isFollow===false" type="primary" @click="followNow()">팔로우</el-button>
+              <el-button v-else type="primary" plain @click="unfollowNow()">팔로잉</el-button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <el-button v-if="isFollow===false" type="primary" @click="followNow()">팔로우</el-button>
-    <el-button v-else type="primary" plain @click="unfollowNow()">팔로잉</el-button>
-    <div class="user-info">
-      <p>소개글</p>
 
+    <div class="description">
+      <p>ㄴr는 ㄱr끔 눈물을 흘린ㄷㅏ...😭</p>
     </div>
+    
+    <div class="followers">
+      <div class="user-follow">
+        <followers-list/>
+      </div>
+      <div class="user-follow">
+        <followings-list/>
+      </div>
+    </div>
+
     <el-tabs
     v-model="activeName"
     type="card"
@@ -81,24 +91,69 @@ export default {
     flex-direction: column;
     margin: 0;
   }
+  
+  .background {
+    display: relative;
+    background-color: bisque;
+    width: 100%;
+    height: 15vh;
+    padding: 0;
+    margin: 0;
+  }
 
-.user-follow {
-  margin: 0;
-}
+  .background-info {
+    display: flex;
+    margin: 0;
+  }
 
-.user-info {
-  display: flex;
-}
+  .username-follow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-.user-follow {
-  display: flex;
-  justify-content: flex-start;
-}
+  .username {
+    display: flex;
+  }
+
+  .follow-button {
+    margin-left: 5%;
+  }
 
 
-.user-follow:first-child {
-  margin-right: 15px;
-}
+  .username h2 {
+    margin: 0
+  }
 
+  .followers {
+    display: flex;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+    height: 10%;
+  }
+
+  .user-info {
+    margin: 0;
+  }
+
+  .profile-picture {
+    display: absolute;
+    margin-top: 20%;
+    margin-right: 65%;
+  }
+
+  .user-follow:first-child {
+    margin-right: 15px;
+  }
+
+  .blank {
+    width: 30%;
+  }
+
+  .description {
+    display: flex;
+    padding-top: 5%;
+  }
 
 </style>
