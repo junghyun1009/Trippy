@@ -5,6 +5,7 @@ import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Domain.Post;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,10 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, Long>, PostSearchRepositoryCustom {
     Optional<Post> findByCompany(int count);
     List<Post> findAllByMember(Member member);
-
 
 
 }
