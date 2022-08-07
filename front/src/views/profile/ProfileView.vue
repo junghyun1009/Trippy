@@ -1,8 +1,10 @@
 <template>
   <div class="container">
     <div class="user-info">
-      <el-avatar :size="100" class="user-info"> user </el-avatar>
-      <div>
+      <div class="profile-picture">
+        <el-avatar :size="90" class="user-info"> user </el-avatar>
+      </div>
+      <div class="username-follow">
         <h2>username</h2>
         <div class="user-follow">
           <div class="user-follow">
@@ -26,7 +28,7 @@
     type="card"
     class="demo-tabs"
     @tab-click="handleClick"
-  >
+    >
       <el-tab-pane label="My Diary">
         <!-- 내가 쓴 일지 목록 -->
       </el-tab-pane>
@@ -68,18 +70,35 @@ export default {
 }
 </script>
 
-<style>
-.user-info,
+<style scoped>
+  * {
+    box-sizing: border-box;
+    margin: 2%;
+    }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+  }
+
+.user-follow {
+  margin: 0;
+}
+
+.user-info {
+  display: flex;
+}
+
 .user-follow {
   display: flex;
-  margin: 0 15px;
+  justify-content: flex-start;
 }
+
 
 .user-follow:first-child {
   margin-right: 15px;
 }
 
-.container {
-  margin-top: 15px;
-}
+
 </style>
