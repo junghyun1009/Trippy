@@ -38,12 +38,20 @@
               <!-- 옵션:여행 기간 -->
               <div class="option-date">
                 <span class="option-title">여행 기간</span>
-                <el-date-picker
-                  v-model="datePick"
-                  type="dates"
-                  value-format="YYYY-MM-DD"
-                  placeholder="여행 기간을 선택해주세요."
-                />
+                <div class="date-picker">
+                  <el-date-picker
+                    v-model="newDiary.startDate"
+                    type="date"
+                    value-format="YYYY-MM-DD"
+                    placeholder="여행 시작일을 선택해주세요."
+                  />
+                  <el-date-picker
+                    v-model="newDiary.endDate"
+                    type="date"
+                    value-format="YYYY-MM-DD"
+                    placeholder="여행 종료일을 선택해주세요."
+                  />
+                </div>
               </div>
 
               <!-- 옵션: 일행 타입 -->
@@ -127,6 +135,11 @@
               <el-input v-model="newStory.place" class="input-box" id="title-input-box" placeholder="상세 장소를 입력하세요." />
             </div>
 
+            <div class="story-rate">
+              <span>별점</span>
+              <el-rate v-model="newStory.rate" allow-half />
+            </div>
+
             <div class="story-content">
               <span>내용</span>
               <el-input v-model="newStory.content" maxlength="500"
@@ -138,7 +151,7 @@
                 <span>사진</span>
                 <span>(선택)</span>
               </div>
-              <div v-if="newStory.photoList.length === 0 && dialogVisible === false" class="photo-div">
+              <div v-if="newStory.photoList.length === 0 && newStory.dialogVisible === false" class="photo-div">
                 <label :for=k>
                   <span class="material-symbols-outlined">add_photo_alternate</span>
                 </label>
@@ -150,11 +163,11 @@
                 <!-- <div v-if="newStory.photoList" class="photo-thumbnail">
                   <img :src="newStory.photoList[0].preview" :alt="newStory.photoList[0].preview" @click="dialogVisible=true"/>
                 </div> -->
-                <div @click="dialogVisible=true" class="photo-add-div">
+                <div @click="newStory.dialogVisible=true" class="photo-add-div">
                   <span class="material-symbols-outlined">photo_library</span>
                   <span class="photo-description">아이콘을 눌러 사진을 확인해보세요.</span>
                 </div>
-                <el-dialog v-model="dialogVisible" width="80%" :show-close="false">
+                <el-dialog v-model="newStory.dialogVisible" width="80%" :show-close="false">
                   <template #header="{ titleId, titleClass, closeBtn }">
                     <div class="my-header">
                       <div>
@@ -162,32 +175,40 @@
                         <p>사진을 누르면 삭제가 가능합니다.</p>
                         <p>한 스토리 당 사진은 열 개까지 추가 가능합니다.</p>
                       </div>
-                      <span :id="closeBtn" class="material-symbols-outlined" @click="dialogVisible=false">close</span>
+                      <span :id="closeBtn" class="material-symbols-outlined" @click="newStory.dialogVisible=false">close</span>
                     </div>
                   </template>
-                  <div v-if="newStory.photoList" class="photo-preview">
+                  <div class="photo-preview">
                     <div v-for="(photo, index) in newStory.photoList" :key="index" class="photo-preview-group">
                       <img :src="photo.preview" :alt="photo.preview" @click="removePhoto(k, index)"/>
                       <!-- <el-button class="remove-photo" circle @click="removePhoto(k, index)">
                         <span class="material-symbols-outlined">remove</span>
                       </el-button> -->
                     </div>
-                    <label :for=k>
-                      <span class="material-symbols-outlined">add_photo_alternate</span>
-                    </label>
-                    <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="uploadPhoto(k)" multiple />
+                    <div v-if="newStory.photoList.length<10">
+                      <label :for=k>
+                        <span class="material-symbols-outlined">add_photo_alternate</span>
+                      </label>
+                      <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="uploadPhoto(k)" multiple />
+                    </div>
                   </div>
                 </el-dialog>
               </div>
             </div>
 
-            <div class="story-rate">
+            <!-- <div class="story-rate">
               <span>별점</span>
               <el-rate v-model="newStory.rate" allow-half />
-            </div>
+            </div> -->
             
-            <el-button @click="removeStory(k)" v-show="(newStories.length >= 1) && k!=0">delete</el-button>
-            <el-button @click="addStory()" v-show="newStories.length < 10" :disabled="k != newStories.length - 1">add story</el-button>
+            <div class="story-btn">
+              <el-button @click="addStory()" v-show="newStories.length < 10" :disabled="k != newStories.length - 1" link>
+                <span class="material-symbols-outlined">note_add</span>
+              </el-button>
+              <el-button @click="removeStory(k)" v-show="(newStories.length >= 1) && k!=0" link>
+                <span class="material-symbols-outlined">delete</span>
+              </el-button>
+            </div>
             <hr>
           </div>
         </div>
@@ -213,9 +234,8 @@ export default {
   },
   data() {
     return {
-      datePick: [this.diary.startDate, this.diary.endDate],
+      // datePick: [this.diary.startDate, this.diary.endDate],
       flag: 0,
-      dialogVisible: false,
       route: {},
       newStories: [
         ...this.diary.stories,
@@ -223,6 +243,7 @@ export default {
           pk: 0,
           place: '',
           photoList: [],
+          dialogVisible: false,
           content: '',
           rate: null
         }
@@ -307,7 +328,7 @@ export default {
       this.route.lng = geocode.lng
       this.newDiary.routes.push(this.route)
       this.route = {}
-      console.log(this.newDiary.routes)
+      // console.log(this.newDiary.routes)
     },
 
     addMarkers() {
@@ -328,7 +349,7 @@ export default {
             map: map,
         });
       })
-      console.log(geocodes)
+      // console.log(geocodes)
       const routePath = new google.maps.Polyline({
         path: geocodes,
         geodesic: true,
@@ -355,6 +376,7 @@ export default {
           pk: 0,
           place: '',
           photoList: [],
+          dialogVisible: false,
           content: '',
           rate: null
         })
@@ -368,10 +390,10 @@ export default {
     uploadPhoto(index) {
       // console.log(index)
       let addedPhotoList = this.newStories[index].photoList
-      console.log(addedPhotoList)
+      // console.log(addedPhotoList)
       // fileInput.value = index
       // console.log(this.$refs.files)
-      console.log(this.$refs.files[index].files)
+      // console.log(this.$refs.files[index].files)
       for (let i = 0; i < this.$refs.files[index].files.length; i++) {
         let photo = this.$refs.files[index].files[i]
         console.log(photo)
@@ -428,14 +450,15 @@ export default {
     onSubmit() {
       if (this.action === 'create') {
         // 날짜 변환해서 저장
-        this.newDiary.startDate = this.datePick[0]
-        this.newDiary.endDate = this.datePick[1]
+        // this.newDiary.startDate = this.datePick[0]
+        // this.newDiary.endDate = this.datePick[1]
         this.newStories.forEach((each) => {
           each.pk = this.newStories.indexOf(each) + 1
+          delete each.dialogVisible
         })
         this.newDiary.stories = this.newStories
 
-        if (this.newDiary.title && this.datePick.length && this.newDiary.transport.length
+        if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.transport.length
         && this.newDiary.routes.length && this.newDiary.stories.length) {
           this.createDiary(this.newDiary)
         } else {
@@ -495,6 +518,10 @@ export default {
   border-right: none;
   margin-bottom: 1rem;
   text-align: left;
+}
+.date-picker {
+  display: flex;
+  flex-direction: column;
 }
 .option-title {
   color: var(--el-text-color-secondary);
@@ -588,6 +615,21 @@ export default {
   width: 70vw;
   /* margin-left: 0.7rem; */
 }
+.story-rate {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin-top: 1rem;
+}
+.story-rate > span {
+  color: var(--el-text-color-secondary);
+  width: 17vw;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.story-rate .el-rate {
+  --el-rate-fill-color: #F16B51;
+}
 .story-content {
   display: flex;
   align-items: center;
@@ -610,6 +652,7 @@ export default {
   align-items: center;
   text-align: left;
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 .story-photo-title {
   display: flex;
@@ -649,7 +692,7 @@ export default {
   align-items: center;
 }
 .photo-add-div .material-symbols-outlined {
-  color: var(--el-text-color-secondary);
+  color:#F16B51;
   font-size: 10vw;
   font-weight: 500;
 }
@@ -695,17 +738,16 @@ export default {
   height: 20vw;
   margin-right: 0.5rem;
 }
-.story-rate {
+.story-btn {
   display: flex;
-  align-items: center;
-  text-align: left;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  justify-content: flex-end;
 }
-.story-rate > span {
-  color: var(--el-text-color-secondary);
-  width: 17vw;
-  font-size: 0.8rem;
-  font-weight: 500;
+.story-btn > el-button {
+  margin: 0;
 }
+.story-btn .material-symbols-outlined {
+  color: #F16B51;
+  font-size: 2rem;;
+}
+
 </style>
