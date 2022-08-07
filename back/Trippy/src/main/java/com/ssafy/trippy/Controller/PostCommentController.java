@@ -73,7 +73,6 @@ public class PostCommentController {
     public ResponseEntity<?> updateComment(@PathVariable("commentId") Long commentId, @RequestBody @Valid RequestPostCommentDto requestPostCommentDto) {
         try {
             postCommentService.updateComment(commentId, requestPostCommentDto);
-
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);

@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Getter
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
-@ToString
 public class DetailLocation extends BaseEntity{
 
     @Id

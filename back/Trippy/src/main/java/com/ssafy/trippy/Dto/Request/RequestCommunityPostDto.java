@@ -1,13 +1,16 @@
 package com.ssafy.trippy.Dto.Request;
 
 import com.ssafy.trippy.Domain.CommunityPost;
+import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class RequestCommunityPostDto {
     private Long id;
@@ -15,11 +18,9 @@ public class RequestCommunityPostDto {
     private String description;
     private Long member_id;
     private int category;
-    private Long location_id;
-//    private String countryName;
-//    private String cityName;
-//    private Double latitude;
-//    private Double longitude;
+    private Long locationId;
+    private String countryName;
+    private String cityName;
     private LocalDateTime meetingTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -41,6 +42,7 @@ public class RequestCommunityPostDto {
                 .endAge(endAge)
                 .endDate(endDate)
                 .gender(gender)
+                .location(Location.builder().id(locationId).cityName(cityName).countryName(countryName).build())
                 .member(Member.builder().id(member_id).build())
                 .meetingTime(meetingTime)
                 .recruitVolume(recruitVolume)
