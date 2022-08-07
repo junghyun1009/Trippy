@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="diary-create-div">
     <diary-form :diary="diary" action="create"></diary-form>
   </div>
 </template>
@@ -31,5 +31,7 @@ export default {
 </script>
 
 <style scoped>
-
+.diary-create-div {
+  margin: 1rem 1rem 2rem 1rem;
+}
 </style>

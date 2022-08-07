@@ -22,7 +22,7 @@
           </p>
           <p class="option">
             <span class="material-symbols-outlined">event_note</span>
-            {{ temp.date[0] }} ~ {{ temp.date[1] }}, {{ temp.time }}
+            {{ convertDate }}, {{ temp.time }}
           </p>
           <p class="option">
             <span class="material-symbols-outlined">groups</span>
@@ -35,6 +35,10 @@
 
          
       </el-card>
+    </router-link>
+
+    <router-link :to="{ name: 'communityCreate' }" class="create">
+      <span class="material-symbols-outlined create-icon">edit</span>
     </router-link>
   </div>
 </template>
@@ -60,6 +64,15 @@ export default {
       },
       recruitCount() {
         return 3
+      },
+      convertDate() {
+        let date = ''
+        if (!this.temp.isDay) {
+          date = this.temp.start_date + '~' + this.temp.end_date
+        } else {
+          date = this.temp.start_date
+        }
+        return date
       },
       convertDesc() {
         let length = 55
@@ -145,5 +158,17 @@ export default {
   padding: 10px;
 }
 
-
+.create {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 3rem;
+  height: 3rem;;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  border-radius: 50%;
+  background-color: #F16B51;
+  color: #fff;
+}
 </style>
