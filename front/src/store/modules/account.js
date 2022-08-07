@@ -6,7 +6,7 @@ export default {
   state: {
     //this.$cookies.get("refreshToken") ||
     accessToken:  '',
-    currentUser: '',
+    currentUser: {},
     profile: {},
     authError: null,
     fromPasswordFindView: false,
@@ -37,7 +37,7 @@ export default {
 
     login({ dispatch }, userinfo) {
       axios({
-        url: 'http://localhost:8000/members/login',
+        url: 'http:// i7a506.p.ssafy.io/members/login',
         method: 'post',
         data: userinfo,
       })
@@ -58,7 +58,7 @@ export default {
 
     signup({ commit, dispatch }, userinfo) {
       axios({
-        url: 'http://localhost:8000/members/signup',
+        url: 'http:// i7a506.p.ssafy.io/members/join',
         method: 'post',
         data: userinfo
       })
@@ -78,11 +78,12 @@ export default {
           })
     },
 
-    fetchCurrentUser({ getters, dispatch, commit }) {
+    fetchCurrentUser({ getters, dispatch, commit }, username) {
       if (getters.isLoggedIn) {
         axios({
           // 여기 pk 넣는 형식 정확히 모르겠음
-          url: 'http://localhost:8000/members/api/`${userid}`',
+          // @PathVariable email ???
+          url: 'http:// i7a506.p.ssafy.io' + username,
           method: 'get',
           headers: getters.authHeader,
         })
@@ -98,7 +99,7 @@ export default {
 
     logout({ getters, dispatch }) {
       axios({
-        url: 'http://localhost:8000/members/logout',
+        url: 'http:// i7a506.p.ssafy.io/members/logout',
         method: 'post',
         headers: getters.authHeader,
       })
@@ -117,12 +118,15 @@ export default {
       router.push('/passwordchange')
     },
 
-    deleteAccount({ getters }) {
+    updatePassword({ getters }, userinfo) {
       axios({
-        url: 'http://localhost:8000/members/api/remove',
-        method: 'delete',
+        url: '/http:// i7a506.p.ssafy.io/members/changepw',
+        method: 'put',
         headers: getters.authHeader,
+        // @PathVariable email ???
+        data: userinfo.newPassword
       })
+        .then()
     }
   },
   modules: {

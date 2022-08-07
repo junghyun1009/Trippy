@@ -1,12 +1,30 @@
 <template>
   <div>
 
+    <div class="image">
+      <div v-if="profilePhoto && Object.keys(profilePhoto).length === 0 && profilePhoto.constructor === Object">
+        <div>이미지</div>
+        <div>
+          <label for="file">사진 등록</label>
+          <input type="file" id="file" ref="files" @change="uploadPhoto"/>
+        </div>
+      </div>
+      <!-- 원래 등록되어 있는 이미지 -->
+      <div v-else>
+        <img :src="profilePhoto.preview" :alt="profilePhoto.preview"/>
+        <br>
+        <el-button @click="removePhoto">
+          x
+        </el-button>
+      </div>
+    </div>
+
     <div class="email">
       <p>이메일</p>
       <el-input  id="email"
       v-model="userinfo.email" 
       placeholder="username@email.com"
-      ></el-input>
+      disabled></el-input>
     </div>
 
     <div class="nickname">
@@ -44,13 +62,13 @@
 
     <div class="description">
       <p>소개</p>
-      <el-input id="description" v-model="userinfo.description" placeholder="원래내용" maxlength="50"></el-input>
+      <el-input id="description" v-model="userinfo.desc" maxlength="50"></el-input>
       <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
     </div>
 
     <br>
     <router-link :to="{ name: 'passwordChange' }">비밀번호 변경</router-link>
-    <p class="delete" @click="open()">회원 탈퇴하기</p>
+    <p class="delete" @click="open(), updateUserinfo()">회원 탈퇴하기</p>
     <el-button type="primary">완료</el-button>
 
 
@@ -60,7 +78,7 @@
 <script>
 import { userErrorMessage } from '@/common/constant.js'
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
-import { mapActions } from 'vuex'
+import { mapActions, } from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 
@@ -72,10 +90,11 @@ export default {
   data() {
           return {
               userinfo: {
-                  email: '',
-                  name: '',
-                  gender: '',
-                  birth: '',
+                  email: this.$store.getters.currentUser.email,
+                  name: this.$store.getters.currentUser.name,
+                  gender: this.$store.getters.currentUser.gender,
+                  birth: this.$store.getters.currentUser.birth,
+                  desc: this.$store.getters.currentUser.desc,
               },
               options: [
                   {
@@ -95,7 +114,11 @@ export default {
           }
   },
   methods: {
-    ...mapActions(['deleteAccount']),
+    ...mapActions(['deleteAccount', 'fetchCurrentUser', 'updateUserinfo']),
+    created() {
+      const userid = this.$store.getters.currentUser.id
+      this.fetchCurrentUser(userid)
+    },
 
     checkNickname() {
       var regNickname = /^([0-9]|[a-z]|[A-Z]|[가-힣]).{1,10}$/;
@@ -108,6 +131,29 @@ export default {
         this.nicknameFormat = false
       }
     },
+
+    // 원래 저장되어 있던 프로필 사진이 나타나게 해야함
+    uploadPhoto() {
+      console.log(this.$refs.files.files[0])
+      let photo = this.$refs.files.files[0]
+      if (photo.type.substr(0, 5) === "image") {
+        this.profilePhoto = 
+        {
+          file: this.$refs.files.files[0],
+          preview: URL.createObjectURL(this.$refs.files.files[0]),
+        }
+      } else {
+        alert("사진 파일만 추가 가능합니다")
+      }
+
+      let fileInput = document.getElementById("file")
+      fileInput.value = ''
+    },
+    removePhoto() {
+      this.profilePhoto = {}
+    },
+
+    
 
     open() {
       ElMessageBox.confirm(
@@ -131,8 +177,8 @@ export default {
             type: 'info',
             message: '탈퇴가 취소되었습니다',
           })
-    })
-}
+      })
+    }
 
     }
 }

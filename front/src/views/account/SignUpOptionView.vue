@@ -19,7 +19,7 @@
 
     <div class="description">
       <p>소개</p>
-      <el-input v-model="userinfo.description" placeholder="자신을 소개해주세요!(선택)"></el-input>
+      <el-input v-model="userinfo.description" placeholder="자신을 소개해주세요! 최대 50자 (선택)" maxlength="50"></el-input>
     </div>
 
     <br>

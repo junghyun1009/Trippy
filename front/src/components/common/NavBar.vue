@@ -112,9 +112,14 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
 
+* {
+  background-color: "#F16B51";
+}
+
 .el-menu-demo {
   display: flex;
   align-items: center;
+  margin: 0;
 }
 
 .menu-icon {
