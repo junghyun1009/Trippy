@@ -7,6 +7,7 @@ import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Dto.Update.UpdatePostDto;
 import com.ssafy.trippy.Service.DetailLocationService;
+import com.ssafy.trippy.Service.Impl.PostSearchServiceImpl;
 import com.ssafy.trippy.Service.MemberService;
 import com.ssafy.trippy.Service.PostService;
 import com.ssafy.trippy.Service.RouteService;
@@ -106,6 +107,7 @@ public class PostController {
         }
         return new ResponseEntity<List<ResponsePostDto>>(responsePostDtos, HttpStatus.OK);
     }
+
 
 
 }
