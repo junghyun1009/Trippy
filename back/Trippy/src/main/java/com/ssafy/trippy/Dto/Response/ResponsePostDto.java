@@ -18,6 +18,8 @@ public class ResponsePostDto {
     private String title;
     private int company;
     private int count;
+    private String countyName;
+    private String cityName;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private int representativeImg;
@@ -31,6 +33,10 @@ public class ResponsePostDto {
 
     @Builder
     public ResponsePostDto(Post post) {
+        for (DetailLocation detailLocation: post.getDetailLocations()){
+            this.countyName = detailLocation.getLocation().getCountryName();
+            this.cityName = detailLocation.getLocation().getCityName();
+        }
         this.id = post.getId();
         this.title = post.getTitle();
         this.company = post.getCompany();
