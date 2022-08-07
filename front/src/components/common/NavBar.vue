@@ -120,7 +120,10 @@ export default {
   display: flex;
   align-items: center;
   margin: 0;
+  border: none;
 }
+
+
 
 .menu-icon {
   display: flex;
