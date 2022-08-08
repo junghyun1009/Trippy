@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # ------- EC2서버 설정---------
-    url: "jdbc:mysql://localhost:3306/testdb?serverTimezone=UTC&characterEncoding=UTF-8"
+    url: "jdbc:mysql://i7a506.p.ssafy.io:3306/testdb?serverTimezone=UTC&characterEncoding=UTF-8"
     username: root
     password: ssafy506
 
