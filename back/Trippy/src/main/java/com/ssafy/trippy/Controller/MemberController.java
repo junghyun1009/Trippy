@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Slf4j
@@ -59,28 +60,33 @@ public class MemberController {
     }
 
     // 회원 삭제
-    @DeleteMapping("/api/remove/{id}")
-    public ResponseEntity<?> removeMember(@PathVariable Long id){
+    @DeleteMapping("/api/remove")
+    public ResponseEntity<?> removeMember(HttpServletRequest request){
+        Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         memberService.deleteMember(id);
         return new ResponseEntity<>("회원삭제성공", HttpStatus.OK);
     }
 
     // 회원 수정
-    @PutMapping("/api/modify/{id}")
-    public ResponseEntity<?> modifyMember(@PathVariable Long id, @RequestBody UpdateMemberDto updateMemberDto){
+    @PutMapping("/api/modify")
+    public ResponseEntity<?> modifyMember(HttpServletRequest request, @RequestBody UpdateMemberDto updateMemberDto){
+        Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         memberService.updateMember(id,updateMemberDto);
         return new ResponseEntity<>("회원수정성공", HttpStatus.OK);
     }
 
     // 회원 정보 받아오기
-    @GetMapping("/api/{id}")
-    public ResponseMemberDto getMember(@PathVariable Long id){
+    @GetMapping("/api")
+    public ResponseMemberDto getMember(HttpServletRequest request){
+        Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         return memberService.selectMember(id);
     }
 
     // 로그아웃
-    @GetMapping("/logout/{id}")
-    public String logout(@PathVariable Long id,@RequestParam String accessToken) {
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        String accessToken = request.getHeader("X-AUTH-TOKEN");
+        Long id = memberService.getIdByToken(accessToken);
         memberService.logout(id, accessToken);
         return "로그아웃 완료";
     }
@@ -101,4 +107,9 @@ public class MemberController {
         }
         return mailService.mailCheck(email);
     }
+
+//    @PostMapping("/test")
+//    public String test(HttpServletRequest request){
+//        return memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN")).toString();
+//    }
 }
