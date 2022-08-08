@@ -2,22 +2,26 @@
   <div class="home">
     <search-bar></search-bar>
     <region-list></region-list>
+
+
+    <recommend-list></recommend-list>
     <recommend-list v-for="diary in diaries" :key="diary.id" :diary="diary"></recommend-list>
 
-    <p>팔로우 하고 있는</p>
-    <p>ㅇㅇㅇ 님이 추천하는 코스</p>
-    <recommend-list></recommend-list>
-    
+    <el-divider />
+    <div class="following-diary-description">
+      <p>정유송님이 팔로우 하고 있는</p>
+      <p><span>정무송</span> 님이 추천하는 코스</p>
+    </div>
+    <div class="following-diary-list">
+      <recommend-list></recommend-list>
+    </div>
     <br>
     <br>
 
-    <router-link :to="{ name: 'diaryCreate' }">Create Diary</router-link><br>
-    <router-link :to="{ name: 'login' }">로그인</router-link><br>
-    <router-link :to="{ name: 'passwordChange' }">비밀번호변경</router-link>
-    <!-- <router-link :to="{ name: 'profile' }">Profile</router-link> -->
-
-    <br><br><br>
-
+   
+    <router-link :to="{ name: 'diaryCreate' }" class="float">
+      <i class='bx bxs-pencil my-float'></i>
+    </router-link>
 
 
   </div>
@@ -52,19 +56,42 @@ export default {
   }
 
 </script>
-<style>
-:root {
-  --el-color-primary: #F16B51;
-}
-</style>
+
 
 <style scoped>
-*{padding:0;margin:0;}
+* {
+  padding:0;
+  margin:0;
+  }
 
 body{
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:18px;
 	background-color:#CCC;
+}
+
+.following-diary-description {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0 2%;
+  margin-bottom: 3%;;
+}
+
+.following-diary-description p {
+	font-size: 2.5vh;
+	font-weight: 500;
+}
+
+.following-diary-description span {
+  color: #F16B51;
+	font-size: 2.5vh;
+	font-weight: 500;
+}
+
+.following-diary-list {
+  /* display: flex; */
+  margin: 0 2%;
 }
 
 .float{
@@ -80,7 +107,12 @@ body{
 	box-shadow: 2px 2px 3px #999;
 }
 
+.image {
+
+}
+
 .my-float{
 	margin-top:22px;
 }
+
 </style>
