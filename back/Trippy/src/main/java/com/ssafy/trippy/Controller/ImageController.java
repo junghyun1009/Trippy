@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/image")
+@RequestMapping("/auth/image")
 public class ImageController {
 
     private final ImageService imageService;
@@ -36,8 +37,9 @@ public class ImageController {
     public ResponseImageDto upload(@RequestPart(value = "file") MultipartFile file){
         return imageService.uploadImage(file,null);
     }
-    @PostMapping("/upload/member/{member_id}")
-    public ResponseEntity<?> updateUserProfile(@RequestPart(value = "file") MultipartFile file, @PathVariable("member_id") Long memberId)  {
+    @PostMapping("/upload/member")
+    public ResponseEntity<?> updateUserProfile(@RequestPart(value = "file") MultipartFile file, HttpServletRequest request)  {
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         ResponseImageDto responseImageDto = imageService.uploadImage(file,null);
         if(responseImageDto.getFileName()==null) {
             return new ResponseEntity<>("이미지가 없습니다.", HttpStatus.BAD_REQUEST);
