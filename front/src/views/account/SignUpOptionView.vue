@@ -1,19 +1,18 @@
 <template>
   <div class="container">
-
     <div class="profile-image">
       <div v-if="profilePhoto && Object.keys(profilePhoto).length === 0 && profilePhoto.constructor === Object">
-        <div>
-          <icon-base viewBox="0 0 1024 1024" width="50" height="50" iconColor="#409EFF" icon-name="addphoto" class="photo-icon">
-            <add-photo/>
-          </icon-base>
+        <div class="add-photo">
+          <label class="photo-icon" for="file">
+            <div class="meterial-symbols-circle">
+              <span class="material-symbols-outlined">add_a_photo</span><br>
+            </div>
+          </label>
+          <input class="photo-input" type="file" id="file" ref="files" @change="uploadPhoto"/>
         </div>
-        <br>
-        <div>
-          <label for="file">사진 등록</label>
-          <input type="file" id="file" ref="files" @change="uploadPhoto"/>
-        </div>
+
       </div>
+
       <div v-else>
         <img :src="profilePhoto.preview" :alt="profilePhoto.preview"/>
         <br>
@@ -36,13 +35,13 @@
 </template>
 
 <script>
-import AddPhoto from '@/components/icon/AddPhoto.vue'
+// import AddPhoto from '@/components/icon/AddPhoto.vue'
 
 export default {
   name: "SignUpOptionView",
-  components: {
-    AddPhoto,
-  },
+  // components: {
+  //   AddPhoto,
+  // },
   data() {
       return { 
         userinfo: {
@@ -88,15 +87,16 @@ export default {
   align-items: center;
 }
 
+.profile-image {
+  margin-top : 25%;
+}
+
 img {
   width: 150px;
   height: 150px;
   border-radius: 50%;
 }
 
-.photo-icon {
-  margin-top: 30px;
-}
 
 .description {
   width: 100%;
@@ -117,4 +117,28 @@ button {
   margin-top: 2%;
 }
 
+.photo-input {
+  visibility: hidden;
+}
+
+.material-symbols-outlined {
+  font-size: 8vh;
+}
+
+.meterial-symbols-circle {
+  background-color: rgb(220, 220, 220);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 150px;
+}
+
+.add-photo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
 </style>
