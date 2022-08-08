@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Slf4j
-@RequestMapping("/members")
 @RequiredArgsConstructor
 @RestController
 public class MemberController {
@@ -32,14 +31,14 @@ public class MemberController {
     // 회원가입
     @ApiOperation(value = "회원가입")
     @ApiImplicitParam(name = "userData", value = "유저의 정보를 담은 객체")
-    @PostMapping("/join")
+    @PostMapping("/members/join")
     public ResponseEntity<ResponseMemberDto> join(@RequestBody RequestMemberDto requestMemberDto){
         ResponseMemberDto responseMemberDto = memberService.signup(requestMemberDto);
         return new ResponseEntity<>(responseMemberDto, HttpStatus.OK);
     }
 
     // 로그인
-    @PostMapping("/login")
+    @PostMapping("/members/login")
     public ResponseEntity<ResponseLoginDto> login(@RequestBody RequestLoginDto user) {
         if(user.getEmail() == null){
             throw new IllegalArgumentException("이메일 null");
@@ -53,14 +52,14 @@ public class MemberController {
     }
 
     // Access-Token 재발급
-    @GetMapping("/re-issue")
+    @GetMapping("/members/re-issue")
     public ResponseEntity<ResponseLoginDto> reIssue(@RequestParam String email, @RequestParam String refreshToken) {
         ResponseLoginDto responseLoginDto = memberService.reIssueAccessToken(email, refreshToken);
         return new ResponseEntity<>(responseLoginDto, HttpStatus.OK);
     }
 
     // 회원 삭제
-    @DeleteMapping("/api/remove")
+    @DeleteMapping("/auth/members/remove")
     public ResponseEntity<?> removeMember(HttpServletRequest request){
         Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         memberService.deleteMember(id);
@@ -68,7 +67,7 @@ public class MemberController {
     }
 
     // 회원 수정
-    @PutMapping("/api/modify")
+    @PutMapping("/auth/members/modify")
     public ResponseEntity<?> modifyMember(HttpServletRequest request, @RequestBody UpdateMemberDto updateMemberDto){
         Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         memberService.updateMember(id,updateMemberDto);
@@ -76,14 +75,14 @@ public class MemberController {
     }
 
     // 회원 정보 받아오기
-    @GetMapping("/api")
+    @GetMapping("/auth/members")
     public ResponseMemberDto getMember(HttpServletRequest request){
         Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         return memberService.selectMember(id);
     }
 
     // 로그아웃
-    @GetMapping("/logout")
+    @GetMapping("members/logout")
     public String logout(HttpServletRequest request) {
         String accessToken = request.getHeader("X-AUTH-TOKEN");
         Long id = memberService.getIdByToken(accessToken);
@@ -92,13 +91,13 @@ public class MemberController {
     }
 
     // 비밀번호 변경
-    @PostMapping("/change_pw")
+    @PostMapping("/members/change_pw")
     public String changePw(@RequestBody RequestLoginDto requestLoginDto){
         memberService.changePw(requestLoginDto);
         return "비밀번호 변경 완료";
     }
     // 인증 메일 보내기(현재 사용 불가)
-    @PostMapping("/join/authmail")
+    @PostMapping("/members/join/authmail")
     public String sendAuthMail(@RequestBody Map<String, String> user){
         String regExp = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
         String email = user.get("email");
@@ -107,9 +106,4 @@ public class MemberController {
         }
         return mailService.mailCheck(email);
     }
-
-//    @PostMapping("/test")
-//    public String test(HttpServletRequest request){
-//        return memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN")).toString();
-//    }
 }

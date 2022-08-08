@@ -2,6 +2,7 @@ package com.ssafy.trippy.Dto.Converter;
 
 import com.ssafy.trippy.Domain.*;
 import com.ssafy.trippy.Dto.Response.ResponseDetailLocationDto;
+import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostCommentDto;
 import com.ssafy.trippy.Dto.Response.ResponseRouteDto;
 import com.ssafy.trippy.Dto.Response.ResponseTransport;
@@ -45,7 +46,6 @@ public class Converter {
         for (PostComment postComment : postCommentList) {
             ResponsePostCommentDto dto = ResponsePostCommentDto.builder()
                     .postComment(postComment).build();
-
             postComments.add(dto);
         }
         return postComments;
