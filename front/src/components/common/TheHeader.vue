@@ -10,17 +10,17 @@
         text-color="#fff"
       >
 
-        <el-menu-item index="0"><a href="/" class="trippyLogo">TRIPPY</a></el-menu-item>
+        <el-menu-item index="0">
+          <a href="/" v-if="this.$route.name === 'home'" class="trippyLogo">Trippy</a>
+          <div v-else>{{ this.$route.name }}</div>
+        </el-menu-item>
         <div class="flex-grow" />
-        <el-menu-item index="1">
-          <div v-if="flag===0" @click="showSearchBar" class="menu-icon">
+        <el-menu-item class="menu-item" index="1">
+          <div class="menu-icon">
             <span class="material-symbols-outlined">search</span>
           </div>
-          <div v-else class="menu-icon">
-            <el-input v-model="searchPlace" placeholder="어디로 떠날까요?" @keyup.enter="showInput"></el-input>
-          </div>
         </el-menu-item>
-        <el-menu-item index="2">
+        <el-menu-item class="menu-item" index="2">
           <div @click="visible=true" class="menu-icon">
             <span class="material-symbols-outlined">menu</span>
           </div>
@@ -76,13 +76,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isLoggedIn', 'profile',])
+    ...mapGetters(['isLoggedIn', 'profile',]),
   },
 	methods: {
     ...mapActions(['logout']),
-    showSearchBar() {
-      this.flag = 1
+    goSearch() {
+
     },
+    // showSearchBar() {
+    //   this.flag = 1
+    // },
     closeSearchBar() {
       this.flag = 0
     },
@@ -110,7 +113,9 @@ export default {
   border: none;
 }
 
-
+.menu-item {
+  padding: 0 1rem 0 0;
+}
 
 .menu-icon {
   display: flex;
