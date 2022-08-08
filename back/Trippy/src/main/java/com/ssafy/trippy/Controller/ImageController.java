@@ -39,7 +39,7 @@ public class ImageController {
         }
         ResponseMemberDto responseMemberDto = memberService.selectMember(memberId);
         UpdateMemberDto updateMemberDto = new UpdateMemberDto(responseMemberDto.getName(), responseMemberDto.getEmail(),
-                responseMemberDto.getPhone(), responseMemberDto.getGender(),responseMemberDto.getBirth(),responseImageDto.getFileName(),responseMemberDto.getDesc());
+                responseMemberDto.getPhone(), responseMemberDto.getGender(),responseMemberDto.getBirth(),responseImageDto.getFileName(),responseMemberDto.getDescription());
         memberService.updateMember(memberId, updateMemberDto);
         imageService.deleteImage(responseMemberDto.getImg_path());
         return new ResponseEntity<>(responseImageDto,HttpStatus.OK);
