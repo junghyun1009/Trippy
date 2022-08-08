@@ -97,4 +97,13 @@ public class MemberServiceImpl implements MemberService {
         member.updatePw(encodedPassword);
         memberRepository.save(member);
     }
+
+    @Override
+    public Long getIdByToken(String token){
+        String email = jwtProvider.getUserPk(token);
+        System.out.println(email);
+        Long id = memberRepository.findByEmail(email).orElseThrow().getId();
+        return id;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.ssafy.trippy.Dto.Response;
 
 import com.ssafy.trippy.Domain.*;
 import com.ssafy.trippy.Dto.Converter.Converter;
+import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
