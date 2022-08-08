@@ -27,7 +27,7 @@ public class RequestMemberDto {
     @ApiParam(value = "프로필 이미지 경로")
     private String img_path;
     @ApiParam(value = "설명")
-    private String desc;
+    private String description;
 
     // DTO -> ENTITY
     public Member toEntity(){
@@ -39,7 +39,7 @@ public class RequestMemberDto {
                 .gender(gender)
                 .birth(birth)
                 .img_path(img_path)
-                .desc(desc)
+                .description(description)
                 .build();
     }
 
