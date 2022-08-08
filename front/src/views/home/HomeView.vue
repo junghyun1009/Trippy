@@ -18,9 +18,6 @@
 
     <br><br><br>
 
-    <router-link :to="{ name: 'diaryCreate' }" class="float">
-      <i class='bx bxs-pencil my-float'></i>
-    </router-link>
 
 
   </div>
