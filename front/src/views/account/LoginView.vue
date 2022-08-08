@@ -2,6 +2,7 @@
   <div class="login">
     <!-- 없는 회원정보 -->
     <div class="input-box">
+      <h1>TRIPPY<span>.</span></h1>
       <form @submin.prevent="login()">
           <el-input class="input" v-model="userinfo.description" placeholder="이메일" id="email" ></el-input>
           <el-input class="input" v-model="userinfo.password" type="password" placeholder="비밀번호" show-password></el-input>
@@ -68,6 +69,8 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+
   * {
     box-sizing: border-box;
     margin: 0;
@@ -101,5 +104,20 @@ export default {
   span {
     color: white;
     margin: 3%;
+  }
+
+
+  h1 {
+    font-family: 'Alfa Slab One', cursive;
+    font-weight: 300;
+    font-size: 8vh;
+    text-decoration: none;
+    color: white;
+    }
+
+  h1 span {
+    margin: 0;
+    font-size: 5vh;
+    font-weight: 500;
   }
 </style>
