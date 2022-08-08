@@ -37,9 +37,72 @@
       </el-card>
     </router-link>
 
-    <router-link :to="{ name: 'communityCreate' }" class="create">
-      <span class="material-symbols-outlined create-icon">edit</span>
+     <router-link :to="{ name: 'communityDetail' }">
+      <!-- v-for 추가예정 -->
+      <el-card class="card">
+        <div>
+          <el-tag class="tag">{{ temp.category }}</el-tag>
+          <el-tag class="tag">장소</el-tag>
+        </div>
+        <div class="title">
+          <span class="state">{{ recruitState }}</span>
+          <h4>{{ temp.title }}</h4>
+        </div>
+        <div class="options">
+          <p class="option">
+            <span class="material-symbols-outlined">groups</span>
+            {{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 {{ temp.option.gender }} 참여 가능
+          </p>
+          <p class="option">
+            <span class="material-symbols-outlined">event_note</span>
+            {{ convertDate }}, {{ temp.time }}
+          </p>
+          <p class="option">
+            <span class="material-symbols-outlined">groups</span>
+            {{ recruitCount}} / {{ temp.recruit_volume }}명 참여
+          </p>
+        </div>
+        <div class="content">
+          <p>{{ convertDesc }}</p>
+        </div>
+
+         
+      </el-card>
     </router-link>
+
+     <router-link :to="{ name: 'communityDetail' }">
+      <!-- v-for 추가예정 -->
+      <el-card class="card">
+        <div>
+          <el-tag class="tag">{{ temp.category }}</el-tag>
+          <el-tag class="tag">장소</el-tag>
+        </div>
+        <div class="title">
+          <span class="state">{{ recruitState }}</span>
+          <h4>{{ temp.title }}</h4>
+        </div>
+        <div class="options">
+          <p class="option">
+            <span class="material-symbols-outlined">groups</span>
+            {{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 {{ temp.option.gender }} 참여 가능
+          </p>
+          <p class="option">
+            <span class="material-symbols-outlined">event_note</span>
+            {{ convertDate }}, {{ temp.time }}
+          </p>
+          <p class="option">
+            <span class="material-symbols-outlined">groups</span>
+            {{ recruitCount}} / {{ temp.recruit_volume }}명 참여
+          </p>
+        </div>
+        <div class="content">
+          <p>{{ convertDesc }}</p>
+        </div>
+
+         
+      </el-card>
+    </router-link>
+
   </div>
 </template>
 
