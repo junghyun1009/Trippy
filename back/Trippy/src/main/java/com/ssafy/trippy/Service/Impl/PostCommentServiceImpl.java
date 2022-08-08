@@ -11,7 +11,6 @@ import com.ssafy.trippy.Repository.MemberRepository;
 import com.ssafy.trippy.Repository.PostCommentRepository;
 import com.ssafy.trippy.Repository.PostRepository;
 import com.ssafy.trippy.Service.PostCommentService;
-import jdk.nashorn.internal.ir.RuntimeNode;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Service;
