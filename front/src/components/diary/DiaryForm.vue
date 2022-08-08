@@ -189,7 +189,7 @@
                       <label :for=k>
                         <span class="material-symbols-outlined">add_photo_alternate</span>
                       </label>
-                      <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="uploadPhoto(k)" multiple />
+                      <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="addPhoto(k)" multiple />
                     </div>
                   </div>
                 </el-dialog>
@@ -215,8 +215,11 @@
 
       </div>
 
-      <div>
-        <el-button @click="onSubmit">{{ action }}</el-button>
+      <div v-if="action==='create'">
+        <el-button @click="onSubmit">작성하기</el-button>
+      </div>
+      <div v-else>
+        <el-button @click="onSubmit">수정하기</el-button>
       </div>
     </form>
   </div>
@@ -388,12 +391,13 @@ export default {
     },
 
     uploadPhoto(index) {
-      // console.log(index)
+      console.log(index)
       let addedPhotoList = this.newStories[index].photoList
       // console.log(addedPhotoList)
       // fileInput.value = index
-      // console.log(this.$refs.files)
-      // console.log(this.$refs.files[index].files)
+      console.log(this.$refs.files)
+      console.log(this.$refs.files[index].files)
+      // let num = -1
       for (let i = 0; i < this.$refs.files[index].files.length; i++) {
         let photo = this.$refs.files[index].files[i]
         console.log(photo)
@@ -401,15 +405,21 @@ export default {
           addedPhotoList = [
             ...addedPhotoList,
             {
+              // 실제 파일
               file: this.$refs.files[index].files[i],
+              // 사진 미리보기
               preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+              // 삭제 및 관리를 위한 number
+              // number: i
             }
           ]
+          // num = i
         } else {
           alert("사진 파일만 추가 가능합니다")
         }
       }
       this.newStories[index].photoList = addedPhotoList
+      // this.newStories[index].imageIndex = num + 1
       let fileInput = document.getElementsByClassName("photo-input")
       fileInput[fileInput.length - 1].value = ''
     },
@@ -421,31 +431,35 @@ export default {
       this.newStories[index].photoList.splice(num, 1)
     },
 
-    // addPhoto(index) {
-    //   console.log('add', index)
-    //   let addedPhotoList = this.newStories[index].photoList
-    //   let fileInput = document.getElementsByClassName("photo-input-sec")
-    //   console.log(fileInput)
-    //   // console.log(this.$refs.files)
-    //   console.log(this.$refs.files[index].files)
-    //   for (let i = 0; i < this.$refs.files[index].files.length; i++) {
-    //     let photo = this.$refs.files[index].files[i]
-    //     if (photo.type.substr(0, 5) === "image") {
-    //       addedPhotoList = [
-    //         ...addedPhotoList,
-    //         {
-    //           file: this.$refs.files[index].files[i],
-    //           preview: URL.createObjectURL(this.$refs.files[index].files[i]),
-    //         }
-    //       ]
-    //     } else {
-    //       alert("사진 파일만 추가 가능합니다")
-    //     }
-    //   }
-    //   this.newStories[index].photoList = addedPhotoList
-    //   fileInput[0].value = ''
-    //   console.log(fileInput.value)
-    // },
+    addPhoto(index) {
+      // console.log('add', index)
+      let addedPhotoList = this.newStories[index].photoList
+      // let num = -1
+      // console.log(fileInput)
+      // console.log(this.$refs.files)
+      console.log(this.$refs.files[index].files)
+      for (let i = 0; i < this.$refs.files[index].files.length; i++) {
+        let photo = this.$refs.files[index].files[i]
+        if (photo.type.substr(0, 5) === "image") {
+          addedPhotoList = [
+            ...addedPhotoList,
+            {
+              file: this.$refs.files[index].files[i],
+              preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+              // number: i + this.newStories[index].imageIndex
+            }
+          ]
+          // num = i
+        } else {
+          alert("사진 파일만 추가 가능합니다")
+        }
+      }
+      this.newStories[index].photoList = addedPhotoList
+      // this.newStories[index].imageIndex = this.newStories[index].imageIndex + num + 1
+      let fileInput = document.getElementsByClassName("photo-input")
+      fileInput[fileInput.length - 1].value = ''
+      // console.log(fileInput.value)
+    },
 
     onSubmit() {
       if (this.action === 'create') {
