@@ -21,9 +21,10 @@
             <span class="cnt">7</span>
           </div>
           
-          <el-drawer v-model="commentClicked" direction="btt">
+          <!-- 댓글 창 열림 -->
+          <el-drawer v-model="commentClicked" direction="btt" size="50%">
             <template #header>
-              <h4>COMMENTS</h4>
+              <h2>COMMENTS</h2>
             </template>
             <template #default>
               <div>
@@ -161,9 +162,9 @@ export default {
       // diaryPk: this.$route.parmas.diaryPk
     }
   },
-  props: {
-    comments: Array,
-  },
+  // props: {
+  //   comments: Array,
+  // },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
     ...mapGetters(['isAuthor', 'diary', 'diaryTemp']),

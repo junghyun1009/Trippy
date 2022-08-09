@@ -2,9 +2,10 @@
   <div>
     <form @submit.prevent="onSubmit" class="comment-list-form">
       <el-container>
-				<label for="comment">Username: </label>
-				<input type="text" id="comment" v-model="content" required/>
-				<el-button class="btn">댓글달기</el-button>
+				<el-input type="text" id="comment" v-model="content" required/>
+				<el-button class="btn" link>
+          <span class="material-symbols-outlined">send</span>
+        </el-button>
 			</el-container>
     </form>
   </div>
@@ -49,11 +50,10 @@ export default {
   margin-left: 3px;
 }
 button {
-  border-radius: 20px;
   margin-left: 12px;
 }
-button:hover {
-  background-color: rgb(255, 129, 129)
+.material-symbols-outlined {
+  color: #F16B51;
 }
 .userinfo {
   font-style: bold;

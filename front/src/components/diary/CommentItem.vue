@@ -1,9 +1,13 @@
 <template>
   <div>
   <li class="comment-list-item">
-    <router-link :to="{ name: 'profile', params: { username: comment.user.username } }">
+    <!-- <router-link :to="{ name: 'profile', params: { username: comment.user.username } }">
       <i class="fa-solid fa-circle-user"></i>{{ comment.user.username }}
-    </router-link>: 
+    </router-link> -->
+
+    <router-link :to="{ name: 'profile' }">
+      <i class="fa-solid fa-circle-user"></i>{{ comment.user.username }}
+    </router-link>
     
     <span v-if="!isEditing">{{ payload.content }}</span>
 
