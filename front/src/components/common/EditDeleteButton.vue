@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-popover class="popover" v-model:visible="isClicked" placement="left-start" :width="150" trigger="click">
+    <el-popover class="popover" v-model:visible="isClicked" placement="left-start" trigger="click">
       <el-button class="button" link @click="goEdit">
         수정하기
         <span class="material-symbols-outlined icon">edit</span>
@@ -55,7 +55,7 @@ export default {
 }
 
 .button {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .button:first-child {
@@ -63,7 +63,7 @@ export default {
 }
 
 .icon {
-  font-size: 1.1rem;
+  font-size: 1rem;
   margin-left: 1rem;
 }
 </style>
