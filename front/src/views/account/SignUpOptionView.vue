@@ -30,27 +30,37 @@
       <el-input v-model="userinfo.description" placeholder="자신을 소개해주세요! 최대 50자 (선택)" maxlength="50"></el-input>
     </div>
     <!-- 완료하면 로그인 페이지로 이동 -->
-    <el-button type="primary" @click="finishSignUp()">완료</el-button>
+    <el-button type="primary" @click="finishSignUp(), mergeObjects(), signupTwo(userData)">완료</el-button>
   </div>
 </template>
 
 <script>
-// import AddPhoto from '@/components/icon/AddPhoto.vue'
+import { mapActions } from 'vuex'
 
 export default {
   name: "SignUpOptionView",
-  // components: {
-  //   AddPhoto,
-  // },
+
   data() {
       return { 
         userinfo: {
           description: '',
+          img_path: ''
         },
         profilePhoto: {},
+        userData: {},
     }
   },
+
   methods: {
+    ...mapActions(['signupTwo']),
+    mergeObjects(){
+      // 첫번째 signup 페이지에서의 data(객체)와 
+      // 두번째 signup 페이지에서의 data(객체)를 merge해서
+      // 새로운 userData 객체로 만듦
+      // 이 객체를 axios 해서 보낼 것
+      const dataOne = this.$store.getters.userData
+      this.userData = Object.assign(dataOne, this.userinfo)
+    },
     uploadPhoto() {
       console.log(this.$refs.files.files[0])
       let photo = this.$refs.files.files[0]
