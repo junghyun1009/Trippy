@@ -8,6 +8,7 @@ export default {
     accessToken:  '',
     currentUser: {},
     profile: {},
+    userData: {},
     authError: null,
     fromPasswordFindView: false,
   },
@@ -15,6 +16,7 @@ export default {
     isLoggedIn: state => !!state.accessToken,
     currentUser: state => state.currentUser,
     profile: state => state.profile,
+    userData: state => state.userData,
     authError: state => state.authError,
     authHeader: state => ({ Authorization: `Token ${state.accessToken}`}),
     fromPasswordFindView: state => state.fromPasswordFindView
@@ -23,6 +25,7 @@ export default {
     SET_ACCESS_TOKEN:(state, token) => state.accesstoken = token,
     SET_CURRENT_USER:(state, user) => state.currentUser = user,
     SET_PROFILE: (state, profile) => state.profile = profile,
+    SET_USER_DATA: (state, userData) => state.userData = userData,
     SET_AUTH_ERROR: (state, error) => state.error = error,
     FROM_PASSWORD_FIND_VIEW: (state) => state.fromPasswordFindView = true,
   },
@@ -35,11 +38,11 @@ export default {
       commit('SET_ACCESS_TOKEN', '')
     },
 
-    login({ dispatch }, userinfo) {
+    login({ dispatch }, userData) {
       axios({
-        url: 'http:// i7a506.p.ssafy.io/members/login',
+        url: '/members/login',
         method: 'post',
-        data: userinfo,
+        data: userData,
       })
           .then( res => {
             // accessToken은 state에 저장
@@ -56,34 +59,40 @@ export default {
           })
     },
 
-    signup({ commit, dispatch }, userinfo) {
-      axios({
-        url: 'http:// i7a506.p.ssafy.io/members/join',
-        method: 'post',
-        data: userinfo
-      })
-          .then( res => {
-            // accessToken은 state에 저장
-            const accessToken = res.data.access_token
-            dispatch('saveToken', accessToken)
-            // refreshToken은 쿠키에 저장
-            const refreshToken = res.data.refresh_token
-            this.$cookies.set("refreshToken", refreshToken)
-            dispatch('fetchCurrentUser')
+    signupOne({ commit }, userData) {
+      // 첫번째 signup 페이지에서의 data 를 state에 저장
+      commit('SET_USER_DATA', userData)
+    },
+    
+    signupTwo({commit,}, userData) {
+      commit('SET_USER_DATA', userData)
+      console.log(this.getters.userData.password)
+      console.log(this.getters.userData.description)
+        axios({
+          url: 'http://i7a506.p.ssafy.io:8080/api/members/join',
+          method: 'post',
+          data: this.getters.userData,
+        })
+          .then( () => {
+            // // accessToken은 state에 저장
+            // const accessToken = res.data.access_token
+            // dispatch('saveToken', accessToken)
+            // // refreshToken은 쿠키에 저장
+            // const refreshToken = res.data.refresh_token
+            // this.$cookies.set("refreshToken", refreshToken)
+            // dispatch('fetchCurrentUser')
             router.push({ name: 'login' })
           })
           .catch(err => {
-            console.error(err.response.data)
-            commit('SET_AUTH_ERROR', err.response.data)
+            console.error(err.response)
+            commit('SET_AUTH_ERROR', err.response)
           })
-    },
+      },
 
-    fetchCurrentUser({ getters, dispatch, commit }, username) {
+    fetchCurrentUser({ getters, dispatch, commit }, ) {
       if (getters.isLoggedIn) {
         axios({
-          // 여기 pk 넣는 형식 정확히 모르겠음
-          // @PathVariable email ???
-          url: 'http:// i7a506.p.ssafy.io' + username,
+          url: '/api/auth/members',
           method: 'get',
           headers: getters.authHeader,
         })
@@ -99,7 +108,7 @@ export default {
 
     logout({ getters, dispatch }) {
       axios({
-        url: 'http:// i7a506.p.ssafy.io/members/logout',
+        url: 'http://i7a506.p.ssafy.io/members/logout',
         method: 'post',
         headers: getters.authHeader,
       })
@@ -120,14 +129,16 @@ export default {
 
     updatePassword({ getters }, userinfo) {
       axios({
-        url: '/http:// i7a506.p.ssafy.io/members/changepw',
+        url: 'http://i7a506.p.ssafy.io/members/changepw',
         method: 'put',
         headers: getters.authHeader,
         // @PathVariable email ???
         data: userinfo.newPassword
       })
         .then()
-    }
+    }, 
+
+
   },
   modules: {
   }
