@@ -2,15 +2,15 @@
   <header>
     <div>
       <div v-if="this.$route.name === 'home'" class="logo">Trippy</div>
-      <div v-else class="view-name">
-        <div @click="goBack()">
-          <span class="material-symbols-outlined menu-icon">arrow_back_ios</span>
+      <div v-else class="view-name-group">
+        <div class="menu-icon" @click="goBack()">
+          <span class="material-symbols-outlined">arrow_back_ios</span>
         </div>
-        <div>{{ viewName }}</div>
+        <div class="view-name">{{ viewName }}</div>
       </div>
     </div>
     <div class="menu">
-      <div class="menu-icon" @click="goSearch">
+      <div class="menu-icon search" @click="goSearch">
         <span class="material-symbols-outlined">search</span>
       </div>
       <div @click="visible=true" class="menu-icon">
@@ -162,16 +162,30 @@ header {
   color: #fff;
 }
 
+.view-name-group {
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+.view-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
 .menu {
   display: flex;
   align-items: center;
 }
 
 .menu-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #fff;
 }
 
-.menu-icon:first-child {
+.search {
   margin-right: 0.5rem;
 }
 /* 
