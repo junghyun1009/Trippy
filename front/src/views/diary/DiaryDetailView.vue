@@ -19,7 +19,7 @@
 
           <!-- 로그인한 유저와 글 쓴 유저가 같다면 -->
           <!-- <div v-if="isAuthor"> -->
-            <span class="material-symbols-outlined">more_vert</span>
+          <edit-delete-button class="edit-delete"></edit-delete-button>
             <!-- <router-link :to="{ name: 'diaryEdit' }">
               <span class="material-symbols-outlined">edit_square</span>
             </router-link> -->
@@ -117,11 +117,13 @@
 /* eslint-disable no-undef */
 import { mapGetters, mapActions } from 'vuex'
 import DiaryCommentView from '@/views/diary/DiaryCommentView.vue'
+import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
 
 export default {
   name: 'DiaryDetailView',
   components: {
     DiaryCommentView,
+    EditDeleteButton,
   },
   data() {
     return {
@@ -183,6 +185,7 @@ a {
 }
 
 .diary-detail-header {
+  /* position: relative; */
   width: 100%;
   background-color: bisque;
   padding: 0 0 1.3rem 0;
@@ -228,6 +231,12 @@ a {
 .cnt {
   font-size: 0.7rem;
 }
+
+/* .edit-delete {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+} */
 
 .diary-detail-body {
   display: flex;
