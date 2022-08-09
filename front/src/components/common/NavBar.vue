@@ -1,24 +1,30 @@
 <template>
-  <div>
-    <div class="navbar">
-			<div class="forms" v-if="isClicked">
-				<el-button class="form-button diary" @click="goDiaryForm">다이어리</el-button>
-				<el-button class="form-button community" @click="goCommunityForm">동행찾기</el-button>
-			</div>
-			<div class="buttons">
-        <el-button class="button" link @click="goHome">
-          <span class="material-symbols-outlined">home</span>
+  <div class="navbar">
+    <div class="buttons">
+      <el-button class="button" link @click="goHome">
+        <span class="material-symbols-outlined">home</span>
+      </el-button>
+      <el-button class="button" link @click="goFeed">
+        <span class="material-symbols-outlined">explore</span>
+      </el-button>
+      <el-popover v-model:visible="isClicked" placement="top" :width="150" trigger="click">
+        <el-button class="form-button diary" link @click="goDiaryForm">
+          다이어리
+          <span class="material-symbols-outlined">summarize</span>
         </el-button>
-        <el-button class="button" link @click="goFeed">
-          <span class="material-symbols-outlined">explore</span>
+        <el-button class="form-button community" link @click="goCommunityForm">
+          동행찾기
+          <span class="material-symbols-outlined">diversity_3</span>
         </el-button>
-        <el-button class="button" link @click="toggle">
-          <span class="material-symbols-outlined">edit_square</span>
-        </el-button>
-        <el-button class="button" link @click="goProfile">
-          <span class="material-symbols-outlined profile">person</span>
-        </el-button>
-      </div>
+        <template #reference>
+          <el-button class="button" link ref="create">
+            <span class="material-symbols-outlined">edit_square</span>
+          </el-button>
+        </template>
+      </el-popover>
+      <el-button class="button" link @click="goProfile">
+        <span class="material-symbols-outlined profile">person</span>
+      </el-button>
     </div>
   </div>
 </template>
@@ -76,16 +82,13 @@ export default {
 }
 
 .form-button {
-  z-index: 1;
-  position: fixed;
-  bottom: 7vh;
+  font-size: 1.1rem;
   margin-bottom: 0.3rem;
-  transform: translate(50%, 0%);
 }
 
-.diary {
-  z-index: 2;
-  bottom: 12vh;
+.form-button span {
+  font-size: 1.1rem;
+  margin-left: 1rem;
 }
 
 .buttons {
