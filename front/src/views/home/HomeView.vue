@@ -35,8 +35,16 @@ export default {
     RecommendList,
     RegionList,
   },
-  created() {
-    this.showAllDiary()
+  mounted() {
+    if (localStorage.getItem('reloaded')) {
+        localStorage.removeItem('reloaded');
+    } else {
+        localStorage.setItem('reloaded', '1');
+        location.reload();
+    }
+
+    this.showAllDiary(),
+    this.reissueToken()
   },
   computed: {
     ...mapGetters(['GET_ALL_DIARY']),
@@ -45,7 +53,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showAllDiary'])
+    ...mapActions(['showAllDiary', 'reissueToken'])
     }
   }
 
