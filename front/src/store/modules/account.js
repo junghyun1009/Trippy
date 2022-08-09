@@ -64,28 +64,28 @@ export default {
       commit('SET_USER_DATA', userData)
     },
     
-    signupTwo({commit, dispatch}, userData) {
+    signupTwo({commit,}, userData) {
       commit('SET_USER_DATA', userData)
       console.log(this.getters.userData.password)
       console.log(this.getters.userData.description)
         axios({
-          url: '/api/members/join',
+          url: 'http://i7a506.p.ssafy.io:8080/api/members/join',
           method: 'post',
           data: this.getters.userData,
         })
-          .then( res => {
-            // accessToken은 state에 저장
-            const accessToken = res.data.access_token
-            dispatch('saveToken', accessToken)
-            // refreshToken은 쿠키에 저장
-            const refreshToken = res.data.refresh_token
-            this.$cookies.set("refreshToken", refreshToken)
-            dispatch('fetchCurrentUser')
+          .then( () => {
+            // // accessToken은 state에 저장
+            // const accessToken = res.data.access_token
+            // dispatch('saveToken', accessToken)
+            // // refreshToken은 쿠키에 저장
+            // const refreshToken = res.data.refresh_token
+            // this.$cookies.set("refreshToken", refreshToken)
+            // dispatch('fetchCurrentUser')
             router.push({ name: 'login' })
           })
           .catch(err => {
-            console.error(err.response.data)
-            commit('SET_AUTH_ERROR', err.response.data)
+            console.error(err.response)
+            commit('SET_AUTH_ERROR', err.response)
           })
       },
 
