@@ -1,12 +1,12 @@
 <template>
   <div>
 
-    <form @submit.prevent="signup(userinfo)">
+    <form @submit.prevent="signupOne(userData)">
     <div class="email">
       <p>이메일</p>
       <el-input  id="email"
       class="input"
-      v-model="userinfo.email" 
+      v-model="userData.email" 
       placeholder="username@email.com"
       ></el-input>
       <el-button type="primary" @click="checkEmail()">인증하기</el-button>
@@ -17,7 +17,7 @@
     <br>
     <div class="password">
       <p>비밀번호</p>
-      <el-input v-model="userinfo.password" 
+      <el-input v-model="userData.password" 
         type="password" 
         id="password"
         placeholder="비밀번호" 
@@ -46,7 +46,7 @@
       <el-input 
       id="nickname" 
       class="input"
-      v-model="userinfo.name" 
+      v-model="userData.name" 
       placeholder="사용할 별명을 입력해주세요" 
       maxlength="10"  @blur="checkNickname"></el-input>
       <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
@@ -55,7 +55,7 @@
     <br>
     <div class="gender">
       <p>성별</p>
-      <el-select id="gender" v-model="userinfo.gender" class="m-2 input" placeholder="Select">
+      <el-select id="gender" v-model="userData.gender" class="m-2 input" placeholder="Select">
       <el-option 
 
         v-for="item in options"
@@ -73,7 +73,7 @@
         <el-date-picker
           class="date-input"
           id="birthdate"
-          v-model="userinfo.birth"
+          v-model="date"
           type="date"
           placeholder="생년월일을 선택해주세요!"
         />
@@ -81,7 +81,7 @@
     </div>
 
     <br><br><br><br>
-    <el-button type="primary" @click="checkBlank()">회원가입</el-button>
+    <el-button type="primary" @click="checkBlank(), dateParsing(), signupOne(userData)">회원가입</el-button>
   </form>
 
   </div>
@@ -99,20 +99,20 @@ export default {
     name: "SignUpView",
     data() {
         return {
-            userinfo: {
-                email: '',
-                password: '',
-                name: '',
-                gender: '',
+            userData: {
                 birth: '',
+                email: '',
+                gender: '',
+                name: '',
+                password: '',
             },
             options: [
                 {
-                    value: 'Male',
+                    value: 1,
                     label: '남성',
                 },
                 {
-                    value: 'Female',
+                    value: 0,
                     label: '여성',
                 },
             ], 
@@ -126,11 +126,15 @@ export default {
             passwordMatch: true,
             nicknameFormat: true,
             passwordCheck: '',
+            date: '',
         }
     },
     methods: {
-      ...mapActions(['signup']),
-      
+      ...mapActions(['signupOne',]),
+      dateParsing() {
+        const birthdate = new Date(this.date)
+        this.userData.birth = birthdate.toISOString()
+      },
       checkEmail() {
       var inputEmail = document.getElementById('email').value;
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -142,7 +146,7 @@ export default {
       },
 
       checkPasswordMatch() {
-        if (this.userinfo.password === this.userinfo.passwordCheck) {
+        if (this.userData.password === this.passwordCheck) {
           this.passwordMatch = true
         } else {
           this.passwordMatch = false
@@ -162,9 +166,9 @@ export default {
       checkNickname() {
         var regNickname = /^([0-9]|[a-z]|[A-Z]|[가-힣]).{1,10}$/;
         var blank = /''/
-        if (regNickname.test(this.userinfo.name)) {
+        if (regNickname.test(this.userData.name)) {
           this.nicknameFormat = true
-        } else if (blank.test(this.userinfo.name)) {
+        } else if (blank.test(this.userData.name)) {
           this.nicknameFormat = true
         } else {
           this.nicknameFormat = false
@@ -178,6 +182,7 @@ export default {
         var birthdateBlank = document.getElementById('birthdate').value
         if ( emailBlank == '' | passwordBlank == '' | nicknameBlank == '' | genderBlank == '' | birthdateBlank == '' ) {
           alert("빈 칸 없이 모든 필드를 채워주세요!")
+          console.log(this.userData)
         } else {
           this.$router.push('/signup/option')
         }
@@ -192,7 +197,7 @@ export default {
 
 * {
   box-sizing: border-box;
-  margin: 0;
+  margin: 0; 
 }
 
   .demo-date-picker {
