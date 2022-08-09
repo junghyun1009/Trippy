@@ -48,5 +48,22 @@ export default {
 </script>
 
 <style scoped>
+.popover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.button {
+  font-size: 1.1rem;
+}
+
+.button:first-child {
+  margin-bottom: 0.5rem;
+}
+
+.icon {
+  font-size: 1.1rem;
+  margin-left: 1rem;
+}
 </style>
