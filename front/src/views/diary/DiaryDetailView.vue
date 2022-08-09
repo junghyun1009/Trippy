@@ -19,7 +19,7 @@
 
           <!-- 로그인한 유저와 글 쓴 유저가 같다면 -->
           <!-- <div v-if="isAuthor"> -->
-            <span class="material-symbols-outlined">more_vert</span>
+          <edit-delete-button class="edit-delete"></edit-delete-button>
             <!-- <router-link :to="{ name: 'diaryEdit' }">
               <span class="material-symbols-outlined">edit_square</span>
             </router-link> -->
@@ -84,7 +84,7 @@
 
     <div>
       <el-tabs tab-position="left" :stretch="true" class="story-tab">
-        <el-tab-pane v-for="(story, idx) in diaryTemp.stories" :key="idx" :label="idx+1">
+        <el-tab-pane v-for="(story, idx) in diaryTemp.stories" :key="idx" :label="(idx+1).toString()">
           <div class="story-title">
             <h3>{{ story.place }}</h3>
             <el-rate disabled v-model=story.rate></el-rate>
@@ -117,11 +117,13 @@
 /* eslint-disable no-undef */
 import { mapGetters, mapActions } from 'vuex'
 import DiaryCommentView from '@/views/diary/DiaryCommentView.vue'
+import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
 
 export default {
   name: 'DiaryDetailView',
   components: {
     DiaryCommentView,
+    EditDeleteButton,
   },
   data() {
     return {
@@ -145,6 +147,7 @@ export default {
       const map = new google.maps.Map(document.getElementById("map"), {
           center: {lat: this.diaryTemp.routes[0].lat, lng: this.diaryTemp.routes[0].lng},
           zoom: 10,
+          disableDefaultUI: true,
       });
       const geocodes = []
       this.diaryTemp.routes.forEach((each) => {
@@ -182,6 +185,7 @@ a {
 }
 
 .diary-detail-header {
+  /* position: relative; */
   width: 100%;
   background-color: bisque;
   padding: 0 0 1.3rem 0;
@@ -227,6 +231,12 @@ a {
 .cnt {
   font-size: 0.7rem;
 }
+
+/* .edit-delete {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+} */
 
 .diary-detail-body {
   display: flex;

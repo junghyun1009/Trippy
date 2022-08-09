@@ -287,6 +287,7 @@ export default {
       const map = new google.maps.Map(document.getElementById("map"), {
           center: { lat: 37.5642135 ,lng: 127.0016985 },
           zoom: 13,
+          disableDefaultUI: true,
       });
       const input = document.getElementById("pac-input");
       const autocomplete = new google.maps.places.Autocomplete(input, {
@@ -339,6 +340,7 @@ export default {
       const map = new google.maps.Map(document.getElementById("map"), {
           center: { lat: this.newDiary.routes[this.newDiary.routes.length - 1].lat, lng: this.newDiary.routes[this.newDiary.routes.length - 1].lng},
           zoom: 13,
+          disableDefaultUI: true,
       });
       const geocodes = []
       // console.log(this.routeGeocodes)
