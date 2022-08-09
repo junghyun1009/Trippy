@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,24 +33,24 @@ public class ImageServiceImpl implements ImageService {
 
     private final DetailLocationRepository detailLocationRepository;
 
-    private String fileUrl = "C:\\Users\\0312j\\OneDrive\\바탕 화면\\SSAFY 7기\\2학기\\공통PJT\\S07P12A506\\back\\Trippy\\src\\main\\webapp\\static\\image\\";
+    private String fileUrl = "/home/ubuntu/S07P12A506/back/Trippy/src/main/resources/webapp/static/image/";
 
     @Override
-    public ResponseImageDto uploadImage(MultipartFile file, Long detailLocationId)  {
+    public ResponseImageDto uploadImage(MultipartFile file, Long detailLocationId,String path)  {
         try {
             String sourceFileName = file.getOriginalFilename();
             String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName).toLowerCase();
             String destinationFileName = RandomStringUtils.randomAlphabetic(32) + "." + sourceFileNameExtension;
-            File destinationFile = new File(fileUrl + destinationFileName);
+            File destinationFile = new File(path + "/" + destinationFileName);
             destinationFile.getParentFile().mkdirs();
             file.transferTo(destinationFile);
 
-            Image image = new Image(destinationFileName, sourceFileName, fileUrl, detailLocationId);
+            Image image = new Image(destinationFileName, sourceFileName, path, detailLocationId);
             if(detailLocationId!=null) imageRespository.save(image);
             return ResponseImageDto.builder()
                     .fileName(destinationFileName)
                     .fileOriName(sourceFileName)
-                    .fileUrl(fileUrl)
+                    .fileUrl(path)
                     .detailLocationId(detailLocationId)
                     .build();
         } catch (Exception e) {
