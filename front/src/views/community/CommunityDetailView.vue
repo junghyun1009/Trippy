@@ -11,7 +11,7 @@
           <span class="username">나유저</span>
         </div>
       </router-link>
-      <edit-delete-button></edit-delete-button>
+      <edit-delete-button class="edit-delete"></edit-delete-button>
       <hr>
     </div> 
     <div class="title">
@@ -64,34 +64,34 @@ import { mapGetters } from 'vuex'
 import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
 
 export default {
-    name: 'CommunityDetailView',
-    components: {
-      EditDeleteButton
+  name: 'CommunityDetailView',
+  components: {
+    EditDeleteButton
+  },
+  data() {
+    return {
+      isBookmark: true
+    }
+  },
+  computed: {
+    ...mapGetters(['temp']),
+    recruitState() {
+      return '모집중'
     },
-    data() {
-      return {
-        isBookmark: true
+    recruitCount() {
+      return 3
+    },
+    convertDate() {
+      let date = ''
+      if (!this.temp.isDay) {
+        date = this.temp.start_date + '~' + this.temp.end_date
+      } else {
+        date = this.temp.start_date
       }
+      return date
     },
-    computed: {
-      ...mapGetters(['temp']),
-      recruitState() {
-        return '모집중'
-      },
-      recruitCount() {
-        return 3
-      },
-      convertDate() {
-        let date = ''
-        if (!this.temp.isDay) {
-          date = this.temp.start_date + '~' + this.temp.end_date
-        } else {
-          date = this.temp.start_date
-        }
-        return date
-      },
-    },
-  }
+  },
+}
 </script>
 
 <style scoped>
@@ -107,6 +107,7 @@ hr {
 }
 
 .header {
+  position: relative;
   padding: 0.5rem;
 }
 
@@ -135,6 +136,12 @@ hr {
 
 .username {
   font-weight: 400;
+}
+
+.edit-delete {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 
 .title {
