@@ -11,6 +11,7 @@
           <span class="username">나유저</span>
         </div>
       </router-link>
+      <edit-delete-button></edit-delete-button>
       <hr>
     </div> 
     <div class="title">
@@ -60,9 +61,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
 
 export default {
     name: 'CommunityDetailView',
+    components: {
+      EditDeleteButton
+    },
     data() {
       return {
         isBookmark: true

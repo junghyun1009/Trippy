@@ -1,0 +1,52 @@
+<template>
+  <div>
+    <el-popover class="popover" v-model:visible="isClicked" placement="left-start" :width="150" trigger="click">
+      <el-button class="button" link @click="goEdit">
+        수정하기
+        <span class="material-symbols-outlined icon">edit</span>
+      </el-button>
+      <el-button class="button" link @click="goDelete">
+        삭제하기
+        <span class="material-symbols-outlined icon">delete</span>
+      </el-button>
+      <template #reference>
+        <el-button class="button" link ref="create">
+          <span class="material-symbols-outlined">more_vert</span>
+        </el-button>
+      </template>
+    </el-popover>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'DeleteEditButton',
+  data() {
+    return {
+      isClicked: false
+    }
+  },
+  methods: {
+    goEdit() {
+      if (this.$route.name === 'diaryDetail') {
+        this.$router.push({ name: 'diaryEdit' })
+      } else {
+        this.$router.push({ name: 'communityEdit' })
+      }
+    },
+    goDelete() {
+      if (confirm('정말 삭제하시겠습니까?')) {
+        if (this.$route.name === 'diaryDetail') {
+          console.log('다이어리 삭제')
+        } else {
+          console.log('동행찾기 삭제')
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
