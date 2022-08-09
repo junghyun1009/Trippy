@@ -84,7 +84,7 @@
 
     <div>
       <el-tabs tab-position="left" :stretch="true" class="story-tab">
-        <el-tab-pane v-for="(story, idx) in diaryTemp.stories" :key="idx" :label="idx+1">
+        <el-tab-pane v-for="(story, idx) in diaryTemp.stories" :key="idx" :label="(idx+1).toString()">
           <div class="story-title">
             <h3>{{ story.place }}</h3>
             <el-rate disabled v-model=story.rate></el-rate>
@@ -145,6 +145,7 @@ export default {
       const map = new google.maps.Map(document.getElementById("map"), {
           center: {lat: this.diaryTemp.routes[0].lat, lng: this.diaryTemp.routes[0].lng},
           zoom: 10,
+          disableDefaultUI: true,
       });
       const geocodes = []
       this.diaryTemp.routes.forEach((each) => {
