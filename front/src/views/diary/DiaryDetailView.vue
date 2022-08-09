@@ -24,16 +24,17 @@
           <!-- 댓글 창 열림 -->
           <el-drawer v-model="commentClicked" direction="btt" size="50%">
             <template #header>
-              <h2>COMMENTS</h2>
+              <h2>Comments</h2>
             </template>
             <template #default>
-              <div>
+              <!-- <div>
                 <ul>
                   <li v-for="comment in comments" :key="comment.pk">
                     <comment-item :comment="comment"></comment-item>
                   </li>
                 </ul>
-              </div>
+              </div> -->
+              <comment-item :comments="comments"></comment-item>
             </template>
             <template #footer>
               <div style="flex: auto">
@@ -158,6 +159,18 @@ export default {
       commentClicked: false,
       diaryPk: this.$store.getters.diary.pk,
       isFollowed: 0,
+      comments: [
+        {
+          member: '유송',
+          content: '이건 댓글',
+          children: [
+            {
+              member: '규민',
+              content: '이건 대댓글'
+            }
+          ]
+        }
+      ]
       // 라우터에 diaryPk 추가하기
       // diaryPk: this.$route.parmas.diaryPk
     }
@@ -264,6 +277,10 @@ a {
   font-size: 0.7rem;
 }
 
+.el-drawer h2{
+  text-align: left;
+  font-weight: 500;
+}
 /* .edit-delete {
   position: absolute;
   top: 1rem;
