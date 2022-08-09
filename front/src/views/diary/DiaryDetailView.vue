@@ -12,10 +12,34 @@
             <span v-else class="material-symbols-outlined filled-heart" @click="isLiked=0">favorite</span>
             <span class="cnt">777</span>
           </div>
-          <router-link :to="{ name: 'diaryComment' }" class="icon-cnt">
+          <!-- <router-link :to="{ name: 'diaryComment' }" class="icon-cnt">
             <span class="material-symbols-outlined">chat_bubble</span>
             <span class="cnt">7</span>
-          </router-link>
+          </router-link> -->
+          <div class="icon-cnt" @click="commentClicked=true">
+            <span class="material-symbols-outlined">chat_bubble</span>
+            <span class="cnt">7</span>
+          </div>
+          
+          <el-drawer v-model="commentClicked" direction="btt">
+            <template #header>
+              <h4>COMMENTS</h4>
+            </template>
+            <template #default>
+              <div>
+                <ul>
+                  <li v-for="comment in comments" :key="comment.pk">
+                    <comment-item :comment="comment"></comment-item>
+                  </li>
+                </ul>
+              </div>
+            </template>
+            <template #footer>
+              <div style="flex: auto">
+                <comment-form :diaryPk="this.diaryPk"></comment-form>
+              </div>
+            </template>
+          </el-drawer>
 
           <!-- 로그인한 유저와 글 쓴 유저가 같다면 -->
           <!-- <div v-if="isAuthor"> -->
@@ -108,7 +132,7 @@
   <br>
 
   <!-- comment? -->
-  <diary-comment-view></diary-comment-view>
+  <!-- <diary-comment-view></diary-comment-view> -->
 
   </div>
 </template>
@@ -116,22 +140,29 @@
 <script>
 /* eslint-disable no-undef */
 import { mapGetters, mapActions } from 'vuex'
-import DiaryCommentView from '@/views/diary/DiaryCommentView.vue'
 import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
+import CommentForm from '@/components/diary/CommentForm.vue'
+import CommentItem from '@/components/diary/CommentItem.vue'
 
 export default {
   name: 'DiaryDetailView',
   components: {
-    DiaryCommentView,
     EditDeleteButton,
+    CommentForm,
+    CommentItem,
   },
   data() {
     return {
       isLiked: 0,
+      commentClicked: false,
+      diaryPk: this.$store.getters.diary.pk,
       isFollowed: 0,
       // 라우터에 diaryPk 추가하기
       // diaryPk: this.$route.parmas.diaryPk
     }
+  },
+  props: {
+    comments: Array,
   },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {

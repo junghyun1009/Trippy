@@ -7,7 +7,7 @@ import SearchView from '@/views/home/SearchView.vue'
 import DiaryCreateView from '../views/diary/DiaryCreateView.vue'
 import DiaryDetailView from '../views/diary/DiaryDetailView.vue'
 import DiaryEditView from '../views/diary/DiaryEditView.vue'
-import DiaryCommentView from '../views/diary/DiaryCommentView.vue'
+import DiaryCommentView from '../components/diary/DiaryCommentView.vue'
 
 import LoginView from '@/views/account/LoginView.vue'
 import SignUpView from '@/views/account/SignUpView.vue'
