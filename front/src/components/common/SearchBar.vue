@@ -1,6 +1,6 @@
 <template>
   <div>
-		<input v-model="searchPlace" type="text" placeholder="어디로 떠날까요?" @click="isClicked=true" @keyup.enter="showInput"/>
+		<input class="search-bar-input" v-model="searchPlace" type="text" placeholder="어디로 떠날까요?" @click="isClicked=true" @keyup.enter="showInput"/>
 		<div v-show="isClicked">
 			<div class="switch-close-div">
 				<el-switch v-model="isDetail" active-text="상세검색" inactive-text="전체검색"/>
@@ -28,7 +28,7 @@
 					</el-checkbox-group>
 				</div>
 				<hr>
-				<el-button size="small" @click="showInput">적용하기</el-button>
+				<el-button size="small" @click="showInput, isClicked=false">적용하기</el-button>
 			</div>
 		</div>
   </div>
@@ -72,12 +72,17 @@ export default {
 </script>
 
 <style scoped>
-	input {
-		width: 80%;
+	.search-bar-input {
+		width: 85%;
 		height: 30px;
 		margin:5%;
 		border-radius: 15px;
 		padding-left: 15px;
+		background-color: rgba(236, 236, 236, 0.735);
+		border: none;
+		outline: 1;
+		outline-color: #F16B51;
+		
 	}
 
 	.switch-close-div {

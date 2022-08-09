@@ -67,14 +67,48 @@ export default {
 </script>
 
 <style scoped>
-
+/* 
   * { 
     box-sizing: border-box; 
+  } */
+
+  /* .flickity-enabled { 
+    margin: 0 60px;
+  } */
+
+  * { box-sizing: border-box; }
+
+  body { font-family: sans-serif; }
+
+  /* .regions {
+    margin: 0 60px;
+  } */
+
+  /* smaller, dark, rounded square */
+  .flickity-prev-next-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    background: transparent !important;
+  }
+
+  .flickity-button {
+    background: transparent;
+    fill: #F16B51 !important;
+    color: #F16B51 !important;
+  }
+
+  /* position outside */
+  .flickity-prev-next-button.previous {
+    left: -40px !important;
+  }
+  .flickity-prev-next-button.next {
+    right: -40px !important;
   }
 
   .region {
-    width: 100px;
-    height: 100px;
+    width: 60px;
+    height: 60px;
     margin-right: 10px;
     border-radius: 50%;
     counter-increment: carousel-cell;
@@ -89,8 +123,8 @@ export default {
   span {
     display: block;
     text-align: center;
-    line-height: 100px;
-    font-size: 30px;
+    line-height: 60px;
+    font-size: 20px;
     color: white;
     text-shadow: 2px 2px 4px #000000;
   }
@@ -98,27 +132,27 @@ export default {
   
   .region:nth-child(1) .image{
       background-image: url("@/assets/seoul.jpg");
-      background-size: 200px 200px;
+      background-size: 100px 100px;
     }
   .region:nth-child(1) .image{
       background-image: url("@/assets/seoul.jpg");
-      background-size: 200px 200px;
+      background-size: 100px 100px;
     }
     .region:nth-child(2) .image{
       background-image: url("@/assets/seoul.jpg");
-      background-size: 200px 200px;
+      background-size: 100px 100px;
     }
     .region:nth-child(3) .image{
       background-image: url("@/assets/busan.jpg");
-      background-size: 200px 200px;
+      background-size: 100px 100px;
     }
     .region:nth-child(4) .image{
       background-image: url("@/assets/jeju.jpg");
-      background-size: 300px 200px;
+      background-size: 100px 60px;
     }
     .region:nth-child(5) .image{
       background-image: url("@/assets/tokyo.jpg");
-      background-size: 300px 200px;
+      background-size: 100px 60px;
     }
 
 

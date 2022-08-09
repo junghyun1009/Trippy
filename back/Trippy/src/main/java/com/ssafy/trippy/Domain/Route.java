@@ -14,7 +14,7 @@ public class Route {
     @Column(name="route_id")
     private Long id;
     private String routeName;
-    private int index;
+    private int idx;
     private Double lat;
     private Double lng;
 
@@ -24,18 +24,18 @@ public class Route {
 ;
 
     @Builder
-    public Route(Long id, String routeName, int index, Post post, Double lat, Double lng) {
+    public Route(Long id, String routeName, int idx, Post post, Double lat, Double lng) {
         this.id = id;
         this.routeName = routeName;
-        this.index = index;
+        this.idx = idx;
         this.post = post;
         this.lat = lat;
         this.lng = lng;
     }
 
-    public void update(String routeName, int index, Double lat, Double lng) {
+    public void update(String routeName, int idx, Double lat, Double lng) {
         this.routeName = routeName;
-        this.index =index;
+        this.idx =idx;
         this.lat = lat;
         this.lng = lng;
     }

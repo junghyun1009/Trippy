@@ -7,19 +7,25 @@ import com.ssafy.trippy.Service.ImageService;
 import com.ssafy.trippy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/image")
+@RequestMapping("/auth/image")
 public class ImageController {
 
     private final ImageService imageService;
@@ -31,15 +37,16 @@ public class ImageController {
     public ResponseImageDto upload(@RequestPart(value = "file") MultipartFile file){
         return imageService.uploadImage(file,null);
     }
-    @PostMapping("/upload/member/{member_id}")
-    public ResponseEntity<?> updateUserProfile(@RequestPart(value = "file") MultipartFile file, @PathVariable("member_id") Long memberId)  {
+    @PostMapping("/upload/member")
+    public ResponseEntity<?> updateUserProfile(@RequestPart(value = "file") MultipartFile file, HttpServletRequest request)  {
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         ResponseImageDto responseImageDto = imageService.uploadImage(file,null);
         if(responseImageDto.getFileName()==null) {
             return new ResponseEntity<>("이미지가 없습니다.", HttpStatus.BAD_REQUEST);
         }
         ResponseMemberDto responseMemberDto = memberService.selectMember(memberId);
         UpdateMemberDto updateMemberDto = new UpdateMemberDto(responseMemberDto.getName(), responseMemberDto.getEmail(),
-                responseMemberDto.getPhone(), responseMemberDto.getGender(),responseMemberDto.getBirth(),responseImageDto.getFileName(),responseMemberDto.getDesc());
+                responseMemberDto.getPhone(), responseMemberDto.getGender(),responseMemberDto.getBirth(),responseImageDto.getFileName(),responseMemberDto.getDescription());
         memberService.updateMember(memberId, updateMemberDto);
         imageService.deleteImage(responseMemberDto.getImg_path());
         return new ResponseEntity<>(responseImageDto,HttpStatus.OK);
@@ -61,8 +68,17 @@ public class ImageController {
     }
 
     @GetMapping("/{post_id}")
-    public ResponseEntity<?> getImageByPostId(@PathVariable("post_id") Long postId){
+    public ResponseEntity<?> getImageByPostId(@PathVariable("post_id") Long postId) {
         List<Resource> resources =  imageService.getImagesByPostId(postId);
-        return new ResponseEntity<>(resources, HttpStatus.OK);
+        List<File> files = new ArrayList<>();
+        for (Resource resource: resources){
+            try {
+                files.add(resource.getFile());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return new ResponseEntity<>(files, HttpStatus.OK);
     }
+
 }

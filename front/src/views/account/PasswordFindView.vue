@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="container">
     <!-- 이메일로 인증번호 받기 전 "beforeEmailVerification" 노출 -->
     <div v-if="!userinfo.verificationCode" class="email">
-      <h4>이메일</h4>
+      <h3>이메일</h3>
       <p>trippy에 가입한 이메일을 작성해주세요</p>
       <el-input v-model="userinfo.email" type="email" id="email" placeholder="username@email.com" @blur="checkEmail()"></el-input>
       <el-button type="primary" @click="countdownTimer(), addCode()">인증번호 받기</el-button>
@@ -10,25 +10,25 @@
     </div>
 
     <!-- 이메일로 인증번호 보낸 이후 노출 -->
-    <div v-else>
-      <div class="verification_code">
-        <span>인증번호 입력</span>
+    <div class="verification-container" v-else>
+      <div class="verification-code">
+        <h3>인증번호 입력</h3>
         <!-- 3분 카운트 하는 시계 -->
         <span>{{ resTimeData }}</span>
         <el-input v-model="userinfo.verificationCode" placeholder="발송된 인증번호를 입력하세요"></el-input>
         <!-- 3분 지나면 인증확인 버튼 disable되게 -->
         <el-button type="primary" v-if="this.timeCounter == 0" disabled>인증확인</el-button>
-        <el-button type="primary" v-else-if="this.timeCounter > 0" @click="fromPasswordFindView()">인증확인</el-button>
+        <el-button type="primary" v-else-if="this.timeCounter > 0" @click="fromPasswordFindView()">인증확인</el-button><br>
         <el-button type="primary" @click="countdownReset(), addCode(), successMessage()">인증번호 다시받기</el-button>        
       </div>
 
       <br>
-      <div class="verification_guide">
-        <span style="color: red">입력하신 이메일로 인증번호를 보냈습니다.</span><br>
+      <div class="verification-guide">
+        <span style="color: red">입력하신 이메일로 인증번호를 보냈습니다.</span>
         <span style="color: red">발송된 인증번호를 3분내로 입력하세요.</span>
-        <br><br>
-        <span>인증 번호를 받지 못하셨나요?</span><br>
-        <span> - 이메일 주소를 올바르게 입력했는지 확인해주세요</span><br>
+        <br>
+        <span>인증 번호를 받지 못하셨나요?</span>
+        <span> - 이메일 주소를 올바르게 입력했는지 확인해주세요</span>
         <span> - 스팸 메일함을 확인해주세요</span>
       </div>
   
@@ -123,6 +123,60 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+
+  .container {
+    display: flex;
+    justify-content: center;
+    margin: 40% 0;
+    padding: 0;
+  }
+
+  h3 {
+    display: flex;
+    color: #F16B51;
+    font-weight: 500;
+  }
+
+  .email p {
+    display: flex;
+  }
+
+  .el-input {
+    margin: 2% 0;
+  }
+  .email button {
+    width: 100%;
+    margin: 0
+  }
+
+  .verification-code {
+    width: 100%;
+    margin: 0;
+  }
+
+  .verification-guide {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 12px;
+    margin: 0;
+  }
+
+.verification-guide span{
+    margin: 0;
+  }
+  .verification-code span {
+    display: flex;
+  }
+  .verification-code button {
+    width: 100%;
+    margin: 1% 0;
+  }
+  .verification-code el-input {
+    margin: 0;
+  }
+
 
 </style>

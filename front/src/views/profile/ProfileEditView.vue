@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
 
     <div class="image">
       <div v-if="profilePhoto && Object.keys(profilePhoto).length === 0 && profilePhoto.constructor === Object">
@@ -11,7 +11,7 @@
       </div>
       <!-- 원래 등록되어 있는 이미지 -->
       <div v-else>
-        <img :src="profilePhoto.preview" :alt="profilePhoto.preview"/>
+        <!-- <img :src="profilePhoto.preview" :alt="profilePhoto.preview"/> -->
         <br>
         <el-button @click="removePhoto">
           x
@@ -19,37 +19,36 @@
       </div>
     </div>
 
-    <div class="email">
-      <p>이메일</p>
-      <el-input  id="email"
-      v-model="userinfo.email" 
-      placeholder="username@email.com"
-      disabled></el-input>
-    </div>
+    <div class="profil-edit-input">
+      <div class="email">
+        <p>이메일</p> 
+        <el-input  id="email"
+        v-model="userinfo.email" 
+        placeholder="username@email.com"
+        disabled></el-input>
+      </div>
 
-    <div class="nickname">
-      <p>닉네임</p>
-      <el-input id="nickname" v-model="userinfo.name" placeholder="사용할 별명을 입력해주세요" maxlength="10"  @blur="checkNickname"></el-input>
-      <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
-    </div>
+      <div class="nickname">
+        <p>닉네임</p>
+        <el-input id="nickname" v-model="userinfo.name" placeholder="사용할 별명을 입력해주세요" maxlength="10"  @blur="checkNickname"></el-input>
+        <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
+      </div>
 
-    <div class="gender">
-      <p>성별</p>
-      <el-select id="gender" v-model="userinfo.gender" class="m-2" placeholder="Select">
-      <el-option 
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-        />
-      </el-select>
-    </div>
+      <div class="gender">
+        <p>성별</p>
+        <el-select id="gender" v-model="userinfo.gender" class="m-2" placeholder="Select">
+        <el-option 
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          />
+        </el-select>
+      </div>
 
-    <div class="birthdate">
-      <div class="demo-date-picker">
-        <div class="block">
-          <span class="demonstration">생년월일</span>
-          <br>
+      <div class="birthdate">
+        <p>생년월일</p>
+        <div class="demo-date-picker">
             <el-date-picker
               id="birthdate"
               v-model="userinfo.birth"
@@ -58,20 +57,21 @@
             />
         </div>
       </div>
+
+      <div class="description">
+        <p>소개</p>
+        <el-input id="description" v-model="userinfo.desc" maxlength="50"></el-input>
+        <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
+      </div>
     </div>
 
-    <div class="description">
-      <p>소개</p>
-      <el-input id="description" v-model="userinfo.desc" maxlength="50"></el-input>
-      <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
+    <div class="change-delete">
+      <router-link :to="{ name: 'passwordChange' }">비밀번호 변경</router-link>
+      <span> | </span>
+      <p class="delete" @click="open(), updateUserinfo()">회원 탈퇴하기</p>
     </div>
-
     <br>
-    <router-link :to="{ name: 'passwordChange' }">비밀번호 변경</router-link>
-    <p class="delete" @click="open(), updateUserinfo()">회원 탈퇴하기</p>
-    <el-button type="primary">완료</el-button>
-
-
+      <el-button type="primary">완료</el-button>
   </div>
 </template>
 
@@ -185,9 +185,55 @@ export default {
 </script>
 
 <style scoped>
-.delete {
-  cursor: pointer;
-  text-decoration: underline;
-}
+  * {
+    box-sizing: border-box;
+    margin: 2%;
+    }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .delete {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  p {
+    display: flex;
+  }
+
+  .gender {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .birthdate {
+    display: flex;
+    flex-direction: column; 
+  }
+
+  .el-input__wrapper {
+    width: 100%;
+  }
+
+  .change-delete {
+    display: flex;
+    justify-content: center;
+    color: #F16B51;
+  }
+
+  .change-delete a {
+    color: #F16B51;
+    font-weight: 500;
+  }
+
+  .change-delete p {
+    color: #F16B51;
+    font-weight: 500;
+    
+  }
 
 </style>

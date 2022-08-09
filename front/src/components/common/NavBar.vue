@@ -1,141 +1,105 @@
 <template>
   <div>
-    <div>
-      <el-menu
-        :default-active="activeIndex"
-        class="el-menu-demo"
-        mode="horizontal"
-        :ellipsis="false"
-        background-color="#F16B51"
-        text-color="#fff"
-      >
-
-        <el-menu-item index="0"><a href="/" class="trippyLogo">TRIPPY</a></el-menu-item>
-        <div class="flex-grow" />
-        <el-menu-item index="1">
-          <div v-if="flag===0" @click="showSearchBar" class="menu-icon">
-            <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#fff" icon-name="searchbar">
-              <search-bar/>
-            </icon-base>
-          </div>
-          <div v-else class="menu-icon">
-            <el-input v-model="searchPlace" placeholder="어디로 떠날까요?" @keyup.enter="showInput"></el-input>
-            <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#fff" icon-name="closeicon" @click="closeSearchBar">
-              <close-icon/>
-            </icon-base>
-          </div>
-        </el-menu-item>
-        <el-menu-item index="2">
-          <div @click="visible=true" class="menu-icon">
-            <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#fff" icon-name="menuicon">
-              <menu-icon/>
-            </icon-base>
-          </div>
-        </el-menu-item>
-      </el-menu>
-      <el-drawer v-model="visible" :show-close="true" :modal="false" size="70%">
-        <!-- 로그인한 유저 -->
-        <!-- <div v-if="isLoggedIn"> -->
-        <div>
-          <router-link :to="{ name: 'profile' }" @click="visible =false">
-            <el-avatar :size="100" :src="profile.img_path" />
-          </router-link>
-          <p>{{ profile.name }}의 로그</p>
-          <router-link :to="{ name: 'profileEdit' }" @click="visible =false">프로필 수정</router-link>
-          <span @click="logout()"> | 로그아웃</span>
-          <hr>
-          <router-link :to="{ name: 'diaryCreate' }" @click="visible =false">다이어리 작성</router-link>
-          <br>
-          <router-link :to="{ name: 'community' }" @click="visible =false">동행 구하기</router-link>
-          <hr>
-          <router-link :to="{ name: 'chatList' }" @click="visible =false">채팅</router-link>
-
-        </div>
-        <!-- 로그인 안 한 유저 -->
-        <!-- <div v-else> -->
-        <div>
-          <router-link :to="{ name: 'login' }" @click="visible =false">로그인</router-link>
-          <br>
-          <router-link :to="{ name: 'signUp' }" @click="visible =false">회원가입</router-link>
-        </div>
-
-      </el-drawer>
-
+    <div class="navbar">
+			<div class="forms" v-if="isClicked">
+				<el-button class="form-button diary" @click="goDiaryForm">다이어리</el-button>
+				<el-button class="form-button community" @click="goCommunityForm">동행찾기</el-button>
+			</div>
+			<div class="buttons">
+        <el-button class="button" link @click="goHome">
+          <span class="material-symbols-outlined">home</span>
+        </el-button>
+        <el-button class="button" link @click="goFeed">
+          <span class="material-symbols-outlined">explore</span>
+        </el-button>
+        <el-button class="button" link @click="toggle">
+          <span class="material-symbols-outlined">edit_square</span>
+        </el-button>
+        <el-button class="button" link @click="goProfile">
+          <span class="material-symbols-outlined profile">person</span>
+        </el-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
-import SearchBar from '@/components/icon/SearchBar.vue'
-import MenuIcon from '@/components/icon/MenuIcon.vue'
-import CloseIcon from '@/components/icon/CloseIcon.vue'
-import { mapGetters, mapActions } from 'vuex'
-
-
 export default {
-  name: "NavBar",
-  components: {
-    SearchBar,
-    MenuIcon,
-    CloseIcon
-  },
-  data () {
-    return {
-      visible: false,
-      flag: 0,
-      searchPlace: '',
-      activeIndex: ref('3')
-    }
-  },
-  computed: {
-    ...mapGetters(['isLoggedIn', 'profile',])
-  },
+	name: 'NavBar',
+	data() {
+		return {
+			isClicked: false,
+		}
+	},
 	methods: {
-    ...mapActions(['logout']),
-    showSearchBar() {
-      this.flag = 1
-    },
-    closeSearchBar() {
-      this.flag = 0
-    },
-    showInput() {
-      console.log(this.searchPlace)
-      this.searchPlace = ''
-    }
-	}
-
-
+		toggle() {
+			this.isClicked = !this.isClicked
+		},	
+		goHome() {
+      this.isClicked = false
+			this.$router.push({ name: 'home' })
+		},
+		goFeed() {
+      this.isClicked = false
+		},
+		goDiaryForm() {
+      this.toggle()
+			this.$router.push({ name: 'diaryCreate' })
+		},
+		goCommunityForm() {
+      this.toggle()
+			this.$router.push({ name: 'communityCreate' })
+		},
+		goProfile() {
+      this.isClicked = false
+			this.$router.push({ name: 'profile' })
+		}
+	},
 }
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
-
-* {
-  background-color: "#F16B51";
+.navbar {
+  position: fixed;
+  bottom: 0vh;
+  width: 100%;
+  border-top: 1px solid #d9d9d9;
+  background-color: #fff;
+  padding: 0.3rem;
 }
 
-.el-menu-demo {
+.forms {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+}
+
+.form-button {
+  z-index: 1;
+  position: fixed;
+  bottom: 7vh;
+  margin-bottom: 0.3rem;
+  transform: translate(50%, 0%);
+}
+
+.diary {
+  z-index: 2;
+  bottom: 12vh;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.button {
   margin: 0;
 }
 
-.menu-icon {
-  display: flex;
-  align-items: center;
-}
-
-.trippyLogo {
-	font-family: 'Alfa Slab One', cursive;
-	font-weight: 300;
-	font-size: 20px;
-  text-decoration: none;
-  }
-
-.flex-grow {
-  flex-grow: 1;
+.material-symbols-outlined {
+  font-size: 2rem;
 }
 
 </style>

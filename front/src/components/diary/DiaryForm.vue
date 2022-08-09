@@ -3,14 +3,14 @@
     <form action="submit">
       <!-- 제목 -->
       <div class="title-box">
-        <span>제목</span>
+        <p>제목</p>
         <el-input v-model="newDiary.title" class="input-box" placeholder="제목을 입력하세요." />
       </div>
 
       <div class="demo-collapse">
         <el-collapse>
           <!-- 장소 -->
-          <el-collapse-item title="장소" name="1">
+          <el-collapse-item class="place-select" title="장소" name="1">
             <div>
               장소
             </div>
@@ -19,94 +19,101 @@
           <!-- 옵션 -->
           <el-collapse-item name="2">
             <template #title>
-              <span>옵션</span>
+              <p class="option-p">옵션</p>
               <!-- 태그 -->
-              <div>
-                <el-tag class="option-tag" type=''>
-                  {{ partyTag }}
-                </el-tag>
-                <el-tag v-for="trans in transportationTag" :key="trans" class="option-tag" 
-                closable :disable-transitions="false" type='' @close="handleClose(trans)">
-                  {{ trans }}
-                </el-tag>
-              </div>
+              <el-scrollbar>
+                <div class="option-tag-div">
+                  <el-tag class="option-tag" type=''>
+                    {{ partyTag }}
+                  </el-tag>
+                  <el-tag v-for="trans in transportationTag" :key="trans" class="option-tag" 
+                  closable :disable-transitions="false" type='' @close="handleClose(trans)">
+                    {{ trans }}
+                  </el-tag>
+                </div>
+              </el-scrollbar>
             </template>
 
-            <div>
+            <div class="option-div">
               <!-- 옵션:여행 기간 -->
-              <div class="date-picker">
-                <div class="block">
-                  <span class="demonstration">여행 기간</span>
+              <div class="option-date">
+                <span class="option-title">여행 기간</span>
+                <div class="date-picker">
                   <el-date-picker
-                    v-model="datePick"
-                    type="daterange"
-                    range-separator="To"
-                    start-placeholder="Start date"
-                    end-placeholder="End date"
+                    v-model="newDiary.startDate"
+                    type="date"
+                    value-format="YYYY-MM-DD"
+                    placeholder="여행 시작일을 선택해주세요."
+                  />
+                  <el-date-picker
+                    v-model="newDiary.endDate"
+                    type="date"
+                    value-format="YYYY-MM-DD"
+                    placeholder="여행 종료일을 선택해주세요."
                   />
                 </div>
               </div>
 
               <!-- 옵션: 일행 타입 -->
-              <div class="party-type">
-                <span class="demonstration">일행 타입</span>
+              <div class="option-party">
+                <span class="option-title">일행 타입</span>
                 <el-radio-group v-model="newDiary.company">
-                  <el-radio label="가족">가족</el-radio>
-                  <el-radio label="커플">커플</el-radio>
-                  <el-radio label="친구">친구</el-radio>
-                  <el-radio label="개인">개인</el-radio>
+                  <el-radio class="party-option" label="가족">가족</el-radio>
+                  <el-radio class="party-option" label="커플">커플</el-radio>
+                  <el-radio class="party-option" label="친구">친구</el-radio>
+                  <el-radio class="party-option" label="개인">개인</el-radio>
                 </el-radio-group>
               </div>
 
               <!-- 옵션: 인원 수 -->
-              <div class="member-num">
-                <span class="demonstration">인원 수</span>
+              <div class="option-member">
+                <span class="option-title">인원 수</span>
                 <el-input-number v-model="newDiary.count" :min="1" :max="10"/>
               </div>
 
             <!-- 옵션: 이동수단 -->
-              <div class="transport-type">
-                <span class="demonstration">이동 수단</span>
-                <el-checkbox-group v-model="newDiary.transport">
-                  <el-checkbox label="뚜벅이" />
-                  <el-checkbox label="대중교통" />
-                  <el-checkbox label="따릉이" />
-                  <el-checkbox label="택시" />
-                  <el-checkbox label="자차" />
+              <div class="option-transport">
+                <span class="option-title">이동 수단</span>
+                <el-checkbox-group class="transport" v-model="newDiary.transport">
+                  <el-checkbox class="transport-option" label="뚜벅이" />
+                  <el-checkbox class="transport-option" label="대중교통" />
+                  <el-checkbox class="transport-option" label="따릉이" />
+                  <el-checkbox class="transport-option" label="택시" />
+                  <el-checkbox class="transport-option" label="자차" />
                 </el-checkbox-group>
               </div>
             </div>
           </el-collapse-item>
 
           <!-- 루트 -->
-          <el-collapse-item name="3">
+          <el-collapse-item class="route-select" name="3">
             <template #title>
-              <span>루트</span>
+              <p class="route-p">루트</p>
               <!-- 태그 -->
-              <div>
-                <el-tag class="option-tag" v-for="(route, idx) in newDiary.routes" :key="idx"
-                :disable-route="false" type=''>
-                  {{ route.routeName }}
-                </el-tag>
-              </div>
+              <el-scrollbar>
+                <div class="option-tag-div">
+                  <el-tag class="option-tag" v-for="(route, idx) in newDiary.routes" :key="idx"
+                  :disable-route="false" type=''>
+                    {{ route.routeName }}
+                  </el-tag>
+                </div>
+              </el-scrollbar>
             </template>
             
             <!-- 지도 -->
             <div>
               <div class="route-div">
                 <input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0 && newDiary.routes.length < 10">
-                <el-button type="primary" @click="addMarkers" :disabled="newDiary.routes.length === 0">
-                  <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#fff" icon-name="maplocation">
-                    <map-location/>
-                  </icon-base>
-                </el-button>
-                <el-button type="primary" @click="initMap" :disabled="flag === 0">
-                  <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#fff" icon-name="plusicon">
-                    <plus-icon/>
-                  </icon-base>  
-                </el-button>
+                <el-button-group >
+                  <el-button type="primary" class="route-btn" @click="addMarkers" :disabled="newDiary.routes.length === 0">
+                    <span class="material-symbols-outlined">push_pin</span>
+                  </el-button>
+                  <el-button type="primary" class="route-btn" @click="initMap" :disabled="flag === 0">
+                    <span class="material-symbols-outlined">add_location</span>  
+                  </el-button>
+                </el-button-group>
               </div>
-              <div id="map" style="height: 480px; position: relative; overflow: hidden;"></div>
+              <div id="map" style="height: 70vw; position: relative; overflow: hidden;"></div>
               <div class="route-tag-group">
                 <el-tag v-for="(route, idx) in newDiary.routes" :key="idx" class="route-tag"
                 closable :disable-route="false" type='' @close="removeRoute(idx)">
@@ -120,66 +127,99 @@
 
       <!-- 스토리 -->
       <div class="story-form">
-        <p class="title-box">스토리</p>
-
+        <p class="story-p">스토리</p>
         <div>
           <div v-for="(newStory, k) in newStories" :key="k">
-            <div class="title-box">
+            <div class="story-title">
               <span>상세 장소</span>
               <el-input v-model="newStory.place" class="input-box" id="title-input-box" placeholder="상세 장소를 입력하세요." />
             </div>
 
-            <div class="photo-content-div">
-              <div>
-                <div v-if="newStory.photoList.length === 0" class="photo-div">
-                  <label :for=k>
-                    <icon-base viewBox="0 0 1024 1024" width="50" height="50" iconColor="#409EFF" icon-name="addphoto" class="photo-icon">
-                      <add-photo/>
-                    </icon-base>
-                  </label>
-                  <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="uploadPhoto(k)" multiple />
-                </div>
-                <div v-else class="photo-preview">
-                  <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="uploadPhoto(k)" multiple />
-                  <el-carousel trigger="click" height="150px" :autoplay=false :initial-index=1 indicator-position="none">
-                    <el-carousel-item>
-                      <label :for=k>
-                        <icon-base viewBox="0 0 1024 1024" width="50" height="50" iconColor="#409EFF" icon-name="addphoto" class="photo-icon">
-                          <add-photo/>
-                        </icon-base>
-                      </label>
-                    </el-carousel-item>
-                    <el-carousel-item v-for="(photo, index) in newStory.photoList" :key="index" class="file-preview-wrapper">
-                      <img :src="photo.preview" :alt="photo.preview"/>
-                      <el-button class="remove-photo" @click="removePhoto(k, index)">
-                        x
-                      </el-button>
-                    </el-carousel-item>
-                  </el-carousel>
-                </div>
-              </div>
-
-              <div>
-                <el-input v-model="newStory.content" maxlength="500"
-                placeholder="내용을 입력해주세요." show-word-limit type="textarea" rows=7 resize="none" class="content-input"/>
-              </div>
-            </div>
-
-            <div class="rate-div">
+            <div class="story-rate">
               <span>별점</span>
               <el-rate v-model="newStory.rate" allow-half />
             </div>
+
+            <div class="story-content">
+              <span>내용</span>
+              <el-input v-model="newStory.content" maxlength="500"
+              placeholder="내용을 입력해주세요." show-word-limit type="textarea" rows=7 resize="none" class="content-input"/>
+            </div>
+
+            <div class="story-photo">
+              <div class="story-photo-title">
+                <span>사진</span>
+                <span>(선택)</span>
+              </div>
+              <div v-if="newStory.photoList.length === 0 && newStory.dialogVisible === false" class="photo-div">
+                <label :for=k>
+                  <span class="material-symbols-outlined">add_photo_alternate</span>
+                </label>
+                <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="uploadPhoto(k)" multiple />
+                <span class="photo-description">아이콘을 눌러 사진을 추가해주세요.</span>
+              </div>
+
+              <div v-else class="photo-content-div">
+                <!-- <div v-if="newStory.photoList" class="photo-thumbnail">
+                  <img :src="newStory.photoList[0].preview" :alt="newStory.photoList[0].preview" @click="dialogVisible=true"/>
+                </div> -->
+                <div @click="newStory.dialogVisible=true" class="photo-add-div">
+                  <span class="material-symbols-outlined">photo_library</span>
+                  <span class="photo-description">아이콘을 눌러 사진을 확인해보세요.</span>
+                </div>
+                <el-dialog v-model="newStory.dialogVisible" width="80%" :show-close="false">
+                  <template #header="{ titleId, titleClass, closeBtn }">
+                    <div class="my-header">
+                      <div>
+                        <h4 :id="titleId" :class="titleClass">사진 미리보기</h4>
+                        <p>사진을 누르면 삭제가 가능합니다.</p>
+                        <p>한 스토리 당 사진은 열 개까지 추가 가능합니다.</p>
+                      </div>
+                      <span :id="closeBtn" class="material-symbols-outlined" @click="newStory.dialogVisible=false">close</span>
+                    </div>
+                  </template>
+                  <div class="photo-preview">
+                    <div v-for="(photo, index) in newStory.photoList" :key="index" class="photo-preview-group">
+                      <img :src="photo.preview" :alt="photo.preview" @click="removePhoto(k, index)"/>
+                      <!-- <el-button class="remove-photo" circle @click="removePhoto(k, index)">
+                        <span class="material-symbols-outlined">remove</span>
+                      </el-button> -->
+                    </div>
+                    <div v-if="newStory.photoList.length<10">
+                      <label :for=k+10>
+                        <span class="material-symbols-outlined">add_photo_alternate</span>
+                      </label>
+                      <input class="photo-input-add" type="file" :id=k+10 ref="files" accept="image/*" @change="addPhoto(k)" multiple />
+                    </div>
+                  </div>
+                </el-dialog>
+              </div>
+            </div>
+
+            <!-- <div class="story-rate">
+              <span>별점</span>
+              <el-rate v-model="newStory.rate" allow-half />
+            </div> -->
             
-            <el-button @click="removeStory(k)" v-show="(newStories.length >= 1) && k!=0">delete</el-button>
-            <el-button @click="addStory()" v-show="newStories.length < 10" :disabled="k != newStories.length - 1">add story</el-button>
+            <div class="story-btn">
+              <el-button @click="addStory()" v-show="newStories.length < 10" :disabled="k != newStories.length - 1" link>
+                <span class="material-symbols-outlined">note_add</span>
+              </el-button>
+              <el-button @click="removeStory(k)" v-show="(newStories.length >= 1) && k!=0" link>
+                <span class="material-symbols-outlined">delete</span>
+              </el-button>
+            </div>
             <hr>
           </div>
         </div>
 
       </div>
 
-      <div>
-        <el-button @click="onSubmit">{{ action }}</el-button>
+      <div v-if="action==='create'">
+        <el-button @click="onSubmit">작성하기</el-button>
+      </div>
+      <div v-else>
+        <el-button @click="onSubmit">수정하기</el-button>
       </div>
     </form>
   </div>
@@ -188,24 +228,16 @@
 <script>
 /* eslint-disable no-undef */
 import { mapActions, mapGetters } from 'vuex'
-import MapLocation from '@/components/icon/MapLocation.vue'
-import PlusIcon from '@/components/icon/PlusIcon.vue'
-import AddPhoto from '@/components/icon/AddPhoto.vue'
 
 export default {
   name: 'DiaryForm',
-  components: {
-    MapLocation,
-    PlusIcon,
-    AddPhoto
-  },
   props: {
     diary: Object,
     action: String
   },
   data() {
     return {
-      datePick: [this.diary.startDate, this.diary.endDate],
+      // datePick: [this.diary.startDate, this.diary.endDate],
       flag: 0,
       route: {},
       newStories: [
@@ -214,6 +246,7 @@ export default {
           pk: 0,
           place: '',
           photoList: [],
+          dialogVisible: false,
           content: '',
           rate: null
         }
@@ -298,7 +331,7 @@ export default {
       this.route.lng = geocode.lng
       this.newDiary.routes.push(this.route)
       this.route = {}
-      console.log(this.newDiary.routes)
+      // console.log(this.newDiary.routes)
     },
 
     addMarkers() {
@@ -319,7 +352,7 @@ export default {
             map: map,
         });
       })
-      console.log(geocodes)
+      // console.log(geocodes)
       const routePath = new google.maps.Polyline({
         path: geocodes,
         geodesic: true,
@@ -346,6 +379,7 @@ export default {
           pk: 0,
           place: '',
           photoList: [],
+          dialogVisible: false,
           content: '',
           rate: null
         })
@@ -357,14 +391,61 @@ export default {
     },
 
     uploadPhoto(index) {
-      // console.log(index)
+      console.log(index)
       let addedPhotoList = this.newStories[index].photoList
+      // console.log(addedPhotoList)
       // fileInput.value = index
-      // console.log(this.$refs.files)
-      // console.log(this.$refs.files[index].files)
+      console.log(this.$refs.files)
+      console.log(this.$refs.files[index].files)
       for (let i = 0; i < this.$refs.files[index].files.length; i++) {
         let photo = this.$refs.files[index].files[i]
-        console.log(photo)
+        // console.log(photo)
+        if (photo.type.substr(0, 5) === "image") {
+          addedPhotoList = [
+            ...addedPhotoList,
+            {
+              // 실제 파일
+              file: this.$refs.files[index].files[i],
+              // 사진 미리보기
+              preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+              // 삭제 및 관리를 위한 number
+              // number: i
+            }
+          ]
+          // num = i
+        } else {
+          alert("사진 파일만 추가 가능합니다")
+        }
+      }
+      this.newStories[index].photoList = addedPhotoList
+      console.log(this.newStories[index].photoList)
+      let fileInput = document.getElementsByClassName("photo-input")
+      // // console.log(fileInput)
+      // console.log(fileInput[0].value)
+      // console.log(fileInput[fileInput.length - 1].value)
+      fileInput[fileInput.length - 1].value = ''
+      // for (let j = 0; j < fileInput.length; j++) {
+      //   console.log(fileInput[j].value)
+      //   fileInput[j].value = ''
+      // }
+    },
+
+    removePhoto(index, num) {
+      // if (this.newStories[index].photoList.length === 1) {
+      //   this.dialogVisible = false
+      // }
+      this.newStories[index].photoList.splice(num, 1)
+    },
+
+    addPhoto(index) {
+      // console.log('add', index)
+      let addedPhotoList = this.newStories[index].photoList
+      // let fileInput = document.getElementsByClassName("photo-input-sec")
+      // console.log(fileInput)
+      console.log(this.$refs.files)
+      console.log(this.$refs.files[index].files)
+      for (let i = 0; i < this.$refs.files[index].files.length; i++) {
+        let photo = this.$refs.files[index].files[i]
         if (photo.type.substr(0, 5) === "image") {
           addedPhotoList = [
             ...addedPhotoList,
@@ -378,51 +459,32 @@ export default {
         }
       }
       this.newStories[index].photoList = addedPhotoList
-      let fileInput = document.getElementsByClassName("photo-input")
+      console.log(this.newStories[index].photoList)
+      let fileInput = document.getElementsByClassName("photo-input-add")
+      // console.log(fileInput[0].value)
+      // console.log(fileInput[fileInput.length - 1].value)
+      // fileInput.forEach((each) => {
+      //   each.value = ''
+      // })
       fileInput[fileInput.length - 1].value = ''
+      // for (let j = 0; j < fileInput.length; j++) {
+      //   console.log(fileInput[j].value)
+      //   fileInput[j].value = ''
+      // }
     },
-
-    removePhoto(index, num) {
-      this.newStories[index].photoList.splice(num, 1)
-    },
-
-    // addPhoto(index) {
-    //   console.log('add', index)
-    //   let addedPhotoList = this.newStories[index].photoList
-    //   let fileInput = document.getElementsByClassName("photo-input-sec")
-    //   console.log(fileInput)
-    //   // console.log(this.$refs.files)
-    //   console.log(this.$refs.files[index].files)
-    //   for (let i = 0; i < this.$refs.files[index].files.length; i++) {
-    //     let photo = this.$refs.files[index].files[i]
-    //     if (photo.type.substr(0, 5) === "image") {
-    //       addedPhotoList = [
-    //         ...addedPhotoList,
-    //         {
-    //           file: this.$refs.files[index].files[i],
-    //           preview: URL.createObjectURL(this.$refs.files[index].files[i]),
-    //         }
-    //       ]
-    //     } else {
-    //       alert("사진 파일만 추가 가능합니다")
-    //     }
-    //   }
-    //   this.newStories[index].photoList = addedPhotoList
-    //   fileInput[0].value = ''
-    //   console.log(fileInput.value)
-    // },
 
     onSubmit() {
       if (this.action === 'create') {
         // 날짜 변환해서 저장
-        this.newDiary.startDate = this.datePick[0]
-        this.newDiary.endDate = this.datePick[1]
+        // this.newDiary.startDate = this.datePick[0]
+        // this.newDiary.endDate = this.datePick[1]
         this.newStories.forEach((each) => {
           each.pk = this.newStories.indexOf(each) + 1
+          delete each.dialogVisible
         })
         this.newDiary.stories = this.newStories
 
-        if (this.newDiary.title && this.datePick.length && this.newDiary.transport.length
+        if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.transport.length
         && this.newDiary.routes.length && this.newDiary.stories.length) {
           this.createDiary(this.newDiary)
         } else {
@@ -440,164 +502,282 @@ export default {
 
 <style scoped>
 .title-box {
-  text-align: left;
+  display: flex;
+  justify-content: start;
+  align-items: center;
   color: var(--el-text);
-  font-size: 14px;
+  font-size: 0.8rem;
 }
-.input-box {
-  width: 300px;
-  margin-left: 15px;
-  margin-bottom: 10px;
+.title-box > p {
+  width: 10vw;
+  text-align: left;
+  font-weight: 500;
+}
+.title-box .input-box {
+  width: 80vw;
+  margin-left: 0.5rem;
+}
+.option-p {
+  width: 10vw;
+  text-align: left;
+  font-weight: 500;
+}
+.option-tag-div {
+  display: flex;
+  /* flex-wrap: wrap; */
+  align-items: center;
+  width: 65vw;
 }
 .option-tag {
-  margin-left: 10px;
+  margin-top: 0.7rem;
+  margin-left: 0.5rem;
+}
+.option-div {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
+.option-date {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-right: none;
+  margin-bottom: 1rem;
+  text-align: left;
 }
 .date-picker {
   display: flex;
-  width: 100%;
-  padding: 0;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
-.date-picker .block {
-  padding: 30px 0;
-  text-align: center;
-  border-right: solid 1px var(--el-border-color);
-  flex: 1;
-}
-.date-picker .block:last-child {
-  border-right: none;
-}
-.date-picker .demonstration {
+.option-title {
   color: var(--el-text-color-secondary);
-  font-size: 14px;
-  margin-right: 20px;
+  width: 20vw;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
-.party-type {
+.option-party {
   display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 0 0 30px;
-}
-.party-type .demonstration {
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
-  margin: 5px 20px 0 0;
-}
-.member-num {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 0 0 30px;
-}
-.member-num .demonstration {
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
-  margin: 5px 20px 0 0;
-}
-.transport-type {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 0 0 30px;
-}
-.transport-type .demonstration {
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
-  margin: 5px 20px 0 0;
-}
-.story-form .demonstration {
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
-  margin: 10px 20px 0 0;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 1rem;
   text-align: left;
+}
+.option-member {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+.party-option {
+  width: 2rem;
+  margin-right: 1.5rem;
+}
+.option-transport {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+.transport {
+  margin-left: 1rem;
+  width: 80vw;
+}
+.transport-option {
+  width: 4rem;
+  margin-right: 1.5rem;
+}
+.route-p {
+  width: 10vw;
+  text-align: left;
+  font-weight: 500;
 }
 .route-div {
-  text-align: left;
+  display: flex;
   margin-bottom: 10px;
 }
 #pac-input {
   background-color: #fff;
-  font-size: 14px;
-  font-weight: 300;
+  font-size: 0.8rem;
+  color: var(--el-text-color-secondary);
   padding: 0 11px 0 13px;
   text-overflow: ellipsis;
-  width: 400px;
-  height: 30px;
+  width: 55vw;
+  height: 1.8rem;
   box-shadow: none;
   border: solid 1px var(--el-border-color);
   border-radius: 5px;
-  margin-right: 10px;
+}
+.route-btn {
+  width: 2rem;
 }
 .route-tag-group {
-  margin-top: 10px;
   text-align: left;
 }
 .route-tag {
-  margin-left: 10px;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
 }
-.title-box {
+.story-p {
+  width: 10vw;
   text-align: left;
-  color: var(--el-text);
-  font-size: 14px;
-  /* margin-left: 85px; */
+  font-weight: 500;
+  font-size: 0.8rem;
 }
-.input-box {
-  width: 300px;
-  margin-left: 15px;
-  margin-bottom: 10px;
+.story-title {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin-top: 1rem;
 }
-.photo-content-div {
+.story-title > span {
+  color: var(--el-text-color-secondary);
+  width: 17vw;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.story-title .input-box {
+  width: 70vw;
+  /* margin-left: 0.7rem; */
+}
+.story-rate {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin-top: 1rem;
+}
+.story-rate > span {
+  color: var(--el-text-color-secondary);
+  width: 17vw;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.story-rate .el-rate {
+  --el-rate-fill-color: #F16B51;
+}
+.story-content {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin-top: 1rem;
+}
+.story-content > span {
+  color: var(--el-text-color-secondary);
+  width: 17vw;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.story-content .content-input {
+  height: 150px;
+  width: 70vw;
+}
+.story-photo {
   display: flex;
   justify-content: left;
   align-items: center;
+  text-align: left;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.story-photo-title {
+  display: flex;
+  flex-direction: column;
+}
+.story-photo-title span {
+  color: var(--el-text-color-secondary);
+  width: 17vw;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 .photo-div {
-  text-align: center;
-  align-content: center;
-  width: 150px;
-  height: 150px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  flex-direction: column;
+}
+.photo-div label {
+  height: 2.25rem;
+}
+.photo-div .material-symbols-outlined {
+  color: var(--el-text-color-secondary);
+  font-size: 10vw;
+  font-weight: 500;
+}
+.photo-description {
+  color: var(--el-text-color-secondary);
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
 }
 .photo-input {
+  width: 0;
   visibility: hidden;
 }
-.photo-icon {
-  margin-top: 30px;
+.photo-input-add {
+  width: 0;
+  visibility: hidden;
+}
+.photo-add-div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.photo-add-div .material-symbols-outlined {
+  color:#F16B51;
+  font-size: 10vw;
+  font-weight: 500;
+}
+.my-header {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 1rem;
+}
+.my-header > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.my-header > div > h4 {
+  font-weight: 500;
+  margin-bottom: 0;
+}
+.my-header > div > p {
+  color: var(--el-text-color-secondary);
+  font-size: 0.7rem;
+  margin-bottom: 0;
+}
+.my-header > div > p:last-child {
+  color: var(--el-text-color-secondary);
+  font-size: 0.7rem;
+  margin-bottom: 0;
+  margin-top: 0;
 }
 .photo-preview {
-  width: 150px;
-}
-.file-preview-wrapper>img {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 150px;
-  height: 150px;
-}
-.remove-photo {
-  position: absolute;
-  top: 5px;
-  right: 0px;
-}
-.add-photo {
-  align-content: center;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  flex-wrap: wrap;
 }
-.content-input {
-  margin-left: 10px;
-  height: 150px;
-  width: 300px;
+.photo-preview .material-symbols-outlined {
+  font-size: 15vw;
 }
-.rate-div {
-  margin: 10px 0;
+.photo-preview label {
+  height: 3.375rem;
 }
+.photo-preview-group > img {
+  width: 15vw;
+  height: 20vw;
+  margin-right: 0.5rem;
+}
+.story-btn {
+  display: flex;
+  justify-content: flex-end;
+}
+.story-btn > el-button {
+  margin: 0;
+}
+.story-btn .material-symbols-outlined {
+  color: #F16B51;
+  font-size: 2rem;;
+}
+
 </style>
