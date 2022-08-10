@@ -2,9 +2,10 @@
   <div>
     <!-- diaryTemp -> diary로 바꿔 -->
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
+    {{ diary }}
     <div class="diary-detail-header">
       <div class="title-icons">
-        <h3>{{ diaryTemp.title }}</h3>
+        <h3>{{ diary.title }}</h3>
         <div class="icons">
           <!-- 여기부터는 공통 -->
           <div class="icon-cnt">
@@ -82,9 +83,9 @@
           </el-button>
           <div class="tag">
             <!-- 여기는 공통 -->
-            <el-tag>{{ diaryTemp.startDate.substr(5, 10) }}-{{ diaryTemp.endDate.substr(5, 10) }}</el-tag>
-            <el-tag>{{ diaryTemp.company }} ({{ diaryTemp.count }}명)</el-tag>
-            <el-tag v-for="(trans, idx) in diaryTemp.transport" :key="idx">{{ trans }}</el-tag>
+            <el-tag>{{ diary.startDate.substr(0, 10) }}-{{ diary.endDate.substr(0, 10) }}</el-tag>
+            <el-tag>{{ diary.company }} ({{ diary.count }}명)</el-tag>
+            <el-tag v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.transport.name }}</el-tag>
           </div>
         </div>
       </div>
@@ -93,7 +94,7 @@
 
     <div id="map" style="height: 70vw; position: relative; overflow: hidden;"></div>
     <div class="route-tag">
-      <el-tag class="tag" v-for="(route, idx) in diaryTemp.routes" :key="idx">{{ route.routeNum }}. {{ route.routeName }}</el-tag>
+      <el-tag class="tag" v-for="(route, idx) in diary.routes" :key="idx">{{ route.index }}. {{ route.routeName }}</el-tag>
     </div>
 
     <!-- <div>
@@ -114,21 +115,21 @@
 
     <div>
       <el-tabs tab-position="left" :stretch="true" class="story-tab">
-        <el-tab-pane v-for="(story, idx) in diaryTemp.stories" :key="idx" :label="(idx+1).toString()">
+        <el-tab-pane v-for="(story, idx) in diary.detailLocations" :key="idx" :label="(idx+1).toString()">
           <div class="story-title">
-            <h3>{{ story.place }}</h3>
-            <el-rate disabled v-model=story.rate></el-rate>
+            <h3>{{ story.detailLocationName }}</h3>
+            <el-rate disabled v-model=story.rating></el-rate>
           </div>
           <div class="story-image">
             <el-carousel indicator-position="outside" trigger="click" height="10rem" :autoplay=false arrow="always">
               <el-carousel-item v-for="(photo, index) in story.photoList" :key="index">
                 <!-- {{ photo }} -->
-                <img :src="photo.preview" :alt="photo.preview"/>
+                <img src="photo.preview" :alt="photo.preview"/>
               </el-carousel-item>
             </el-carousel>
           </div>
           <div class="story-content">
-            <p>{{ story.content }}</p>
+            <p>{{ story.detailLocationContent }}</p>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -161,7 +162,7 @@ export default {
     return {
       isLiked: 0,
       commentClicked: false,
-      diaryPk: this.$store.getters.diary.pk,
+      diaryPk: this.$route.params.diaryPk,
       isFollowed: 0,
       commentsTemp: [
         {
@@ -179,13 +180,8 @@ export default {
           content: '나도 댓글 달랭'
         }
       ]
-      // 라우터에 diaryPk 추가하기
-      // diaryPk: this.$route.parmas.diaryPk
     }
   },
-  // props: {
-  //   comments: Array,
-  // },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
     ...mapGetters(['isAuthor', 'diary', 'diaryTemp', 'isChild', 'parentComment']),
@@ -198,13 +194,13 @@ export default {
     ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent']),
     addMarkers() {
       const map = new google.maps.Map(document.getElementById("map"), {
-          center: {lat: this.diaryTemp.routes[0].lat, lng: this.diaryTemp.routes[0].lng},
-          zoom: 10,
+          center: {lat: this.diary.routes[0].lat, lng: this.diary.routes[0].lng},
+          zoom: 13,
           disableDefaultUI: true,
       });
       const geocodes = []
-      this.diaryTemp.routes.forEach((each) => {
-        let labelNum = (each.routeNum).toString()
+      this.diary.routes.forEach((each) => {
+        let labelNum = (each.idx).toString()
         geocodes.push({lat: each.lat, lng: each.lng})
         new google.maps.Marker({
             position: {lat: each.lat, lng: each.lng},
@@ -226,9 +222,9 @@ export default {
       this.hideParent()
     }
   },
-  // created() {
-  //   this.fetchDiary(this.diaryPk)
-  // },
+  created() {
+    this.fetchDiary(this.diaryPk)
+  },
   mounted() {
     this.addMarkers()
   }

@@ -15,6 +15,7 @@ export default {
   data() {
     return {
       diary: {
+        id: null,
         title: '',
         countryName: '대한민국',
         cityName: '서울특별시',
