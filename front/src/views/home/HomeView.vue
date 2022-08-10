@@ -35,9 +35,20 @@ export default {
     RecommendList,
     RegionList,
   },
-  created() {
-    this.showAllDiary()
+
+  //App.vue로 옮기기
+  mounted() {
+    if (localStorage.getItem('reloaded')) {
+        localStorage.removeItem('reloaded');
+    } else {
+        localStorage.setItem('reloaded', '1');
+        location.reload();
+    }
+
+    this.showAllDiary(),
+    this.reissueToken()
   },
+
   computed: {
     ...mapGetters(['GET_ALL_DIARY']),
     diaries() {
@@ -45,7 +56,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showAllDiary'])
+    ...mapActions(['showAllDiary', 'reissueToken'])
     }
   }
 

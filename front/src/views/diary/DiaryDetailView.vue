@@ -12,10 +12,40 @@
             <span v-else class="material-symbols-outlined filled-heart" @click="isLiked=0">favorite</span>
             <span class="cnt">777</span>
           </div>
-          <router-link :to="{ name: 'diaryComment' }" class="icon-cnt">
+          <!-- <router-link :to="{ name: 'diaryComment' }" class="icon-cnt">
             <span class="material-symbols-outlined">chat_bubble</span>
             <span class="cnt">7</span>
-          </router-link>
+          </router-link> -->
+          <div class="icon-cnt" @click="commentClicked=true">
+            <span class="material-symbols-outlined">chat_bubble</span>
+            <span class="cnt">7</span>
+          </div>
+          
+          <!-- 댓글 창 열림 -->
+          <el-drawer v-model="commentClicked" direction="btt" size="50%">
+            <template #header>
+              <h2>Comments</h2>
+            </template>
+            <template #default>
+              <!-- <div>
+                <ul>
+                  <li v-for="comment in comments" :key="comment.pk">
+                    <comment-item :comment="comment"></comment-item>
+                  </li>
+                </ul>
+              </div> -->
+              <comment-item :comments="commentsTemp"></comment-item>
+            </template>
+            <template #footer>
+              <div class="comment-form">
+                <div v-if="isChild">
+                  <p>@{{ parentComment }}님에게 답글 남기는 중</p>
+                  <span @click="closeInfo">x</span>
+                </div>
+                <comment-form :diaryPk="this.diaryPk"></comment-form>
+              </div>
+            </template>
+          </el-drawer>
 
           <!-- 로그인한 유저와 글 쓴 유저가 같다면 -->
           <!-- <div v-if="isAuthor"> -->
@@ -108,7 +138,7 @@
   <br>
 
   <!-- comment? -->
-  <diary-comment-view></diary-comment-view>
+  <!-- <diary-comment-view></diary-comment-view> -->
 
   </div>
 </template>
@@ -116,33 +146,56 @@
 <script>
 /* eslint-disable no-undef */
 import { mapGetters, mapActions } from 'vuex'
-import DiaryCommentView from '@/views/diary/DiaryCommentView.vue'
 import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
+import CommentForm from '@/components/diary/CommentForm.vue'
+import CommentItem from '@/components/diary/CommentItem.vue'
 
 export default {
   name: 'DiaryDetailView',
   components: {
-    DiaryCommentView,
     EditDeleteButton,
+    CommentForm,
+    CommentItem,
   },
   data() {
     return {
       isLiked: 0,
+      commentClicked: false,
+      diaryPk: this.$store.getters.diary.pk,
       isFollowed: 0,
+      commentsTemp: [
+        {
+          member: '유송',
+          content: '이건 댓글',
+          children: [
+            {
+              member: '규민',
+              content: '이건 대댓글'
+            }
+          ]
+        },
+        {
+          member: '정현',
+          content: '나도 댓글 달랭'
+        }
+      ]
       // 라우터에 diaryPk 추가하기
       // diaryPk: this.$route.parmas.diaryPk
     }
   },
+  // props: {
+  //   comments: Array,
+  // },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
-    ...mapGetters(['isAuthor', 'diary', 'diaryTemp']),
+    ...mapGetters(['isAuthor', 'diary', 'diaryTemp', 'isChild', 'parentComment']),
     photoUrl(file) {
       const newUrl = URL.createObjectURL(file)
       return newUrl
     }
   },
   methods: {
-    ...mapActions(['fetchDiary', 'deleteDiary']),
+    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent']),
     addMarkers() {
       const map = new google.maps.Map(document.getElementById("map"), {
           center: {lat: this.diaryTemp.routes[0].lat, lng: this.diaryTemp.routes[0].lng},
@@ -168,6 +221,10 @@ export default {
       })
       routePath.setMap(map)
     },
+
+    closeInfo() {
+      this.hideParent()
+    }
   },
   // created() {
   //   this.fetchDiary(this.diaryPk)
@@ -232,6 +289,10 @@ a {
   font-size: 0.7rem;
 }
 
+.el-drawer h2{
+  text-align: left;
+  font-weight: 500;
+}
 /* .edit-delete {
   position: absolute;
   top: 1rem;
@@ -341,4 +402,29 @@ a {
 .story-content {
   text-align: left;
 }
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-form div{
+  display: flex;
+  margin-bottom: 0.5rem;
+  justify-content: space-between
+}
+
+.comment-form p {
+  text-align: left;
+  color: var(--el-text-color-secondary);
+  font-size: 0.7rem;
+  font-weight: 100;
+}
+
+.comment-form span {
+  color: var(--el-text-color-secondary);
+  font-size: 1rem;
+  font-weight: 100;
+}
+
 </style>

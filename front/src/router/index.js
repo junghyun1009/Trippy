@@ -1,5 +1,5 @@
-// import store from '../store'
-
+import store from '../store'
+import VueCookies from 'vue-cookies'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
 import SearchView from '@/views/home/SearchView.vue'
@@ -7,7 +7,7 @@ import SearchView from '@/views/home/SearchView.vue'
 import DiaryCreateView from '../views/diary/DiaryCreateView.vue'
 import DiaryDetailView from '../views/diary/DiaryDetailView.vue'
 import DiaryEditView from '../views/diary/DiaryEditView.vue'
-import DiaryCommentView from '../views/diary/DiaryCommentView.vue'
+// import DiaryCommentView from '../components/diary/DiaryCommentView.vue'
 
 import LoginView from '@/views/account/LoginView.vue'
 import SignUpView from '@/views/account/SignUpView.vue'
@@ -94,12 +94,12 @@ const routes = [
     name: 'diaryEdit',
     component: DiaryEditView
   },
-  {
-    path: '/diary/comment',
-    // 나중에 pk 추가하기
-    name: 'diaryComment',
-    component: DiaryCommentView
-  },
+  // {
+  //   path: '/diary/comment',
+  //   // 나중에 pk 추가하기
+  //   name: 'diaryComment',
+  //   component: DiaryCommentView
+  // },
 
 
   {
@@ -163,24 +163,42 @@ const router = createRouter({
 })
 
 
-// router.beforeEach((to, from, next) => {
-//   const { isLoggedIn } = store.getters
+router.beforeEach((to, from, next) => {
+  const { isLoggedIn } = store.getters
+  const refreshToken = VueCookies.get('refreshToken')
 
-//   const authPages = [
-//     'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
-//     'profile', 'profileEdit', 
-//     'community', 'communityEdit', 'communityDetail', 'communityCreate',
-//     'badgeList'
-//   ]
+  const authPages = [
+    'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
+    'profile', 'profileEdit', 
+    'community', 'communityEdit', 'communityDetail', 'communityCreate',
+    'badgeList'
+  ]
 
-//   const isAuthRequired = authPages.includes(to.name)
+  const isAuthRequired = authPages.includes(to.name)
   
-//   if ( isAuthRequired && !isLoggedIn ) {
-//     alert('로그인을 해주세요!')
-//     next({ name: 'login' })
-//   } else {
-//     next()
-//   }
-// })
+    if (isAuthRequired && !isLoggedIn && refreshToken){
+      console.log(isLoggedIn)
+      //refreshToken은 있고 accessToken이 없을 경우 토큰 재발급 요청
+      store.dispatch('reissueToken');
+    }
+    if (isAuthRequired && isLoggedIn){
+      //accessToken이 있을 경우 진행
+      return next();
+    }
+    if (isAuthRequired && !isLoggedIn && !refreshToken){
+      console.log(store)
+      //2개 토큰이 모두 없을 경우 로그인페이지로
+      alert('로그인을 해주세요!')
+      return next({name: 'login'});
+    }
+    return next();
+
+  // if ( isAuthRequired && !isLoggedIn ) {
+  //   alert('로그인을 해주세요!')
+  //   next({ name: 'login' })
+  // } else {
+  //   next()
+  // }
+})
 
 export default router
