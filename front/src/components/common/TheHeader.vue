@@ -42,38 +42,63 @@
         </div>
       </el-menu-item>
     </el-menu> -->
-    <el-drawer v-model="visible" :show-close="false" size="70%">
+    <el-drawer v-model="visible" size="80%">
       <!-- 로그인한 유저 -->
-      <!-- <div v-if="isLoggedIn"> -->
+      <div class="drawer">
+        <!-- <div v-if="isLoggedIn"> -->
         <div> 
-          <div @click="goProfile(), visible=false">
-            <el-avatar :size="100" :src="profile.img_path"/>
+          <div class="profile" @click="goProfile(), visible=false">
+            <el-avatar class="img" :size="50" :src="profile.img_path"/>
+            <p class="name">{{ profile.name }} 이름
+              <span class="material-symbols-outlined icon">arrow_forward_ios</span>
+            </p>
+            
+          </div>
+          <hr>
+          <div class="my-activity">
+            <p @click="goMyDiary(), visible=false">
+              <span class="material-symbols-outlined icon">note_alt</span>
+              내 일지
+            </p>
+            <p @click="goMyLikes(), visible=false">
+              <span class="material-symbols-outlined icon">favorite</span>
+              내 좋아요
+            </p>
             <p>
-              {{ profile.name }}
-              <span class="material-symbols-outlined">arrow_forward_ios</span>
+              <span class="material-symbols-outlined icon">diversity_1</span>
+              내 동행찾기
             </p>
           </div>
-          <!-- <router-link :to="{ name: 'profileEdit' }" @click="visible=false">프로필 수정</router-link>
-          <span @click="logout()"> | 로그아웃</span> -->
           <hr>
-          <p @click="goMyDiary(), visible=false">내 일지</p>
-          <p @click="goMyLikes(), visible=false">내 좋아요</p>
-          <p>내 동행찾기</p>
+          <div class="activity">
+            <p @click="goCommunity(), visible=false">
+              <span class="material-symbols-outlined icon">diversity_3</span>
+              동행찾기
+            </p>
+            <p @click="goBadge(), visible=false">
+              <span class="material-symbols-outlined icon">local_police</span>
+              뱃지
+            </p>
+          </div>
           <hr>
-          <p @click="goCommunity(), visible=false">동행찾기</p>
-          <p @click="goBadge(), visible=false">뱃지</p>
-          <hr>
-          <p @click="goSetting(), visible=false">설정</p>
+          <div class="setting">
+            <p @click="goSetting(), visible=false">
+              <span class="material-symbols-outlined icon">settings</span>
+              설정
+            </p>
+          </div>
           <hr>
         </div>
       <!-- </div> -->
       <!-- 로그인 안 한 유저 -->
       <!-- <div v-if="!isLoggedIn"> -->
-        <div>
+        <div class="loggedin">
           <p @click="goLogin(), visible=false">로그인</p>
+          <span class="slash">/</span>
           <p @click="goSignup(), visible=false">회원가입</p>
         </div>
       <!-- </div> -->
+      </div>
     </el-drawer>
   </header>
 </template>
@@ -220,6 +245,53 @@ header {
   margin-right: 0.5rem;
 }
 
+.profile {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+.img {
+  margin-right: 0.3rem;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.icon {
+  font-size: 0.9rem;
+  margin-right: 0.3rem;
+}
+
+.my-activity,
+.activity,
+.setting,
+.loggedin {
+  padding: 1rem;
+}
+
+.my-activity p,
+.activity p {
+  margin-bottom: 1rem;
+}
+
+.my-activity p:last-child, 
+.activity p:last-child,
+.loggedin p:last-child {
+  margin: 0;
+}
+
+.loggedin {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.slash{
+  margin: 0 0.3rem;
+}
 /* 
 .flex-grow {
   flex-grow: 1;

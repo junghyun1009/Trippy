@@ -1,9 +1,22 @@
 <template>
   <div>
-    <p @click="goProfileEdit">프로필 수정</p>
-    <p @click="goPasswordChange">비밀번호 변경</p>
-    <p @click="logout">로그아웃</p>
-    <p>회원 탈퇴</p>
+    <p @click="goProfileEdit">
+      프로필 수정
+      <span class="material-symbols-outlined icon">arrow_forward_ios</span>
+    </p>
+    
+    <p @click="goPasswordChange">
+      비밀번호 변경
+      <span class="material-symbols-outlined icon">arrow_forward_ios</span>
+    </p>
+    <p @click="logout">
+      로그아웃
+      <span class="material-symbols-outlined icon">arrow_forward_ios</span>
+    </p>
+    <p>
+      회원 탈퇴
+      <span class="material-symbols-outlined icon">arrow_forward_ios</span>
+    </p>
   </div>
 </template>
 
@@ -24,6 +37,20 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+* {
+  padding: 1rem;
+}
 
+p {
+  margin: 0.8rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon {
+  font-size: 1rem;
+  padding: 0;
+}
 </style>
