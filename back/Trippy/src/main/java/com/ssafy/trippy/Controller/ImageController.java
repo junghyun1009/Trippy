@@ -34,13 +34,15 @@ public class ImageController {
 
 //  추후에 업로드 형식에 따라 param받는 형식 고려(현재는 postman이 requestpart에 호환)
     @PostMapping("/upload")
-    public ResponseImageDto upload(@RequestPart(value = "file") MultipartFile file){
-        return imageService.uploadImage(file,null);
+    public ResponseImageDto upload(@RequestPart(value = "file") MultipartFile file, HttpServletRequest request){
+        return imageService.uploadImage(file,null,request.getSession().getServletContext().getRealPath("/resources/image"));
     }
     @PostMapping("/upload/member")
     public ResponseEntity<?> updateUserProfile(@RequestPart(value = "file") MultipartFile file, HttpServletRequest request)  {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        ResponseImageDto responseImageDto = imageService.uploadImage(file,null);
+        System.out.println(request.getSession().getServletContext().getRealPath("/resources/image"));
+        ResponseImageDto responseImageDto = imageService.uploadImage(file,null,request.getSession().getServletContext().getRealPath("/resources/image"));
+
         if(responseImageDto.getFileName()==null) {
             return new ResponseEntity<>("이미지가 없습니다.", HttpStatus.BAD_REQUEST);
         }
@@ -53,8 +55,8 @@ public class ImageController {
     }
 
     @PostMapping("/upload/post/{detail_location_id}")
-    public ResponseEntity<?> updatePostProfile(@RequestPart(value = "file") MultipartFile file, @PathVariable("detail_location_id") Long detailLocId){
-            ResponseImageDto responseImageDto = imageService.uploadImage(file,detailLocId);
+    public ResponseEntity<?> updatePostProfile(@RequestPart(value = "file") MultipartFile file, @PathVariable("detail_location_id") Long detailLocId, HttpServletRequest request){
+            ResponseImageDto responseImageDto = imageService.uploadImage(file,detailLocId,request.getSession().getServletContext().getRealPath("/resources/image"));
             if(responseImageDto.getFileName()==null) {
                 return new ResponseEntity<>("이미지가 없습니다.", HttpStatus.BAD_REQUEST);
             }
@@ -62,13 +64,13 @@ public class ImageController {
     }
 
     @DeleteMapping("/delete/{image_id}")
-    public ResponseEntity<?> deleteImage(@PathVariable("image_id") Long imageId) {
+    public ResponseEntity<?> deleteImage(@PathVariable("image_id") Long imageId, HttpServletRequest request) {
         imageService.deleteImage(imageService.getImageById(imageId).getFileName());
         return new ResponseEntity<>("success",HttpStatus.OK);
     }
 
     @GetMapping("/{post_id}")
-    public ResponseEntity<?> getImageByPostId(@PathVariable("post_id") Long postId) {
+    public ResponseEntity<?> getImageByPostId(@PathVariable("post_id") Long postId, HttpServletRequest request) {
         List<Resource> resources =  imageService.getImagesByPostId(postId);
         List<File> files = new ArrayList<>();
         for (Resource resource: resources){

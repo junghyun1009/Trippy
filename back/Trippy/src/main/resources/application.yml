@@ -38,7 +38,7 @@ spring:
       mail.smtp.ssl.enable: true
       mail.smtp.ssl.trust: smtp.naver.com
   redis:
-    host: localhost
+    host: 172.26.13.195
     port: 6379
   jwt:
     blacklist:

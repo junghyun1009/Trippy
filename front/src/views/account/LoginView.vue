@@ -4,7 +4,7 @@
     <div class="input-box">
       <h1>TRIPPY<span>.</span></h1>
       <form @submin.prevent="login()">
-          <el-input class="input" v-model="userinfo.description" placeholder="이메일" id="email" ></el-input>
+          <el-input class="input" v-model="userinfo.email" placeholder="이메일" id="email" ></el-input>
           <el-input class="input" v-model="userinfo.password" type="password" placeholder="비밀번호" show-password></el-input>
           <el-button class="input" type="primary" @click="checkEmail()">로그인</el-button>
         <br><br>
@@ -30,8 +30,8 @@ export default {
     },
     data() {
         return { userinfo: {
-            email: '',
-            password: '',
+            'email': '',
+            'password': '',
         },
         loginError: userErrorMessage.loginError,
         emailError: userErrorMessage.emailError,
@@ -49,8 +49,7 @@ export default {
       if (regEmail.test(inputEmail) === false) {
         this.emailFormat = false;
       } else {
-        // 만약 이메일 형식이 같다면 로그인 화면으로 ㄱㄱ -- 이건 나중에 auth 되면 바꿔야 함
-        this.$router.push('/')
+        this.login(this.userinfo)
         }        
       },  
       checkAuthentication() {

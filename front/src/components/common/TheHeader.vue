@@ -44,28 +44,29 @@
     </el-menu> -->
     <el-drawer v-model="visible" :show-close="false" size="70%">
       <!-- 로그인한 유저 -->
-      <!-- <div v-if="isLoggedIn"> -->
-      <div>
-        <router-link :to="{ name: 'profile' }" @click="visible =false">
-          <el-avatar :size="100" :src="profile.img_path" />
-        </router-link>
-        <p>{{ profile.name }}의 로그</p>
-        <router-link :to="{ name: 'profileEdit' }" @click="visible =false">프로필 수정</router-link>
-        <span @click="logout()"> | 로그아웃</span>
-        <hr>
-        <router-link :to="{ name: 'diaryCreate' }" @click="visible =false">다이어리 작성</router-link>
-        <br>
-        <router-link :to="{ name: 'community' }" @click="visible =false">동행 구하기</router-link>
-        <hr>
-        <router-link :to="{ name: 'chatList' }" @click="visible =false">채팅</router-link>
-
+      <div v-if="isLoggedIn">
+        <div>
+          <router-link :to="{ name: 'profile' }" @click="visible =false">
+            <el-avatar :size="100" :src="profile.img_path" />
+          </router-link>
+          <p>{{ profile.name }}의 로그</p>
+          <router-link :to="{ name: 'profileEdit' }" @click="visible =false">프로필 수정</router-link>
+          <span @click="logout()"> | 로그아웃</span>
+          <hr>
+          <router-link :to="{ name: 'diaryCreate' }" @click="visible =false">다이어리 작성</router-link>
+          <br>
+          <router-link :to="{ name: 'community' }" @click="visible =false">동행 구하기</router-link>
+          <hr>
+          <router-link :to="{ name: 'chatList' }" @click="visible =false">채팅</router-link>
+        </div>
       </div>
       <!-- 로그인 안 한 유저 -->
-      <!-- <div v-else> -->
-      <div>
-        <router-link :to="{ name: 'login' }" @click="visible =false">로그인</router-link>
-        <br>
-        <router-link :to="{ name: 'signUp' }" @click="visible =false">회원가입</router-link>
+      <div v-if="!isLoggedIn">
+        <div>
+          <router-link :to="{ name: 'login' }" @click="visible =false">로그인</router-link>
+          <br>
+          <router-link :to="{ name: 'signUp' }" @click="visible =false">회원가입</router-link>
+        </div>
       </div>
 
     </el-drawer>
