@@ -9,7 +9,7 @@
         <div class="view-name">{{ viewName }}</div>
       </div>
     </div>
-    <div class="menu">
+    <div v-if="this.$route.name !== 'login'" class="menu">
       <div class="menu-icon search" @click="goSearch">
         <span class="material-symbols-outlined">search</span>
       </div>
@@ -44,33 +44,37 @@
     </el-menu> -->
     <el-drawer v-model="visible" :show-close="false" size="70%">
       <!-- 로그인한 유저 -->
-      <div v-if="isLoggedIn">
-        <div>
-          <router-link :to="{ name: 'profile' }" @click="visible =false">
-            <el-avatar :size="100" :src="profile.img_path" />
-          </router-link>
-          <p>{{ profile.name }}의 로그</p>
-          <router-link :to="{ name: 'profileEdit' }" @click="visible =false">프로필 수정</router-link>
-          <span @click="logout()"> | 로그아웃</span>
+      <!-- <div v-if="isLoggedIn"> -->
+        <div> 
+          <div @click="goProfile(), visible=false">
+            <el-avatar :size="100" :src="profile.img_path"/>
+            <p>
+              {{ profile.name }}
+              <span class="material-symbols-outlined">arrow_forward_ios</span>
+            </p>
+          </div>
+          <!-- <router-link :to="{ name: 'profileEdit' }" @click="visible=false">프로필 수정</router-link>
+          <span @click="logout()"> | 로그아웃</span> -->
           <hr>
-          <router-link :to="{ name: 'diaryCreate' }" @click="visible =false">다이어리 작성</router-link>
-          <br>
-          <router-link :to="{ name: 'community' }" @click="visible =false">동행 구하기</router-link>
+          <p @click="goMyDiary(), visible=false">내 일지</p>
+          <p @click="goMyLikes(), visible=false">내 좋아요</p>
+          <p>내 동행찾기</p>
           <hr>
-          <router-link :to="{ name: 'chatList' }" @click="visible =false">채팅</router-link>
+          <p @click="goCommunity(), visible=false">동행찾기</p>
+          <p @click="goBadge(), visible=false">뱃지</p>
+          <hr>
+          <p @click="goSetting(), visible=false">설정</p>
+          <hr>
         </div>
-      </div>
+      <!-- </div> -->
       <!-- 로그인 안 한 유저 -->
-      <div v-if="!isLoggedIn">
+      <!-- <div v-if="!isLoggedIn"> -->
         <div>
-          <router-link :to="{ name: 'login' }" @click="visible =false">로그인</router-link>
-          <br>
-          <router-link :to="{ name: 'signUp' }" @click="visible =false">회원가입</router-link>
+          <p @click="goLogin(), visible=false">로그인</p>
+          <p @click="goSignup(), visible=false">회원가입</p>
         </div>
-      </div>
-
+      <!-- </div> -->
     </el-drawer>
-
   </header>
 </template>
 
@@ -79,7 +83,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 
 export default {
-  name: "NavBar",
+  name: 'TheHeader',
   components: {
   },
   data () {
@@ -103,6 +107,8 @@ export default {
         return '다이어리 작성'
       } else if (name === 'diaryEdit') {
         return '다이어리 수정'
+      } else if (name === 'signUp' || name === 'signUpOption') {
+        return '회원가입'
       } else if (name === 'profile') {
         return '프로필'
       } else if (name === 'profileEdit') {
@@ -129,6 +135,30 @@ export default {
     },
     goSearch() {
       this.$router.push({ name:  'search' })
+    },
+    goProfile() {
+      this.$router.push({ name: 'profile' })
+    },
+    goMyDiary() {
+      this.$router.push({ name: 'profile'})
+    },
+    goMyLikes() {
+      this.$router.push({ name: 'profile' })
+    },
+    goCommunity() {
+      this.$router.push({ name: 'community' })
+    },
+    goBadge() {
+      this.$router.push({ name: 'badgeList' })
+    },
+    goSetting() {
+      this.$router.push({ name: 'setting' })
+    },
+    goLogin() {
+      this.$router.push({ name: 'login' })
+    },
+    goSignup() {
+      this.$router.push({ name: 'signUp' })
     },
     // showSearchBar() {
     //   this.flag = 1
@@ -166,7 +196,7 @@ header {
 .view-name-group {
   display: flex;
   align-items: center;
-  color: #fff;
+  color: #ffffff;
 }
 
 .view-name {
@@ -189,6 +219,7 @@ header {
 .search {
   margin-right: 0.5rem;
 }
+
 /* 
 .flex-grow {
   flex-grow: 1;
