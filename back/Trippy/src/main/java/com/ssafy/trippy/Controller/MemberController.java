@@ -98,6 +98,12 @@ public class MemberController {
         return "비밀번호 변경 완료";
     }
 
+    // 이메일 중복확인
+    @GetMapping("/members/duplicate")
+    public boolean chkDup(@RequestParam("email") String email) {
+        return memberService.chkDuplicate(email);
+    }
+
     // 인증 메일 보내기
     @PostMapping("/members/join/authmail")
     @ApiOperation(value = "회원 가입시 이메인 인증", notes = "기존사용하고 있는 이메일을 통해 인증")
