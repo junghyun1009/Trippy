@@ -35,6 +35,8 @@ export default {
     RecommendList,
     RegionList,
   },
+
+  //App.vue로 옮기기
   mounted() {
     if (localStorage.getItem('reloaded')) {
         localStorage.removeItem('reloaded');
@@ -46,6 +48,7 @@ export default {
     this.showAllDiary(),
     this.reissueToken()
   },
+
   computed: {
     ...mapGetters(['GET_ALL_DIARY']),
     diaries() {
