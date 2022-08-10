@@ -45,16 +45,27 @@
     <el-drawer v-model="visible" size="80%">
       <!-- 로그인한 유저 -->
       <div class="drawer">
-        <!-- <div v-if="isLoggedIn"> -->
-        <div> 
+        <div v-if="isLoggedIn">
           <div class="profile" @click="goProfile(), visible=false">
             <el-avatar class="img" :size="50" :src="profile.img_path"/>
             <p class="name">{{ profile.name }} 이름
               <span class="material-symbols-outlined icon">arrow_forward_ios</span>
-            </p>
-            
+            </p> 
           </div>
           <hr>
+
+        </div>
+      <!-- 로그인 안 한 유저 -->
+        <div v-if="!isLoggedIn">
+          <div class="loggedin">
+            <p @click="goLogin(), visible=false">로그인</p>
+            <span class="slash">/</span>
+            <p @click="goSignup(), visible=false">회원가입</p>
+          </div>
+        </div>
+
+      <!-- 공통 -->
+        <div>
           <div class="my-activity">
             <p @click="goMyDiary(), visible=false">
               <span class="material-symbols-outlined icon">note_alt</span>
@@ -87,17 +98,7 @@
               설정
             </p>
           </div>
-          <hr>
         </div>
-      <!-- </div> -->
-      <!-- 로그인 안 한 유저 -->
-      <!-- <div v-if="!isLoggedIn"> -->
-        <div class="loggedin">
-          <p @click="goLogin(), visible=false">로그인</p>
-          <span class="slash">/</span>
-          <p @click="goSignup(), visible=false">회원가입</p>
-        </div>
-      <!-- </div> -->
       </div>
     </el-drawer>
   </header>
@@ -138,6 +139,8 @@ export default {
         return '프로필'
       } else if (name === 'profileEdit') {
         return '프로필 수정'
+      } else if (name === 'setting') {
+        return '설정'
       } else if (name === 'community') {
         return '동행찾기'
       } else if (name === 'communityCreate') {

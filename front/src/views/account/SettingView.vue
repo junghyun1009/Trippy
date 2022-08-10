@@ -13,7 +13,7 @@
       로그아웃
       <span class="material-symbols-outlined icon">arrow_forward_ios</span>
     </p>
-    <p>
+    <p @click="open(), deleteAccount()">
       회원 탈퇴
       <span class="material-symbols-outlined icon">arrow_forward_ios</span>
     </p>
@@ -22,17 +22,43 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 export default {
   name: 'SettingView',
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(['logout', 'deleteAccount']),
     goProfileEdit() {
       this.$router.push({ name: 'profileEdit' })
     },
     goPasswordChange() {
       this.$router.push({ name: 'passwordChange' })
     },
+    open() {
+      ElMessageBox.confirm(
+        '정말로 탈퇴하시곘습니까?',
+        'Warning',
+        {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }
+      )
+      .then(() => {
+        ElMessage({
+          type: 'success',
+          message: '탈퇴가 완료되었습니다',
+        })
+        this.deleteAccount()
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '탈퇴가 취소되었습니다',
+        })
+      })
+    }
+
   }
 }
 </script>
