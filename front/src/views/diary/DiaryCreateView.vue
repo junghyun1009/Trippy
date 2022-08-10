@@ -16,13 +16,15 @@ export default {
     return {
       diary: {
         title: '',
+        countryName: '대한민국',
+        cityName: '서울특별시',
         startDate: '',
         endDate: '',
-        company: '가족',
+        company: 1,
         count: 1,
-        transport: [],
+        postTransports: [],
         routes: [],
-        stories: []
+        detailLocations: []
       }
     }
   }

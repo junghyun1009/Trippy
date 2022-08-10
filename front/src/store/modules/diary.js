@@ -89,27 +89,31 @@ export default ({
   actions: {
     // 일지 CREATE
     // 일지 저장
-    createDiary({ commit }, diary) {
-      commit('CREATE_DIARY', diary)
-      // axios({
-      //   url: 'http://localhost:8000/posts/',
-      //   method: 'post',
-      //   data: diary,
-      //   headers: getters.authHeader,
-      // })
-      // .then(res => {
-      //   commit('CREATE_DIARY', res.data)
-      //   router.push({
-      //     name: 'diaryDetail'
-      //   })
-      // })
+    createDiary({ commit, getters }, diary) {
+      // commit('CREATE_DIARY', diary)
+      console.log(1)
+      console.log(diary)
+      axios({
+        url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts',
+        method: 'post',
+        data: diary,
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        console.log(2)
+        commit('CREATE_DIARY', res.data)
+        console.log(3)
+        router.push({
+          name: 'diaryDetail'
+        })
+      })
     },
 
     // 일지 READ
     // 단일 일지
     fetchDiary({ commit, getters }, diaryPk) {
       axios({
-        url: `http://localhost:8000/posts/detail/${diaryPk}`,
+        url: `http://i7a506.p.ssafy.io:8080/posts/detail/${diaryPk}`,
         method: 'get',
         headers: getters.authHeader
       })
