@@ -66,7 +66,9 @@ public class CommunityPostServiceImpl implements CommunityPostService {
                 requestCommunityPostDto.getEndAge(),
                 requestCommunityPostDto.getGender(),
                 requestCommunityPostDto.isLocal(),
-                Location.builder().id(requestCommunityPostDto.getLocationId()).build());
+                Location.builder().id(requestCommunityPostDto.getLocationId()).build(),
+                requestCommunityPostDto.getPlace(),
+                requestCommunityPostDto.isDay());
     }
 
     @Override
@@ -92,6 +94,8 @@ public class CommunityPostServiceImpl implements CommunityPostService {
                     .recruitVolume(communityPost.getRecruitVolume())
                     .startDate(communityPost.getStartDate())
                     .title(communityPost.getTitle())
+                    .place(communityPost.getPlace())
+                    .isDAY(communityPost.isDAY())
                     .build();
             communityPostDtos.add(responseCommunityPostDto);
         }
