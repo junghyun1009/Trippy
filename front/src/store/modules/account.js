@@ -127,6 +127,10 @@ export default {
           const email = res.data.email
           console.log(email)
           localStorage.setItem('email', email)
+          let gender = res.data.gender
+          if ( gender === 1) {
+            res.data.gender = '남자'
+          } else ( res.data.gender = '여자')
           commit('SET_CURRENT_USER', res.data)})
         .catch(err => {
           if (err.response.status === 400) {
@@ -180,6 +184,7 @@ export default {
       })
       .then( () => {
         console.log('deleted')
+        router.push({ name: 'home' })
       })
       .catch(err => {
         console.error(err)

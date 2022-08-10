@@ -94,7 +94,7 @@ export default {
             name: this.$store.getters.currentUser.name,
             gender: this.$store.getters.currentUser.gender,
             birth: this.$store.getters.currentUser.birth,
-            desc: this.$store.getters.currentUser.desc,
+            desc: this.$store.getters.currentUser.description,
         },
         options: [
             {
@@ -115,10 +115,10 @@ export default {
   },
   methods: {
     ...mapActions(['deleteAccount', 'fetchCurrentUser',]),
-    created() {
+    mounted() {
       this.fetchCurrentUser()
+      this.genderParsing()
     },
-  
 
     checkNickname() {
       var regNickname = /^([0-9]|[a-z]|[A-Z]|[가-힣]).{1,10}$/;
@@ -152,8 +152,6 @@ export default {
     removePhoto() {
       this.profilePhoto = {}
     },
-
-    
 
     open() {
       ElMessageBox.confirm(
