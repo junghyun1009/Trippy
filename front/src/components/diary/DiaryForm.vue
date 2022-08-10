@@ -4,8 +4,6 @@
       <!-- 제목 -->
       <div class="title-box">
         <p>제목</p>
-        <p>{{ currentUser.email }}</p>
-        <p>{{ isLoggedIn }}</p>
         <el-input v-model="newDiary.title" class="input-box" placeholder="제목을 입력하세요." />
       </div>
 
@@ -30,7 +28,7 @@
                   </el-tag>
                   <el-tag v-for="trans in transportationTag" :key="trans" class="option-tag" 
                   closable :disable-transitions="false" type='' @close="handleClose(trans)">
-                    {{ trans }}
+                    {{ trans.transport.name }}
                   </el-tag>
                 </div>
               </el-scrollbar>
@@ -75,14 +73,12 @@
 
             <!-- 옵션: 이동수단 -->
               <div class="option-transport">
-                <span class="option-title">이동 수단</span>
-                <el-checkbox-group class="transport" v-model="newDiary.postTransports" v-for="(trans, idx) in transportList" :key="idx">
-                  <el-checkbox class="transport-option" :label="trans">{{ trans.transport.name }}</el-checkbox>
-                  <!-- <el-checkbox class="transport-option" label="대중교통" />
-                  <el-checkbox class="transport-option" label="따릉이" />
-                  <el-checkbox class="transport-option" label="택시" />
-                  <el-checkbox class="transport-option" label="자차" /> -->
-                </el-checkbox-group>
+                <span>이동 수단</span>
+                <div class="option-checkbox">
+                  <el-checkbox-group class="transport" v-model="newDiary.postTransports" v-for="(trans, idx) in transportList" :key="idx">
+                    <el-checkbox class="transport-option" :label="trans">{{ trans.transport.name }}</el-checkbox>
+                  </el-checkbox-group>
+                </div>
               </div>
             </div>
           </el-collapse-item>
@@ -106,7 +102,7 @@
             <div>
               <div class="route-div">
                 <input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0 && newDiary.routes.length < 10">
-                <el-button-group >
+                <el-button-group>
                   <el-button type="primary" class="route-btn" @click="addMarkers" :disabled="newDiary.routes.length === 0">
                     <span class="material-symbols-outlined">push_pin</span>
                   </el-button>
@@ -217,10 +213,10 @@
 
       </div>
 
-      <div v-if="action==='create'">
+      <div v-if="action==='create'" class="submit-btn">
         <el-button @click="onSubmit">작성하기</el-button>
       </div>
-      <div v-else>
+      <div v-else class="submit-btn">
         <el-button @click="onSubmit">수정하기</el-button>
       </div>
     </form>
@@ -306,10 +302,11 @@ export default {
   },
   computed: {
     // update할 때 diaryTemp 대신 해당 pk 다이어리 가져와야 함 -> 편집 창으로 들어오면 해당 pk 다이어리 내용 fetch하는 함수
-    ...mapGetters(['diaryTemp', 'currentUser', 'isLoggedIn']),
+    ...mapGetters(['diaryTemp']),
     partyTag() {
       const party = this.newDiary.company
-      return party
+      const partyList = ['가족', '커플', '친구', '개인']
+      return partyList[party-1]
     },
     transportationTag() {
       const transportation = this.newDiary.postTransports
@@ -552,6 +549,7 @@ export default {
   align-items: center;
   color: var(--el-text);
   font-size: 0.8rem;
+  margin-bottom: 0.5rem;
 }
 .title-box > p {
   width: 10vw;
@@ -625,9 +623,16 @@ export default {
   margin-bottom: 1rem;
   text-align: left;
 }
-.transport {
-  margin-left: 1rem;
-  width: 80vw;
+.option-transport span {
+  color: var(--el-text-color-secondary);
+  width: 25vw;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.option-checkbox {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 1.5rem;
 }
 .transport-option {
   width: 4rem;
@@ -648,11 +653,12 @@ export default {
   color: var(--el-text-color-secondary);
   padding: 0 11px 0 13px;
   text-overflow: ellipsis;
-  width: 55vw;
+  width: 60vw;
   height: 1.8rem;
   box-shadow: none;
   border: solid 1px var(--el-border-color);
   border-radius: 5px;
+  margin-right: 1rem;
 }
 .route-btn {
   width: 2rem;
@@ -669,6 +675,7 @@ export default {
   text-align: left;
   font-weight: 500;
   font-size: 0.8rem;
+  margin-top: 1rem;
 }
 .story-title {
   display: flex;
@@ -823,6 +830,9 @@ export default {
 .story-btn .material-symbols-outlined {
   color: #F16B51;
   font-size: 2rem;;
+}
+.submit-btn {
+  margin-top: 1rem;
 }
 
 </style>
