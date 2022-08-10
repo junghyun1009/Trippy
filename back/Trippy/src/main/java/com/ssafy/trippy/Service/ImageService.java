@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ImageService {
-    ResponseImageDto uploadImage(MultipartFile file,Long detailLocationId, String path);
+    ResponseImageDto uploadImage(MultipartFile file,Long detailLocationId);
 
     void deleteImage(String destinationFileName);
 

@@ -26,17 +26,6 @@ spring:
         #        show_sql: true
         format_sql: true
     generate-ddl: true
-  mail:
-    host: smtp.naver.com
-    port: 465
-    #  -----본인 계정 정보 ------
-    username:
-    password:
-    #  -------------------------
-    properties:
-      mail.smtp.auth: true
-      mail.smtp.ssl.enable: true
-      mail.smtp.ssl.trust: smtp.naver.com
   redis:
     host: 172.26.13.195
     port: 6379
@@ -46,10 +35,23 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
 server:
   servlet:
     context-path: /api
+
+cloud:
+  aws:
+    s3:
+      bucket: trippybucket
+    region:
+      static: ap-northeast-2 # 리전 정보

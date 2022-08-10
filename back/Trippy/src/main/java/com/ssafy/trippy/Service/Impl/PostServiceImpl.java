@@ -4,6 +4,7 @@ import com.ssafy.trippy.Domain.*;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Repository.*;
+import com.ssafy.trippy.Service.ImageService;
 import com.ssafy.trippy.Service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class PostServiceImpl implements PostService {
     private final LocationRepository locationRepository;
     private final PostCommentRepository postCommentRepository;
     private final RouteRepository routeRepository;
+    private final ImageService imageService;
 
     private final Long busId = 1L;
     private final Long walkId = 2L;

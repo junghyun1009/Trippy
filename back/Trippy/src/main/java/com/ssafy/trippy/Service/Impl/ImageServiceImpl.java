@@ -36,21 +36,21 @@ public class ImageServiceImpl implements ImageService {
     private String fileUrl = "/home/ubuntu/S07P12A506/back/Trippy/src/main/resources/webapp/static/image/";
 
     @Override
-    public ResponseImageDto uploadImage(MultipartFile file, Long detailLocationId,String path)  {
+    public ResponseImageDto uploadImage(MultipartFile file, Long detailLocationId)  {
         try {
             String sourceFileName = file.getOriginalFilename();
             String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName).toLowerCase();
             String destinationFileName = RandomStringUtils.randomAlphabetic(32) + "." + sourceFileNameExtension;
-            File destinationFile = new File(path + "/" + destinationFileName);
+            File destinationFile = new File(fileUrl + "/" + destinationFileName);
             destinationFile.getParentFile().mkdirs();
             file.transferTo(destinationFile);
 
-            Image image = new Image(destinationFileName, sourceFileName, path, detailLocationId);
+            Image image = new Image(destinationFileName, sourceFileName, fileUrl, detailLocationId);
             if(detailLocationId!=null) imageRespository.save(image);
             return ResponseImageDto.builder()
                     .fileName(destinationFileName)
                     .fileOriName(sourceFileName)
-                    .fileUrl(path)
+                    .fileUrl(fileUrl)
                     .detailLocationId(detailLocationId)
                     .build();
         } catch (Exception e) {
