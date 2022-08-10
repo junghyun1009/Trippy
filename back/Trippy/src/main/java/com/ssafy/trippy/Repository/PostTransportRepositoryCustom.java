@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface PostSearchRepositoryCustom {
-    List<ResponsePostDto> findAllByTitleContainingAndCompany(String title, int company);
+public interface PostTransportRepositoryCustom {
+    List<ResponsePostDto> findAllBySearch(String title, int company,Long locationId);
 }

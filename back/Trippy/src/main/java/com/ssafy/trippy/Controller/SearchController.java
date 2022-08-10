@@ -20,16 +20,18 @@ public class SearchController {
     private static final String SUCCESS = "OK";
     private static final String FAIL = "ERROR";
 
-    @GetMapping("/search/{title}/{company}")
-    public ResponseEntity<?> search(@PathVariable("title") String title,
-                                    @PathVariable("company") int company){
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam("title") String title,
+                                    @RequestParam("company") int company,
+                                    @RequestParam("locationId") Long locationId){
         SearchRequestDto searchRequestDto = SearchRequestDto.builder()
                 .company(company)
                 .title(title)
+                .locationId(locationId)
                 .build();
         List<ResponsePostDto> post = new ArrayList<>();
         try{
-            post =  postSearchService.search(searchRequestDto);
+            post =  postSearchService.searchPost(searchRequestDto);
         }catch(Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(FAIL,HttpStatus.NOT_FOUND );
