@@ -1,29 +1,38 @@
 <template>
   <div>
-    <form @submit.prevent="onSubmit" class="comment-list-form">
-      <el-container>
-				<label for="comment">Username: </label>
-				<input type="text" id="comment" v-model="content" required/>
-				<el-button class="btn">댓글달기</el-button>
-			</el-container>
+    <form @submit.prevent="onSubmit">
+      <div class="comment-form">
+        <!-- 수정 상태인지 아닌지 체크 -->
+				<el-input class="comment-input" type="text" id="comment" v-model="content" required/>
+				<button class="btn" link>
+          <span class="material-symbols-outlined">send</span>
+        </button>
+			</div>
     </form>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: 'CommentForm',
     data() {
-			return {
-				content: '',
-			}
-		},
+      return {
+        content: '',
+      }
+    },
+    computed: {
+      ...mapGetters(['comment', 'isUpdating']),
+      // content() {
+      //   return this.comment
+      // }
+    },
 		methods: {
 			...mapActions(['createComment']),
 			onSubmit() {
-				this.createComment(),
+        // diary.pk diarydetail에서 props로 받아와서 같이 넘겨주기
+				this.createComment(this.content),
 				this.content = ''
 			}
 		}
@@ -36,29 +45,15 @@ export default {
   * { 
       font-family: 'IBM Plex Sans KR', sans-serif;
     } 
-.comment-list-form {
-  display: flex;
-}
-.container {
-  display: flex;
-  padding: 0;
-}
-.commentbox {
-  display: flex;
-  width: 500px;
-  margin-left: 3px;
-}
+
 button {
-  border-radius: 20px;
   margin-left: 12px;
 }
-button:hover {
-  background-color: rgb(255, 129, 129)
+.material-symbols-outlined {
+  color: #F16B51;
 }
-.userinfo {
-  font-style: bold;
-  margin-left: 3px;
-  margin-bottom: 8px;
-  font-size: 18px;
+.comment-form {
+  display: flex;
+  width: 90vw;
 }
 </style>
