@@ -14,6 +14,7 @@ export default {
     email: localStorage.getItem('email') || '',
     authError: null,
     fromPasswordFindView: false,
+    verificationCode: ''
   },
   getters: {
     isLoggedIn: state => !!state.accessToken,
@@ -23,7 +24,8 @@ export default {
     userData: state => state.userData,
     authError: state => state.authError,
     authHeader: state => ({ 'X-AUTH-TOKEN': `${state.accessToken}`}),
-    fromPasswordFindView: state => state.fromPasswordFindView
+    fromPasswordFindView: state => state.fromPasswordFindView,
+    verificationCode: state => state.verificationCode
   },
   mutations: {
     SET_ACCESS_TOKEN:(state, accessToken) => state.accessToken = accessToken,
@@ -33,6 +35,7 @@ export default {
     SET_USER_DATA: (state, userData) => state.userData = userData,
     SET_AUTH_ERROR: (state, error) => state.error = error,
     FROM_PASSWORD_FIND_VIEW: (state) => state.fromPasswordFindView = true,
+    SET_EMAIL_AUTH_CODE: (state, verificationCode) => state.verificationCode = verificationCode,
   },
   actions: {
     saveToken({ commit }, accessToken ) {
@@ -113,7 +116,24 @@ export default {
             console.error(err.response)
             commit('SET_AUTH_ERROR', err.response)
           })
-      },
+    },
+
+    // 인증 코드 요청하기
+    emailCode({commit}, userinfo) {
+      console.log(userinfo)
+      axios({
+        url: 'http://i7a506.p.ssafy.io:8080/api/members/join/authmail',
+        method: 'post',
+        data: userinfo.email
+      })
+      .then( res => {
+        console.log(res)
+        commit('SET_EMAIL_AUTH_CODE', res.data)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    },
 
     fetchCurrentUser({ getters, dispatch, commit }, ) {
       if (getters.isLoggedIn) {
