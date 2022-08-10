@@ -68,7 +68,7 @@
     <div class="change-delete">
       <router-link :to="{ name: 'passwordChange' }">비밀번호 변경</router-link>
       <span> | </span>
-      <p class="delete" @click="open(), updateUserinfo()">회원 탈퇴하기</p>
+      <p class="delete" @click="open(), deleteAccount()">회원 탈퇴하기</p>
     </div>
     <br>
       <el-button type="primary">완료</el-button>
@@ -88,37 +88,37 @@ export default {
     AccountErrorList
   },
   data() {
-          return {
-              userinfo: {
-                  email: this.$store.getters.currentUser.email,
-                  name: this.$store.getters.currentUser.name,
-                  gender: this.$store.getters.currentUser.gender,
-                  birth: this.$store.getters.currentUser.birth,
-                  desc: this.$store.getters.currentUser.desc,
-              },
-              options: [
-                  {
-                      value: 'Male',
-                      label: '남성',
-                  },
-                  {
-                      value: 'Female',
-                      label: '여성',
-                  },
-              ], 
-              emailError: userErrorMessage.emailError,
-              nicknameError: userErrorMessage.nicknameError,
-              alreadyRegistered: userErrorMessage.alreadyRegistered,
-              emailFormat: true,
-              nicknameFormat: true,
-          }
+    return {
+        userinfo: {
+            email: this.$store.getters.currentUser.email,
+            name: this.$store.getters.currentUser.name,
+            gender: this.$store.getters.currentUser.gender,
+            birth: this.$store.getters.currentUser.birth,
+            desc: this.$store.getters.currentUser.desc,
+        },
+        options: [
+            {
+                value: 'Male',
+                label: '남성',
+            },
+            {
+                value: 'Female',
+                label: '여성',
+            },
+        ], 
+        emailError: userErrorMessage.emailError,
+        nicknameError: userErrorMessage.nicknameError,
+        alreadyRegistered: userErrorMessage.alreadyRegistered,
+        emailFormat: true,
+        nicknameFormat: true,
+    }
   },
   methods: {
-    ...mapActions(['deleteAccount', 'fetchCurrentUser', 'updateUserinfo']),
+    ...mapActions(['deleteAccount', 'fetchCurrentUser',]),
     created() {
-      const userid = this.$store.getters.currentUser.id
-      this.fetchCurrentUser(userid)
+      this.fetchCurrentUser()
     },
+  
 
     checkNickname() {
       var regNickname = /^([0-9]|[a-z]|[A-Z]|[가-힣]).{1,10}$/;

@@ -126,7 +126,6 @@ export default {
           console.log(res)
           const email = res.data.email
           console.log(email)
-          commit('SET_EMAIL', email)
           localStorage.setItem('email', email)
           commit('SET_CURRENT_USER', res.data)})
         .catch(err => {
@@ -173,6 +172,19 @@ export default {
         .then()
     }, 
 
+    deleteAccount({ getters }) {
+      axios({
+        url: 'http://i7a506.p.ssafy.io:8080/api/auth/members/remove',
+        method: 'delete',
+        headers: getters.authHeader,
+      })
+      .then( () => {
+        console.log('deleted')
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    }
 
   },
   modules: {
