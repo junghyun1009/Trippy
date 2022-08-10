@@ -34,10 +34,14 @@
                   </li>
                 </ul>
               </div> -->
-              <comment-item :comments="comments"></comment-item>
+              <comment-item :comments="commentsTemp"></comment-item>
             </template>
             <template #footer>
-              <div style="flex: auto">
+              <div class="comment-form">
+                <div v-if="isChild">
+                  <p>@{{ parentComment }}님에게 답글 남기는 중</p>
+                  <span @click="closeInfo">x</span>
+                </div>
                 <comment-form :diaryPk="this.diaryPk"></comment-form>
               </div>
             </template>
@@ -159,7 +163,7 @@ export default {
       commentClicked: false,
       diaryPk: this.$store.getters.diary.pk,
       isFollowed: 0,
-      comments: [
+      commentsTemp: [
         {
           member: '유송',
           content: '이건 댓글',
@@ -169,6 +173,10 @@ export default {
               content: '이건 대댓글'
             }
           ]
+        },
+        {
+          member: '정현',
+          content: '나도 댓글 달랭'
         }
       ]
       // 라우터에 diaryPk 추가하기
@@ -180,14 +188,14 @@ export default {
   // },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
-    ...mapGetters(['isAuthor', 'diary', 'diaryTemp']),
+    ...mapGetters(['isAuthor', 'diary', 'diaryTemp', 'isChild', 'parentComment']),
     photoUrl(file) {
       const newUrl = URL.createObjectURL(file)
       return newUrl
     }
   },
   methods: {
-    ...mapActions(['fetchDiary', 'deleteDiary']),
+    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent']),
     addMarkers() {
       const map = new google.maps.Map(document.getElementById("map"), {
           center: {lat: this.diaryTemp.routes[0].lat, lng: this.diaryTemp.routes[0].lng},
@@ -213,6 +221,10 @@ export default {
       })
       routePath.setMap(map)
     },
+
+    closeInfo() {
+      this.hideParent()
+    }
   },
   // created() {
   //   this.fetchDiary(this.diaryPk)
@@ -390,4 +402,29 @@ a {
 .story-content {
   text-align: left;
 }
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-form div{
+  display: flex;
+  margin-bottom: 0.5rem;
+  justify-content: space-between
+}
+
+.comment-form p {
+  text-align: left;
+  color: var(--el-text-color-secondary);
+  font-size: 0.7rem;
+  font-weight: 100;
+}
+
+.comment-form span {
+  color: var(--el-text-color-secondary);
+  font-size: 1rem;
+  font-weight: 100;
+}
+
 </style>

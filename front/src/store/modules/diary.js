@@ -6,7 +6,10 @@ export default ({
   state: {
     diaries: [],
     diary: {},
+    comment: '',
     comments: [],
+    isChild: false,
+    parentComment: '',
     diaryTemp: {
       title: '제주도 3박 4일 여행',
       startDate: '2022-07-01',
@@ -29,7 +32,10 @@ export default ({
   getters: {
     diaries: state => state.diaries,
     diary: state => state.diary,
+    comment: state => state.comment,
     comments: state => state.comments,
+    isChild: state => state.isChild,
+    parentComment: state => state.parentComment,
     diaryTemp: state => state.diaryTemp,
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
@@ -50,6 +56,11 @@ export default ({
       state.diary = diary
     },
 
+    SET_COMMENT(state, comment) {
+      state.comment = comment
+      console.log(state.comment)
+    },
+
     SET_COMMENTS(state, comments) {
       state.comments = comments
     },
@@ -57,6 +68,15 @@ export default ({
     // 홈화면에 추천(일단은 전부 띄우는 것)
     // 근데 diaries에 써도 되는건지 잘 모르겠음?
     GET_ALL_DIARY(state, diaries) {state.diaries = diaries},
+
+    SHOW_PARENT(state, parentComment) {
+      state.isChild = true
+      state.parentComment = parentComment
+    },
+
+    HIDE_PARENT(state) {
+      state.isChild = false
+    }
   },
   actions: {
     // 일지 CREATE
@@ -127,60 +147,72 @@ export default ({
       .catch(err => console.error(err.response))
     },
 
-    updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
-      const comment = { content, diaryPk, commentPk }
+    // updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
+    //   const comment = { content, diaryPk, commentPk }
+    //   axios({
+    //     url:'http://localhost:8000/comments/api/post',
+    //     method: 'put',
+    //     data: comment,
+    //     headers: getters.authHeader,
+    //   })
+    //   .then(res => {
+    //     commit('SET_COMMENTS', res.data)
+    //   })
+    //   .catch(err => console.error(err.response))
+    // },
+    updateComment({ commit }, content) {
+      commit('SET_COMMENT', content)
+    },
+
+    fetchComment({ getters, commit}, diaryPk) {
       axios({
-        url:'http://localhost:8000/comments/api/post',
-        method: 'put',
-        data: comment,
-        headers: getters.authHeader,
+        url: `http://localhost:8000/comments/post/${diaryPk}`,
+        method: 'get',
+        headers: getters.authHeader
       })
-      .then(res => {
+      .then( res => {
         commit('SET_COMMENTS', res.data)
       })
-      .catch(err => console.error(err.response))
-    }
-  },
-
-  fetchComment({ getters, commit}, diaryPk) {
-    axios({
-      url: `http://localhost:8000/comments/post/${diaryPk}`,
-      method: 'get',
-      headers: getters.authHeader
-    })
-    .then( res => {
-      commit('SET_COMMENTS', res.data)
-    })
-    .catch(err => {
-      if (err.response.status === 404) {
-        router.push({ name: 'notFound404'})
+      .catch(err => {
+        if (err.response.status === 404) {
+          router.push({ name: 'notFound404'})
+        }
+      })
+    },
+  
+    deleteComment({ getters, commit}, diaryPk, commentPk) {
+      if (confirm('정말 삭제하시겠습니까?')) {
+        axios({
+          url: `http://localhost:8000/comments/post/`,
+          method: 'delete',
+          data: {diaryPk, commentPk},
+          headers: getters.authHeader,
+        })
+        .then(res => {
+          commit('SET_COMMENTS', res.data)
+        })
+        .catch(err => console.error(err.response))
       }
-    })
-  },
+    },
+  
+    showParent({ commit }, commentUser) {
+      commit('SHOW_PARENT', commentUser)
+    },
 
-  deleteComment({ getters, commit}, diaryPk, commentPk) {
-    if (confirm('정말 삭제하시겠습니까?')) {
+    hideParent({ commit }) {
+      commit('HIDE_PARENT')
+    },
+  
+    showAllDiary({ commit }) {
       axios({
-        url: `http://localhost:8000/comments/post/`,
-        method: 'delete',
-        data: {diaryPk, commentPk},
-        headers: getters.authHeader,
+        url: 'http://localhost:8000/posts',
+        method: 'get'
       })
-      .then(res => {
-        commit('SET_COMMENTS', res.data)
+      .then((res) => {
+        const allDiary = res.data
+        commit('SHOW_ALL_DIARY', allDiary)
       })
-      .catch(err => console.error(err.response))
-    }
+    },
   },
 
-  showAllDiary({ commit }) {
-    axios({
-      url: 'http://localhost:8000/posts',
-      method: 'get'
-    })
-    .then((res) => {
-      const allDiary = res.data
-      commit('SHOW_ALL_DIARY', allDiary)
-    })
-  },
 })

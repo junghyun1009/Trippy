@@ -18,7 +18,7 @@
       <a class="editdelete" @click="deleteComment(payload)"><i class="fa-solid fa-trash-can"></i></a>
     </span>
   </li> -->
-    <div v-for="(comment, idx) in comments" :key="idx">
+    <div v-for="(comment, idx) in comments" :key="idx" class="parent-child">
       <!-- 댓글 -->
       <div class="parent-comment">
         <router-link :to="{ name: 'profile' }">
@@ -27,6 +27,10 @@
         <div>
           <p class="member">{{ comment.member }}</p>
           <p class="content">{{ comment.content }}</p>
+          <!-- 나중에는 comment.pk로 바꿔서 보내야할 듯 -->
+          <span class="leave-comment" @click="sendInfo(comment.member)">답글 달기</span>
+          <span class="leave-comment" @click="editComment(comment.content)">수정</span>
+          <span class="leave-comment">삭제</span>
         </div>
       </div>
       <!-- 대댓글 -->
@@ -38,6 +42,8 @@
           <div>
             <p class="member">{{ child.member }}</p>
             <p class="content">{{ child.content }}</p>
+            <span class="leave-comment" @click="editComment(child.content)">수정</span>
+            <span class="leave-comment">삭제</span>
           </div>
         </div>
       </div>
@@ -48,6 +54,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'CommentItem',
   props: { 
@@ -67,13 +74,21 @@ export default {
     ...mapGetters(['currentUser',]),
   },
   methods: {
-    ...mapActions(['updateComment', 'deleteComment']),
+    ...mapActions(['updateComment', 'deleteComment', 'showParent']),
     switchIsEditing() {
       this.isEditing = !this.isEditing
     },
     onUpdate() {
       this.updateComment(this.payload)
       this.isEditing = false
+    },
+    sendInfo(member) {
+      console.log(member)
+      this.showParent(member)
+    },
+    editComment(content) {
+      console.log(content)
+      this.updateComment(content)
     }
   },
 }
@@ -94,8 +109,13 @@ export default {
 i {
   margin-right: 5px;
 } */
+.parent-child {
+  margin-bottom: 1.2rem;
+}
+
 .parent-comment {
   display: flex;
+  margin-bottom: 0.5rem;
 }
 
 .parent-comment > div {
@@ -108,7 +128,7 @@ i {
   background-color: bisque;
   border-radius: 1rem;
   margin-left: 3rem;
-  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   padding: 1rem;
 }
 
@@ -126,5 +146,11 @@ i {
   color: black;
   font-size: 0.8rem;
   font-weight: 100;
+}
+
+.leave-comment {
+  font-size: 0.7rem;
+  font-weight: 100;
+  margin-right: 0.5rem;
 }
 </style>

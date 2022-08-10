@@ -1,26 +1,32 @@
 <template>
   <div>
-    <form @submit.prevent="onSubmit" class="comment-list-form">
-      <el-container>
-				<el-input type="text" id="comment" v-model="content" required/>
+    <form @submit.prevent="onSubmit">
+      <div class="comment-form">
+				<el-input class="comment-input" type="text" id="comment" v-model="content" required/>
 				<el-button class="btn" link>
           <span class="material-symbols-outlined">send</span>
         </el-button>
-			</el-container>
+			</div>
     </form>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: 'CommentForm',
     data() {
-			return {
-				content: '',
-			}
-		},
+      return {
+        // content: this.comment,
+      }
+    },
+    computed: {
+      ...mapGetters(['comment']),
+      content() {
+        return this.comment
+      }
+    },
 		methods: {
 			...mapActions(['createComment']),
 			onSubmit() {
@@ -37,28 +43,15 @@ export default {
   * { 
       font-family: 'IBM Plex Sans KR', sans-serif;
     } 
-.comment-list-form {
-  display: flex;
-}
-.container {
-  display: flex;
-  padding: 0;
-}
-.commentbox {
-  display: flex;
-  width: 500px;
-  margin-left: 3px;
-}
+
 button {
   margin-left: 12px;
 }
 .material-symbols-outlined {
   color: #F16B51;
 }
-.userinfo {
-  font-style: bold;
-  margin-left: 3px;
-  margin-bottom: 8px;
-  font-size: 18px;
+.comment-form {
+  display: flex;
+  width: 90vw;
 }
 </style>
