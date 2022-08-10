@@ -53,6 +53,7 @@ export default {
 
   methods: {
     ...mapActions(['signupTwo']),
+
     mergeObjects(){
       // 첫번째 signup 페이지에서의 data(객체)와 
       // 두번째 signup 페이지에서의 data(객체)를 merge해서
@@ -61,6 +62,7 @@ export default {
       const dataOne = this.$store.getters.userData
       this.userData = Object.assign(dataOne, this.userinfo)
     },
+
     uploadPhoto() {
       console.log(this.$refs.files.files[0])
       let photo = this.$refs.files.files[0]
@@ -77,9 +79,11 @@ export default {
       let fileInput = document.getElementById("file")
       fileInput.value = ''
     },
+
     removePhoto() {
       this.profilePhoto = {}
     },
+    
     finishSignUp() {
       this.$router.push('/login')
       alert('회원가입을 축하합니다!')

@@ -131,10 +131,12 @@ export default {
     },
     methods: {
       ...mapActions(['signupOne',]),
+      
       dateParsing() {
         const birthdate = new Date(this.date)
         this.userData.birth = birthdate.toISOString()
       },
+
       checkEmail() {
       var inputEmail = document.getElementById('email').value;
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
