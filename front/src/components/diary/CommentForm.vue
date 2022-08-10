@@ -2,10 +2,11 @@
   <div>
     <form @submit.prevent="onSubmit">
       <div class="comment-form">
+        <!-- 수정 상태인지 아닌지 체크 -->
 				<el-input class="comment-input" type="text" id="comment" v-model="content" required/>
-				<el-button class="btn" link>
+				<button class="btn" link>
           <span class="material-symbols-outlined">send</span>
-        </el-button>
+        </button>
 			</div>
     </form>
   </div>
@@ -18,19 +19,20 @@ export default {
     name: 'CommentForm',
     data() {
       return {
-        // content: this.comment,
+        content: '',
       }
     },
     computed: {
-      ...mapGetters(['comment']),
-      content() {
-        return this.comment
-      }
+      ...mapGetters(['comment', 'isUpdating']),
+      // content() {
+      //   return this.comment
+      // }
     },
 		methods: {
 			...mapActions(['createComment']),
 			onSubmit() {
-				this.createComment(),
+        // diary.pk diarydetail에서 props로 받아와서 같이 넘겨주기
+				this.createComment(this.content),
 				this.content = ''
 			}
 		}

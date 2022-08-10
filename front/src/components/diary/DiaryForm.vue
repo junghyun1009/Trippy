@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form action="submit">
+    <form @submit.prevent="onSubmit">
       <!-- 제목 -->
       <div class="title-box">
         <p>제목</p>

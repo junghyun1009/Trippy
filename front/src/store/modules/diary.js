@@ -6,10 +6,13 @@ export default ({
   state: {
     diaries: [],
     diary: {},
+
     comment: '',
     comments: [],
     isChild: false,
+    isUpdating: false,
     parentComment: '',
+
     diaryTemp: {
       title: '제주도 3박 4일 여행',
       startDate: '2022-07-01',
@@ -35,6 +38,7 @@ export default ({
     comment: state => state.comment,
     comments: state => state.comments,
     isChild: state => state.isChild,
+    isUpdating: state => state.isUpdating,
     parentComment: state => state.parentComment,
     diaryTemp: state => state.diaryTemp,
     // 이 친구 긴가민가
@@ -59,6 +63,10 @@ export default ({
     SET_COMMENT(state, comment) {
       state.comment = comment
       console.log(state.comment)
+    },
+
+    SET_STATUS(state) {
+      state.isUpdating = true
     },
 
     SET_COMMENTS(state, comments) {
@@ -130,21 +138,24 @@ export default ({
     },
 
 
-    // 일지 comment 
-    createComment({ getters, commit }, diaryPk, content) {
-      const comment = { content }
-      axios({
-        url: `http://localhost:8000/comments/post/${diaryPk}`,
-        method: 'post',
-        data: comment,
-        headers: getters.authHeader
-      })
-      .then( res => {
-        commit('SET_COMMENTS'),
-        res.data
-        router.push('DiaryCommentView')
-      })
-      .catch(err => console.error(err.response))
+    // 일지 댓글 CREATE
+    // createComment({ getters, commit }, diaryPk, content) {
+    //   const comment = { content }
+    //   axios({
+    //     url: `http://localhost:8000/comments/post/${diaryPk}`,
+    //     method: 'post',
+    //     data: comment,
+    //     headers: getters.authHeader
+    //   })
+    //   .then( res => {
+    //     commit('SET_COMMENTS'),
+    //     res.data
+    //     router.push('DiaryCommentView')
+    //   })
+    //   .catch(err => console.error(err.response))
+    // },
+    createComment({ commit }, content) {
+      commit('SET_COMMENT', content)
     },
 
     // updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
@@ -162,6 +173,7 @@ export default ({
     // },
     updateComment({ commit }, content) {
       commit('SET_COMMENT', content)
+      commit('SET_STATUS')
     },
 
     fetchComment({ getters, commit}, diaryPk) {
