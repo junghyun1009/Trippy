@@ -15,13 +15,10 @@ public class ResponseDetailLocationDto {
 
     private String detailLocationContent;
 
-    private String imgPath;
-
     @Builder
     public ResponseDetailLocationDto(DetailLocation detailLocation) {
         this.detailLocationName = detailLocation.getDetailLocationName();
         this.rating = detailLocation.getRating();
         this.detailLocationContent =detailLocation.getDetailLocationContent();
-        this.imgPath = detailLocation.getImgPath();
     }
 }
