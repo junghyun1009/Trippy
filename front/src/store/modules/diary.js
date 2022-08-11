@@ -48,13 +48,13 @@ export default ({
     // isDiary: state => !_.isEmpty(state.diary)
   },
   mutations: {
-    CREATE_DIARY(state, diary) {
-      state.diary = diary
-      // 얘는 지워도 될 것 같은데 일단 실험해봐야 함
-      // state.diaries.push(state.diary)
-      console.log(state.diary)
-      // console.log(state.diaries)
-    },
+    // CREATE_DIARY(state, diary) {
+    //   state.diary = diary
+    //   // 얘는 지워도 될 것 같은데 일단 실험해봐야 함
+    //   // state.diaries.push(state.diary)
+    //   console.log(state.diary)
+    //   // console.log(state.diaries)
+    // },
 
     SET_DIARY(state, diary) {
       state.diary = diary
@@ -102,12 +102,12 @@ export default ({
       })
       .then(res => {
         console.log(res.data)
-        commit('CREATE_DIARY', res.data)
+        commit('SET_DIARY', diary)
         // console.log(3)
-        console.log(getters.diary)
+        // console.log(getters.diary)
         router.push({
           name: 'diaryDetail',
-          params: { diaryPk: getters.diary.id }
+          params: { diaryPk: res.data }
         })
       })
     },
@@ -130,6 +130,22 @@ export default ({
     },
 
     // 일지 UPDATE
+    updateDiary({ commit, getters }, diary) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/posts/${diary.id}`,
+        method: 'put',
+        data: diary.content,
+        headers: getters.authHeader
+      })
+      .then(res => {
+        console.log(res.data)
+        commit('SET_DIARY', diary)
+        router.push({
+          name: 'DiaryDetail',
+          parmas: { diaryPk: res.data }
+        })
+      })
+    },
     // 일지 DELETE
     deleteDiary({ commit, getters }, diaryPk) {
       axios({
