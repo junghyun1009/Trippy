@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Converter {
-    
+
     public static List<ResponseTransport> convertTransportList(List<Transport> transportList) {
         List<ResponseTransport> transports = new ArrayList<>();
         for (Transport transport : transportList) {
@@ -21,6 +21,7 @@ public class Converter {
         }
         return transports;
     }
+
     public static List<ResponseDetailLocationDto> convertDetailLocationList(List<DetailLocation> detailLocationList) {
         List<ResponseDetailLocationDto> detailLocations = new ArrayList<>();
         for (DetailLocation detailLocation : detailLocationList) {
@@ -31,6 +32,7 @@ public class Converter {
         }
         return detailLocations;
     }
+
     public static List<ResponseRouteDto> convertRouteList(List<Route> routeList) {
         List<ResponseRouteDto> routes = new ArrayList<>();
         for (Route route : routeList) {
@@ -41,14 +43,16 @@ public class Converter {
         }
         return routes;
     }
+
     public static List<ResponsePostCommentDto> convertPostCommentList(List<PostComment> postCommentList) {
-        List<ResponsePostCommentDto> postComments = new ArrayList<>();
+        List<ResponsePostCommentDto> ResponsepostComments = new ArrayList<>();
         for (PostComment postComment : postCommentList) {
             ResponsePostCommentDto dto = ResponsePostCommentDto.builder()
                     .postComment(postComment).build();
-            postComments.add(dto);
+
+            ResponsepostComments.add(dto);
         }
-        return postComments;
+        return ResponsepostComments;
     }
 
     public static List<Transport> convertTransportsToPostTransports(List<PostTransport> postTransports) {
@@ -60,4 +64,5 @@ public class Converter {
     }
 
 
-    }
+}
+
