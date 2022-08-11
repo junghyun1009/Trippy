@@ -5,35 +5,31 @@
     </el-form-item>
     <el-form-item label="카테고리">
       <el-select v-model="newPost.category" placeholder="어떤 활동을 같이 하고 싶나요?">
-        <el-option label="밥/카페" value="밥/카페"></el-option>
-        <el-option label="동행" value="동행"></el-option>
-        <el-option label="파티" value="파티"></el-option>
-        <el-option label="이동수단 셰어" value="이동수단 셰어"></el-option>
+        <el-option v-for="(cat, idx) in categories" :key="idx" :label="cat.label" :value="cat.value" />
       </el-select>
     </el-form-item>
     <el-form-item label="활동 내용">
-      <el-input v-model="newPost.desc" type="textarea" placeholder="간단히 하고 싶은 활동을 설명해주세요." />
+      <el-input v-model="newPost.description" type="textarea" placeholder="간단히 하고 싶은 활동을 설명해주세요." />
     </el-form-item>
-    <!-- <el-form-item label="날짜">
-      <el-date-picker class="calendar" v-model="newPost.date" type="daterange"/>
-    </el-form-item> -->
     <el-form-item label="날짜">
-      <el-date-picker v-model="newPost.startDate" type="date" placeholder="동행 시작일을 선택해주세요." value-format="YYYY-MM-DD" :disabled-date="disabledStartDate"/>
-      <el-switch class="switch" v-model="newPost.isDay" size="small" active-text="당일"></el-switch>
+      <el-date-picker v-model="newPost.startDate" type="date" placeholder="동행 시작일을 선택해주세요." value-format="YYYY-MM-DD HH:mm:ss" :disabled-date="disabledStartDate"/>
+      <el-switch class="switch" v-model="newPost.day" size="small" active-text="당일"></el-switch>
     </el-form-item>
-    <el-form-item class="end_date" v-if="!newPost.isDay">
-      <el-date-picker v-model="newPost.endDate" type="date" placeholder="동행 종료일을 선택해주세요." value-format="YYYY-MM-DD" :disabled-date="disabledEndDate"/>
+    <el-form-item class="end_date" v-if="!newPost.day">
+      <el-date-picker v-model="newPost.endDate" type="date" placeholder="동행 종료일을 선택해주세요." value-format="YYYY-MM-DD HH:mm:ss" :disabled-date="disabledEndDate"/>
     </el-form-item>
     <el-form-item label="시간">
-      <el-time-picker v-model="newPost.time" value-format="HH:mm" :disabled-seconds="disabledSeconds"/>
+      <el-time-picker v-model="newPost.meetingTime" value-format="HH:mm:ss" :disabled-seconds="disabledSeconds"/>
     </el-form-item>
     <el-form-item label="인원">
-      <el-input-number v-model="newPost.recruit_volume" :min="1" :max="10"/>
+      <el-input-number v-model="newPost.recruitVolume" :min="1" :max="10"/>
     </el-form-item>
     <el-form-item>
       <el-collapse class="collapse">
         <el-collapse-item title="장소">
-          <div>장소</div>
+          <div>
+            {{ newPost.countryName }}, {{ newPost.cityName }}
+          </div>
         </el-collapse-item>
         <el-collapse-item>
           <template #title>
@@ -43,7 +39,7 @@
             </div>
           </template>
           <el-form-item label="성별">
-            <el-radio-group v-model="newPost.newOption.gender">
+            <el-radio-group v-model="newPost.gender">
               <el-radio label="누구나" />
               <el-radio label="여성만" />
               <el-radio label="남성만" />
@@ -53,7 +49,7 @@
             <el-slider class="slider" v-model="age" range :min="19" :max="70" @input="onInput"/>
           </el-form-item>
           <el-form-item label="지역 제한">
-            <el-switch v-model="newPost.newOption.isLocal" />
+            <el-switch v-model="newPost.local" />
           </el-form-item>
         </el-collapse-item>
       </el-collapse>
@@ -76,34 +72,57 @@ export default {
   },
   data() {
     return {
-      age: [this.post.option.startAge, this.post.option.endAge],
+      categories: [
+        {
+          value: 1,
+          label: '식사' 
+        },
+        {
+          value: 2,
+          label: '동행' 
+        },
+        {
+          value: 3,
+          label: '파티' 
+        },
+        {
+          value: 4,
+          label: '이동수단 셰어' 
+        },
+        {
+          value: 5,
+          label: '기타' 
+        },
+      ],
+      age: [this.post.startAge, this.post.endAge],
       newPost: {
         title: this.post.title,
         category: this.post.category,
-        desc: this.post.desc,
+        description: this.post.description,
         startDate: this.post.startDate,
-        isDay: this.post.isDay,
+        day: this.post.day,
         endDate: this.post.endDate,
-        time: this.post.time,
-        recruit_volume: this.post.recruit_volume,
-        newOption: {
-          gender: this.post.option.gender,
-          isLocal: this.post.option.isLocal
-        },
+        meetingTime: this.post.meetingTime,
+        recruitCurrentVolume: this.post.recruitCurrentVolume,
+        recruitVolume: this.post.recruitVolume,
+        countryName: this.post.countryName,
+        cityName: this.post.cityName,
+        gender: this.post.gender,
+        local: this.post.local,
         place: this.post.place,
       }
     }
   },
   computed: {
     optionTag() {
-      const gender = this.newPost.newOption.gender
-      const startAge = this.newPost.newOption.startAge
-      const endAge = this.newPost.newOption.endAge
+      const gender = this.newPost.gender
+      const startAge = this.newPost.startAge
+      const endAge = this.newPost.endAge
       let age = startAge + '~' + endAge + '살'
       if (startAge === undefined && endAge === undefined || startAge === 19 && endAge === 70) {
         age = '누구나'
       }
-      const isLocal = this.newPost.newOption.isLocal
+      const isLocal = this.newPost.local
       let local = ''
       if (isLocal === false) {
         local = '어디서나'
@@ -115,11 +134,13 @@ export default {
   },
   methods: {
     onInput() {
-      this.newPost.newOption.startAge = this.age[0]
-      this.newPost.newOption.endAge = this.age[1]
+      this.newPost.startAge = this.age[0]
+      this.newPost.endAge = this.age[1]
     },
     onSubmit() {
-      console.log(this.newPost)
+      if (this.action === 'create') {
+        this.newPost.meetingTime = '0000-00-00 ' + this.newPost.meetingTime
+      }
     },
     disabledStartDate(date) {
       return date.getTime() < Date.now() - 3600 * 1000 * 24 
