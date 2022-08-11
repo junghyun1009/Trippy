@@ -12,7 +12,7 @@
           <!-- 장소 -->
           <el-collapse-item class="place-select" title="장소" name="1">
             <div>
-              장소
+              {{ newDiary.countryName }}, {{ newDiary.cityName }}
             </div>
           </el-collapse-item>
 
@@ -28,7 +28,7 @@
                   </el-tag>
                   <el-tag v-for="trans in transportationTag" :key="trans" class="option-tag" 
                   closable :disable-transitions="false" type='' @close="handleClose(trans)">
-                    {{ trans }}
+                    {{ trans.transport.name }}
                   </el-tag>
                 </div>
               </el-scrollbar>
@@ -58,10 +58,10 @@
               <div class="option-party">
                 <span class="option-title">일행 타입</span>
                 <el-radio-group v-model="newDiary.company">
-                  <el-radio class="party-option" label="가족">가족</el-radio>
-                  <el-radio class="party-option" label="커플">커플</el-radio>
-                  <el-radio class="party-option" label="친구">친구</el-radio>
-                  <el-radio class="party-option" label="개인">개인</el-radio>
+                  <el-radio class="party-option" :label=1>가족</el-radio>
+                  <el-radio class="party-option" :label=2>커플</el-radio>
+                  <el-radio class="party-option" :label=3>친구</el-radio>
+                  <el-radio class="party-option" :label=4>개인</el-radio>
                 </el-radio-group>
               </div>
 
@@ -73,14 +73,12 @@
 
             <!-- 옵션: 이동수단 -->
               <div class="option-transport">
-                <span class="option-title">이동 수단</span>
-                <el-checkbox-group class="transport" v-model="newDiary.transport">
-                  <el-checkbox class="transport-option" label="뚜벅이" />
-                  <el-checkbox class="transport-option" label="대중교통" />
-                  <el-checkbox class="transport-option" label="따릉이" />
-                  <el-checkbox class="transport-option" label="택시" />
-                  <el-checkbox class="transport-option" label="자차" />
-                </el-checkbox-group>
+                <span>이동 수단</span>
+                <div class="option-checkbox">
+                  <el-checkbox-group class="transport" v-model="newDiary.postTransports" v-for="(trans, idx) in transportList" :key="idx">
+                    <el-checkbox class="transport-option" :label="trans">{{ trans.transport.name }}</el-checkbox>
+                  </el-checkbox-group>
+                </div>
               </div>
             </div>
           </el-collapse-item>
@@ -104,7 +102,7 @@
             <div>
               <div class="route-div">
                 <input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0 && newDiary.routes.length < 10">
-                <el-button-group >
+                <el-button-group>
                   <el-button type="primary" class="route-btn" @click="addMarkers" :disabled="newDiary.routes.length === 0">
                     <span class="material-symbols-outlined">push_pin</span>
                   </el-button>
@@ -132,17 +130,17 @@
           <div v-for="(newStory, k) in newStories" :key="k">
             <div class="story-title">
               <span>상세 장소</span>
-              <el-input v-model="newStory.place" class="input-box" id="title-input-box" placeholder="상세 장소를 입력하세요." />
+              <el-input v-model="newStory.detailLocationName" class="input-box" id="title-input-box" placeholder="상세 장소를 입력하세요." />
             </div>
 
             <div class="story-rate">
               <span>별점</span>
-              <el-rate v-model="newStory.rate" allow-half />
+              <el-rate v-model="newStory.rating" allow-half />
             </div>
 
             <div class="story-content">
               <span>내용</span>
-              <el-input v-model="newStory.content" maxlength="500"
+              <el-input v-model="newStory.detailLocationContent" maxlength="500"
               placeholder="내용을 입력해주세요." show-word-limit type="textarea" rows=7 resize="none" class="content-input"/>
             </div>
 
@@ -215,10 +213,10 @@
 
       </div>
 
-      <div v-if="action==='create'">
+      <div v-if="action==='create'" class="submit-btn">
         <el-button @click="onSubmit">작성하기</el-button>
       </div>
-      <div v-else>
+      <div v-else class="submit-btn">
         <el-button @click="onSubmit">수정하기</el-button>
       </div>
     </form>
@@ -238,40 +236,80 @@ export default {
   data() {
     return {
       // datePick: [this.diary.startDate, this.diary.endDate],
+      transportList: [
+        {
+          transport: 
+          {
+            id: 1,
+            name: '뚜벅이'
+          }
+        },
+        {
+          transport: 
+          {
+            id: 2,
+            name: '대중교통'
+          }
+        },
+        {
+          transport: 
+          {
+            id: 3,
+            name: '따릉이'
+          }
+        },
+        {
+          transport: 
+          {
+            id: 4,
+            name: '택시'
+          }
+        },
+        {
+          transport: 
+          {
+            id: 5,
+            name: '자차'
+          }
+        },
+      ],
       flag: 0,
       route: {},
       newStories: [
-        ...this.diary.stories,
+        ...this.diary.detailLocations,
         { 
-          pk: 0,
-          place: '',
+          // pk: 0,
+          detailLocationName: '',
           photoList: [],
           dialogVisible: false,
-          content: '',
-          rate: null
+          detailLocationContent: '',
+          rating: null
         }
       ],      
       newDiary: {
         title: this.diary.title,
+        countryName: this.diary.countryName,
+        cityName: this.diary.cityName,
         startDate: this.diary.startDate,
         endDate: this.diary.endDate,
         company: this.diary.company,
         count: this.diary.count,
-        transport: this.diary.transport,
+        postTransports: this.diary.postTransports,
         routes: this.diary.routes,
-        stories: this.diary.stories
+        detailLocations: this.diary.detailLocations
       }
     }
   },
   computed: {
     // update할 때 diaryTemp 대신 해당 pk 다이어리 가져와야 함 -> 편집 창으로 들어오면 해당 pk 다이어리 내용 fetch하는 함수
-    ...mapGetters(['routeNames', 'stories', 'diaryTemp']),
+    ...mapGetters(['diaryTemp']),
     partyTag() {
       const party = this.newDiary.company
-      return party
+      const partyList = ['가족', '커플', '친구', '개인']
+      return partyList[party-1]
     },
     transportationTag() {
-      const transportation = this.newDiary.transport
+      const transportation = this.newDiary.postTransports
       return transportation
     }
   },
@@ -279,7 +317,7 @@ export default {
     ...mapActions(['createDiary']),
 
     handleClose(tag) {
-      this.newDiary.transport.splice(this.newDiary.transport.indexOf(tag), 1)
+      this.newDiary.postTransports.splice(this.newDiary.postTransports.indexOf(tag), 1)
     },
 
     initMap() {
@@ -326,11 +364,12 @@ export default {
     },
 
     addRoute(routeName, geocode) {
-      this.route.routeNum = this.newDiary.routes.length + 1
+      this.route.index = this.newDiary.routes.length + 1
       this.route.routeName = routeName
       this.route.lat = geocode.lat
       this.route.lng = geocode.lng
       this.newDiary.routes.push(this.route)
+      console.log(this.newDiary.routes)
       this.route = {}
       // console.log(this.newDiary.routes)
     },
@@ -346,7 +385,7 @@ export default {
       // console.log(this.routeGeocodes)
       this.newDiary.routes.forEach((each) => {
         // console.log(each)
-        let labelNum = (each.routeNum).toString()
+        let labelNum = (each.index).toString()
         geocodes.push({ lat: each.lat, lng: each.lng })
         new google.maps.Marker({
             position: { lat: each.lat, lng: each.lng },
@@ -368,22 +407,22 @@ export default {
     removeRoute(index) {
       this.newDiary.routes.splice(index, 1)
       this.newDiary.routes.forEach((each) => {
-        each.routeNum = this.newDiary.routes.indexOf(each) + 1
+        each.index = this.newDiary.routes.indexOf(each) + 1
       })
       this.addMarkers()
     },
 
     addStory() {
-      if (this.newStories[this.newStories.length - 1].place === '' || this.newStories[this.newStories.length - 1].content === '') {
+      if (this.newStories[this.newStories.length - 1].detailLocationName === '' || this.newStories[this.newStories.length - 1].detailLocationContent === '') {
         alert('내용 작성 후 스토리를 추가해주세요!')
       } else {
         this.newStories.push({
-          pk: 0,
-          place: '',
+          // pk: 0,
+          detailLocationName: '',
           photoList: [],
           dialogVisible: false,
-          content: '',
-          rate: null
+          detailLocationContent: '',
+          rating: null
         })
       }
     },
@@ -478,16 +517,17 @@ export default {
     onSubmit() {
       if (this.action === 'create') {
         // 날짜 변환해서 저장
-        // this.newDiary.startDate = this.datePick[0]
-        // this.newDiary.endDate = this.datePick[1]
+        this.newDiary.startDate = this.newDiary.startDate + 'T05:29:23.168Z'
+        this.newDiary.endDate = this.newDiary.endDate + 'T05:29:23.168Z'
         this.newStories.forEach((each) => {
-          each.pk = this.newStories.indexOf(each) + 1
+          // each.pk = this.newStories.indexOf(each) + 1
           delete each.dialogVisible
         })
-        this.newDiary.stories = this.newStories
+        this.newDiary.detailLocations = this.newStories
 
-        if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.transport.length
-        && this.newDiary.routes.length && this.newDiary.stories.length) {
+        if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
+        && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
+          console.log(this.newDiary)
           this.createDiary(this.newDiary)
         } else {
           alert("빈 칸 없이 모든 필드를 채워주세요!")
@@ -509,6 +549,7 @@ export default {
   align-items: center;
   color: var(--el-text);
   font-size: 0.8rem;
+  margin-bottom: 0.5rem;
 }
 .title-box > p {
   width: 10vw;
@@ -582,9 +623,16 @@ export default {
   margin-bottom: 1rem;
   text-align: left;
 }
-.transport {
-  margin-left: 1rem;
-  width: 80vw;
+.option-transport span {
+  color: var(--el-text-color-secondary);
+  width: 25vw;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.option-checkbox {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 1.5rem;
 }
 .transport-option {
   width: 4rem;
@@ -605,11 +653,12 @@ export default {
   color: var(--el-text-color-secondary);
   padding: 0 11px 0 13px;
   text-overflow: ellipsis;
-  width: 55vw;
+  width: 60vw;
   height: 1.8rem;
   box-shadow: none;
   border: solid 1px var(--el-border-color);
   border-radius: 5px;
+  margin-right: 1rem;
 }
 .route-btn {
   width: 2rem;
@@ -626,6 +675,7 @@ export default {
   text-align: left;
   font-weight: 500;
   font-size: 0.8rem;
+  margin-top: 1rem;
 }
 .story-title {
   display: flex;
@@ -780,6 +830,9 @@ export default {
 .story-btn .material-symbols-outlined {
   color: #F16B51;
   font-size: 2rem;;
+}
+.submit-btn {
+  margin-top: 1rem;
 }
 
 </style>
