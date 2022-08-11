@@ -50,7 +50,7 @@ public class PostComment extends BaseEntity {
         this.content = content;
     }
 
-    public void update(String content, LocalDateTime regDt) {
+    public void update(String content) {
         this.content = content;
     }
 
