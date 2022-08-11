@@ -19,7 +19,9 @@ export default {
         title: '',
         category: [],
         desc: '',
-        date: [],
+        start_date: '',
+        isDay: false,
+        end_date: '',
         time: '',
         recruit_volume: '',
         option: {

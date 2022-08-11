@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public ResponseMemberDto signup(RequestMemberDto requestMemberDto) {
         if(chkDuplicate(requestMemberDto.getEmail())){
-            throw new IllegalArgumentException("이메일이 중복됩니다.");
+            return new ResponseMemberDto(Member.builder().build());
         }
         String rawPassword = requestMemberDto.getPassword();
         String encodedPassword = passwordEncoder.encode(rawPassword);
@@ -97,4 +97,13 @@ public class MemberServiceImpl implements MemberService {
         member.updatePw(encodedPassword);
         memberRepository.save(member);
     }
+
+    @Override
+    public Long getIdByToken(String token){
+        String email = jwtProvider.getUserPk(token);
+        System.out.println(email);
+        Long id = memberRepository.findByEmail(email).orElseThrow().getId();
+        return id;
+    }
+
 }

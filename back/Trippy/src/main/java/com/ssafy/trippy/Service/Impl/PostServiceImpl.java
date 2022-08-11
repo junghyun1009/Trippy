@@ -190,7 +190,7 @@ public class PostServiceImpl implements PostService {
 
         for (int i = 0; i < routes.size(); i++) {
             oldRoute.get(i).update(changeRoutes.get(i).getRouteName(),
-                    changeRoutes.get(i).getIndex(),
+                    changeRoutes.get(i).getIdx(),
                     changeRoutes.get(i).getLat(),
                     changeRoutes.get(i).getLng());
 

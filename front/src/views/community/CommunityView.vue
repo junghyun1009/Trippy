@@ -22,7 +22,7 @@
           </p>
           <p class="option">
             <span class="material-symbols-outlined">event_note</span>
-            {{ temp.date[0] }} ~ {{ temp.date[1] }}, {{ temp.time }}
+            {{ convertDate }}, {{ temp.time }}
           </p>
           <p class="option">
             <span class="material-symbols-outlined">groups</span>
@@ -36,6 +36,73 @@
          
       </el-card>
     </router-link>
+
+     <router-link :to="{ name: 'communityDetail' }">
+      <!-- v-for 추가예정 -->
+      <el-card class="card">
+        <div>
+          <el-tag class="tag">{{ temp.category }}</el-tag>
+          <el-tag class="tag">장소</el-tag>
+        </div>
+        <div class="title">
+          <span class="state">{{ recruitState }}</span>
+          <h4>{{ temp.title }}</h4>
+        </div>
+        <div class="options">
+          <p class="option">
+            <span class="material-symbols-outlined">groups</span>
+            {{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 {{ temp.option.gender }} 참여 가능
+          </p>
+          <p class="option">
+            <span class="material-symbols-outlined">event_note</span>
+            {{ convertDate }}, {{ temp.time }}
+          </p>
+          <p class="option">
+            <span class="material-symbols-outlined">groups</span>
+            {{ recruitCount}} / {{ temp.recruit_volume }}명 참여
+          </p>
+        </div>
+        <div class="content">
+          <p>{{ convertDesc }}</p>
+        </div>
+
+         
+      </el-card>
+    </router-link>
+
+     <router-link :to="{ name: 'communityDetail' }">
+      <!-- v-for 추가예정 -->
+      <el-card class="card">
+        <div>
+          <el-tag class="tag">{{ temp.category }}</el-tag>
+          <el-tag class="tag">장소</el-tag>
+        </div>
+        <div class="title">
+          <span class="state">{{ recruitState }}</span>
+          <h4>{{ temp.title }}</h4>
+        </div>
+        <div class="options">
+          <p class="option">
+            <span class="material-symbols-outlined">groups</span>
+            {{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 {{ temp.option.gender }} 참여 가능
+          </p>
+          <p class="option">
+            <span class="material-symbols-outlined">event_note</span>
+            {{ convertDate }}, {{ temp.time }}
+          </p>
+          <p class="option">
+            <span class="material-symbols-outlined">groups</span>
+            {{ recruitCount}} / {{ temp.recruit_volume }}명 참여
+          </p>
+        </div>
+        <div class="content">
+          <p>{{ convertDesc }}</p>
+        </div>
+
+         
+      </el-card>
+    </router-link>
+
   </div>
 </template>
 
@@ -60,6 +127,15 @@ export default {
       },
       recruitCount() {
         return 3
+      },
+      convertDate() {
+        let date = ''
+        if (!this.temp.isDay) {
+          date = this.temp.start_date + '~' + this.temp.end_date
+        } else {
+          date = this.temp.start_date
+        }
+        return date
       },
       convertDesc() {
         let length = 55
@@ -145,5 +221,17 @@ export default {
   padding: 10px;
 }
 
-
+.create {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 3rem;
+  height: 3rem;;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  border-radius: 50%;
+  background-color: #F16B51;
+  color: #fff;
+}
 </style>

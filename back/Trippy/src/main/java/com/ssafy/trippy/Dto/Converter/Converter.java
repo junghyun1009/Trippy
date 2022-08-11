@@ -2,6 +2,7 @@ package com.ssafy.trippy.Dto.Converter;
 
 import com.ssafy.trippy.Domain.*;
 import com.ssafy.trippy.Dto.Response.ResponseDetailLocationDto;
+import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostCommentDto;
 import com.ssafy.trippy.Dto.Response.ResponseRouteDto;
 import com.ssafy.trippy.Dto.Response.ResponseTransport;

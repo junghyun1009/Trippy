@@ -20,17 +20,14 @@ public class Image {
     private String fileName;
 
     @Column(nullable = false)
-    private String fileOriName;
-
-    @Column(nullable = false)
     private String fileUrl;
 
-    @Column(nullable = false)
+    @Column
     private Long detailLocationId;
 
-    public Image(String fileName, String fileOriName, String fileUrl, Long detailLocationId) {
+    @Builder
+    public Image(String fileName, String fileUrl, Long detailLocationId) {
         this.fileName = fileName;
-        this.fileOriName = fileOriName;
         this.fileUrl = fileUrl;
         this.detailLocationId = detailLocationId;
     }
