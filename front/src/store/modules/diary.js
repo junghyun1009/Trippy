@@ -43,7 +43,7 @@ export default ({
     diaryTemp: state => state.diaryTemp,
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
-      return state.diary.member_id?.name === getters.currentUser.name
+      return state.diary?.email === getters.currentUser.email
     },
     // isDiary: state => !_.isEmpty(state.diary)
   },
