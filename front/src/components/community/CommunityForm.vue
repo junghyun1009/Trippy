@@ -18,11 +18,11 @@
       <el-date-picker class="calendar" v-model="newPost.date" type="daterange"/>
     </el-form-item> -->
     <el-form-item label="날짜">
-      <el-date-picker v-model="newPost.start_date" type="date" placeholder="동행 시작일을 선택해주세요." value-format="YYYY-MM-DD" :disabled-date="disabledStartDate"/>
+      <el-date-picker v-model="newPost.startDate" type="date" placeholder="동행 시작일을 선택해주세요." value-format="YYYY-MM-DD" :disabled-date="disabledStartDate"/>
       <el-switch class="switch" v-model="newPost.isDay" size="small" active-text="당일"></el-switch>
     </el-form-item>
     <el-form-item class="end_date" v-if="!newPost.isDay">
-      <el-date-picker v-model="newPost.end_date" type="date" placeholder="동행 종료일을 선택해주세요." value-format="YYYY-MM-DD" :disabled-date="disabledEndDate"/>
+      <el-date-picker v-model="newPost.endDate" type="date" placeholder="동행 종료일을 선택해주세요." value-format="YYYY-MM-DD" :disabled-date="disabledEndDate"/>
     </el-form-item>
     <el-form-item label="시간">
       <el-time-picker v-model="newPost.time" value-format="HH:mm" :disabled-seconds="disabledSeconds"/>
@@ -50,7 +50,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="나이">
-            <el-slider class="slider" v-model="newPost.newOption.age" range :min="19" :max="70"/>
+            <el-slider class="slider" v-model="age" range :min="19" :max="70" @input="onInput"/>
           </el-form-item>
           <el-form-item label="지역 제한">
             <el-switch v-model="newPost.newOption.isLocal" />
@@ -76,18 +76,18 @@ export default {
   },
   data() {
     return {
+      age: [this.post.option.startAge, this.post.option.endAge],
       newPost: {
         title: this.post.title,
         category: this.post.category,
         desc: this.post.desc,
-        start_date: this.post.start_date,
+        startDate: this.post.startDate,
         isDay: this.post.isDay,
-        end_date: this.post.end_date,
+        endDate: this.post.endDate,
         time: this.post.time,
         recruit_volume: this.post.recruit_volume,
         newOption: {
           gender: this.post.option.gender,
-          age: this.post.option.age,
           isLocal: this.post.option.isLocal
         },
         place: this.post.place,
@@ -97,10 +97,10 @@ export default {
   computed: {
     optionTag() {
       const gender = this.newPost.newOption.gender
-      const start_age = this.newPost.newOption.age[0]
-      const end_age = this.newPost.newOption.age[1]
-      let age = start_age + '~' + end_age + '살'
-      if (start_age === undefined && end_age === undefined || start_age === 19 && end_age === 70) {
+      const startAge = this.newPost.newOption.startAge
+      const endAge = this.newPost.newOption.endAge
+      let age = startAge + '~' + endAge + '살'
+      if (startAge === undefined && endAge === undefined || startAge === 19 && endAge === 70) {
         age = '누구나'
       }
       const isLocal = this.newPost.newOption.isLocal
@@ -114,6 +114,10 @@ export default {
     },
   },
   methods: {
+    onInput() {
+      this.newPost.newOption.startAge = this.age[0]
+      this.newPost.newOption.endAge = this.age[1]
+    },
     onSubmit() {
       console.log(this.newPost)
     },
@@ -132,7 +136,7 @@ export default {
     },
     disabledSeconds() {
       return this.makeRange(1, 59)
-    }
+    },
   },
 }
 </script>
