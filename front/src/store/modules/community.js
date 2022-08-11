@@ -5,7 +5,9 @@ export default ({
       title: '가평에서 같이 노실분~',
       category: '파티',
       desc: '혹시 가평 근처에서 같이 노실 분?혹시 가평 근처에서 같이 노실 분?혹시 가평 근처에서 같이 노실 분?',
-      date:  ['2022-08-12', '2022-08-13'],
+      start_date:  '2022-08-12',
+      isDay: true,
+      end_date: '',
       time: '18:00',
       recruit_volume: 6,
       option: {

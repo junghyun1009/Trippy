@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ResponseRouteDto {
     private String routeName;
-    private int index;
+    private int idx;
 
     private Double lng;
     private Double lat;
@@ -21,7 +21,7 @@ public class ResponseRouteDto {
     @Builder
     public ResponseRouteDto(Route route){
         this.routeName = route.getRouteName();
-        this.index = route.getIndex();
+        this.idx = route.getIdx();
         this.lng = route.getLng();
         this.lat = route.getLat();
     }
