@@ -7,7 +7,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@ToString
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 public class PostTransport extends BaseEntity{
 

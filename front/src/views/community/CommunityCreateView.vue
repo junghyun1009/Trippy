@@ -19,14 +19,15 @@ export default {
         title: '',
         category: [],
         desc: '',
-        start_date: '',
+        startDate: '',
         isDay: false,
-        end_date: '',
+        endDate: '',
         time: '',
         recruit_volume: '',
         option: {
           gender: '누구나',
-          age: 0,
+          startAge: 0,
+          endAge: 70,
           isLocal: false
         },
         place: '',

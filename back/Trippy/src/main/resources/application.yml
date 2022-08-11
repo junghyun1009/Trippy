@@ -18,6 +18,13 @@ spring:
   #    driver-class-name: org.h2.Driver
   profiles:
     include: jwt
+#    active: local
+  redis:
+    host: localhost
+    port: 6379
+  jwt:
+    blacklist:
+      access-token: BlackList_AccessToken_
   jpa:
     hibernate:
       ddl-auto: update
@@ -25,13 +32,17 @@ spring:
       hibernate:
         #        show_sql: true
         format_sql: true
-    generate-ddl: true
-  redis:
-    host: 172.26.13.195
-    port: 6379
-  jwt:
-    blacklist:
-      access-token: BlackList_AccessToken_
+  mail:
+    host: smtp.naver.com
+    port: 465
+    #  -----본인 계정 정보 ------
+    username:
+    password:
+    #  -------------------------
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.trust: smtp.naver.com_
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
