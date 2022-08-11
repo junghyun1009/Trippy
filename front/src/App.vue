@@ -17,6 +17,7 @@ export default ({
     NavBar
   },
   methods: {
+    ...mapActions(['fetchAllDiary', 'reissueToken'])
     // notShowLoginJoin() {
     //   this.$route.name !== 'login'
     //   this.$route.name !== 'signUp'

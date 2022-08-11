@@ -4,6 +4,9 @@ import com.ssafy.trippy.Domain.DetailLocation;
 import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Domain.Post;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @Getter
@@ -18,16 +21,15 @@ public class RequestDetailLocationDto {
 
     private String detailLocationContent;
 
-    private String imgPath;
-
     private Long post_id;
 
     private Long location_id;
 
+    private List<MultipartFile> images;
+
     public DetailLocation toEntity() {
         return DetailLocation.builder()
                 .detailLocationContent(detailLocationContent)
-                .imgPath(imgPath)
                 .post(Post.builder().id(post_id).build())
                 .location(Location.builder().id(location_id).build())
                 .rating(rating)
@@ -36,11 +38,10 @@ public class RequestDetailLocationDto {
     }
 
     @Builder
-    public RequestDetailLocationDto(String detailLocationName, float rating, String detailLocationContent, String imgPath, Long post_id, Long location_id) {
+    public RequestDetailLocationDto(String detailLocationName, float rating, String detailLocationContent, Long post_id, Long location_id) {
         this.detailLocationName = detailLocationName;
         this.rating = rating;
         this.detailLocationContent = detailLocationContent;
-        this.imgPath = imgPath;
         this.post_id = post_id;
         this.location_id = location_id;
     }
