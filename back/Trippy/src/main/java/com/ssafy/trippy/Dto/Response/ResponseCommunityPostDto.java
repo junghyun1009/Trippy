@@ -1,9 +1,11 @@
 package com.ssafy.trippy.Dto.Response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.trippy.Domain.CommunityPost;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -15,15 +17,23 @@ public class ResponseCommunityPostDto {
     private int category;
     private String countryName;
     private String cityName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime meetingTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
     private int recruitVolume;
     private int recruitCurrentVolume;
     private int startAge;
     private int endAge;
-    private int gender;
+    private String gender;
     private boolean isLocal;
+    private String place;
+    private boolean isDAY;
 
 
     public ResponseCommunityPostDto(CommunityPost communityPost) {
@@ -41,10 +51,12 @@ public class ResponseCommunityPostDto {
         this.endAge = communityPost.getEndAge();
         this.gender = communityPost.getGender();
         this.isLocal = communityPost.isLocal();
+        this.place = communityPost.getPlace();
+        this.isDAY = communityPost.isDAY();
     }
 
     @Builder
-    public ResponseCommunityPostDto(String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, int gender, boolean isLocal) {
+    public ResponseCommunityPostDto(String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean isLocal, String place, boolean isDAY) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -59,5 +71,7 @@ public class ResponseCommunityPostDto {
         this.endAge = endAge;
         this.gender = gender;
         this.isLocal = isLocal;
+        this.place = place;
+        this.isDAY = isDAY;
     }
 }
