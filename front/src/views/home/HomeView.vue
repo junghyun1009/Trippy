@@ -24,7 +24,6 @@
 import SearchBar from '@/components/common/SearchBar.vue'
 import RecommendList from '@/components/home/RecommendList.vue'
 import RegionList from '@/components/common/RegionList.vue'
-import {  mapActions } from 'vuex'
 
 export default {
   name: 'HomeView',
@@ -33,9 +32,16 @@ export default {
     RecommendList,
     RegionList,
   },
-
+  mounted() {
+    if (localStorage.getItem('reloaded')) {
+        localStorage.removeItem('reloaded');
+    } else {
+        localStorage.setItem('reloaded', '1');
+        location.reload();
+    }
+  },
   methods: {
-    ...mapActions(['reissueToken'])
+
     }
   }
 
