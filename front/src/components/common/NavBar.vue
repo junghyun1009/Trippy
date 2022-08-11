@@ -2,28 +2,48 @@
   <div class="navbar">
     <div class="buttons">
       <el-button class="button" link @click="goHome">
-        <span class="material-symbols-outlined">home</span>
+        <div class="menu">
+          <span class="material-symbols-outlined menu-icon">home</span>
+          <span class="menu-desc">HOME</span>
+        </div>
       </el-button>
       <el-button class="button" link @click="goFeed">
-        <span class="material-symbols-outlined">explore</span>
+        <div class="menu">
+          <span class="material-symbols-outlined menu-icon">explore</span>
+          <span class="menu-desc">FEED</span>
+        </div>
       </el-button>
       <el-popover v-model:visible="isClicked" placement="top" :width="150" trigger="click">
-        <el-button class="form-button diary" link @click="goDiaryForm">
-          다이어리
-          <span class="material-symbols-outlined">summarize</span>
-        </el-button>
-        <el-button class="form-button community" link @click="goCommunityForm">
-          동행찾기
-          <span class="material-symbols-outlined">diversity_3</span>
-        </el-button>
+        <div class="popover">
+          <el-button class="form-button diary" link @click="goDiaryForm">
+            <span class="form-desc">다이어리</span>
+            <span class="material-symbols-outlined menu-icon">description</span>
+          </el-button>
+          <el-button class="form-button community" link @click="goCommunityForm">
+            <span class="form-desc">동행찾기</span>
+            <span class="material-symbols-outlined menu-icon">groups_2</span>
+          </el-button>
+        </div>
         <template #reference>
           <el-button class="button" link ref="create">
-            <span class="material-symbols-outlined">edit_square</span>
+            <div class="menu">
+              <span class="material-symbols-outlined menu-icon">edit</span>
+              <span class="menu-desc">WRITE</span>
+            </div>
           </el-button>
         </template>
       </el-popover>
+      <el-button class="button" link @click="goChat">
+        <div class="menu">
+          <span class="material-symbols-outlined menu-icon">forum</span>
+          <span class="menu-desc">CHAT</span>
+        </div>
+      </el-button>
       <el-button class="button" link @click="goProfile">
-        <span class="material-symbols-outlined profile">person</span>
+        <div class="menu">
+          <span class="material-symbols-outlined menu-icon profile">person</span>
+          <span class="menu-desc">MY</span>
+        </div>
       </el-button>
     </div>
   </div>
@@ -56,6 +76,10 @@ export default {
       this.toggle()
 			this.$router.push({ name: 'communityCreate' })
 		},
+    goChat() {
+      this.isClicked = false
+      this.$router.push({ name: 'chatList' })
+    },
 		goProfile() {
       this.isClicked = false
 			this.$router.push({ name: 'profile' })
@@ -69,6 +93,7 @@ export default {
   position: fixed;
   bottom: 0vh;
   width: 100%;
+  /* height: 3rem; */
   border-top: 1px solid #d9d9d9;
   background-color: #fff;
   padding: 0.3rem;
@@ -81,14 +106,18 @@ export default {
   align-items: center;
 }
 
-.form-button {
-  font-size: 1.1rem;
-  margin-bottom: 0.3rem;
+.popover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.form-button span {
-  font-size: 1.1rem;
-  margin-left: 1rem;
+.form-desc {
+  margin-right: 0.5rem;
+}
+
+.community {
+  margin: 0 !important;
 }
 
 .buttons {
@@ -101,8 +130,19 @@ export default {
   margin: 0;
 }
 
-.material-symbols-outlined {
-  font-size: 2rem;
+.menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.menu-desc {
+  font-size: 0.6rem;
+  /* font-weight: bold; */
 }
 
 </style>
