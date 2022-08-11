@@ -14,6 +14,7 @@ export default {
     email: localStorage.getItem('email') || '',
     authError: null,
     fromPasswordFindView: false,
+    verificationCode: ''
   },
   getters: {
     isLoggedIn: state => !!state.accessToken,
@@ -23,7 +24,8 @@ export default {
     userData: state => state.userData,
     authError: state => state.authError,
     authHeader: state => ({ 'X-AUTH-TOKEN': `${state.accessToken}`}),
-    fromPasswordFindView: state => state.fromPasswordFindView
+    fromPasswordFindView: state => state.fromPasswordFindView,
+    verificationCode: state => state.verificationCode
   },
   mutations: {
     SET_ACCESS_TOKEN:(state, accessToken) => state.accessToken = accessToken,
@@ -33,6 +35,7 @@ export default {
     SET_USER_DATA: (state, userData) => state.userData = userData,
     SET_AUTH_ERROR: (state, error) => state.error = error,
     FROM_PASSWORD_FIND_VIEW: (state) => state.fromPasswordFindView = true,
+    SET_EMAIL_AUTH_CODE: (state, verificationCode) => state.verificationCode = verificationCode,
   },
   actions: {
     saveToken({ commit }, accessToken ) {
@@ -113,7 +116,40 @@ export default {
             console.error(err.response)
             commit('SET_AUTH_ERROR', err.response)
           })
-      },
+    },
+
+    // 이메일 중복확인
+    checkEmailDuplicate({ getters }, userinfo) {
+      console.log(getters)
+      axios({
+        url: "http://i7a506.p.ssafy.io:8080/members/duplicate",
+        method: 'get',
+        data: userinfo.email
+      })
+      .then(() => {
+        alert('이메일이 중복되었습니다')
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    },
+
+    // 인증 코드 요청하기
+    emailCode({commit}, userinfo) {
+      console.log(userinfo)
+      axios({
+        url: 'http://i7a506.p.ssafy.io:8080/api/members/join/authmail',
+        method: 'post',
+        data: userinfo.email
+      })
+      .then( res => {
+        console.log(res)
+        commit('SET_EMAIL_AUTH_CODE', res.data)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    },
 
     fetchCurrentUser({ getters, dispatch, commit }, ) {
       if (getters.isLoggedIn) {
@@ -126,8 +162,11 @@ export default {
           console.log(res)
           const email = res.data.email
           console.log(email)
-          commit('SET_EMAIL', email)
           localStorage.setItem('email', email)
+          let gender = res.data.gender
+          if ( gender === 1) {
+            res.data.gender = '남자'
+          } else ( res.data.gender = '여자')
           commit('SET_CURRENT_USER', res.data)})
         .catch(err => {
           if (err.response.status === 400) {
@@ -162,17 +201,38 @@ export default {
       router.push('/passwordchange')
     },
 
-    updatePassword({ getters }, userinfo) {
+    changePassword({ commit, dispatch }, userinfo) {
       axios({
-        url: 'http://i7a506.p.ssafy.io/members/changepw',
-        method: 'put',
-        headers: getters.authHeader,
-        // @PathVariable email ???
+        url: 'http://i7a506.p.ssafy.io:8080/api/members/change_pw',
+        method: 'post',
         data: userinfo.newPassword
       })
-        .then()
+      .then((res) => {
+        console.log(res)
+        dispatch('fetchCurrentUser')
+        commit('SET_USER_DATA')
+        alert('비밀번호가 변경되었습니다')
+        router.push({ name: 'login' })
+      })
+      .catch( err => {
+        console.error(err.response)
+      })       
     }, 
 
+    deleteAccount({ getters }) {
+      axios({
+        url: 'http://i7a506.p.ssafy.io:8080/api/auth/members/remove',
+        method: 'delete',
+        headers: getters.authHeader,
+      })
+      .then( () => {
+        console.log('deleted')
+        router.push({ name: 'home' })
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    }
 
   },
   modules: {

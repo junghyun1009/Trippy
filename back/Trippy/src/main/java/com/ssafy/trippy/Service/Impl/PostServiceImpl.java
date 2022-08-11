@@ -30,6 +30,10 @@ public class PostServiceImpl implements PostService {
     private final Long busId = 1L;
     private final Long walkId = 2L;
     private final Long taxiId = 3L;
+    private final Long carId = 4L;
+
+    private final List<Long> transportId = new ArrayList<>();
+    private final List<Transport> name = new ArrayList<>();
 
 
     // 모든 post찾기
@@ -39,7 +43,6 @@ public class PostServiceImpl implements PostService {
         List<ResponsePostDto> responsePostDtoList = new ArrayList<>();
         // 1) 직접 responsePostDto에 set을 해주자!
         for (Post post : all) {
-            System.out.println("post.getPostTransports().toString() = " + post.getPostTransports().toString());
             ResponsePostDto dto = new ResponsePostDto(post);
             responsePostDtoList.add(dto);
         }
@@ -61,7 +64,7 @@ public class PostServiceImpl implements PostService {
     // post 등록
     @Transactional
     @Override
-    public void savePost(RequestPostDto requestPostDto) {
+    public Long savePost(RequestPostDto requestPostDto) {
         Member member = memberRepository.findById(requestPostDto.getMember_id()).get();
         requestPostDto.setMember_id(member.getId());
         Post post = postRepository.save(requestPostDto.toEntity());
@@ -83,6 +86,7 @@ public class PostServiceImpl implements PostService {
             detailLocationRepository.save(detailLocation);
         }
 
+
         for (PostTransport postTransport : requestPostDto.toEntity().getPostTransports().stream().collect(Collectors.toList())) {
             postTransport.setPost(post);
             postTransportRepository.save(postTransport);
@@ -93,6 +97,7 @@ public class PostServiceImpl implements PostService {
             routeRepository.save(route);
         }
 
+        return post.getId();
     }
 
     // post 삭제
@@ -128,10 +133,12 @@ public class PostServiceImpl implements PostService {
         for (PostTransport postTransport : requestPostDto.toEntity().getPostTransports().stream().collect(Collectors.toList())) {
             if (postTransport.getTransport().getName().equals("버스")) {
                 postTransport.getTransport().builder().id(busId).build();
-            } else if (postTransport.getTransport().getName().equals("택시")) {
+            } else if (postTransport.getTransport().getName().equals("뚜벅이")) {
                 postTransport.getTransport().builder().id(walkId).build();
-            } else {
+            } else if(postTransport.getTransport().getName().equals("택시")) {
                 postTransport.getTransport().builder().id(taxiId).build();
+            }{
+                postTransport.getTransport().builder().id(carId).build();
             }
         }
         // detailLocation 테이블에도 수정된 값 넣어주기
@@ -195,7 +202,7 @@ public class PostServiceImpl implements PostService {
                 requestPostDto.getCount(),
                 requestPostDto.getStartDate(),
                 requestPostDto.getEndDate(),
-                requestPostDto.getRepresentiveImg(),
+                requestPostDto.getRepresentativeImg(),
                 postTransport,
                 detailLocations,
                 oldRoute);
