@@ -141,6 +141,12 @@ export default {
       if (this.action === 'create') {
         this.newPost.meetingTime = '0000-00-00 ' + this.newPost.meetingTime
       }
+      const post = this.newPost
+      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.day || post.endDate)) {
+        console.log(this.newPost)
+      } else {
+        alert('빈 칸 없이 모든 필드를 채워주세요!')
+      }
     },
     disabledStartDate(date) {
       return date.getTime() < Date.now() - 3600 * 1000 * 24 
