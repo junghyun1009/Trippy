@@ -159,7 +159,7 @@ export default {
           headers: getters.authHeader,
         })
         .then( res => {
-          console.log(res)
+          console.log('successfully fetched current user info')
           const email = res.data.email
           console.log(email)
           localStorage.setItem('email', email)

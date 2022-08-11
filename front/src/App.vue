@@ -17,12 +17,11 @@ export default ({
     NavBar
   },
   methods: {
-    ...mapActions(['fetchAllDiary', 'reissueToken'])
+    ...mapActions(['reissueToken'])
     // notShowLoginJoin() {
     //   this.$route.name !== 'login'
     //   this.$route.name !== 'signUp'
     // }
-    ...mapActions(['reissueToken'])
   },
   mounted() {
     if (localStorage.getItem('reloaded')) {
