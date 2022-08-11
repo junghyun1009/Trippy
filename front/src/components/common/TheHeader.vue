@@ -95,7 +95,7 @@
           <div class="setting">
             <p @click="goSetting(), visible=false">
               <span class="material-symbols-outlined icon">settings</span>
-              설정
+              계정 관리
             </p>
           </div>
         </div>
@@ -140,7 +140,7 @@ export default {
       } else if (name === 'profileEdit') {
         return '프로필 수정'
       } else if (name === 'setting') {
-        return '설정'
+        return '계정 관리'
       } else if (name === 'community') {
         return '동행찾기'
       } else if (name === 'communityCreate') {
