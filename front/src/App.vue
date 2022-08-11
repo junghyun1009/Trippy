@@ -17,12 +17,11 @@ export default ({
     NavBar
   },
   methods: {
-    ...mapActions(['fetchAllDiary', 'reissueToken'])
+    ...mapActions(['reissueToken'])
     // notShowLoginJoin() {
     //   this.$route.name !== 'login'
     //   this.$route.name !== 'signUp'
     // }
-    ...mapActions(['reissueToken'])
   },
   mounted() {
     if (localStorage.getItem('reloaded')) {
@@ -57,7 +56,7 @@ export default ({
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
 }
 
