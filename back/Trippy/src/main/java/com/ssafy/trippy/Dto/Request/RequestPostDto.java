@@ -1,12 +1,10 @@
 package com.ssafy.trippy.Dto.Request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.trippy.Domain.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +21,13 @@ public class RequestPostDto {
     private Long locationId;
     private int company;
     private int count;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
-    private int representiveImg;
+    private int representativeImg;
     private Long member_id;
     private List<RequestPostTransPortDto> postTransports;
     private List<RequestDetailLocationDto> detailLocations;
@@ -56,7 +58,7 @@ public class RequestPostDto {
                 .detailLocations(detailLocationList)
                 .title(title)
                 .isDelete(isDelete)
-                .representiveImg(representiveImg)
+                .representiveImg(representativeImg)
                 .routes(routeList)
                 .build();
     }
@@ -65,14 +67,14 @@ public class RequestPostDto {
 
 
     @Builder
-    public RequestPostDto(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Long memberId, List<RequestPostTransPortDto> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes) {
+    public RequestPostDto(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representativeImg, Long memberId, List<RequestPostTransPortDto> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes) {
         this.title = title;
         this.isDelete = isDelete;
         this.company = company;
         this.count = count;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.representiveImg = representiveImg;
+        this.representativeImg = representativeImg;
         this.member_id = member_id;
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;

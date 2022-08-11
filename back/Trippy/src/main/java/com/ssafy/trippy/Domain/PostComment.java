@@ -45,7 +45,12 @@ public class PostComment extends BaseEntity {
         return postComment;
     }
 
-    public void update(String content) {
+    @Builder
+    public PostComment(String content) {
+        this.content = content;
+    }
+
+    public void update(String content, LocalDateTime regDt) {
         this.content = content;
     }
 

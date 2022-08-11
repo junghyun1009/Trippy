@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Dto.Response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.trippy.Domain.*;
 import com.ssafy.trippy.Dto.Converter.Converter;
 import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
@@ -7,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +23,11 @@ public class ResponsePostDto {
     private int count;
     private String countyName;
     private String cityName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
     private int representativeImg;
     private String email;

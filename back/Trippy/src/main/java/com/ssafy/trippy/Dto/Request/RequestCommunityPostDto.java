@@ -1,11 +1,13 @@
 package com.ssafy.trippy.Dto.Request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.trippy.Domain.CommunityPost;
 import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -21,21 +23,31 @@ public class RequestCommunityPostDto {
     private Long locationId;
     private String countryName;
     private String cityName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime meetingTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
     private int recruitVolume;
     private int recruitCurrentVolume;
     private int startAge;
     private int endAge;
-    private int gender;
+    private String gender;
     private boolean isLocal;
+
+    private String place;
+    private boolean isDay;
 
 
     // DTO -> ENTITY
     public CommunityPost toEntity() {
         return CommunityPost.builder()
                 .id(id)
+                .isDAY(isDay)
                 .isLocal(isLocal)
                 .category(category)
                 .description(description)
@@ -50,6 +62,7 @@ public class RequestCommunityPostDto {
                 .startDate(startDate)
                 .recruitCurrentVolume(recruitCurrentVolume)
                 .title(title)
+                .place(place)
                 .build();
     }
 
