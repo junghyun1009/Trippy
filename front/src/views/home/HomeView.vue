@@ -3,9 +3,8 @@
     <search-bar></search-bar>
     <region-list></region-list>
 
-
     <recommend-list></recommend-list>
-    <recommend-list v-for="diary in diaries" :key="diary.id" :diary="diary"></recommend-list>
+  
 
     <el-divider />
     <div class="following-diary-description">
@@ -13,7 +12,6 @@
       <p><span>정무송</span> 님이 추천하는 코스</p>
     </div>
     <div class="following-diary-list">
-      <recommend-list></recommend-list>
     </div>
     <br>
     <br>
@@ -26,7 +24,7 @@
 import SearchBar from '@/components/common/SearchBar.vue'
 import RecommendList from '@/components/home/RecommendList.vue'
 import RegionList from '@/components/common/RegionList.vue'
-import { mapGetters, mapActions } from 'vuex'
+import {  mapActions } from 'vuex'
 
 export default {
   name: 'HomeView',
@@ -36,27 +34,8 @@ export default {
     RegionList,
   },
 
-  //App.vue로 옮기기
-  mounted() {
-    if (localStorage.getItem('reloaded')) {
-        localStorage.removeItem('reloaded');
-    } else {
-        localStorage.setItem('reloaded', '1');
-        location.reload();
-    }
-
-    this.showAllDiary(),
-    this.reissueToken()
-  },
-
-  computed: {
-    ...mapGetters(['GET_ALL_DIARY']),
-    diaries() {
-      return this.$store.state.diaries
-    }
-  },
   methods: {
-    ...mapActions(['showAllDiary', 'reissueToken'])
+    ...mapActions(['reissueToken'])
     }
   }
 

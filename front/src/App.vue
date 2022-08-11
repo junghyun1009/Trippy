@@ -17,11 +17,11 @@ export default ({
     NavBar
   },
   methods: {
+    ...mapActions(['reissueToken'])
     // notShowLoginJoin() {
     //   this.$route.name !== 'login'
     //   this.$route.name !== 'signUp'
     // }
-    ...mapActions(['reissueToken'])
   },
   mounted() {
     if (localStorage.getItem('reloaded')) {
