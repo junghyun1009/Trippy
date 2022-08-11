@@ -1,14 +1,18 @@
 package com.ssafy.trippy.Service.Impl;//package com.ssafy.trippy.Service.Impl;
 
 import com.ssafy.trippy.Domain.*;
+import com.ssafy.trippy.Dto.Request.RequestDetailLocationDto;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Repository.*;
 import com.ssafy.trippy.Service.PostService;
+import com.ssafy.trippy.Service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +30,7 @@ public class PostServiceImpl implements PostService {
     private final LocationRepository locationRepository;
     private final PostCommentRepository postCommentRepository;
     private final RouteRepository routeRepository;
+    private final S3Uploader s3Uploader;
 
     private final Long busId = 1L;
     private final Long walkId = 2L;
@@ -81,9 +86,24 @@ public class PostServiceImpl implements PostService {
             requestPostDto.setLocationId(locationId);
         }
 
-        for (DetailLocation detailLocation : requestPostDto.toEntity().getDetailLocations().stream().collect(Collectors.toList())) {
-            detailLocation.setPost(post);
-            detailLocationRepository.save(detailLocation);
+//        for (DetailLocation detailLocation : requestPostDto.toEntity().getDetailLocations().stream().collect(Collectors.toList())) {
+//            detailLocation.setPost(post);
+//            detailLocationRepository.save(detailLocation);
+//        }
+
+        for(RequestDetailLocationDto requestDetailLocationDto: requestPostDto.getDetailLocations()){
+            List<MultipartFile> images = requestDetailLocationDto.getImages();
+            DetailLocation detailLoc = requestDetailLocationDto.toEntity();
+            detailLoc.setPost(post);
+            DetailLocation detailLocation = detailLocationRepository.save(detailLoc);
+            for (MultipartFile image:images){
+                try {
+                    s3Uploader.upload(image,"static",detailLocation.getId());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new IllegalArgumentException("POST 이미지 저장 error");
+                }
+            }
         }
 
 
@@ -162,8 +182,7 @@ public class PostServiceImpl implements PostService {
         for (int i = 0; i < detailLocation.size(); i++) {
             detailLocationList.get(i).update(detailLocations.get(i).getDetailLocationContent(),
                     detailLocations.get(i).getDetailLocationName(),
-                    detailLocations.get(i).getRating(),
-                    detailLocations.get(i).getImgPath());
+                    detailLocations.get(i).getRating());
         }
 
         // PostTransport 테이블에도 수정된 값 넣어주기

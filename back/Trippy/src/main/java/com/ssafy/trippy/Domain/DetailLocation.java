@@ -28,10 +28,6 @@ public class DetailLocation extends BaseEntity{
 //    @NotBlank(message="상세지역글을 입력하세요")
     private String detailLocationContent;
 
-//    @Column(name="IMG_PATH")
-    private String imgPath;
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="POST_ID")
     private Post post;
@@ -46,22 +42,20 @@ public class DetailLocation extends BaseEntity{
     }
 
     @Builder
-    public DetailLocation(Long id, String detailLocationName, float rating, String detailLocationContent, String imgPath,Post post, Location location) {
+    public DetailLocation(Long id, String detailLocationName, float rating, String detailLocationContent,Post post, Location location) {
         this.id=id;
         this.detailLocationContent = detailLocationContent;
         this.detailLocationName = detailLocationName;
         this.rating = rating;
-        this.imgPath = imgPath;
         this.post = post;
         this.location = location;
     }
 
 
-    public void update(String detailLocationContent, String detailLocationName, float rating, String imgPath){
+    public void update(String detailLocationContent, String detailLocationName, float rating){
         this.detailLocationContent = detailLocationContent;
         this.detailLocationName = detailLocationName;
         this.rating = rating;
-        this.imgPath = imgPath;
     }
 
 }
