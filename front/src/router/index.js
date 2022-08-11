@@ -89,7 +89,7 @@ const routes = [
     component: DiaryCreateView
   },
   {
-    path: '/diary',
+    path: '/diary/:diaryPk',
     // 나중에 pk 추가하기
     name: 'diaryDetail',
     component: DiaryDetailView
