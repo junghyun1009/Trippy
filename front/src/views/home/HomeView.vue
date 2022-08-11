@@ -36,18 +36,6 @@ export default {
     RegionList,
   },
 
-  //App.vue로 옮기기
-  mounted() {
-    if (localStorage.getItem('reloaded')) {
-        localStorage.removeItem('reloaded');
-    } else {
-        localStorage.setItem('reloaded', '1');
-        location.reload();
-    }
-
-    this.showAllDiary(),
-    this.reissueToken()
-  },
 
   computed: {
     ...mapGetters(['GET_ALL_DIARY']),
@@ -56,7 +44,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showAllDiary', 'reissueToken'])
+    ...mapActions(['fetchAllDiary', 'reissueToken'])
     }
   }
 
