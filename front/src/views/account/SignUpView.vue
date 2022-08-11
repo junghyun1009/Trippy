@@ -9,7 +9,7 @@
       v-model="userData.email" 
       placeholder="username@email.com"
       ></el-input>
-      <el-button type="primary" @click="checkEmail()">인증하기</el-button>
+      <el-button type="primary" @click="checkEmail(), checkEmailDuplicate(userinfo)">중복확인</el-button>
       <account-error-list :errorMessage="emailError" v-if="!emailFormat"></account-error-list>
 
     </div>
@@ -130,8 +130,8 @@ export default {
         }
     },
     methods: {
-      ...mapActions(['signupOne',]),
-      
+      ...mapActions(['signupOne', 'checkEmailDuplicate']),
+
       dateParsing() {
         const birthdate = new Date(this.date)
         this.userData.birth = birthdate.toISOString()

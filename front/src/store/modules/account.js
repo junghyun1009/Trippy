@@ -118,6 +118,22 @@ export default {
           })
     },
 
+    // 이메일 중복확인
+    checkEmailDuplicate({ getters }, userinfo) {
+      console.log(getters)
+      axios({
+        url: "http://i7a506.p.ssafy.io:8080/members/duplicate",
+        method: 'get',
+        data: userinfo.email
+      })
+      .then(() => {
+        alert('이메일이 중복되었습니다')
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    },
+
     // 인증 코드 요청하기
     emailCode({commit}, userinfo) {
       console.log(userinfo)
