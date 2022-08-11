@@ -199,7 +199,7 @@ export default {
     photoUrl(file) {
       const newUrl = URL.createObjectURL(file)
       return newUrl
-    }
+    },
   },
   methods: {
     ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent']),
@@ -231,7 +231,7 @@ export default {
 
     closeInfo() {
       this.hideParent()
-    }
+    },
   },
   created() {
     this.fetchDiary(this.diaryPk)

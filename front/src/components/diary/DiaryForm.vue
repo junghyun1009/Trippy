@@ -145,7 +145,7 @@
             </div>
 
             <!-- 사진 잠깐 주석 -->
-            <div class="story-photo">
+            <!-- <div class="story-photo">
               <div class="story-photo-title">
                 <span>사진</span>
                 <span>(선택)</span>
@@ -187,7 +187,7 @@
                   </div>
                 </el-dialog>
               </div>
-            </div>
+            </div> -->
             
             <div class="story-btn">
               <el-button @click="addStory()" v-show="newStories.length < 10" :disabled="k != newStories.length - 1" link>
@@ -206,7 +206,7 @@
       <div v-if="action==='create'" class="submit-btn">
         <el-button @click="onSubmit">작성하기</el-button>
       </div>
-      <div v-else class="submit-btn">
+      <div v-else-if="action==='update'" class="submit-btn">
         <el-button @click="onSubmit">수정하기</el-button>
       </div>
     </form>
@@ -270,7 +270,7 @@ export default {
         { 
           // pk: 0,
           detailLocationName: '',
-          images: [],
+          // images: [],
           dialogVisible: false,
           detailLocationContent: '',
           rating: null
@@ -409,7 +409,7 @@ export default {
         this.newStories.push({
           // pk: 0,
           detailLocationName: '',
-          images: [],
+          // images: [],
           dialogVisible: false,
           detailLocationContent: '',
           rating: null
@@ -435,16 +435,16 @@ export default {
           addedPhotoList = [
             ...addedPhotoList,
             // 1차 실험 코드 (사진 미리보기는 없음)
-            this.$refs.files[index].files[i]
+            // this.$refs.files[index].files[i]
             // 여기 잠깐 주석
-            // {
-            //   // 실제 파일
-            //   file: this.$refs.files[index].files[i],
-            //   // 사진 미리보기
-            //   preview: URL.createObjectURL(this.$refs.files[index].files[i]),
-            //   // 삭제 및 관리를 위한 number
-            //   // number: i
-            // }
+            {
+              // 실제 파일
+              file: this.$refs.files[index].files[i],
+              // 사진 미리보기
+              preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+              // 삭제 및 관리를 위한 number
+              // number: i
+            }
           ]
           // num = i
         } else {

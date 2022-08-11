@@ -146,15 +146,17 @@ export default ({
         })
       })
     },
+
     // 일지 DELETE
     deleteDiary({ commit, getters }, diaryPk) {
       axios({
-        url: `http://localhost:8000/posts/api/${diaryPk}`,
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/posts/${diaryPk}`,
         method: 'delete',
         headers: getters.authHeader
       })
-      .then(() => {
+      .then(res => {
         commit('SET_DIARY', {})
+        console.log(res)
         router.push({ name: 'home' })
       })
       .catch(err => console.error(err.response))
