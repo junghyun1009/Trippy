@@ -5,6 +5,7 @@
     <div class="email">
       <p>이메일</p>
       <el-input  id="email"
+      class="input"
       v-model="userinfo.email" 
       placeholder="username@email.com"
       ></el-input>
@@ -13,6 +14,7 @@
 
     </div>
 
+    <br>
     <div class="password">
       <p>비밀번호</p>
       <el-input v-model="userinfo.password" 
@@ -21,6 +23,7 @@
         placeholder="비밀번호" 
         autocomplete="off"
         maxlength="20"
+        class="input"
         @blur="checkPasswordValidity"
         show-password
         />
@@ -37,15 +40,22 @@
       <account-error-list :errorMessage="passwordMatchError" v-if="!passwordMatch"></account-error-list>
     </div>
 
+    <br>
     <div class="nickname">
       <p>닉네임</p>
-      <el-input id="nickname" v-model="userinfo.name" placeholder="사용할 별명을 입력해주세요" maxlength="10"  @blur="checkNickname"></el-input>
+      <el-input 
+      id="nickname" 
+      class="input"
+      v-model="userinfo.name" 
+      placeholder="사용할 별명을 입력해주세요" 
+      maxlength="10"  @blur="checkNickname"></el-input>
       <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
     </div>
 
+    <br>
     <div class="gender">
       <p>성별</p>
-      <el-select id="gender" v-model="userinfo.gender" class="m-2" placeholder="Select">
+      <el-select id="gender" v-model="userinfo.gender" class="m-2 input" placeholder="Select">
       <el-option 
 
         v-for="item in options"
@@ -56,22 +66,21 @@
       </el-select>
     </div>
 
+    <br> 
     <div class="birthdate">
-      <div class="demo-date-picker">
-        <div class="block">
-          <span class="demonstration">생년월일</span>
-          <br>
-            <el-date-picker
-              id="birthdate"
-              v-model="userinfo.birth"
-              type="date"
-              placeholder="생년월일을 선택해주세요!"
-            />
-        </div>
+      <p>생년월일</p>
+      <div class="demo-date-picker input m-2">
+        <el-date-picker
+          class="date-input"
+          id="birthdate"
+          v-model="userinfo.birth"
+          type="date"
+          placeholder="생년월일을 선택해주세요!"
+        />
       </div>
     </div>
 
-    <br>
+    <br><br><br><br>
     <el-button type="primary" @click="checkBlank()">회원가입</el-button>
   </form>
 
@@ -180,25 +189,47 @@ export default {
 </script>
 
 <style scoped>
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
   .demo-date-picker {
     display: flex;
     width: 100%;
     padding: 0;
     flex-wrap: wrap;
   }
-  .demo-date-picker .block {
-    padding: 30px 0;
-    text-align: center;
-    border-right: solid 1px var(--el-border-color);
-    flex: 1;
-  }
+
   .demo-date-picker .block:last-child {
     border-right: none;
   }
-  .demo-date-picker .demonstration {
-    display: block;
-    color: var(--el-text-color-secondary);
-    font-size: 14px;
-    margin-bottom: 20px;
+
+  button {
+    width: 100%;
   }
+
+  form {
+    margin: 15% 3%;
+  }
+
+  p {
+    display: flex;
+  }
+
+  .gender {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .birthdate {
+    display: flex;
+    flex-direction: column; 
+  }
+
+  .input {
+    margin: 2% 0;
+  }
+
 </style>
