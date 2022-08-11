@@ -9,8 +9,7 @@
 <script>
 import TheHeader from '@/components/common/TheHeader.vue'
 import NavBar from '@/components/common/NavBar.vue'
-import { mapActions } from 'vuex'
-
+import { mapActions } from 'vuex';
 export default ({
   name: 'App',
   components: {
@@ -23,6 +22,7 @@ export default ({
     //   this.$route.name !== 'login'
     //   this.$route.name !== 'signUp'
     // }
+    ...mapActions(['reissueToken'])
   },
   mounted() {
     if (localStorage.getItem('reloaded')) {
@@ -31,15 +31,19 @@ export default ({
         localStorage.setItem('reloaded', '1');
         location.reload();
     }
-
-    this.fetchAllDiary(),
     this.reissueToken()
   },
-  
 })
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;500&display=swap');
+
+  * { 
+      font-family: 'IBM Plex Sans KR', sans-serif;
+      font-weight: 100;
+    } 
+
 :root {
   --el-color-primary: #F16B51 !important;
 }

@@ -4,9 +4,9 @@
       <div class="comment-form">
         <!-- 수정 상태인지 아닌지 체크 -->
 				<el-input class="comment-input" type="text" id="comment" v-model="content" required/>
-				<button class="btn" link>
+				<el-button class="btn" link>
           <span class="material-symbols-outlined">send</span>
-        </button>
+        </el-button>
 			</div>
     </form>
   </div>
@@ -39,7 +39,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;500&display=swap');
 
   * { 
