@@ -25,8 +25,6 @@ public class RequestDetailLocationDto {
 
     private Long location_id;
 
-    private List<MultipartFile> images;
-
     public DetailLocation toEntity() {
         return DetailLocation.builder()
                 .detailLocationContent(detailLocationContent)
