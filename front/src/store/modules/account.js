@@ -5,8 +5,8 @@ import VueCookies from 'vue-cookies'
 
 export default {
   state: {
-    accessToken:  '',
-    refreshToken: '',
+    // accessToken:  '',
+    // refreshToken: '',
     currentUser: {},
     profile: {},
     userData: {},
@@ -18,18 +18,18 @@ export default {
   },
   getters: {
     isLoggedIn: state => !!state.accessToken,
-    refreshToken: state => state.refreshToken,
+    // refreshToken: state => state.refreshToken,
     currentUser: state => state.currentUser,
     profile: state => state.profile,
     userData: state => state.userData,
     authError: state => state.authError,
-    authHeader: state => ({ 'X-AUTH-TOKEN': `${state.accessToken}`}),
+    authHeader: () => ({ 'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`}),
     fromPasswordFindView: state => state.fromPasswordFindView,
     verificationCode: state => state.verificationCode
   },
   mutations: {
-    SET_ACCESS_TOKEN:(state, accessToken) => state.accessToken = accessToken,
-    SET_REFRESH_TOKEN: () => VueCookies.set('refreshToken'),
+    // SET_ACCESS_TOKEN:(state, accessToken) => state.accessToken = accessToken,
+    // SET_REFRESH_TOKEN: () => VueCookies.set('refreshToken'),
     SET_CURRENT_USER:(state, user) => state.currentUser = user,
     SET_PROFILE: (state, profile) => state.profile = profile,
     SET_USER_DATA: (state, userData) => state.userData = userData,
@@ -38,12 +38,13 @@ export default {
     SET_EMAIL_AUTH_CODE: (state, verificationCode) => state.verificationCode = verificationCode,
   },
   actions: {
-    saveToken({ commit }, accessToken ) {
-      commit('SET_ACCESS_TOKEN', accessToken)
-    },
+    // saveToken({ commit }, accessToken ) {
+    //   commit('SET_ACCESS_TOKEN', accessToken)
+    // },
     
-    removeToken({ commit }, ) {
-      commit('SET_ACCESS_TOKEN', '')
+    removeToken({ getters }, ) {
+      console.log(getters)
+      VueCookies.remove('accessToken')
       VueCookies.remove('refreshToken')
       localStorage.removeItem('email')
     },
@@ -60,9 +61,10 @@ export default {
       })
       .then( res => {
         console.log('access token re-issued')
-        // accessToken은 state에 저장
+        // accessToken은 state에 저장.. 하지 않고 1시간 동안 쿠키에 저장
         const accessToken = res.data.accessToken
-        dispatch('saveToken', accessToken)
+        // dispatch('saveToken', accessToken)
+        VueCookies.set("accessToken", accessToken, '1h')
         // refreshToken은 7일동안 쿠키에 저장
         const refreshToken = res.data.refreshToken
         VueCookies.set("refreshToken", refreshToken, '7d')
@@ -80,9 +82,10 @@ export default {
         data: userinfo,
       })
         .then( res => {
-          // accessToken은 state에 저장
+          // accessToken은 state에 저장.. 하지 않고 1시간 동안 쿠키에 저장
           const accessToken = res.data.accessToken
-          dispatch('saveToken', accessToken)
+          // dispatch('saveToken', accessToken)
+          VueCookies.set("accessToken", accessToken, '1h')
           // refreshToken은 7일동안 쿠키에 저장
           const refreshToken = res.data.refreshToken
           VueCookies.set("refreshToken", refreshToken, '7d')
@@ -159,7 +162,7 @@ export default {
           headers: getters.authHeader,
         })
         .then( res => {
-          console.log(res)
+          console.log('successfully fetched current user info')
           const email = res.data.email
           console.log(email)
           localStorage.setItem('email', email)
