@@ -27,42 +27,50 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'RegionListItem',
   data() {
     return {
-
+      region: '',
     }
   },
   methods: {
+    ...mapActions(['fetchAllDiaries', 'getRegionDiaries']),
     diaryFilter() {
       console.log(event.currentTarget.innerText)
       if ( event.currentTarget.innerText == '전체') {
         console.log('all')
-        // 모든 일지를 axios로 호출해서 뿌림
+        this.fetchAllDiaries()
       } 
       else if ( event.currentTarget.innerText == '서울') {
         console.log('seoul')
-        // 모든 일지를 axios로 호출해서 가져오면
-        // 오 근데 도시별 게시물 전체조회가 있네...???
-        // 그러면 백에서 걍 호출해주면될거같기도함-- 나중에 api 완성돼야 알수있을듯
+        this.region = '서울특별시'
+        this.getRegionDiaries(this.region)
       }
       else if ( event.currentTarget.innerText == '제주') {
         console.log('jeju')
+        this.region = '제주'
+        this.getRegionDiaries(this.region)
       }
       else if ( event.currentTarget.innerText == '부산') {
         console.log('busan')
+        this.region = '부산'
+        this.getRegionDiaries(this.region)
       }
       else if ( event.currentTarget.innerText == '도쿄') {
         console.log('tokyo')
+        this.region = '도쿄'
+        this.getRegionDiaries(this.region)
       }
     }
   },
-  created() {
-    window.onpopstate = function () {
-    location.reload()
-    };
-  }
+  // created() {
+  //   window.onpopstate = function () {
+  //   location.reload()
+  //   };
+  // }
 }
 </script>
 

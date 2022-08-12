@@ -39,11 +39,11 @@ export default {
   name: 'SettingView',
   methods: {
     ...mapActions(['logout', 'deleteAccount']),
+    goPasswordChange() {
+      this.$router.push({ name: 'passwordFind' })
+    },
     goProfileEdit() {
       this.$router.push({ name: 'profileEdit' })
-    },
-    goPasswordChange() {
-      this.$router.push({ name: 'passwordChange' })
     },
     open() {
       ElMessageBox.confirm(

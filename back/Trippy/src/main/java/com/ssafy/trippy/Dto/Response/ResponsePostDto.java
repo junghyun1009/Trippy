@@ -40,10 +40,8 @@ public class ResponsePostDto {
 
     @Builder
     public ResponsePostDto(Post post) {
-        for (DetailLocation detailLocation: post.getDetailLocations()){
-            this.countryName = detailLocation.getLocation().getCountryName();
-            this.cityName = detailLocation.getLocation().getCityName();
-        }
+        this.countryName = post.getLocation().getCountryName();
+        this.cityName = post.getLocation().getCityName();
         this.id = post.getId();
         this.title = post.getTitle();
         this.company = post.getCompany();
