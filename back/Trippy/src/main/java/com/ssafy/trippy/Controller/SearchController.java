@@ -34,7 +34,7 @@ public class SearchController {
             post =  postSearchService.searchPost(searchRequestDto);
         }catch(Exception e){
             e.printStackTrace();
-            return new ResponseEntity<>(FAIL,HttpStatus.NOT_FOUND );
+            return new ResponseEntity<>("해당 게시물을 찾을 수 없습니다.",HttpStatus.BAD_REQUEST );
         }
         return new ResponseEntity<List<ResponsePostDto>>(post, HttpStatus.OK);
     }
