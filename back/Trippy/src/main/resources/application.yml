@@ -20,8 +20,8 @@ spring:
     include: jwt
 #    active: local
   redis:
-    host: localhost
-#    host: 172.26.13.195
+#    host: localhost
+    host: 172.26.13.195
     port: 6379
   jwt:
     blacklist:
