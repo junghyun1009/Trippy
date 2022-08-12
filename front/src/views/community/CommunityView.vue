@@ -70,7 +70,7 @@
       </el-card>
     </router-link>
 
-     <router-link :to="{ name: 'communityDetail' }">
+     <router-link :to="{ name: 'communityDetail', params: { postPk: post.id } }">
       <!-- v-for 추가예정 -->
       <el-card class="card">
         <div>
@@ -121,7 +121,7 @@ export default {
       }
     },
     computed: {
-      ...mapGetters(['temp']),
+      ...mapGetters(['temp', 'post']),
       recruitState() {
         return '모집중'
       },

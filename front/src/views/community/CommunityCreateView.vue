@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Community create</h1>
     <community-form :post="post" action="create"></community-form>
   </div>
 </template>
@@ -10,17 +9,17 @@ import CommunityForm from '@/components/community/CommunityForm.vue'
 export default {
   name: 'CommunityCreate',
   components: {
-      CommunityForm
+    CommunityForm
   },
   data() {
     return {
       post: {
-        pk: null,
+        id: null,
         title: '',
         category: 1,
         description: '',
         startDate: '',
-        day: false,
+        isDay: true,
         endDate: '',
         meetingTime: '',
         recruitCurrentVolume: 0,
@@ -30,7 +29,7 @@ export default {
         gender: '누구나',
         startAge: 0,
         endAge: 70,
-        local: false,
+        isLocal: true,
         place: '',
       }
     }
