@@ -1,26 +1,29 @@
 <template>
   <div>
 
-    <form @submit.prevent="signup(userinfo)">
+    <form @submit.prevent="signupOne(userData)">
     <div class="email">
       <p>이메일</p>
       <el-input  id="email"
-      v-model="userinfo.email" 
+      class="input"
+      v-model="userData.email" 
       placeholder="username@email.com"
       ></el-input>
-      <el-button type="primary" @click="checkEmail()">인증하기</el-button>
+      <el-button type="primary" @click="checkEmail(), checkEmailDuplicate(userinfo)">중복확인</el-button>
       <account-error-list :errorMessage="emailError" v-if="!emailFormat"></account-error-list>
 
     </div>
 
+    <br>
     <div class="password">
       <p>비밀번호</p>
-      <el-input v-model="userinfo.password" 
+      <el-input v-model="userData.password" 
         type="password" 
         id="password"
         placeholder="비밀번호" 
         autocomplete="off"
         maxlength="20"
+        class="input"
         @blur="checkPasswordValidity"
         show-password
         />
@@ -37,15 +40,22 @@
       <account-error-list :errorMessage="passwordMatchError" v-if="!passwordMatch"></account-error-list>
     </div>
 
+    <br>
     <div class="nickname">
       <p>닉네임</p>
-      <el-input id="nickname" v-model="userinfo.name" placeholder="사용할 별명을 입력해주세요" maxlength="10"  @blur="checkNickname"></el-input>
+      <el-input 
+      id="nickname" 
+      class="input"
+      v-model="userData.name" 
+      placeholder="사용할 별명을 입력해주세요" 
+      maxlength="10"  @blur="checkNickname"></el-input>
       <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
     </div>
 
+    <br>
     <div class="gender">
       <p>성별</p>
-      <el-select id="gender" v-model="userinfo.gender" class="m-2" placeholder="Select">
+      <el-select id="gender" v-model="userData.gender" class="m-2 input" placeholder="Select">
       <el-option 
 
         v-for="item in options"
@@ -56,23 +66,22 @@
       </el-select>
     </div>
 
+    <br> 
     <div class="birthdate">
-      <div class="demo-date-picker">
-        <div class="block">
-          <span class="demonstration">생년월일</span>
-          <br>
-            <el-date-picker
-              id="birthdate"
-              v-model="userinfo.birth"
-              type="date"
-              placeholder="생년월일을 선택해주세요!"
-            />
-        </div>
+      <p>생년월일</p>
+      <div class="demo-date-picker input m-2">
+        <el-date-picker
+          class="date-input"
+          id="birthdate"
+          v-model="date"
+          type="date"
+          placeholder="생년월일을 선택해주세요!"
+        />
       </div>
     </div>
 
-    <br>
-    <el-button type="primary" @click="checkBlank()">회원가입</el-button>
+    <br><br><br><br>
+    <el-button type="primary" @click="checkBlank(), dateParsing(), signupOne(userData)">회원가입</el-button>
   </form>
 
   </div>
@@ -90,20 +99,20 @@ export default {
     name: "SignUpView",
     data() {
         return {
-            userinfo: {
-                email: '',
-                password: '',
-                name: '',
-                gender: '',
+            userData: {
                 birth: '',
+                email: '',
+                gender: '',
+                name: '',
+                password: '',
             },
             options: [
                 {
-                    value: 'Male',
+                    value: 1,
                     label: '남성',
                 },
                 {
-                    value: 'Female',
+                    value: 0,
                     label: '여성',
                 },
             ], 
@@ -117,11 +126,17 @@ export default {
             passwordMatch: true,
             nicknameFormat: true,
             passwordCheck: '',
+            date: '',
         }
     },
     methods: {
-      ...mapActions(['signup']),
-      
+      ...mapActions(['signupOne', 'checkEmailDuplicate']),
+
+      dateParsing() {
+        const birthdate = new Date(this.date)
+        this.userData.birth = birthdate.toISOString()
+      },
+
       checkEmail() {
       var inputEmail = document.getElementById('email').value;
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -133,7 +148,7 @@ export default {
       },
 
       checkPasswordMatch() {
-        if (this.userinfo.password === this.userinfo.passwordCheck) {
+        if (this.userData.password === this.passwordCheck) {
           this.passwordMatch = true
         } else {
           this.passwordMatch = false
@@ -153,9 +168,9 @@ export default {
       checkNickname() {
         var regNickname = /^([0-9]|[a-z]|[A-Z]|[가-힣]).{1,10}$/;
         var blank = /''/
-        if (regNickname.test(this.userinfo.name)) {
+        if (regNickname.test(this.userData.name)) {
           this.nicknameFormat = true
-        } else if (blank.test(this.userinfo.name)) {
+        } else if (blank.test(this.userData.name)) {
           this.nicknameFormat = true
         } else {
           this.nicknameFormat = false
@@ -169,6 +184,7 @@ export default {
         var birthdateBlank = document.getElementById('birthdate').value
         if ( emailBlank == '' | passwordBlank == '' | nicknameBlank == '' | genderBlank == '' | birthdateBlank == '' ) {
           alert("빈 칸 없이 모든 필드를 채워주세요!")
+          console.log(this.userData)
         } else {
           this.$router.push('/signup/option')
         }
@@ -180,25 +196,47 @@ export default {
 </script>
 
 <style scoped>
+
+* {
+  box-sizing: border-box;
+  margin: 0; 
+}
+
   .demo-date-picker {
     display: flex;
     width: 100%;
     padding: 0;
     flex-wrap: wrap;
   }
-  .demo-date-picker .block {
-    padding: 30px 0;
-    text-align: center;
-    border-right: solid 1px var(--el-border-color);
-    flex: 1;
-  }
+
   .demo-date-picker .block:last-child {
     border-right: none;
   }
-  .demo-date-picker .demonstration {
-    display: block;
-    color: var(--el-text-color-secondary);
-    font-size: 14px;
-    margin-bottom: 20px;
+
+  button {
+    width: 100%;
   }
+
+  form {
+    margin: 15% 3%;
+  }
+
+  p {
+    display: flex;
+  }
+
+  .gender {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .birthdate {
+    display: flex;
+    flex-direction: column; 
+  }
+
+  .input {
+    margin: 2% 0;
+  }
+
 </style>

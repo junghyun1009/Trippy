@@ -1,12 +1,13 @@
 package com.ssafy.trippy.Repository;
 
-import static com.ssafy.trippy.Domain.QPostComment.postComment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.trippy.Domain.PostComment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import static com.ssafy.trippy.Domain.QPostComment.postComment;
 
 @Repository
 @RequiredArgsConstructor
