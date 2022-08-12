@@ -1,15 +1,14 @@
 <template>
   <div>
     <span class="material-symbols-outlined location" @click="getLocation">my_location</span>
-    <!-- <div>{{posts}}</div> -->
 
     <!-- <region-list></region-list> -->
     <div v-for="post in posts" :key="post.id">
        <router-link :to="{ name: 'communityDetail', params: { postPk: post.id } }">
         <el-card class="card">
           <div>
-            <!-- <el-tag class="tag">{{ convertTag }}</el-tag> -->
-            <el-tag class="tag">{{ post.place }}</el-tag>
+            <el-tag class="tag">{{ post.cityName }}</el-tag>
+            <el-tag class="tag">{{ convertTag }}</el-tag>
           </div>
           <div class="title">
             <span class="state">{{ recruitState }}</span>
@@ -22,7 +21,7 @@
             </p>
             <p class="option">
               <span class="material-symbols-outlined">event_note</span>
-              <!-- {{ convertDate }}, {{ convertTime }} -->
+              {{ convertDate }}, {{ convertTime }}
             </p>
             <p class="option">
               <span class="material-symbols-outlined">groups</span>
@@ -30,7 +29,7 @@
             </p>
           </div>
           <div class="content">
-            <!-- <p>{{ convertDesc }}</p> -->
+            <p>{{ convertDesc }}</p>
           </div>
 
           
@@ -57,49 +56,61 @@ export default {
     },
     computed: {
       ...mapGetters(['posts']),
-      // convertTag() {
-      //   let tag = ''
-      //   const posts = this.posts
-      //   posts.forEach((i) => {
-      //     if (posts[i].category === 1) {
-      //       tag = '식사'
-      //     } else if (posts[i].category === 2) {
-      //       tag = '동행'
-      //     } else if (posts[i].category === 3) {
-      //       tag = '파티'
-      //     } else if (posts[i].category === 4) {
-      //       tag = '이동수단 셰어'
-      //     } else {
-      //       tag = '기타'
-      //     }
-      //   })
-      //   return tag
-      // },
+      convertTag() {
+        let tag = ''
+        const posts = this.posts
+        posts.forEach((el) => {
+          if (el.category === 1) {
+            tag = '식사'
+          } else if (el.category === 2) {
+            tag = '동행'
+          } else if (el.category === 3) {
+            tag = '파티'
+          } else if (el.category === 4) {
+            tag = '이동수단 셰어'
+          } else {
+            tag = '기타'
+          }
+        })
+        return tag
+      },
       recruitState() {
         return '모집중'
       },
-      // convertDate() {
-      //   let date = ''
-      //   if (!this.posts.isDay) {
-      //     date = this.posts.startDate.substr(5,5) + '~' + this.posts.endDate.substr(5,5)
-      //   } else {
-      //     date = this.posts.startDate.substr(5,5)
-      //   }
-      //   return date
-      // },
-      // convertTime() {
-      //   let time = ''
-      //   time = this.posts.meetingTime.substr(11,5)
-      //   return time
-      // },
-      // convertDesc() {
-      //   let length = 55
-      //   let desc = ''
-      //   if (this.posts.description.length > length) {
-      //     desc = this.posts.description.substr(0, length - 2) + '...'
-      //   }
-      //   return desc
-      // }
+      convertDate() {
+        let date = ''
+        const posts = this.posts
+        posts.forEach((el) => {
+          let startDate = ''+el.startDate
+          let endDate = ''+el.endDate
+          if (!el.isDay) {
+            date = `${startDate.slice(5,10)}~${endDate.slice(5,10)}`
+          } else {
+            date = startDate
+          }
+        })
+        return date
+      },
+      convertTime() {
+        let time = ''
+        const posts = this.posts
+        posts.forEach((el) => {
+          let meetingTime = ''+el.meetingTime
+          time = meetingTime.slice(11, 16)
+        })
+        return time
+      },
+      convertDesc() {
+        let length = 50
+        let desc = ''
+        const posts = this.posts
+        posts.forEach((el) => {
+          if (el.description.length > length) {
+            desc = el.description.substr(0, length - 2) + '...'
+          }
+        })
+        return desc
+      }
     },
     methods: {
       ...mapActions(['fetchPosts']),
@@ -118,9 +129,17 @@ export default {
     },
     created() {
       this.fetchPosts()
-      // console.log(this.posts)
-      // console.log(this.posts[1])
-      // console.log(this.posts[0])
+      console.log(this.posts)
+      // console.log(this.posts[1].category)
+      this.posts.forEach(i => {
+        console.log(i.category)
+      })
+      // console.log(post)
+      // console.log(this.posts[0]['category'])
+      this.posts.forEach((el) => {
+          const startDate = el.startDate
+          console.log(typeof(startDate))
+      })
     }
   }
 </script>
