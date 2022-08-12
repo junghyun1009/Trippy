@@ -15,7 +15,8 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
+    Optional<Post> findByCompany(int count);
     List<Post> findAllByMember(Member member);
-    Optional<Post> findById(Long id);
+
 
 }
