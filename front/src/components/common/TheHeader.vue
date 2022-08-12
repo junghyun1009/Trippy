@@ -9,7 +9,7 @@
         <div class="view-name">{{ viewName }}</div>
       </div>
     </div>
-    <div class="menu">
+    <div v-if="this.$route.name !== 'login'" class="menu">
       <div class="menu-icon search" @click="goSearch">
         <span class="material-symbols-outlined">search</span>
       </div>
@@ -42,35 +42,65 @@
         </div>
       </el-menu-item>
     </el-menu> -->
-    <el-drawer v-model="visible" :show-close="false" size="70%">
+    <el-drawer v-model="visible" size="80%">
       <!-- 로그인한 유저 -->
-      <div v-if="isLoggedIn">
-        <div>
-          <router-link :to="{ name: 'profile' }" @click="visible =false">
-            <el-avatar :size="100" :src="profile.img_path" />
-          </router-link>
-          <p>{{ profile.name }}의 로그</p>
-          <router-link :to="{ name: 'profileEdit' }" @click="visible =false">프로필 수정</router-link>
-          <span @click="logout()"> | 로그아웃</span>
+      <div class="drawer">
+        <div v-if="isLoggedIn">
+          <div class="profile" @click="goProfile(), visible=false">
+            <el-avatar class="img" :size="50" :src="profile.img_path"/>
+            <p class="name">{{ profile.name }} 이름
+              <span class="material-symbols-outlined icon">arrow_forward_ios</span>
+            </p> 
+          </div>
           <hr>
-          <router-link :to="{ name: 'diaryCreate' }" @click="visible =false">다이어리 작성</router-link>
-          <br>
-          <router-link :to="{ name: 'community' }" @click="visible =false">동행 구하기</router-link>
-          <hr>
-          <router-link :to="{ name: 'chatList' }" @click="visible =false">채팅</router-link>
+
         </div>
-      </div>
       <!-- 로그인 안 한 유저 -->
-      <div v-if="!isLoggedIn">
+        <div v-if="!isLoggedIn">
+          <div class="loggedin">
+            <p @click="goLogin(), visible=false">로그인</p>
+            <span class="slash">/</span>
+            <p @click="goSignup(), visible=false">회원가입</p>
+          </div>
+        </div>
+
+      <!-- 공통 -->
         <div>
-          <router-link :to="{ name: 'login' }" @click="visible =false">로그인</router-link>
-          <br>
-          <router-link :to="{ name: 'signUp' }" @click="visible =false">회원가입</router-link>
+          <div class="my-activity">
+            <p @click="goMyDiary(), visible=false">
+              <span class="material-symbols-outlined icon">note_alt</span>
+              내 일지
+            </p>
+            <p @click="goMyLikes(), visible=false">
+              <span class="material-symbols-outlined icon">favorite</span>
+              내 좋아요
+            </p>
+            <p>
+              <span class="material-symbols-outlined icon">diversity_1</span>
+              내 동행찾기
+            </p>
+          </div>
+          <hr>
+          <div class="activity">
+            <p @click="goCommunity(), visible=false">
+              <span class="material-symbols-outlined icon">diversity_3</span>
+              동행찾기
+            </p>
+            <p @click="goBadge(), visible=false">
+              <span class="material-symbols-outlined icon">local_police</span>
+              뱃지
+            </p>
+          </div>
+          <hr>
+          <div class="setting">
+            <p @click="goSetting(), visible=false">
+              <span class="material-symbols-outlined icon">settings</span>
+              계정 관리
+            </p>
+          </div>
         </div>
       </div>
-
     </el-drawer>
-
   </header>
 </template>
 
@@ -79,7 +109,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 
 export default {
-  name: "NavBar",
+  name: 'TheHeader',
   components: {
   },
   data () {
@@ -103,10 +133,14 @@ export default {
         return '다이어리 작성'
       } else if (name === 'diaryEdit') {
         return '다이어리 수정'
+      } else if (name === 'signUp' || name === 'signUpOption') {
+        return '회원가입'
       } else if (name === 'profile') {
         return '프로필'
       } else if (name === 'profileEdit') {
         return '프로필 수정'
+      } else if (name === 'setting') {
+        return '계정 관리'
       } else if (name === 'community') {
         return '동행찾기'
       } else if (name === 'communityCreate') {
@@ -129,6 +163,30 @@ export default {
     },
     goSearch() {
       this.$router.push({ name:  'search' })
+    },
+    goProfile() {
+      this.$router.push({ name: 'profile' })
+    },
+    goMyDiary() {
+      this.$router.push({ name: 'profile'})
+    },
+    goMyLikes() {
+      this.$router.push({ name: 'profile' })
+    },
+    goCommunity() {
+      this.$router.push({ name: 'community' })
+    },
+    goBadge() {
+      this.$router.push({ name: 'badgeList' })
+    },
+    goSetting() {
+      this.$router.push({ name: 'setting' })
+    },
+    goLogin() {
+      this.$router.push({ name: 'login' })
+    },
+    goSignup() {
+      this.$router.push({ name: 'signUp' })
     },
     // showSearchBar() {
     //   this.flag = 1
@@ -166,7 +224,7 @@ header {
 .view-name-group {
   display: flex;
   align-items: center;
-  color: #fff;
+  color: #ffffff;
 }
 
 .view-name {
@@ -188,6 +246,54 @@ header {
 
 .search {
   margin-right: 0.5rem;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+.img {
+  margin-right: 0.3rem;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.icon {
+  font-size: 0.9rem;
+  margin-right: 0.3rem;
+}
+
+.my-activity,
+.activity,
+.setting,
+.loggedin {
+  padding: 1rem;
+}
+
+.my-activity p,
+.activity p {
+  margin-bottom: 1rem;
+}
+
+.my-activity p:last-child, 
+.activity p:last-child,
+.loggedin p:last-child {
+  margin: 0;
+}
+
+.loggedin {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.slash{
+  margin: 0 0.3rem;
 }
 /* 
 .flex-grow {

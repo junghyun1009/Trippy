@@ -31,14 +31,14 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public ResponseImageDto upload(MultipartFile multipartFile, String dirName, Long DetailLocId) throws IOException {
+    public ResponseImageDto upload(MultipartFile multipartFile, String dirName) throws IOException {
 
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-        return upload(uploadFile, dirName, DetailLocId);
+        return upload(uploadFile, dirName);
     }
 
-    private ResponseImageDto upload(File uploadFile, String dirName, Long DetailLocId) {
+    private ResponseImageDto upload(File uploadFile, String dirName) {
 
         String fileName = dirName + "/" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
@@ -46,9 +46,8 @@ public class S3Uploader {
         Image image = Image.builder()
                 .fileName(fileName)
                 .fileUrl(uploadImageUrl)
-                .detailLocationId(DetailLocId)
                 .build();
-        if(DetailLocId != null) imageRespository.save(image);
+//        if(DetailLocId != null) imageRespository.save(image);
         removeNewFile(uploadFile);
         return new ResponseImageDto(image);
     }
