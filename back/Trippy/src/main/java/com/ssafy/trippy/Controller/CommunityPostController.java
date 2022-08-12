@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,13 +32,13 @@ public class CommunityPostController {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         requestCommunityPostDto.setMember_id(memberId);
         try {
-            Long id = communityPostService.saveCommunityPost(requestCommunityPostDto);
-            return new ResponseEntity<>(id, HttpStatus.OK);
+            communityPostService.saveCommunityPost(requestCommunityPostDto);
 
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
         }
+        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 
     @DeleteMapping("/auth/community/{community_post_id}")
