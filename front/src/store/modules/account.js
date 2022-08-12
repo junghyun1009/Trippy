@@ -13,11 +13,12 @@ export default {
     // 임시 email
     email: localStorage.getItem('email') || '',
     authError: null,
-    fromPasswordFindView: false,
-    verificationCode: ''
+    fromPasswordFindView: true,
+    verificationCode: '',
+    emailInfo: '',
   },
   getters: {
-    isLoggedIn: state => !!state.accessToken,
+    isLoggedIn: () => !!VueCookies.get('accessToken'),
     // refreshToken: state => state.refreshToken,
     currentUser: state => state.currentUser,
     profile: state => state.profile,
@@ -25,7 +26,8 @@ export default {
     authError: state => state.authError,
     authHeader: () => ({ 'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`}),
     fromPasswordFindView: state => state.fromPasswordFindView,
-    verificationCode: state => state.verificationCode
+    verificationCode: state => state.verificationCode,
+    emailInfo: state => state.emailInfo,
   },
   mutations: {
     // SET_ACCESS_TOKEN:(state, accessToken) => state.accessToken = accessToken,
@@ -36,12 +38,16 @@ export default {
     SET_AUTH_ERROR: (state, error) => state.error = error,
     FROM_PASSWORD_FIND_VIEW: (state) => state.fromPasswordFindView = true,
     SET_EMAIL_AUTH_CODE: (state, verificationCode) => state.verificationCode = verificationCode,
+    SET_EMAIL_INFO: (state, emailInfo) => state.emailInfo = emailInfo,
   },
   actions: {
     // saveToken({ commit }, accessToken ) {
     //   commit('SET_ACCESS_TOKEN', accessToken)
     // },
-    
+    emailInfo({ commit }, emailInfo){
+      commit('SET_EMAIL_INFO', emailInfo)
+    },
+
     removeToken({ getters }, ) {
       console.log(getters)
       VueCookies.remove('accessToken')
@@ -208,6 +214,7 @@ export default {
       })
       .then((res) => {
         dispatch('removeToken')
+        localStorage.revmoveItem('email')
         console.log(getters.isLoggedIn)
         router.push({ name: 'home' })
         console.log(res.data)
@@ -218,6 +225,7 @@ export default {
       })
     },
 
+
     fromPasswordFindView({commit}, ) {
       commit('FROM_PASSWORD_FIND_VIEW')
       console.log(this.getters.fromPasswordFindView)
@@ -225,10 +233,11 @@ export default {
     },
 
     changePassword({ commit, dispatch }, userinfo) {
+      console.log(userinfo)
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/members/change_pw',
         method: 'post',
-        data: userinfo.newPassword
+        data: userinfo
       })
       .then((res) => {
         console.log(res)
