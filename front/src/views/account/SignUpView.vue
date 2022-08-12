@@ -157,7 +157,8 @@ export default {
 
       checkPasswordValidity() {
         var inputPassword = document.getElementById('password').value;
-        var regPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+        // 문자, 숫자, 그리고 최소 하나의 특수문자
+        var regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d~$@$!%*#?&()+|=]{8,20}$/;
         if (regPassword.test(inputPassword)) {
           this.passwordFormat = true
           } else {
