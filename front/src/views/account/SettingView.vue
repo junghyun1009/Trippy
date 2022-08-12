@@ -56,11 +56,12 @@ export default {
         }
       )
       .then(() => {
+        console.log('delete confirmation')
+        this.deleteAccount()
         ElMessage({
           type: 'success',
           message: '탈퇴가 완료되었습니다',
         })
-        this.deleteAccount()
       })
       .catch(() => {
         ElMessage({

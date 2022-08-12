@@ -90,7 +90,7 @@ export default {
           const refreshToken = res.data.refreshToken
           VueCookies.set("refreshToken", refreshToken, '7d')
           dispatch('fetchCurrentUser')
-          console.log('loginok')
+          console.log('successfully logged in')
           router.push({ name: 'home' })
         })
         .catch(err => {
@@ -113,6 +113,7 @@ export default {
           data: this.getters.userData,
         })
           .then( () => {
+            console.log('successfully created an account')
             router.push({ name: 'login' })
           })
           .catch(err => {
@@ -122,15 +123,20 @@ export default {
     },
 
     // 이메일 중복확인
-    checkEmailDuplicate({ getters }, userinfo) {
+    checkEmailDuplicate({ getters }, userData) {
       console.log(getters)
+      const email = userData.email
       axios({
-        url: "http://i7a506.p.ssafy.io:8080/members/duplicate",
+        url: `http://i7a506.p.ssafy.io:8080/api/members/duplicate?email=${email}`,
         method: 'get',
-        data: userinfo.email
+        param: email
       })
-      .then(() => {
-        alert('이메일이 중복되었습니다')
+      .then(res => {
+        if (res.data === true) {
+          alert('이메일이 중복되었습니다')
+        } else {
+          alert('이메일을 사용하셔도 좋습니다')
+        }
       })
       .catch(err => {
         console.error(err)
@@ -143,7 +149,7 @@ export default {
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/members/join/authmail',
         method: 'post',
-        data: userinfo.email
+        data: userinfo
       })
       .then( res => {
         console.log(res)
@@ -152,6 +158,20 @@ export default {
       .catch(err => {
         console.error(err)
       })
+    },
+
+      // 받아온 인증번호와, 입력한 인증번호가 동일한지 확인
+    emailAuth() {
+      console.log(this.verificationCode)
+      if ( !this.verificationCode ) {
+        alert('인증번호를 입력하세요') }
+      else if ( this.$store.getters.verificationCode === this.verificationCode ){
+        alert('인증이 완료되었습니다')
+        this.verified = true
+        this.fromPasswordFindView()
+      } else {
+        alert('인증번호가 일치하지 않습니다')
+      }
     },
 
     fetchCurrentUser({ getters, dispatch, commit }, ) {
@@ -223,14 +243,17 @@ export default {
     }, 
 
     deleteAccount({ getters }) {
+      console.log(getters.authHeader)
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/members/remove',
         method: 'delete',
         headers: getters.authHeader,
       })
       .then( () => {
-        console.log('deleted')
-        router.push({ name: 'home' })
+        VueCookies.remove('accessToken')
+        VueCookies.remove('refreshToken')
+        console.log('successfully deleted account')
+        router.push({ name: 'login' })
       })
       .catch(err => {
         console.error(err)
