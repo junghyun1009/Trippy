@@ -130,7 +130,7 @@
             <!-- <el-carousel indicator-position="outside" trigger="click" height="10rem" :autoplay=false arrow="always"> -->
               <!-- <el-carousel-item v-for="(photo, index) in story.photoList" :key="index"> -->
                 <!-- {{ photo }} -->
-            <img :src="story.filepath" :alt="story.filepath"/>
+            <img v-if="story.filepath.substr(-1)!='/'" :src="story.filepath" :alt="story.filepath"/>
               <!-- </el-carousel-item> -->
             <!-- </el-carousel> -->
           </div>
