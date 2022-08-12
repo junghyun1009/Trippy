@@ -234,35 +234,35 @@ export default {
         {
           transport: 
           {
-            id: 1,
+            value: 1,
             name: '뚜벅이'
           }
         },
         {
           transport: 
           {
-            id: 2,
+            value: 2,
             name: '대중교통'
           }
         },
         {
           transport: 
           {
-            id: 3,
+            value: 3,
             name: '따릉이'
           }
         },
         {
           transport: 
           {
-            id: 4,
+            value: 4,
             name: '택시'
           }
         },
         {
           transport: 
           {
-            id: 5,
+            value: 5,
             name: '자차'
           }
         },
