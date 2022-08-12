@@ -1,5 +1,5 @@
-// import store from '../store'
-// import VueCookies from 'vue-cookies'
+import store from '../store'
+import VueCookies from 'vue-cookies'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
 import SearchView from '@/views/home/SearchView.vue'
@@ -169,42 +169,35 @@ const router = createRouter({
 })
 
 
-// router.beforeEach((to, from, next) => {
-//   const { isLoggedIn } = store.getters
-//   const refreshToken = VueCookies.get('refreshToken')
+router.beforeEach((to, from, next) => {
+  // const { isLoggedIn } = store.getters
+  const refreshToken = VueCookies.get('refreshToken')
+  const accessToken = VueCookies.get('accessToken')
 
-//   const authPages = [
-//     'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
-//     'profile', 'profileEdit', 
-//     'community', 'communityEdit', 'communityDetail', 'communityCreate',
-//     'badgeList'
-//   ]
+  const authPages = [
+    'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
+    'profile', 'profileEdit', 
+    'community', 'communityEdit', 'communityDetail', 'communityCreate',
+    'badgeList'
+  ]
 
-//   const isAuthRequired = authPages.includes(to.name)
+  const isAuthRequired = authPages.includes(to.name)
   
-//     if (isAuthRequired && !isLoggedIn && refreshToken){
-//       console.log(isLoggedIn)
-//       //refreshToken은 있고 accessToken이 없을 경우 토큰 재발급 요청
-//       store.dispatch('reissueToken');
-//     }
-//     if (isAuthRequired && isLoggedIn){
-//       //accessToken이 있을 경우 진행
-//       return next();
-//     }
-//     if (isAuthRequired && !isLoggedIn && !refreshToken){
-//       console.log(store)
-//       //2개 토큰이 모두 없을 경우 로그인페이지로
-//       alert('로그인을 해주세요!')
-//       return next({name: 'login'});
-//     }
-//     return next();
-
-//   // if ( isAuthRequired && !isLoggedIn ) {
-//   //   alert('로그인을 해주세요!')
-//   //   next({ name: 'login' })
-//   // } else {
-//   //   next()
-//   // }
-// })
+    if (isAuthRequired && !accessToken && refreshToken){
+      //refreshToken은 있고 accessToken이 없을 경우 토큰 재발급 요청
+      store.dispatch('reissueToken');
+    }
+    if (isAuthRequired && accessToken){
+      //accessToken이 있을 경우 진행
+      return next();
+    }
+    if (isAuthRequired && !accessToken && !refreshToken){
+      console.log(store)
+      //2개 토큰이 모두 없을 경우 로그인페이지로
+      alert('로그인을 해주세요!')
+      return next({name: 'login'});
+    }
+    return next();
+})
 
 export default router

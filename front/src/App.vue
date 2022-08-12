@@ -9,7 +9,7 @@
 <script>
 import TheHeader from '@/components/common/TheHeader.vue'
 import NavBar from '@/components/common/NavBar.vue'
-import { mapActions } from 'vuex';
+// import { mapActions } from 'vuex';
 export default ({
   name: 'App',
   components: {
@@ -17,21 +17,21 @@ export default ({
     NavBar
   },
   methods: {
-    ...mapActions(['reissueToken'])
+    // ...mapActions(['reissueToken'])
     // notShowLoginJoin() {
     //   this.$route.name !== 'login'
     //   this.$route.name !== 'signUp'
     // }
   },
-  mounted() {
-    if (localStorage.getItem('reloaded')) {
-        localStorage.removeItem('reloaded');
-    } else {
-        localStorage.setItem('reloaded', '1');
-        location.reload();
-    }
-    this.reissueToken()
-  },
+  // mounted() {
+  //   if (localStorage.getItem('reloaded')) {
+  //       localStorage.removeItem('reloaded');
+  //   } else {
+  //       localStorage.setItem('reloaded', '1');
+  //       location.reload();
+  //   }
+  //   this.reissueToken()
+  // },
 })
 </script>
 
