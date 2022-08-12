@@ -18,7 +18,6 @@ public class RequestPostDto {
     private Byte isDelete;
     private String countryName;
     private String cityName;
-    private Long locationId;
     private int company;
     private int count;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -31,13 +30,12 @@ public class RequestPostDto {
     private Long member_id;
     private List<RequestPostTransPortDto> postTransports;
     private List<RequestDetailLocationDto> detailLocations;
-
+    private Long location_id;
     private List<RequestRouteDto> routes;
 
     public Post toEntity() {
         List<DetailLocation> detailLocationList = new ArrayList<>();
         for (RequestDetailLocationDto detailLocation : detailLocations) {
-            detailLocation.setLocation_id(locationId);
             detailLocationList.add(detailLocation.toEntity());
         }
         List<Route> routeList = new ArrayList<>();
@@ -60,6 +58,7 @@ public class RequestPostDto {
                 .isDelete(isDelete)
                 .representiveImg(representativeImg)
                 .routes(routeList)
+                .location(Location.builder().id(location_id).build())
                 .build();
     }
 
