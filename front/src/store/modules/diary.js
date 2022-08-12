@@ -24,7 +24,7 @@ export default ({
     parentComment: state => state.parentComment,
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
-      return state.diary?.email === getters.currentUser.email
+      return state.diary?.name === getters.currentUser.name
     },
     // isDiary: state => !_.isEmpty(state.diary)
   },

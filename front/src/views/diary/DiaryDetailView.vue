@@ -127,12 +127,12 @@
             <el-rate disabled v-model=story.rating></el-rate>
           </div>
           <div class="story-image">
-            <el-carousel indicator-position="outside" trigger="click" height="10rem" :autoplay=false arrow="always">
-              <el-carousel-item v-for="(photo, index) in story.photoList" :key="index">
+            <!-- <el-carousel indicator-position="outside" trigger="click" height="10rem" :autoplay=false arrow="always"> -->
+              <!-- <el-carousel-item v-for="(photo, index) in story.photoList" :key="index"> -->
                 <!-- {{ photo }} -->
-                <img src="photo.preview" :alt="photo.preview"/>
-              </el-carousel-item>
-            </el-carousel>
+            <img :src="story.filepath" :alt="story.filepath"/>
+              <!-- </el-carousel-item> -->
+            <!-- </el-carousel> -->
           </div>
           <div class="story-content">
             <p>{{ story.detailLocationContent }}</p>
@@ -202,7 +202,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary']),
+    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'fetchCurrentUser']),
     addMarkers() {
       const map = new google.maps.Map(document.getElementById("map"), {
           center: {lat: this.diary.routes[0].lat, lng: this.diary.routes[0].lng},
@@ -211,7 +211,7 @@ export default {
       });
       const geocodes = []
       this.diary.routes.forEach((each) => {
-        let labelNum = (each.idx).toString()
+        let labelNum = (each.index).toString()
         geocodes.push({lat: each.lat, lng: each.lng})
         new google.maps.Marker({
             position: {lat: each.lat, lng: each.lng},
@@ -235,6 +235,7 @@ export default {
   },
   created() {
     this.fetchDiary(this.diaryPk)
+    this.fetchCurrentUser()
   },
   mounted() {
     this.addMarkers()
