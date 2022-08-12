@@ -27,6 +27,14 @@ public class CommunityPostServiceImpl implements CommunityPostService {
     @Transactional
     @Override
     public Long saveCommunityPost(RequestCommunityPostDto requestCommunityPostDto) {
+        Optional<Location> location = locationRepository.findByCityNameAndCountryName(requestCommunityPostDto.getCityName(), requestCommunityPostDto.getCountryName());
+        if (location.isPresent()) {
+            requestCommunityPostDto.setLocationId(location.get().getId());
+        } else {
+            Long id = locationRepository.save(Location.builder().cityName(requestCommunityPostDto.getCityName()).countryName(requestCommunityPostDto.getCountryName()).build()).getId();
+            requestCommunityPostDto.setLocationId(id);
+        }
+
         return communityPostRepository.save(requestCommunityPostDto.toEntity()).getId();
     }
 
@@ -39,24 +47,28 @@ public class CommunityPostServiceImpl implements CommunityPostService {
 
     @Transactional
     @Override
-    public void updateCommunityPost(Long id, UpdateCommunityPostDto updateCommunityPostDto) {
-        CommunityPost communityPost = communityPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id="+id));
-        System.out.println("updateCommunityPostDto.getLocation_id() = " + updateCommunityPostDto.toString());
-        Optional<Location> location = locationRepository.findById(updateCommunityPostDto.getLocation_id());
-
-        communityPost.update(updateCommunityPostDto.getTitle(),
-                updateCommunityPostDto.getDescription(),
-                updateCommunityPostDto.getCategory(),
-                updateCommunityPostDto.getMeetingTime(),
-                updateCommunityPostDto.getStartDate(),
-                updateCommunityPostDto.getEndDate(),
-                updateCommunityPostDto.getRecruitVolume(),
-                updateCommunityPostDto.getRecruitCurrentVolume(),
-                updateCommunityPostDto.getStartAge(),
-                updateCommunityPostDto.getEndAge(),
-                updateCommunityPostDto.getGender(),
-                updateCommunityPostDto.isLocal(),
-                location.get());
+    public void updateCommunityPost(Long id, RequestCommunityPostDto requestCommunityPostDto) {
+        CommunityPost communityPost = communityPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+        Optional<Location> location = locationRepository.findByCityNameAndCountryName(requestCommunityPostDto.getCityName(), requestCommunityPostDto.getCountryName());
+        if(!location.isPresent()){
+            Long locationId = locationRepository.save(Location.builder().cityName(requestCommunityPostDto.getCityName()).countryName(requestCommunityPostDto.getCountryName()).build()).getId();
+            requestCommunityPostDto.setLocationId(locationId);
+        }
+        communityPost.update(requestCommunityPostDto.getTitle(),
+                requestCommunityPostDto.getDescription(),
+                requestCommunityPostDto.getCategory(),
+                requestCommunityPostDto.getMeetingTime(),
+                requestCommunityPostDto.getStartDate(),
+                requestCommunityPostDto.getEndDate(),
+                requestCommunityPostDto.getRecruitVolume(),
+                requestCommunityPostDto.getRecruitCurrentVolume(),
+                requestCommunityPostDto.getStartAge(),
+                requestCommunityPostDto.getEndAge(),
+                requestCommunityPostDto.getGender(),
+                requestCommunityPostDto.isLocal(),
+                Location.builder().id(requestCommunityPostDto.getLocationId()).build(),
+                requestCommunityPostDto.getPlace(),
+                requestCommunityPostDto.isDay());
     }
 
     @Override
@@ -66,6 +78,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
         List<ResponseCommunityPostDto> communityPostDtos = new ArrayList<>();
         for (CommunityPost communityPost : communityPosts) {
             Location location = locationRepository.findById(communityPost.getLocation().getId()).get();
+            System.out.println("location.getId() = " + location.getId());
             ResponseCommunityPostDto responseCommunityPostDto = ResponseCommunityPostDto.builder()
                     .category(communityPost.getCategory())
                     .cityName(location.getCityName())
@@ -81,6 +94,8 @@ public class CommunityPostServiceImpl implements CommunityPostService {
                     .recruitVolume(communityPost.getRecruitVolume())
                     .startDate(communityPost.getStartDate())
                     .title(communityPost.getTitle())
+                    .place(communityPost.getPlace())
+                    .isDAY(communityPost.isDAY())
                     .build();
             communityPostDtos.add(responseCommunityPostDto);
         }

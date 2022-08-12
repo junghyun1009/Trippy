@@ -1,10 +1,6 @@
 package com.ssafy.trippy.Domain;
 
-import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +9,9 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class PostComment extends BaseEntity {
     @Id
     @GeneratedValue
@@ -40,7 +38,6 @@ public class PostComment extends BaseEntity {
 
     public static PostComment createComment(String content, Post post, Member member, PostComment parent){
         PostComment postComment = new PostComment();
-        postComment.content = content;
         postComment.post = post;
         postComment.member = member;
         postComment.content = content;
@@ -48,9 +45,13 @@ public class PostComment extends BaseEntity {
         return postComment;
     }
 
-    public void update(String content, LocalDateTime regDt) {
+    @Builder
+    public PostComment(String content) {
         this.content = content;
-        this.regDt =regDt;
+    }
+
+    public void update(String content) {
+        this.content = content;
     }
 
 

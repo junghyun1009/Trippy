@@ -30,7 +30,7 @@ public class ResponseMemberDto {
     private int gender;
     private LocalDateTime birth;
     private String img_path;
-    private String desc;
+    private String description;
 
     //Entity -> Dto
     public ResponseMemberDto(Member member){
@@ -42,7 +42,7 @@ public class ResponseMemberDto {
         this.gender = member.getGender();
         this.birth = member.getBirth();
         this.img_path = member.getImg_path();
-        this.desc = member.getDesc();
+        this.description = member.getDescription();
     }
 
 }
