@@ -33,6 +33,7 @@ export default ({
     SET_POST: (state, post) => state.post = post,
   },
   actions: {
+    // 게시글 작성
     createPost({ commit, getters }, post) {
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/community',
@@ -47,6 +48,21 @@ export default ({
           name: 'communityDetail',
           params: { postPk: res.data }
         })
+      })
+    },
+    // 단일 게시글 (디테일 페이지) 조회
+    fetchPost({ commit, getters }, postPk) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/community/${postPk}`,
+        method: 'GET',
+        headers: getters.authHeader,
+      })
+      .then(res => commit('SET_POST', res.data))
+      .catch(err => {
+        console.err(err.response)
+        if (err.response.status === 404) {
+          router.push({ name: 'NotFound404' })
+        }
       })
     }
   },
