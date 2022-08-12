@@ -18,6 +18,6 @@ public class PostSearchServiceImpl {
     private final PostTransportRepository postTransportRepository;
 
     public List<ResponsePostDto> searchPost(SearchRequestDto searchRequestDto){
-        return postTransportRepository.findAllBySearch(searchRequestDto.getTitle(), searchRequestDto.getCompany(), searchRequestDto.getLocationId());
+        return postTransportRepository.findAllBySearch(searchRequestDto.getTitle(), searchRequestDto.getCompany(), searchRequestDto.getTransportId());
     }
 }
