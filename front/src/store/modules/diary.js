@@ -250,6 +250,23 @@ export default ({
         commit('SHOW_ALL_DIARY', allDiary)
       })
     },
+
+    likeDiary({ commit, getters }, diaryPk) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/likepost`,
+        method: 'post',
+        data: {post_id: diaryPk},
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        commit('SET_DIARY', res.data)
+        console.log(res.data)
+        router.push({
+          name: 'DiaryDetail',
+          params: { diaryPk: diaryPk }
+        })
+      })
+    }
   },
 
 })

@@ -145,49 +145,53 @@
             </div>
 
             <!-- 사진 잠깐 주석 -->
-            <!-- <div class="story-photo">
+            <div class="story-photo">
               <div class="story-photo-title">
                 <span>사진</span>
                 <span>(선택)</span>
               </div>
-              <div v-if="newStory.images.length === 0 && newStory.dialogVisible === false" class="photo-div">
+
+              <div v-if="images[k].length === 0" class="photo-div">
                 <label :for=k>
                   <span class="material-symbols-outlined">add_photo_alternate</span>
                 </label>
-                <input class="photo-input" type="file" :id=k ref="files" accept="image/*" @change="uploadPhoto(k)" multiple />
-                <span class="photo-description">아이콘을 눌러 사진을 추가해주세요.</span>
+                <input class="photo-input" type="file" :id=k :ref="`${k}th-file`" accept="image/*" @change="uploadPhoto(k)"/>
+                <div class="photo-des-div">
+                  <span class="photo-description">아이콘을 눌러 사진을 추가해주세요.</span>
+                  <span class="photo-description-sec">(스토리 당 한 개의 사진을 첨부할 수 있어요.)</span>
+                </div>
               </div>
 
               <div v-else class="photo-content-div">
-                <div @click="newStory.dialogVisible=true" class="photo-add-div">
-                  <span class="material-symbols-outlined">photo_library</span>
-                  <span class="photo-description">아이콘을 눌러 사진을 확인해보세요.</span>
+                <div class="photo-preview-group">
+                  <!-- <span class="material-symbols-outlined">photo_library</span> -->
+                  <img :src="newStory.preview" alt="photo" @click="removePhoto(k)">
+                  <span class="photo-description">사진을 클릭하면 삭제할 수 있어요.</span>
                 </div>
-                <el-dialog v-model="newStory.dialogVisible" width="80%" :show-close="false">
+                <!-- <el-dialog v-model="newStory.dialogVisible" width="80%" :show-close="false">
                   <template #header="{ titleId, titleClass, closeBtn }">
                     <div class="my-header">
                       <div>
                         <h4 :id="titleId" :class="titleClass">사진 미리보기</h4>
                         <p>사진을 누르면 삭제가 가능합니다.</p>
-                        <p>한 스토리 당 사진은 열 개까지 추가 가능합니다.</p>
                       </div>
                       <span :id="closeBtn" class="material-symbols-outlined" @click="newStory.dialogVisible=false">close</span>
                     </div>
                   </template>
                   <div class="photo-preview">
-                    <div v-for="(photo, index) in newStory.photoList" :key="index" class="photo-preview-group">
+                    <div v-for="(photo, index) in newStory.images" :key="index" class="photo-preview-group">
                       <img :src="photo.preview" :alt="photo.preview" @click="removePhoto(k, index)"/>
-                    </div>
-                    <div v-if="newStory.images.length<10">
+                    </div> -->
+                    <!-- <div v-if="newStory.images.length<10">
                       <label :for=k+10>
                         <span class="material-symbols-outlined">add_photo_alternate</span>
                       </label>
                       <input class="photo-input-add" type="file" :id=k+10 ref="files" accept="image/*" @change="addPhoto(k)" multiple />
-                    </div>
-                  </div>
-                </el-dialog>
+                    </div> -->
+                  <!-- </div>
+                </el-dialog> -->
               </div>
-            </div> -->
+            </div>
             
             <div class="story-btn">
               <el-button @click="addStory()" v-show="newStories.length < 10" :disabled="k != newStories.length - 1" link>
@@ -265,15 +269,16 @@ export default {
       ],
       flag: 0,
       route: {},
+      images: [[]],
       newStories: [
         ...this.diary.detailLocations,
         { 
           // pk: 0,
           detailLocationName: '',
-          // images: [],
-          dialogVisible: false,
+          // dialogVisible: false,
           detailLocationContent: '',
-          rating: null
+          rating: null,
+          preview: ''
         }
       ],      
       newDiary: {
@@ -411,9 +416,11 @@ export default {
           detailLocationName: '',
           // images: [],
           dialogVisible: false,
-          detailLocationContent: '',
-          rating: null
-        })
+          // detailLocationContent: '',
+          rating: null,
+          preview: ''
+        }),
+        this.images.push([])
       }
     },
 
@@ -423,89 +430,118 @@ export default {
 
     uploadPhoto(index) {
       console.log(index)
-      let addedPhotoList = this.newStories[index].images
-      // console.log(addedPhotoList)
-      // fileInput.value = index
-      console.log(this.$refs.files)
-      console.log(this.$refs.files[index].files)
-      for (let i = 0; i < this.$refs.files[index].files.length; i++) {
-        let photo = this.$refs.files[index].files[i]
-        // console.log(photo)
+      console.log(this.$refs[`${index}th-file`])
+      console.log(this.$refs[`${index}th-file`][0].files)
+
+      // let photo = this.$refs.files[index].files[0]
+      // if (photo.type.substr(0, 5) === "image") {
+      //   this.images[index] = this.$refs.files[index].files[0]
+      //   this.newStories[index].preview = URL.createObjectURL(this.$refs.files[index].files[0])
+      // } else {
+      //     alert("사진 파일만 추가 가능합니다")
+      //   }
+      for (let i = 0; i < this.$refs[`${index}th-file`][0].files.length; i++) {
+        let photo = this.$refs[`${index}th-file`][0].files[i]
         if (photo.type.substr(0, 5) === "image") {
-          addedPhotoList = [
-            ...addedPhotoList,
-            // 1차 실험 코드 (사진 미리보기는 없음)
-            // this.$refs.files[index].files[i]
-            // 여기 잠깐 주석
-            {
-              // 실제 파일
-              file: this.$refs.files[index].files[i],
-              // 사진 미리보기
-              preview: URL.createObjectURL(this.$refs.files[index].files[i]),
-              // 삭제 및 관리를 위한 number
-              // number: i
-            }
-          ]
-          // num = i
+          this.images[index] = this.$refs[`${index}th-file`][0].files[i]
+          this.newStories[index].preview = URL.createObjectURL(this.$refs[`${index}th-file`][0].files[i])
         } else {
           alert("사진 파일만 추가 가능합니다")
         }
       }
-      this.newStories[index].images = addedPhotoList
-      console.log(this.newStories[index].images)
+      console.log(this.images[index])
+      console.log(this.images)
+      console.log(this.newStories[index].preview)
       let fileInput = document.getElementsByClassName("photo-input")
-      // // console.log(fileInput)
-      // console.log(fileInput[0].value)
-      // console.log(fileInput[fileInput.length - 1].value)
       fileInput[fileInput.length - 1].value = ''
-      // for (let j = 0; j < fileInput.length; j++) {
-      //   console.log(fileInput[j].value)
-      //   fileInput[j].value = ''
-      // }
     },
 
-    removePhoto(index, num) {
+    // uploadPhoto(index) {
+    //   console.log(index)
+    //   let addedPhotoList = this.newStories[index].images
+    //   // console.log(addedPhotoList)
+    //   // fileInput.value = index
+    //   console.log(this.$refs.files)
+    //   console.log(this.$refs.files[index].files)
+    //   for (let i = 0; i < this.$refs.files[index].files.length; i++) {
+    //     let photo = this.$refs.files[index].files[i]
+    //     // console.log(photo)
+    //     if (photo.type.substr(0, 5) === "image") {
+    //       addedPhotoList = [
+    //         ...addedPhotoList,
+    //         // 1차 실험 코드 (사진 미리보기는 없음)
+    //         // this.$refs.files[index].files[i]
+    //         // 여기 잠깐 주석
+    //         {
+    //           // 실제 파일
+    //           file: this.$refs.files[index].files[i],
+    //           // 사진 미리보기
+    //           preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+    //           // 삭제 및 관리를 위한 number
+    //           // number: i
+    //         }
+    //       ]
+    //       // num = i
+    //     } else {
+    //       alert("사진 파일만 추가 가능합니다")
+    //     }
+    //   }
+    //   this.newStories[index].images = addedPhotoList
+    //   console.log(this.newStories[index].images)
+    //   let fileInput = document.getElementsByClassName("photo-input")
+    //   // // console.log(fileInput)
+    //   // console.log(fileInput[0].value)
+    //   // console.log(fileInput[fileInput.length - 1].value)
+    //   fileInput[fileInput.length - 1].value = ''
+    //   // for (let j = 0; j < fileInput.length; j++) {
+    //   //   console.log(fileInput[j].value)
+    //   //   fileInput[j].value = ''
+    //   // }
+    // },
+
+    removePhoto(index) {
       // if (this.newStories[index].photoList.length === 1) {
       //   this.dialogVisible = false
       // }
-      this.newStories[index].images.splice(num, 1)
+      this.images[index] = []
+      this.newStories[index].preview = ''
     },
 
-    addPhoto(index) {
-      // console.log('add', index)
-      let addedPhotoList = this.newStories[index].images
-      // let fileInput = document.getElementsByClassName("photo-input-sec")
-      // console.log(fileInput)
-      console.log(this.$refs.files)
-      console.log(this.$refs.files[index].files)
-      for (let i = 0; i < this.$refs.files[index].files.length; i++) {
-        let photo = this.$refs.files[index].files[i]
-        if (photo.type.substr(0, 5) === "image") {
-          addedPhotoList = [
-            ...addedPhotoList,
-            {
-              file: this.$refs.files[index].files[i],
-              preview: URL.createObjectURL(this.$refs.files[index].files[i]),
-            }
-          ]
-        } else {
-          alert("사진 파일만 추가 가능합니다")
-        }
-      }
-      this.newStories[index].images = addedPhotoList
-      console.log(this.newStories[index].images)
-      let fileInput = document.getElementsByClassName("photo-input-add")
-      // console.log(fileInput[0].value)
-      // console.log(fileInput[fileInput.length - 1].value)
-      // fileInput.forEach((each) => {
-      //   each.value = ''
-      // })
-      fileInput[fileInput.length - 1].value = ''
-      // for (let j = 0; j < fileInput.length; j++) {
-      //   console.log(fileInput[j].value)
-      //   fileInput[j].value = ''
-      // }
-    },
+    // addPhoto(index) {
+    //   // console.log('add', index)
+    //   let addedPhotoList = this.newStories[index].images
+    //   // let fileInput = document.getElementsByClassName("photo-input-sec")
+    //   // console.log(fileInput)
+    //   console.log(this.$refs.files)
+    //   console.log(this.$refs.files[index].files)
+    //   for (let i = 0; i < this.$refs.files[index].files.length; i++) {
+    //     let photo = this.$refs.files[index].files[i]
+    //     if (photo.type.substr(0, 5) === "image") {
+    //       addedPhotoList = [
+    //         ...addedPhotoList,
+    //         {
+    //           file: this.$refs.files[index].files[i],
+    //           preview: URL.createObjectURL(this.$refs.files[index].files[i]),
+    //         }
+    //       ]
+    //     } else {
+    //       alert("사진 파일만 추가 가능합니다")
+    //     }
+    //   }
+    //   this.newStories[index].images = addedPhotoList
+    //   console.log(this.newStories[index].images)
+    //   let fileInput = document.getElementsByClassName("photo-input-add")
+    //   // console.log(fileInput[0].value)
+    //   // console.log(fileInput[fileInput.length - 1].value)
+    //   // fileInput.forEach((each) => {
+    //   //   each.value = ''
+    //   // })
+    //   fileInput[fileInput.length - 1].value = ''
+    //   // for (let j = 0; j < fileInput.length; j++) {
+    //   //   console.log(fileInput[j].value)
+    //   //   fileInput[j].value = ''
+    //   // }
+    // },
 
     onSubmit() {
       if (this.action === 'create') {
@@ -514,14 +550,27 @@ export default {
         // this.newDiary.endDate = this.newDiary.endDate + 'T05:29:23.168Z'
         this.newStories.forEach((each) => {
           // each.pk = this.newStories.indexOf(each) + 1
-          delete each.dialogVisible
+          delete each.preview
         })
         this.newDiary.detailLocations = this.newStories
 
         if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
         && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
           console.log(this.newDiary)
-          this.createDiary(this.newDiary)
+          const imageList = []
+          this.images.forEach((image) => {
+            if (image.length === 0) {
+              image = null
+            }
+            imageList.push(image)
+          })
+          // console.log(this.images)
+          // console.log(imageList)
+          const payload = {
+            diary: this.newDiary,
+            images: imageList
+          }
+          this.createDiary(payload)
         } else {
           alert("빈 칸 없이 모든 필드를 채워주세요!")
         }
@@ -646,7 +695,7 @@ export default {
   margin-left: 1.5rem;
 }
 .transport-option {
-  width: 4rem;
+  width: 5.2rem;
   margin-right: 1.5rem;
 }
 .route-p {
@@ -766,9 +815,18 @@ export default {
   font-size: 10vw;
   font-weight: 500;
 }
+.photo-des-div {
+  display: flex;
+  flex-direction: column;
+}
 .photo-description {
   color: var(--el-text-color-secondary);
   font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+.photo-description-sec {
+  color: var(--el-text-color-secondary);
+  font-size: 0.6rem;
   margin-left: 0.5rem;
 }
 .photo-input {
@@ -825,6 +883,10 @@ export default {
 }
 .photo-preview label {
   height: 3.375rem;
+}
+.photo-preview-group {
+  display: flex;
+  align-items: center;
 }
 .photo-preview-group > img {
   width: 15vw;
