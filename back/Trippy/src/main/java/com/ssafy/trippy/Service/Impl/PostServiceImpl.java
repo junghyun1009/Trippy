@@ -93,7 +93,7 @@ public class PostServiceImpl implements PostService {
             DetailLocation detailLocation = detailLocations.get(i);
             detailLocation.setPost(post);
 
-            if(images.get(i)!=null) {
+            if(!images.get(i).isEmpty()) {
                 try {
                     ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i),"static");
                     detailLocation.setFilename(responseImageDto.getFileName());
