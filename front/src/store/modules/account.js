@@ -122,15 +122,20 @@ export default {
     },
 
     // 이메일 중복확인
-    checkEmailDuplicate({ getters }, userinfo) {
+    checkEmailDuplicate({ getters }, userData) {
       console.log(getters)
+      const email = userData.email
       axios({
-        url: "http://i7a506.p.ssafy.io:8080/members/duplicate",
+        url: `http://i7a506.p.ssafy.io:8080/api/members/duplicate?email=${email}`,
         method: 'get',
-        data: userinfo.email
+        param: email
       })
-      .then(() => {
-        alert('이메일이 중복되었습니다')
+      .then(res => {
+        if (res.data === true) {
+          alert('이메일이 중복되었습니다')
+        } else {
+          alert('이메일을 사용하셔도 좋습니다')
+        }
       })
       .catch(err => {
         console.error(err)
