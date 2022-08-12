@@ -1,14 +1,13 @@
 <template>
-  <div>
-    <h1>Diary Edit</h1>
+  <div class="diary-create-div">
     <!-- <diary-form v-if="isDiary" :diary="diaryTemp" action="update"></diary-form> -->
-    <diary-form :diary="diaryTemp" action="update"></diary-form>
+    <diary-form :diary="diary" action="update"></diary-form>
   </div>
 </template>
 
 <script>
 import DiaryForm from '@/components/diary/DiaryForm.vue'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'DiaryEditView',
@@ -16,11 +15,19 @@ export default {
     DiaryForm
   },
   computed: {
-    ...mapGetters(['isDiary', 'diaryTemp'])
+    ...mapGetters(['isDiary', 'diary'])
+  },
+  methods: {
+    ...mapActions(['fetchDiary'])
+  },
+  created() {
+    this.fetchDiary(this.$route.params.diaryPk)
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+.diary-create-div {
+  margin: 1rem 1rem 2rem 1rem;
+}
 </style>
