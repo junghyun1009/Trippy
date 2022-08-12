@@ -229,7 +229,6 @@ export default {
   },
   data() {
     return {
-      // datePick: [this.diary.startDate, this.diary.endDate],
       transportList: [
         {
           transport: 
@@ -433,13 +432,6 @@ export default {
       console.log(this.$refs[`${index}th-file`])
       console.log(this.$refs[`${index}th-file`][0].files)
 
-      // let photo = this.$refs.files[index].files[0]
-      // if (photo.type.substr(0, 5) === "image") {
-      //   this.images[index] = this.$refs.files[index].files[0]
-      //   this.newStories[index].preview = URL.createObjectURL(this.$refs.files[index].files[0])
-      // } else {
-      //     alert("사진 파일만 추가 가능합니다")
-      //   }
       for (let i = 0; i < this.$refs[`${index}th-file`][0].files.length; i++) {
         let photo = this.$refs[`${index}th-file`][0].files[i]
         if (photo.type.substr(0, 5) === "image") {
@@ -546,9 +538,6 @@ export default {
 
     onSubmit() {
       if (this.action === 'create') {
-        // 날짜 변환해서 저장
-        // this.newDiary.startDate = this.newDiary.startDate + 'T05:29:23.168Z'
-        // this.newDiary.endDate = this.newDiary.endDate + 'T05:29:23.168Z'
         this.newStories.forEach((each) => {
           // each.pk = this.newStories.indexOf(each) + 1
           delete each.preview

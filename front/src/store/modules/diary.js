@@ -7,43 +7,21 @@ export default ({
   state: {
     diaries: [],
     diary: {},
-    images: [],
 
     comment: '',
     comments: [],
     isChild: false,
     isUpdating: false,
     parentComment: '',
-
-    diaryTemp: {
-      title: '제주도 3박 4일 여행',
-      startDate: '2022-07-01',
-      endDate: '2022-07-04',
-      company: '친구',
-      count: 4,
-      transport: ['뚜벅이', '대중교통'],
-      routes: [
-        {routeNum: 1, routeName: '제주국제공항',lat: 33.51041350000001, lng: 126.4913534},
-        {routeNum: 2, routeName: '한담해변', lat: 33.461609, lng: 126.3105212},
-        {routeNum: 3, routeName: '랜디스도넛 제주애월점', lat: 33.4611909, lng: 126.3116327},
-        {routeNum: 4, routeName: '곽지해수욕장', lat: 33.450902, lng: 126.3057298}
-      ],
-      stories: [
-        {pk: 1, place: "제주 국제 공항", photoList: [ {file: "[object File]", preview: "https://www.okinawa.halekulani.com/lang_module/images/home/img_main-sp.jpg" } ], content: "111", rate: 3 }, 
-        {pk: 2, place: "한담해변", photoList: [ {file: "[object File]", preview: "blob:http://localhost:8080/a3e66b80-2256-4034-bab0-f24ae67c0dfc" } ], content: "222", rate: 5 }
-      ]
-    },
   },
   getters: {
     diaries: state => state.diaries,
     diary: state => state.diary,
-    images: state => state.images,
     comment: state => state.comment,
     comments: state => state.comments,
     isChild: state => state.isChild,
     isUpdating: state => state.isUpdating,
     parentComment: state => state.parentComment,
-    diaryTemp: state => state.diaryTemp,
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
       return state.diary?.email === getters.currentUser.email
@@ -51,13 +29,6 @@ export default ({
     // isDiary: state => !_.isEmpty(state.diary)
   },
   mutations: {
-    // CREATE_DIARY(state, diary) {
-    //   state.diary = diary
-    //   // 얘는 지워도 될 것 같은데 일단 실험해봐야 함
-    //   // state.diaries.push(state.diary)
-    //   console.log(state.diary)
-    //   // console.log(state.diaries)
-    // },
 
     SET_DIARY(state, diary) {
       state.diary = diary
@@ -114,31 +85,6 @@ export default ({
       .then(res => {
         console.log(res.data)
         commit('SET_DIARY', diary)
-        // console.log(3)
-        // console.log(getters.diary)
-        router.push({
-          name: 'diaryDetail',
-          params: { diaryPk: res.data }
-        })
-      })
-    },
-
-    saveImage({ commit },imageList) {
-      // commit('CREATE_DIARY', diary)
-      // console.log(1)
-      console.log(imageList)
-      axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts',
-        method: 'post',
-        data: imageList,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`
-        }
-      })
-      .then(res => {
-        console.log(res.data)
-        commit('SET_IMAGES', imageList)
         // console.log(3)
         // console.log(getters.diary)
         router.push({
