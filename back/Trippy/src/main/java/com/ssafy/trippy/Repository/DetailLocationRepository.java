@@ -13,4 +13,5 @@ public interface DetailLocationRepository extends JpaRepository<DetailLocation, 
 //    List<DetailLocation> findDetailLocationById(Long id);
 
     Optional<List<DetailLocation>> findAllByPostId(Long postId);
+    List<DetailLocation> findAllByLocationId(Long locationId);
 }
