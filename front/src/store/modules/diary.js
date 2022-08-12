@@ -43,7 +43,7 @@ export default ({
     diaryTemp: state => state.diaryTemp,
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
-      return state.diary.member_id?.name === getters.currentUser.name
+      return state.diary?.email === getters.currentUser.email
     },
     // isDiary: state => !_.isEmpty(state.diary)
   },
@@ -51,13 +51,14 @@ export default ({
     CREATE_DIARY(state, diary) {
       state.diary = diary
       // 얘는 지워도 될 것 같은데 일단 실험해봐야 함
-      state.diaries.push(state.diary)
+      // state.diaries.push(state.diary)
       console.log(state.diary)
-      console.log(state.diaries)
+      // console.log(state.diaries)
     },
 
     SET_DIARY(state, diary) {
       state.diary = diary
+      console.log(state.diary)
     },
 
     SET_COMMENT(state, comment) {
@@ -89,27 +90,33 @@ export default ({
   actions: {
     // 일지 CREATE
     // 일지 저장
-    createDiary({ commit }, diary) {
-      commit('CREATE_DIARY', diary)
-      // axios({
-      //   url: 'http://localhost:8000/posts/',
-      //   method: 'post',
-      //   data: diary,
-      //   headers: getters.authHeader,
-      // })
-      // .then(res => {
-      //   commit('CREATE_DIARY', res.data)
-      //   router.push({
-      //     name: 'diaryDetail'
-      //   })
-      // })
+    createDiary({ commit, getters }, diary) {
+      // commit('CREATE_DIARY', diary)
+      // console.log(1)
+      console.log(diary)
+      axios({
+        url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts',
+        method: 'post',
+        data: diary,
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        console.log(res.data)
+        commit('CREATE_DIARY', res.data)
+        // console.log(3)
+        console.log(getters.diary)
+        router.push({
+          name: 'diaryDetail',
+          params: { diaryPk: getters.diary.id }
+        })
+      })
     },
 
     // 일지 READ
     // 단일 일지
     fetchDiary({ commit, getters }, diaryPk) {
       axios({
-        url: `http://localhost:8000/posts/detail/${diaryPk}`,
+        url: `http://i7a506.p.ssafy.io:8080/api/posts/detail/${diaryPk}`,
         method: 'get',
         headers: getters.authHeader
       })
