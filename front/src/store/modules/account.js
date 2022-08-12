@@ -5,8 +5,8 @@ import VueCookies from 'vue-cookies'
 
 export default {
   state: {
-    accessToken:  '',
-    refreshToken: '',
+    // accessToken:  '',
+    // refreshToken: '',
     currentUser: {},
     profile: {},
     userData: {},
@@ -18,18 +18,18 @@ export default {
   },
   getters: {
     isLoggedIn: state => !!state.accessToken,
-    refreshToken: state => state.refreshToken,
+    // refreshToken: state => state.refreshToken,
     currentUser: state => state.currentUser,
     profile: state => state.profile,
     userData: state => state.userData,
     authError: state => state.authError,
-    authHeader: state => ({ 'X-AUTH-TOKEN': `${state.accessToken}`}),
+    authHeader: () => ({ 'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`}),
     fromPasswordFindView: state => state.fromPasswordFindView,
     verificationCode: state => state.verificationCode
   },
   mutations: {
-    SET_ACCESS_TOKEN:(state, accessToken) => state.accessToken = accessToken,
-    SET_REFRESH_TOKEN: () => VueCookies.set('refreshToken'),
+    // SET_ACCESS_TOKEN:(state, accessToken) => state.accessToken = accessToken,
+    // SET_REFRESH_TOKEN: () => VueCookies.set('refreshToken'),
     SET_CURRENT_USER:(state, user) => state.currentUser = user,
     SET_PROFILE: (state, profile) => state.profile = profile,
     SET_USER_DATA: (state, userData) => state.userData = userData,
@@ -38,12 +38,13 @@ export default {
     SET_EMAIL_AUTH_CODE: (state, verificationCode) => state.verificationCode = verificationCode,
   },
   actions: {
-    saveToken({ commit }, accessToken ) {
-      commit('SET_ACCESS_TOKEN', accessToken)
-    },
+    // saveToken({ commit }, accessToken ) {
+    //   commit('SET_ACCESS_TOKEN', accessToken)
+    // },
     
-    removeToken({ commit }, ) {
-      commit('SET_ACCESS_TOKEN', '')
+    removeToken({ getters }, ) {
+      console.log(getters)
+      VueCookies.remove('accessToken')
       VueCookies.remove('refreshToken')
       localStorage.removeItem('email')
     },
@@ -60,9 +61,10 @@ export default {
       })
       .then( res => {
         console.log('access token re-issued')
-        // accessToken은 state에 저장
+        // accessToken은 state에 저장.. 하지 않고 1시간 동안 쿠키에 저장
         const accessToken = res.data.accessToken
-        dispatch('saveToken', accessToken)
+        // dispatch('saveToken', accessToken)
+        VueCookies.set("accessToken", accessToken, '1h')
         // refreshToken은 7일동안 쿠키에 저장
         const refreshToken = res.data.refreshToken
         VueCookies.set("refreshToken", refreshToken, '7d')
@@ -80,14 +82,15 @@ export default {
         data: userinfo,
       })
         .then( res => {
-          // accessToken은 state에 저장
+          // accessToken은 state에 저장.. 하지 않고 1시간 동안 쿠키에 저장
           const accessToken = res.data.accessToken
-          dispatch('saveToken', accessToken)
+          // dispatch('saveToken', accessToken)
+          VueCookies.set("accessToken", accessToken, '1h')
           // refreshToken은 7일동안 쿠키에 저장
           const refreshToken = res.data.refreshToken
           VueCookies.set("refreshToken", refreshToken, '7d')
           dispatch('fetchCurrentUser')
-          console.log('loginok')
+          console.log('successfully logged in')
           router.push({ name: 'home' })
         })
         .catch(err => {
@@ -110,6 +113,7 @@ export default {
           data: this.getters.userData,
         })
           .then( () => {
+            console.log('successfully created an account')
             router.push({ name: 'login' })
           })
           .catch(err => {
@@ -119,15 +123,20 @@ export default {
     },
 
     // 이메일 중복확인
-    checkEmailDuplicate({ getters }, userinfo) {
+    checkEmailDuplicate({ getters }, userData) {
       console.log(getters)
+      const email = userData.email
       axios({
-        url: "http://i7a506.p.ssafy.io:8080/members/duplicate",
+        url: `http://i7a506.p.ssafy.io:8080/api/members/duplicate?email=${email}`,
         method: 'get',
-        data: userinfo.email
+        param: email
       })
-      .then(() => {
-        alert('이메일이 중복되었습니다')
+      .then(res => {
+        if (res.data === true) {
+          alert('이메일이 중복되었습니다')
+        } else {
+          alert('이메일을 사용하셔도 좋습니다')
+        }
       })
       .catch(err => {
         console.error(err)
@@ -140,7 +149,7 @@ export default {
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/members/join/authmail',
         method: 'post',
-        data: userinfo.email
+        data: userinfo
       })
       .then( res => {
         console.log(res)
@@ -151,6 +160,20 @@ export default {
       })
     },
 
+      // 받아온 인증번호와, 입력한 인증번호가 동일한지 확인
+    emailAuth() {
+      console.log(this.verificationCode)
+      if ( !this.verificationCode ) {
+        alert('인증번호를 입력하세요') }
+      else if ( this.$store.getters.verificationCode === this.verificationCode ){
+        alert('인증이 완료되었습니다')
+        this.verified = true
+        this.fromPasswordFindView()
+      } else {
+        alert('인증번호가 일치하지 않습니다')
+      }
+    },
+
     fetchCurrentUser({ getters, dispatch, commit }, ) {
       if (getters.isLoggedIn) {
         axios({
@@ -159,7 +182,7 @@ export default {
           headers: getters.authHeader,
         })
         .then( res => {
-          console.log(res)
+          console.log('successfully fetched current user info')
           const email = res.data.email
           console.log(email)
           localStorage.setItem('email', email)
@@ -220,14 +243,17 @@ export default {
     }, 
 
     deleteAccount({ getters }) {
+      console.log(getters.authHeader)
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/members/remove',
         method: 'delete',
         headers: getters.authHeader,
       })
       .then( () => {
-        console.log('deleted')
-        router.push({ name: 'home' })
+        VueCookies.remove('accessToken')
+        VueCookies.remove('refreshToken')
+        console.log('successfully deleted account')
+        router.push({ name: 'login' })
       })
       .catch(err => {
         console.error(err)

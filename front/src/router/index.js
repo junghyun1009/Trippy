@@ -12,6 +12,7 @@ import DiaryEditView from '../views/diary/DiaryEditView.vue'
 import LoginView from '@/views/account/LoginView.vue'
 import SignUpView from '@/views/account/SignUpView.vue'
 import SignUpOptionView from '@/views/account/SignUpOptionView.vue'
+import SettingView from '@/views/account/SettingView.vue'
 import PasswordFindView from '@/views/account/PasswordFindView.vue'
 import PasswordChangeView from '@/views/account/PasswordChangeView.vue'
 
@@ -54,6 +55,11 @@ const routes = [
     path: '/signup/option',
     name: 'signUpOption',
     component: SignUpOptionView
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    component: SettingView
   },
   {
     path: '/passwordchange',
@@ -164,8 +170,9 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-  const { isLoggedIn } = store.getters
+  // const { isLoggedIn } = store.getters
   const refreshToken = VueCookies.get('refreshToken')
+  const accessToken = VueCookies.get('accessToken')
 
   const authPages = [
     'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
@@ -176,29 +183,21 @@ router.beforeEach((to, from, next) => {
 
   const isAuthRequired = authPages.includes(to.name)
   
-    if (isAuthRequired && !isLoggedIn && refreshToken){
-      console.log(isLoggedIn)
+    if (isAuthRequired && !accessToken && refreshToken){
       //refreshToken은 있고 accessToken이 없을 경우 토큰 재발급 요청
       store.dispatch('reissueToken');
     }
-    if (isAuthRequired && isLoggedIn){
+    if (isAuthRequired && accessToken){
       //accessToken이 있을 경우 진행
       return next();
     }
-    if (isAuthRequired && !isLoggedIn && !refreshToken){
+    if (isAuthRequired && !accessToken && !refreshToken){
       console.log(store)
       //2개 토큰이 모두 없을 경우 로그인페이지로
       alert('로그인을 해주세요!')
       return next({name: 'login'});
     }
     return next();
-
-  // if ( isAuthRequired && !isLoggedIn ) {
-  //   alert('로그인을 해주세요!')
-  //   next({ name: 'login' })
-  // } else {
-  //   next()
-  // }
 })
 
 export default router
