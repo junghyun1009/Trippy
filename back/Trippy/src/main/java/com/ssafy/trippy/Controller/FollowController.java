@@ -3,6 +3,7 @@ package com.ssafy.trippy.Controller;
 import com.ssafy.trippy.Domain.Follow;
 import com.ssafy.trippy.Dto.Request.RequestFollowDto;
 import com.ssafy.trippy.Dto.Response.ResponseFollowDto;
+import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Service.FollowService;
 import com.ssafy.trippy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -44,15 +45,15 @@ public class FollowController {
     @GetMapping("/follower")
     public ResponseEntity<?> getFollowers(HttpServletRequest request){
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        List<ResponseFollowDto> responseFollowDtos = followService.getFollowers(memberId);
-        return new ResponseEntity<>(responseFollowDtos, HttpStatus.OK);
+        List<ResponseMemberDto> responseMemberDtos = followService.getFollowers(memberId);
+        return new ResponseEntity<>(responseMemberDtos, HttpStatus.OK);
     }
 
     @GetMapping("/following")
     public ResponseEntity<?> getFollowings(HttpServletRequest request){
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        List<ResponseFollowDto> responseFollowDtos = followService.getFollowings(memberId);
-        return new ResponseEntity<>(responseFollowDtos, HttpStatus.OK);
+        List<ResponseMemberDto> responseMemberDtos = followService.getFollowings(memberId);
+        return new ResponseEntity<>(responseMemberDtos, HttpStatus.OK);
     }
 
     @GetMapping("/follower/cnt")

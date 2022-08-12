@@ -80,6 +80,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
             Location location = locationRepository.findById(communityPost.getLocation().getId()).get();
             System.out.println("location.getId() = " + location.getId());
             ResponseCommunityPostDto responseCommunityPostDto = ResponseCommunityPostDto.builder()
+                    .id(communityPost.getId())
                     .category(communityPost.getCategory())
                     .cityName(location.getCityName())
                     .countryName(location.getCountryName())

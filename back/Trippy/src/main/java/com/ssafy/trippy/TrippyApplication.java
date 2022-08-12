@@ -14,8 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class TrippyApplication {
 
 	public static final String APPLICATION_LOCATIONS = "spring.config.location="
-			+ "classpath:application.yml,"
-			+ "classpath:application-aws.yml";
+			+ "classpath:/application.yml,"
+			+ "classpath:/application-aws.yml,"
+			+ "classpath:/application-jwt.yml,"
+			+ "classpath:/email.properties";
 
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(TrippyApplication.class)
