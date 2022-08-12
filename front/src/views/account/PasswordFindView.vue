@@ -122,10 +122,10 @@ export default {
     emailAuth() {
       console.log(this.verificationCode)
       if ( !this.verificationCode ) {
-        alert('인증번호를 입력하세요') }
-      else if ( this.$store.getters.verificationCode === this.verificationCode ){
+        alert('인증번호를 입력하세요') 
+      } else if ( this.$store.getters.verificationCode === this.verificationCode ){
         alert('인증이 완료되었습니다')
-        this.$router.push('/passwordchange')
+        this.fromPasswordFindView()
       } else {
         alert('인증번호가 일치하지 않습니다')
       }

@@ -218,11 +218,11 @@ export default {
       })
     },
 
-    // fromPasswordFindView({commit}, ) {
-    //   commit('FROM_PASSWORD_FIND_VIEW')
-    //   console.log(this.getters.fromPasswordFindView)
-    //   router.push('/passwordchange')
-    // },
+    fromPasswordFindView({commit}, ) {
+      commit('FROM_PASSWORD_FIND_VIEW')
+      console.log(this.getters.fromPasswordFindView)
+      router.push('/passwordchange')
+    },
 
     changePassword({ commit, dispatch }, userinfo) {
       axios({
