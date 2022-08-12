@@ -1,14 +1,14 @@
 package com.ssafy.trippy.Controller;
 
+import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Domain.Member;
-import com.ssafy.trippy.Dto.Request.RequestDetailLocationDto;
+import com.ssafy.trippy.Domain.Post;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
-import com.ssafy.trippy.Dto.Update.UpdatePostDto;
-import com.ssafy.trippy.Service.*;
+import com.ssafy.trippy.Service.MemberService;
+import com.ssafy.trippy.Service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -44,7 +43,7 @@ public class PostController {
     }
 
     @DeleteMapping("/auth/posts/{post_id}")
-    public ResponseEntity<?> deletePost(@PathVariable("post_id") Long post_id) {
+    public ResponseEntity<?> deletePost(HttpServletRequest request, @PathVariable("post_id") Long post_id) {
         try {
             postService.deletePost(post_id);
 
@@ -83,12 +82,12 @@ public class PostController {
     @GetMapping("/posts/detail/{post_id}")
     public ResponseEntity<?> detailPost(@PathVariable("post_id") Long post_id) {
         ResponsePostDto responsePostDto = new ResponsePostDto();
-            try {
-                responsePostDto = postService.findPostId(post_id);
+        try {
+            responsePostDto = postService.findPostId(post_id);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                return new ResponseEntity<String>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
         }
         return new ResponseEntity<ResponsePostDto>(responsePostDto, HttpStatus.OK);
     }
@@ -105,5 +104,16 @@ public class PostController {
         }
     }
 
-
+    @GetMapping("/posts/{countryName}/{cityName}")
+    public ResponseEntity<?> getAllPostByCountryNameAndCityName(@PathVariable("countryName") String countryName,
+                                                                @PathVariable("cityName") String cityName) {
+        try {
+            Location location = Location.builder().countryName(countryName).cityName(cityName).build();
+            List<ResponsePostDto> responsePostDtos = postService.findByCity(location);
+            return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("해당 게시물을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+        }
+    }
 }
