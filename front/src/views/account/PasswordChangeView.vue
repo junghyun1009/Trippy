@@ -1,20 +1,14 @@
 <template>
   <div class="container">
-    <div class="current-password" v-show="!fromPasswordFindView">
-      <h3>현재 비밀번호</h3>
-      <el-input v-model="userinfo.currentPassword" type="password" placeholder="비밀번호" @click="PasswordVerification()" show-password></el-input>
-    </div>
-    <!-- 만약 PasswordFindView에서 연결되면, 현재 비밀번호는 빼고 노출 -->
     <div class="new-password">
       <h3>새 비밀번호</h3>
-      <el-input v-model="userinfo.newPassword" v-if="currentPasswordVerified" id="password" type="password" placeholder="비밀번호" @blur="checkPasswordValidity"></el-input>
-      <el-input v-model="userinfo.newPassword" v-if="!currentPasswordVerified" id="password" type="password" placeholder="비밀번호" @blur="checkPasswordValidity" disabled></el-input>
-      <el-input v-model="userinfo.newPasswordCheck" v-if="currentPasswordVerified" type="password" placeholder="비밀번호 확인" @blur="checkPasswordMatch"></el-input>
-      <el-input v-model="userinfo.newPasswordCheck" v-if="!currentPasswordVerified" type="password" placeholder="비밀번호 확인" @blur="checkPasswordMatch" disabled></el-input>
-      <!-- 비밀번호와 비밀번호 확인되지 않으면 자동으로 매치되는지 확인하는 기능 -->
+      <!-- 이메일 인증때 넣었던 이메일이 bind 돼서 뜨게 만들자 -->
+      <el-input v-model="userinfo.email" type="email" disabled></el-input>
+      <el-input v-model="userinfo.password" id="password" type="password" placeholder="비밀번호" @blur="checkPasswordValidity"></el-input>
+      <el-input v-model="newPasswordCheck" type="password" placeholder="비밀번호 확인" @blur="checkPasswordMatch"></el-input>
       <account-error-list :errorMessage="passwordValidityError" v-if="!passwordFormat"></account-error-list>
       <account-error-list :errorMessage="passwordMatchError" v-if="!passwordMatch"></account-error-list>
-      <el-button type="primary" @click="changePassword()">비밀번호 변경하기</el-button>
+      <el-button type="primary" @click="changePassword(userinfo)">비밀번호 변경하기</el-button>
 
     </div>
   </div>
@@ -23,7 +17,7 @@
 <script>
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
 import { userErrorMessage } from '@/common/constant.js'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: "PasswordChangeView",
@@ -33,25 +27,36 @@ export default {
   data() {
     return {
       userinfo: {
-        currentPassword: '',
-        newPassword: '',
-        newPasswordCheck: '',
+        email: '',
+        password: '',
       }, 
+      currentPassword: '',
+      newPasswordCheck: '',
       fromPasswordFindView: this.$store.getters.fromPasswordFindView,
       passwordMatchError: userErrorMessage.passwordMatchError,
       passwordValidityError: userErrorMessage.passwordValidityError,
       passwordFormat: true,
       passwordMatch: true,
-      currentPasswordVerified: false,
-
+      verified: false,
     }
   },
+  
+  mounted() {
+    console.log(this.emailInfo)
+    this.userinfo.email = this.emailInfo.email
+  },
+
+  computed: {
+    ...mapGetters(['emailInfo'])
+  },
+
   methods: {
-    ...mapActions(['changePassword']),
+    ...mapActions(['changePassword', 'fetchCurrentUser']),
 
     checkPasswordMatch() {
-      if (this.userinfo.newPassword === this.userinfo.newPasswordCheck) {
+      if (this.userinfo.password === this.newPasswordCheck) {
         this.passwordMatch = true
+        this.verified = true
       } else {
         this.passwordMatch = false
       }
@@ -62,20 +67,39 @@ export default {
       var regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d~$@$!%*#?&()+|=]{8,20}$/;
       // 문자, 숫자, 특수문자의 조합(특수문자 필수 아님)
       // var regPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d~!@#$%^&*()+|=]{8,20}$/
-
       if (regPassword.test(inputPassword)) {
         this.passwordFormat = true
+        this.verified = true
         } else {
           this.passwordFormat = false
         }
     },
 
-    PasswordVerification() {
-      const currentPassword = this.$store.getters.userData.password
-      if ( currentPassword !== this.userinfo.currentPassword ) {
-        alert('비밀번호를 다시 한 번 확인해주세요')
-      }
-    }
+    // url로 들어왔거나, 비밀번호 찾기가 아닌 비밀번호 변경으로 들어온 경우 현재 비밀번호 확인 작업
+    // PasswordVerification() {
+    //   const currentPassword = this.$store.getters.userData.password
+    //   if ( currentPassword !== this.currentPassword ) {
+    //     alert('비밀번호를 다시 한 번 확인해주세요')
+    //   }
+    // },
+
+    // 이메일 형식 검증하기
+    checkEmail() {
+      var inputEmail = document.getElementById('email').value;
+      var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+      if ( !this.userinfo.email ) {
+          alert('이메일을 입력해주세요')
+          this.emailSent = false
+        } else if (regEmail.test(inputEmail) === false) {
+        this.emailFormat = false;
+        this.emailSent = false
+        alert('이메일 형식을 확인해주세요')
+        } else { 
+          this.emailFormat = true
+          this.emailSent = true
+        }        
+    },
+
   }
 }
 </script>
@@ -90,7 +114,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 40%;
+    margin-top: 30%;
   }
 
   button {
