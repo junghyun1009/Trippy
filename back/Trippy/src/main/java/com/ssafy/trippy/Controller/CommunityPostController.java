@@ -18,7 +18,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class CommunityPostController {
 
     private final CommunityPostService communityPostService;
