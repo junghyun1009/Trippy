@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class ResponseCommunityPostDto {
+    private Long id;
     private String title;
     private String description;
     private int category;
@@ -37,6 +38,7 @@ public class ResponseCommunityPostDto {
 
 
     public ResponseCommunityPostDto(CommunityPost communityPost) {
+        this.id = communityPost.getId();
         this.title = communityPost.getTitle();
         this.description = communityPost.getDescription();
         this.category = communityPost.getCategory();
@@ -56,7 +58,8 @@ public class ResponseCommunityPostDto {
     }
 
     @Builder
-    public ResponseCommunityPostDto(String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean isLocal, String place, boolean isDAY) {
+    public ResponseCommunityPostDto(Long id, String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean isLocal, String place, boolean isDAY) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.category = category;

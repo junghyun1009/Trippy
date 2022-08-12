@@ -12,12 +12,12 @@ public class SearchRequestDto {
 
     private String title;
     private int company;
-    private Long locationId;
+    private Long transportId;
 
     @Builder
-    public SearchRequestDto(String title, int company, Long locationId) {
+    public SearchRequestDto(String title, int company, Long transportId) {
         this.title = title;
         this.company = company;
-        this.locationId = locationId;
+        this.transportId = transportId;
     }
 }
