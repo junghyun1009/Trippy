@@ -2,6 +2,7 @@ package com.ssafy.trippy.Controller;
 
 import com.ssafy.trippy.Dto.Request.RequestLikePostDto;
 import com.ssafy.trippy.Dto.Response.ResponseLikePostDto;
+import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Service.LikePostService;
 import com.ssafy.trippy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +37,8 @@ public class LikePostController {
     @GetMapping
     public ResponseEntity<?> getLikePosts(HttpServletRequest request) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        List<ResponseLikePostDto> responseLikePostDtos = likePostService.getLikePosts(memberId);
-        return new ResponseEntity<>(responseLikePostDtos, HttpStatus.OK);
+        List<ResponsePostDto> responsePostDtos = likePostService.getLikePosts(memberId);
+        return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
     }
 
     @DeleteMapping
