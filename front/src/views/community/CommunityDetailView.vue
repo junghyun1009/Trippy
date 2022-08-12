@@ -81,20 +81,9 @@ export default {
       return '모집중'
     },
     convertTag() {
-      let tag = ''
       const category = this.post.category
-      if (category === 1) {
-        tag = '식사'
-      } else if (category === 2) {
-        tag = '동행'
-      } else if (category === 3) {
-        tag = '파티'
-      } else if (category === 4) {
-        tag = '이동수단 셰어'
-      } else {
-        tag = '기타'
-      }
-      return tag
+      const categoryList = ['식사', '동행', '파티', '이동수단 셰어', '기타']
+      return categoryList[category-1]
     },
     convertDate() {
       let date = ''

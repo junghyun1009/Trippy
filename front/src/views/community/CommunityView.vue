@@ -60,17 +60,9 @@ export default {
         let tag = ''
         const posts = this.posts
         posts.forEach((el) => {
-          if (el.category === 1) {
-            tag = '식사'
-          } else if (el.category === 2) {
-            tag = '동행'
-          } else if (el.category === 3) {
-            tag = '파티'
-          } else if (el.category === 4) {
-            tag = '이동수단 셰어'
-          } else {
-            tag = '기타'
-          }
+          const category = el.category
+          const categoryList = ['식사', '동행', '파티', '이동수단 셰어', '기타']
+          tag = categoryList[category-1]
         })
         return tag
       },
