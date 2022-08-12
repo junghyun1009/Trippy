@@ -15,10 +15,13 @@ public class ResponseDetailLocationDto {
 
     private String detailLocationContent;
 
+    private String filename;
+
     @Builder
     public ResponseDetailLocationDto(DetailLocation detailLocation) {
         this.detailLocationName = detailLocation.getDetailLocationName();
         this.rating = detailLocation.getRating();
         this.detailLocationContent =detailLocation.getDetailLocationContent();
+        this.filename = detailLocation.getFilename();
     }
 }

@@ -62,9 +62,13 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy="post")
     private List<PostComment> postComments = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LOCATION_ID")
+    private Location location;
+
 
     @Builder
-    public Post(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations, List<PostComment> postComments, List<Route> routes) {
+    public Post(Long id, String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations, List<PostComment> postComments, List<Route> routes,Location location) {
         this.id = id;
         this.title = title;
         this.isDelete = isDelete;
@@ -78,9 +82,10 @@ public class Post extends BaseEntity{
         this.detailLocations = detailLocations;
         this.postComments = postComments;
         this.routes = routes;
+        this.location = location;
     }
 
-    public void update(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, List<PostTransport> postTransports, List<DetailLocation> detailLocations,List<Route> routes){
+    public void update(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, List<PostTransport> postTransports, List<DetailLocation> detailLocations,List<Route> routes, Location location){
         this.title = title;
         this.isDelete = isDelete;
         this.company = company;
@@ -91,5 +96,6 @@ public class Post extends BaseEntity{
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;
         this.routes = routes;
+        this.location = location;
     }
 }
