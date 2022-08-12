@@ -12,6 +12,7 @@ import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -31,11 +32,11 @@ public class PostController {
 
 
     @PostMapping("/auth/posts")
-    public ResponseEntity<?> savePost(HttpServletRequest request, @RequestBody @Valid RequestPostDto requestPostDto) {
+    public ResponseEntity<?> savePost(HttpServletRequest request, @RequestBody @Valid RequestPostDto requestPostDto, @RequestPart("images") List<MultipartFile> images) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         requestPostDto.setMember_id(memberId);
         try {
-            Long id = postService.savePost(requestPostDto);
+            Long id = postService.savePost(requestPostDto,images);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

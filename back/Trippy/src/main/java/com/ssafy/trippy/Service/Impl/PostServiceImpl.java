@@ -69,7 +69,7 @@ public class PostServiceImpl implements PostService {
     // post 등록
     @Transactional
     @Override
-    public Long savePost(RequestPostDto requestPostDto) {
+    public Long savePost(RequestPostDto requestPostDto, List<MultipartFile> images) {
         Member member = memberRepository.findById(requestPostDto.getMember_id()).get();
         requestPostDto.setMember_id(member.getId());
         Post post = postRepository.save(requestPostDto.toEntity());
@@ -86,25 +86,36 @@ public class PostServiceImpl implements PostService {
             requestPostDto.setLocationId(locationId);
         }
 
-//        for (DetailLocation detailLocation : requestPostDto.toEntity().getDetailLocations().stream().collect(Collectors.toList())) {
-//            detailLocation.setPost(post);
-//            detailLocationRepository.save(detailLocation);
-//        }
-
-        for(RequestDetailLocationDto requestDetailLocationDto: requestPostDto.getDetailLocations()){
-            List<MultipartFile> images = requestDetailLocationDto.getImages();
-            DetailLocation detailLoc = requestDetailLocationDto.toEntity();
-            detailLoc.setPost(post);
-            DetailLocation detailLocation = detailLocationRepository.save(detailLoc);
-            for (MultipartFile image:images){
-                try {
-                    s3Uploader.upload(image,"static",detailLocation.getId());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new IllegalArgumentException("POST 이미지 저장 error");
-                }
+        List<DetailLocation> detailLocations = requestPostDto.toEntity().getDetailLocations().stream().collect(Collectors.toList());
+        for (int i = 0; i < detailLocations.size(); i++) {
+            DetailLocation detailLocation = detailLocations.get(i);
+            detailLocation.setPost(post);
+            DetailLocation loc = detailLocationRepository.save(detailLocation);
+            try {
+                s3Uploader.upload(images.get(i),"static",loc.getId());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+//        for (DetailLocation detailLocation : requestPostDto.toEntity().getDetailLocations().stream().collect(Collectors.toList())) {
+//            detailLocation.setPost(post);
+//            DetailLocation loc = detailLocationRepository.save(detailLocation);
+//        }
+
+//        for(RequestDetailLocationDto requestDetailLocationDto: requestPostDto.getDetailLocations()){
+//            List<MultipartFile> images = requestDetailLocationDto.getImages();
+//            DetailLocation detailLoc = requestDetailLocationDto.toEntity();
+//            detailLoc.setPost(post);
+//            DetailLocation detailLocation = detailLocationRepository.save(detailLoc);
+//            for (MultipartFile image:images){
+//                try {
+//                    s3Uploader.upload(image,"static",detailLocation.getId());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    throw new IllegalArgumentException("POST 이미지 저장 error");
+//                }
+//            }
+//        }
 
 
         for (PostTransport postTransport : requestPostDto.toEntity().getPostTransports().stream().collect(Collectors.toList())) {
