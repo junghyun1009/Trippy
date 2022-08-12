@@ -35,6 +35,17 @@ export default ({
       console.log(state.diary)
     },
 
+    FETCH_DIARY(state, diary) {
+      diary.detailLocations.forEach((location) => {
+        if (location.filepath.substr(-1) != '/') {
+          diary.representativeImg = location.filepath
+          return false
+        }
+      })
+      state.diary = diary
+      console.log(state.diary)
+    },
+
     SET_IMAGES(state, images) {
       state.images = images
       console.log(state.images)
@@ -55,7 +66,18 @@ export default ({
 
     // 홈화면에 추천(일단은 전부 띄우는 것)
     // 근데 diaries에 써도 되는건지 잘 모르겠음?
-    GET_ALL_DIARY(state, diaries) {state.diaries = diaries},
+    GET_ALL_DIARY(state, diaries) {
+      diaries.forEach((diary) => {
+        console.log(diary.detailLocations)
+        diary.detailLocations.forEach((location) => {
+          if (location.filepath.substr(-1) != '/') {
+            diary.representativeImg = location.filepath
+            return false
+          }
+        })
+      })
+      state.diaries = diaries
+    },
 
     SHOW_PARENT(state, parentComment) {
       state.isChild = true
@@ -102,7 +124,9 @@ export default ({
         method: 'get',
         headers: getters.authHeader
       })
-      .then(res => commit('SET_DIARY', res.data))
+      .then(res => {
+        commit('FETCH_DIARY', res.data)
+      })
       .catch(err => {
         console.error(err.response)
         if (err.response.status === 404) {
@@ -143,7 +167,6 @@ export default ({
       })
       .catch(err => console.error(err.response))
     },
-
 
     // 일지 댓글 CREATE
     // createComment({ getters, commit }, diaryPk, content) {
