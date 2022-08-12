@@ -2,6 +2,7 @@ package com.ssafy.trippy.Controller;
 
 import com.ssafy.trippy.Dto.Request.RequestBookmarkDto;
 import com.ssafy.trippy.Dto.Response.ResponseBookmarkDto;
+import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
 import com.ssafy.trippy.Service.BookmarkService;
 import com.ssafy.trippy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +36,8 @@ public class BookmarkController {
     @GetMapping
     public ResponseEntity<?> getBookmarks(HttpServletRequest request){
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        List<ResponseBookmarkDto> responseBookmarkDtos = bookmarkService.getBookmarks(memberId);
-        return new ResponseEntity<>(responseBookmarkDtos, HttpStatus.OK);
+        List<ResponseCommunityPostDto> responseCommunityPostDtos = bookmarkService.getBookmarks(memberId);
+        return new ResponseEntity<>(responseCommunityPostDtos, HttpStatus.OK);
     }
 
     @DeleteMapping("/{community_post_id}")
