@@ -90,7 +90,7 @@ export default {
           const refreshToken = res.data.refreshToken
           VueCookies.set("refreshToken", refreshToken, '7d')
           dispatch('fetchCurrentUser')
-          console.log('loginok')
+          console.log('successfully logged in')
           router.push({ name: 'home' })
         })
         .catch(err => {
@@ -113,50 +113,13 @@ export default {
           data: this.getters.userData,
         })
           .then( () => {
+            console.log('successfully created an account')
             router.push({ name: 'login' })
           })
           .catch(err => {
             console.error(err.response)
             commit('SET_AUTH_ERROR', err.response)
           })
-    },
-
-    // 이메일 중복확인
-    checkEmailDuplicate({ getters }, userData) {
-      console.log(getters)
-      const email = userData.email
-      axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/members/duplicate?email=${email}`,
-        method: 'get',
-        param: email
-      })
-      .then(res => {
-        if (res.data === true) {
-          alert('이메일이 중복되었습니다')
-        } else {
-          alert('이메일을 사용하셔도 좋습니다')
-        }
-      })
-      .catch(err => {
-        console.error(err)
-      })
-    },
-
-    // 인증 코드 요청하기
-    emailCode({commit}, userinfo) {
-      console.log(userinfo)
-      axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/join/authmail',
-        method: 'post',
-        data: userinfo.email
-      })
-      .then( res => {
-        console.log(res)
-        commit('SET_EMAIL_AUTH_CODE', res.data)
-      })
-      .catch(err => {
-        console.error(err)
-      })
     },
 
     fetchCurrentUser({ getters, dispatch, commit }, ) {
@@ -203,11 +166,32 @@ export default {
       })
     },
 
-    fromPasswordFindView({commit}, ) {
-      commit('FROM_PASSWORD_FIND_VIEW')
-      console.log(this.getters.fromPasswordFindView)
-      router.push('/passwordchange')
+    // 이메일 중복확인
+    checkEmailDuplicate({ getters }, userData) {
+      console.log(getters)
+      const email = userData.email
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/members/duplicate?email=${email}`,
+        method: 'get',
+        param: email
+      })
+      .then(res => {
+        if (res.data === true) {
+          alert('이메일이 중복되었습니다')
+        } else {
+          alert('이메일을 사용하셔도 좋습니다')
+        }
+      })
+      .catch(err => {
+        console.error(err)
+      })
     },
+
+    // fromPasswordFindView({commit}, verified ) {
+    //   commit('FROM_PASSWORD_FIND_VIEW')
+    //   console.log(this.getters.fromPasswordFindView)
+      
+    // },
 
     changePassword({ commit, dispatch }, userinfo) {
       axios({
