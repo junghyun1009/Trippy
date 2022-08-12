@@ -1,11 +1,13 @@
 import router from "@/router"
 import axios from "axios"
+import VueCookies from 'vue-cookies'
 // import _ from 'lodash'
 
 export default ({
   state: {
     diaries: [],
     diary: {},
+    images: [],
 
     comment: '',
     comments: [],
@@ -35,6 +37,7 @@ export default ({
   getters: {
     diaries: state => state.diaries,
     diary: state => state.diary,
+    images: state => state.images,
     comment: state => state.comment,
     comments: state => state.comments,
     isChild: state => state.isChild,
@@ -59,6 +62,11 @@ export default ({
     SET_DIARY(state, diary) {
       state.diary = diary
       console.log(state.diary)
+    },
+
+    SET_IMAGES(state, images) {
+      state.images = images
+      console.log(state.images)
     },
 
     SET_COMMENT(state, comment) {
@@ -90,7 +98,7 @@ export default ({
   actions: {
     // 일지 CREATE
     // 일지 저장
-    createDiary({ commit, getters }, diary) {
+    createDiary({ commit }, diary) {
       // commit('CREATE_DIARY', diary)
       // console.log(1)
       console.log(diary)
@@ -98,11 +106,39 @@ export default ({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts',
         method: 'post',
         data: diary,
-        headers: getters.authHeader,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`
+        }
       })
       .then(res => {
         console.log(res.data)
         commit('SET_DIARY', diary)
+        // console.log(3)
+        // console.log(getters.diary)
+        router.push({
+          name: 'diaryDetail',
+          params: { diaryPk: res.data }
+        })
+      })
+    },
+
+    saveImage({ commit },imageList) {
+      // commit('CREATE_DIARY', diary)
+      // console.log(1)
+      console.log(imageList)
+      axios({
+        url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts',
+        method: 'post',
+        data: imageList,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`
+        }
+      })
+      .then(res => {
+        console.log(res.data)
+        commit('SET_IMAGES', imageList)
         // console.log(3)
         // console.log(getters.diary)
         router.push({

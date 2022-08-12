@@ -70,7 +70,7 @@
           </router-link>
           <!-- <span>{{ diary.member_id.name }}</span> -->
           <router-link :to="{ name: 'profile' }">
-            <span class="username">나유저</span>
+            <span class="username">{{ diary.name }}</span>
           </router-link>
         </div>
         <div class="btn-tag">
@@ -91,7 +91,7 @@
             <!-- <el-tag>{{ diary.cityName }}</el-tag> -->
             <el-tag class="tag">{{ diary.startDate.substr(5, 5) }}-{{ diary.endDate.substr(5, 5) }}</el-tag>
             <el-tag class="tag">{{ partyTag }} ({{ diary.count }}명)</el-tag>
-            <el-tag class="tag" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.transport.name }}</el-tag>
+            <el-tag class="tag" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.name }}</el-tag>
           </div>
         </div>
       </div>

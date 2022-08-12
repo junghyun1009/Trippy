@@ -234,35 +234,35 @@ export default {
         {
           transport: 
           {
-            value: 1,
+            id: 1,
             name: '뚜벅이'
           }
         },
         {
           transport: 
           {
-            value: 2,
+            id: 2,
             name: '대중교통'
           }
         },
         {
           transport: 
           {
-            value: 3,
+            id: 3,
             name: '따릉이'
           }
         },
         {
           transport: 
           {
-            value: 4,
+            id: 4,
             name: '택시'
           }
         },
         {
           transport: 
           {
-            value: 5,
+            id: 5,
             name: '자차'
           }
         },
@@ -309,7 +309,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['createDiary', 'updateDiary']),
+    ...mapActions(['createDiary', 'updateDiary', 'saveImage']),
 
     handleClose(tag) {
       this.newDiary.postTransports.splice(this.newDiary.postTransports.indexOf(tag), 1)
@@ -415,8 +415,8 @@ export default {
           // pk: 0,
           detailLocationName: '',
           // images: [],
-          dialogVisible: false,
-          // detailLocationContent: '',
+          // dialogVisible: false,
+          detailLocationContent: '',
           rating: null,
           preview: ''
         }),
@@ -444,6 +444,7 @@ export default {
         let photo = this.$refs[`${index}th-file`][0].files[i]
         if (photo.type.substr(0, 5) === "image") {
           this.images[index] = this.$refs[`${index}th-file`][0].files[i]
+          console.log(this.images[index])
           this.newStories[index].preview = URL.createObjectURL(this.$refs[`${index}th-file`][0].files[i])
         } else {
           alert("사진 파일만 추가 가능합니다")
@@ -557,20 +558,42 @@ export default {
         if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
         && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
           console.log(this.newDiary)
-          const imageList = []
-          this.images.forEach((image) => {
-            if (image.length === 0) {
-              image = null
-            }
-            imageList.push(image)
-          })
+          // const imageList = new FormData()
+          const diary = new FormData()
           // console.log(this.images)
           // console.log(imageList)
-          const payload = {
-            diary: this.newDiary,
-            images: imageList
+          // for (let key in this.newDiary) {
+            //   const value = this.newDiary[key]
+          //   diary.append(key, JSON.stringify(value))
+          // }
+          diary.append("post", new Blob([JSON.stringify(this.newDiary)], {type: "application/json"}))
+          // diary.append("diary", JSON.stringify(this.newDiary))
+          this.images.forEach((image) => {
+            if (image.length === 0) {
+              // diary.append("images", this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
+              // console.log(this.images.indexOf(image))
+              // console.log(this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
+              const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
+              diary.append("images", empty)
+            } else {
+              diary.append("images", image)
+            }
+          })
+          // diary.append("images", imageList)
+          for (var key of diary.keys()) {
+            console.log(key);
           }
-          this.createDiary(payload)
+          for (var value of diary.values()) {
+            console.log(value);
+          }
+          // for (var imagekey of imageList.keys()) {
+          //   console.log(imagekey);
+          // }
+          // for (var imagevalue of imageList.values()) {
+          //   console.log(imagevalue);
+          // }
+          this.createDiary(diary)
+          // this.saveImage(imageList)
         } else {
           alert("빈 칸 없이 모든 필드를 채워주세요!")
         }
