@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'DeleteEditButton',
   data() {
@@ -27,6 +29,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['deleteDiary']),
     goEdit() {
       if (this.$route.name === 'diaryDetail') {
         this.$router.push({ name: 'diaryEdit' })
@@ -38,6 +41,7 @@ export default {
       if (confirm('정말 삭제하시겠습니까?')) {
         if (this.$route.name === 'diaryDetail') {
           console.log('다이어리 삭제')
+          this.deleteDiary(this.$route.params.diaryPk)
         } else {
           console.log('동행찾기 삭제')
         }

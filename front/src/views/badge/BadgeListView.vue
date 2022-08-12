@@ -1,10 +1,12 @@
 <template>
   <div>
-    <div v-for="(badge, idx) in badgeList" :key="idx">
+    <div class="badge-list" v-for="(badge, idx) in badgeList" :key="idx">
       <!-- 여기에서 조건문 -->
       <!-- 사용자의 뱃지 목록에 있다면 -->
-      <img :src=badge.image :alt=badge.image @click="badge.drawer=true">
-      <p>{{ badge.name }}</p>
+      <div class="badge">
+        <img class="obtained" :src=badge.image :alt=badge.image @click="badge.drawer=true">
+        <p>{{ badge.name }}</p>
+      </div>
       <el-drawer v-model=badge.drawer direction="btt" size="50%">
         <img :src=badge.image :alt=badge.image style="width: 70px; height: 90px;">
         <p>{{ badge.name }}</p>
@@ -13,8 +15,10 @@
       </el-drawer>
       
       <!-- 사용자의 뱃지 목록에 없다면 -->
-      <img class="not-obtained badge" :src=badge.image alt="not obtained" @click="badge.drawer=true">
-      <p>{{ badge.name }}</p>
+      <div class="badge">
+        <img class="not-obtained" :src=badge.image alt="not obtained" @click="badge.drawer=true">
+        <p>{{ badge.name }}</p>
+      </div>
       <el-drawer v-model=badge.drawer direction="btt" size="50%">
         <img :src=badge.image :alt=badge.image style="width: 70px; height: 90px;">
         <p>{{ badge.name }}</p>
@@ -34,16 +38,23 @@ export default {
       badgeList: [
         {
           pk: 1,
-          name: '여행 초보',
-          description: '첫 여행일지를 작성하셨네요!',
-          image: require('@/assets/badge1.png'),
+          name: '여행의 시작',
+          description: 'Trippy에 오신 것을 환영합니다!',
+          image: require('@/assets/world.png'),
           drawer: false
         },
         {
           pk: 2,
-          name: '경기도의 딸',
-          description: '경기도 여행을 세 번 가셨군요!',
-          image: require('@/assets/badge2.png'),
+          name: '기록의 시작',
+          description: '첫 여행 일지를 기록하셨군요!',
+          image: require('@/assets/journal.png'),
+          drawer: false
+        },
+        {
+          pk: 3,
+          name: '만남의 시작',
+          description: '첫 동행 글을 작성하셨군요!',
+          image: require('@/assets/chatting-app.png'),
           drawer: false
         }
       ]
@@ -53,7 +64,22 @@ export default {
 </script>
 
 <style scoped>
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.obtained {
+  width: 10vw;
+  height: 10vw;
+}
 .not-obtained {
+  width: 10vw;
+  height: 10vw;
   filter: blur(10px);
 }
 </style>

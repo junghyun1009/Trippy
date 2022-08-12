@@ -32,7 +32,8 @@ public class PostController {
 
 
     @PostMapping("/auth/posts")
-    public ResponseEntity<?> savePost(HttpServletRequest request, @RequestPart("post") @Valid RequestPostDto requestPostDto, @RequestPart("images") List<MultipartFile> images) {
+    public ResponseEntity<?> savePost(HttpServletRequest request, @RequestPart("post") @Valid RequestPostDto requestPostDto
+            , @RequestPart("images") List<MultipartFile> images) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         requestPostDto.setMember_id(memberId);
         try {
@@ -83,7 +84,7 @@ public class PostController {
 
     @GetMapping("/posts/detail/{post_id}")
     public ResponseEntity<?> detailPost(@PathVariable("post_id") Long post_id) {
-        ResponsePostDto responsePostDto = new ResponsePostDto();
+        ResponsePostDto responsePostDto;
         try {
             responsePostDto = postService.findPostId(post_id);
             return new ResponseEntity<>(responsePostDto, HttpStatus.OK);

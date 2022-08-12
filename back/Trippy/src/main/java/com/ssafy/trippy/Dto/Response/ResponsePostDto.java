@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.trippy.Domain.*;
 import com.ssafy.trippy.Dto.Converter.Converter;
 import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ssafy.trippy.Service.S3Uploader;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -17,6 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class ResponsePostDto {
+
     private Long id;
     private String title;
     private int company;
