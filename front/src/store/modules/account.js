@@ -228,14 +228,17 @@ export default {
     }, 
 
     deleteAccount({ getters }) {
+      console.log(getters.authHeader)
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/members/remove',
         method: 'delete',
         headers: getters.authHeader,
       })
       .then( () => {
-        console.log('deleted')
-        router.push({ name: 'home' })
+        VueCookies.remove('accessToken')
+        VueCookies.remove('refreshToken')
+        console.log('successfully deleted account')
+        router.push({ name: 'login' })
       })
       .catch(err => {
         console.error(err)
