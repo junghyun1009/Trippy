@@ -12,16 +12,15 @@ spring:
   #    password: ssafy
 
   # ------기존 h2 설정---------
-#      url: jdbc:h2:tcp://localhost/~/trippy
-#      username: sa
-#      password:
-#      driver-class-name: org.h2.Driver
+  #    url: jdbc:h2:tcp://localhost/~/trippy
+  #    username: sa
+  #    password:
+  #    driver-class-name: org.h2.Driver
   profiles:
     include: jwt
 #    active: local
   redis:
     host: 172.26.13.195
-#    host: localhost
     port: 6379
   jwt:
     blacklist:

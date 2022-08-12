@@ -9,7 +9,7 @@
 <script>
 import TheHeader from '@/components/common/TheHeader.vue'
 import NavBar from '@/components/common/NavBar.vue'
-import { mapActions } from 'vuex';
+// import { mapActions } from 'vuex';
 export default ({
   name: 'App',
   components: {
@@ -17,21 +17,21 @@ export default ({
     NavBar
   },
   methods: {
+    // ...mapActions(['reissueToken'])
     // notShowLoginJoin() {
     //   this.$route.name !== 'login'
     //   this.$route.name !== 'signUp'
     // }
-    ...mapActions(['reissueToken'])
   },
-  mounted() {
-    if (localStorage.getItem('reloaded')) {
-        localStorage.removeItem('reloaded');
-    } else {
-        localStorage.setItem('reloaded', '1');
-        location.reload();
-    }
-    this.reissueToken()
-  },
+  // mounted() {
+  //   if (localStorage.getItem('reloaded')) {
+  //       localStorage.removeItem('reloaded');
+  //   } else {
+  //       localStorage.setItem('reloaded', '1');
+  //       location.reload();
+  //   }
+  //   this.reissueToken()
+  // },
 })
 </script>
 
@@ -56,7 +56,7 @@ export default ({
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
 }
 

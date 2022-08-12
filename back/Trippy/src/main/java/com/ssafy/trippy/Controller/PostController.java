@@ -1,13 +1,13 @@
 package com.ssafy.trippy.Controller;
 
-import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
-import com.ssafy.trippy.Service.MemberService;
-import com.ssafy.trippy.Service.PostService;
+import com.ssafy.trippy.Dto.Update.UpdatePostDto;
+import com.ssafy.trippy.Service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -43,7 +44,7 @@ public class PostController {
     }
 
     @DeleteMapping("/auth/posts/{post_id}")
-    public ResponseEntity<?> deletePost(HttpServletRequest request, @PathVariable("post_id") Long post_id) {
+    public ResponseEntity<?> deletePost(@PathVariable("post_id") Long post_id) {
         try {
             postService.deletePost(post_id);
             return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
