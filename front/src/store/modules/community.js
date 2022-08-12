@@ -6,22 +6,22 @@ export default ({
     posts: [],
     post: {},
 
-    temp: {
-      title: '가평에서 같이 노실분~',
-      category: '파티',
-      desc: '혹시 가평 근처에서 같이 노실 분?혹시 가평 근처에서 같이 노실 분?혹시 가평 근처에서 같이 노실 분?',
-      start_date:  '2022-08-12',
-      isDay: true,
-      end_date: '',
-      time: '18:00',
-      recruit_volume: 6,
-      option: {
-        gender: '여성만',
-        age: [25, 30],
-        isLocal: true
-      },
-      place: '가평역'
-    }
+    // temp: {
+    //   title: '가평에서 같이 노실분~',
+    //   category: '파티',
+    //   desc: '혹시 가평 근처에서 같이 노실 분?혹시 가평 근처에서 같이 노실 분?혹시 가평 근처에서 같이 노실 분?',
+    //   start_date:  '2022-08-12',
+    //   isDay: true,
+    //   end_date: '',
+    //   time: '18:00',
+    //   recruit_volume: 6,
+    //   option: {
+    //     gender: '여성만',
+    //     age: [25, 30],
+    //     isLocal: true
+    //   },
+    //   place: '가평역'
+    // }
   },
   getters: {
     posts: state => state.posts,
@@ -33,7 +33,7 @@ export default ({
     SET_POST: (state, post) => state.post = post,
   },
   actions: {
-    // 게시글 작성
+    // 게시글 CREATE
     createPost({ commit, getters }, post) {
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/community',
@@ -50,7 +50,17 @@ export default ({
         })
       })
     },
-    // 단일 게시글 (디테일 페이지) 조회
+    // 게시글 목록 READ
+    fetchPosts({ commit, getters }) {
+      axios({
+        url: 'http://i7a506.p.ssafy.io:8080/api/community',
+        method: 'GET',
+        headers: getters.authHeader,
+      })
+      .then(res => commit('SET_POSTS', res.data))
+      .catch(err => console.err(err.response))
+    },
+    // 단일 게시글 (디테일 페이지) READ
     fetchPost({ commit, getters }, postPk) {
       axios({
         url: `http://i7a506.p.ssafy.io:8080/api/community/${postPk}`,
@@ -61,7 +71,7 @@ export default ({
       .catch(err => {
         console.err(err.response)
         if (err.response.status === 404) {
-          router.push({ name: 'NotFound404' })
+          router.push({ name: 'notFound404' })
         }
       })
     }

@@ -100,6 +100,7 @@ export default {
       ],
       age: [this.post.startAge, this.post.endAge],
       newPost: {
+        id: this.post.id,
         title: this.post.title,
         category: this.post.category,
         description: this.post.description,
@@ -127,7 +128,7 @@ export default {
       if (startAge === undefined && endAge === undefined || startAge === 19 && endAge === 70) {
         age = '누구나'
       }
-      const isLocal = this.newPost.local
+      const isLocal = this.newPost.isLocal
       let local = ''
       if (isLocal === false) {
         local = '어디서나'
@@ -147,7 +148,7 @@ export default {
       if (this.action === 'create') {
         // this.newPost.meetingTime = '0000-00-00 ' + this.newPost.meetingTime
         const post = this.newPost
-        if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.day || post.endDate)) {
+        if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
           console.log(this.newPost)
           this.createPost(this.newPost)
         } else {
