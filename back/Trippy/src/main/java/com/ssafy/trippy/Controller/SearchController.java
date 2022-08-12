@@ -35,10 +35,10 @@ public class SearchController {
         List<ResponsePostDto> post;
         try{
             post =  postSearchService.searchPost(searchRequestDto);
-            return new ResponseEntity<>(post, HttpStatus.OK);
         }catch(Exception e){
             e.printStackTrace();
-            return new ResponseEntity<>("해당 게시물을 찾을 수 없습니다.",HttpStatus.NOT_FOUND );
+            return new ResponseEntity<>("해당 게시물을 찾을 수 없습니다.",HttpStatus.BAD_REQUEST );
         }
+        return new ResponseEntity<List<ResponsePostDto>>(post, HttpStatus.OK);
     }
 }

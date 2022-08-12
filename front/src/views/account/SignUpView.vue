@@ -8,8 +8,9 @@
       class="input"
       v-model="userData.email" 
       placeholder="username@email.com"
+      @blur="checkEmail()"
       ></el-input>
-      <el-button type="primary" @click="checkEmail(), checkEmailDuplicate(userinfo)">중복확인</el-button>
+      <el-button type="primary" @click="checkEmailDuplicate(userData)">중복확인</el-button>
       <account-error-list :errorMessage="emailError" v-if="!emailFormat"></account-error-list>
 
     </div>
@@ -81,7 +82,7 @@
     </div>
 
     <br><br><br><br>
-    <el-button type="primary" @click="checkBlank(), dateParsing(), signupOne(userData)">회원가입</el-button>
+    <el-button type="primary" @click="checkBlank(), dateParsing(), signupOne(userData), youShallNotPass()">회원가입</el-button>
   </form>
 
   </div>
@@ -127,44 +128,57 @@ export default {
             nicknameFormat: true,
             passwordCheck: '',
             date: '',
+            pass: false,
         }
     },
     methods: {
       ...mapActions(['signupOne', 'checkEmailDuplicate']),
 
+      // 받아온 날짜를 ISO string 형식으로 변환해주는 함수
       dateParsing() {
         const birthdate = new Date(this.date)
         this.userData.birth = birthdate.toISOString()
       },
 
+      // 이메일 형식 확인 regex
       checkEmail() {
       var inputEmail = document.getElementById('email').value;
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
       if (regEmail.test(inputEmail) === false) {
-        this.emailFormat = false;                          
+        this.emailFormat = false,   
+        this.pass = false;                       
       } else {
         this.emailFormat = true
+        this.pass = true
       }        
       },
 
+      // 비밀번호 , 비밀번호 확인에 넣은 번호가 같은지 확인하는 함수
       checkPasswordMatch() {
         if (this.userData.password === this.passwordCheck) {
           this.passwordMatch = true
+          this.pass = true
         } else {
-          this.passwordMatch = false
+          this.passwordMatch = false,
+          this.pass = false
         }
       },
 
+      // 비밀번호 형식 확인 regex
       checkPasswordValidity() {
         var inputPassword = document.getElementById('password').value;
-        var regPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+        // 문자, 숫자, 그리고 최소 하나의 특수문자
+        var regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d~$@$!%*#?&()+|=]{8,20}$/;
         if (regPassword.test(inputPassword)) {
           this.passwordFormat = true
+          this.pass = true
           } else {
             this.passwordFormat = false
+            this.pass = false
           }
       },
 
+      // 닉네임 형식 확인 regex
       checkNickname() {
         var regNickname = /^([0-9]|[a-z]|[A-Z]|[가-힣]).{1,10}$/;
         var blank = /''/
@@ -172,10 +186,14 @@ export default {
           this.nicknameFormat = true
         } else if (blank.test(this.userData.name)) {
           this.nicknameFormat = true
+          this.pass = true
         } else {
           this.nicknameFormat = false
+          this.pass = false
         }
       },
+
+      // 빈칸이 있는지 없는지 확인하는 함수
       checkBlank() {
         var emailBlank = document.getElementById('email').value
         var passwordBlank = document.getElementById('password').value
@@ -185,11 +203,22 @@ export default {
         if ( emailBlank == '' | passwordBlank == '' | nicknameBlank == '' | genderBlank == '' | birthdateBlank == '' ) {
           alert("빈 칸 없이 모든 필드를 채워주세요!")
           console.log(this.userData)
-        } else {
-          this.$router.push('/signup/option')
-        }
+        } 
       },
 
+      // 회원가입2로 넘어갈 수 있는지 확인하는 함수
+      // 중복되는 이메일을 가지고 있으면 안됨
+      // 비밀번호 두 개가 같아야 함
+      // 닉네임이 2글자 이상이어야 함
+      youShallNotPass() {
+        if ( this.pass ) { 
+          console.log(this.pass)
+          this.$router.push('/signup/option') 
+        } else {
+          console.log(this.pass)
+          alert('형식에 맞는지 확인해주세요!')
+        }
+      }
     }
   }
 

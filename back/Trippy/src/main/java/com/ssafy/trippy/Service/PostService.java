@@ -23,7 +23,6 @@ public interface PostService {
     void updatePost(Long id, RequestPostDto requestPostDto);
 
     ResponsePostDto findPostId(Long id);
-
     List<ResponsePostDto> findByCity(Location location);
 
 
