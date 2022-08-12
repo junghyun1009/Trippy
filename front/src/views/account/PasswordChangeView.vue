@@ -59,7 +59,10 @@ export default {
 
     checkPasswordValidity() {
       var inputPassword = document.getElementById('password').value;
-      var regPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+      var regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d~$@$!%*#?&()+|=]{8,20}$/;
+      // 문자, 숫자, 특수문자의 조합(특수문자 필수 아님)
+      // var regPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d~!@#$%^&*()+|=]{8,20}$/
+
       if (regPassword.test(inputPassword)) {
         this.passwordFormat = true
         } else {

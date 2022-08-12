@@ -22,7 +22,7 @@
       <span class="material-symbols-outlined arrow">arrow_forward_ios</span>
     </div>
     <div class="menu">
-      <p @click="open(), deleteAccount()">
+      <p @click="open()">
         <span class="material-symbols-outlined icon">delete_forever</span>
         회원 탈퇴
       </p>
