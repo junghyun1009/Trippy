@@ -32,7 +32,7 @@ public class PostController {
 
 
     @PostMapping("/auth/posts")
-    public ResponseEntity<?> savePost(HttpServletRequest request, @RequestBody @Valid RequestPostDto requestPostDto, @RequestPart("images") List<MultipartFile> images) {
+    public ResponseEntity<?> savePost(HttpServletRequest request, @RequestPart("post") @Valid RequestPostDto requestPostDto, @RequestPart("images") List<MultipartFile> images) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         requestPostDto.setMember_id(memberId);
         try {
