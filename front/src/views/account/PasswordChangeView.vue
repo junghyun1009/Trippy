@@ -36,7 +36,7 @@ export default {
         currentPassword: '',
         newPassword: '',
         newPasswordCheck: '',
-      },
+      }, 
       fromPasswordFindView: this.$store.getters.fromPasswordFindView,
       passwordMatchError: userErrorMessage.passwordMatchError,
       passwordValidityError: userErrorMessage.passwordValidityError,
