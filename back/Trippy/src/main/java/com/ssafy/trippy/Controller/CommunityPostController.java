@@ -18,7 +18,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class CommunityPostController {
 
     private final CommunityPostService communityPostService;
@@ -32,13 +31,13 @@ public class CommunityPostController {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         requestCommunityPostDto.setMember_id(memberId);
         try {
-            communityPostService.saveCommunityPost(requestCommunityPostDto);
+            Long id = communityPostService.saveCommunityPost(requestCommunityPostDto);
+            return new ResponseEntity<>(id, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
         }
-        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 
     @DeleteMapping("/auth/community/{community_post_id}")
