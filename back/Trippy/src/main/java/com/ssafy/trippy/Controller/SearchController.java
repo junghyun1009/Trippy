@@ -21,20 +21,23 @@ public class SearchController {
     private static final String FAIL = "ERROR";
 
     @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam("title") String title,
-                                    @RequestParam("company") int company,
-                                    @RequestParam("locationId") Long locationId){
+    public ResponseEntity<?> search(@RequestParam(value="title", required = false) String title,
+                                    @RequestParam(value="company", required = false) Integer company,
+                                    @RequestParam(value="transportId", required = false) Long transportId){
+        if(company==null) company = 0;
+        if(transportId==null) transportId = 0L;
+
         SearchRequestDto searchRequestDto = SearchRequestDto.builder()
                 .company(company)
                 .title(title)
-                .locationId(locationId)
+                .transportId(transportId)
                 .build();
-        List<ResponsePostDto> post = new ArrayList<>();
+        List<ResponsePostDto> post;
         try{
             post =  postSearchService.searchPost(searchRequestDto);
         }catch(Exception e){
             e.printStackTrace();
-            return new ResponseEntity<>(FAIL,HttpStatus.NOT_FOUND );
+            return new ResponseEntity<>("해당 게시물을 찾을 수 없습니다.",HttpStatus.BAD_REQUEST );
         }
         return new ResponseEntity<List<ResponsePostDto>>(post, HttpStatus.OK);
     }

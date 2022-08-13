@@ -2,10 +2,7 @@ package com.ssafy.trippy.Controller;
 
 import com.ssafy.trippy.Dto.Request.RequestCommunityPostDto;
 import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
-import com.ssafy.trippy.Dto.Response.ResponsePostDto;
-import com.ssafy.trippy.Dto.Update.UpdateCommunityPostDto;
 import com.ssafy.trippy.Service.CommunityPostService;
-import com.ssafy.trippy.Service.Impl.CommunityPostServiceImpl;
 import com.ssafy.trippy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,13 +28,13 @@ public class CommunityPostController {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         requestCommunityPostDto.setMember_id(memberId);
         try {
-            communityPostService.saveCommunityPost(requestCommunityPostDto);
+            Long id = communityPostService.saveCommunityPost(requestCommunityPostDto);
+            return new ResponseEntity<>(id, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
+            return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 
     @DeleteMapping("/auth/community/{community_post_id}")
@@ -47,7 +43,7 @@ public class CommunityPostController {
             communityPostService.deleteCommunityPost(community_post_id);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
+            return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
@@ -60,20 +56,30 @@ public class CommunityPostController {
             communityPostService.updateCommunityPost(community_post_id, requestCommunityPostDto);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
+            return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 
     @GetMapping("/community")
     public ResponseEntity<?> getAllCommunityPostList() {
-        List<ResponseCommunityPostDto> responsePostDtos = communityPostService.getAllCommunityPost();
-        return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
+        try {
+            List<ResponseCommunityPostDto> responsePostDtos = communityPostService.getAllCommunityPost();
+            return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("게시글이 없습니다", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/community/{community_post_id}")
     public ResponseEntity<?> detailCommunityPost(@PathVariable("community_post_id") Long id) {
-        ResponseCommunityPostDto responseCommunityPostDto = communityPostService.findCommunityPost(id);
-        return new ResponseEntity<>(responseCommunityPostDto, HttpStatus.OK);
+        try {
+            ResponseCommunityPostDto responseCommunityPostDto = communityPostService.findCommunityPost(id);
+            return new ResponseEntity<>(responseCommunityPostDto, HttpStatus.OK);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
+        }
     }
 }

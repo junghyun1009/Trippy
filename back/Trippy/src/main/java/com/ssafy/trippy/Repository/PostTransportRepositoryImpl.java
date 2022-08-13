@@ -11,7 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,7 +23,8 @@ public class PostTransportRepositoryImpl implements PostTransportRepositoryCusto
 
 
     @Override
-    public List<ResponsePostDto> findAllBySearch(String title, int company, Long locationId) {
+    public List<ResponsePostDto> findAllBySearch(String title, int company, Long transportId) {
+        Set<Long> postId = new HashSet<>();
         QPostTransport transport = QPostTransport.postTransport;
         QPost post = QPost.post;
         BooleanBuilder builder = new BooleanBuilder();
@@ -31,8 +34,8 @@ public class PostTransportRepositoryImpl implements PostTransportRepositoryCusto
         if(!StringUtils.isEmpty(title)) {
             builder.and(post.title.containsIgnoreCase(title));
         }
-        if(locationId>0){
-            builder.and(transport.transport.id.eq(locationId));
+        if(transportId>0){
+            builder.and(transport.transport.id.eq(transportId));
         }
 
         List<PostTransport> postList = jpaQueryFactory.selectFrom(transport)
@@ -41,7 +44,10 @@ public class PostTransportRepositoryImpl implements PostTransportRepositoryCusto
                 .fetch();
         List<ResponsePostDto> responsePostDtos = new ArrayList<>();
         for (PostTransport postTransport : postList) {
-            Post post1 = postRepository.findById(postTransport.getPost().getId()).get();
+            postId.add(postTransport.getPost().getId());
+        }
+        for (Long aLong : postId) {
+            Post post1 = postRepository.findById(aLong).get();
             ResponsePostDto dto = ResponsePostDto.builder()
                     .post(post1).build();
             responsePostDtos.add(dto);

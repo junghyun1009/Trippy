@@ -18,7 +18,7 @@
         <el-input v-model="verificationCode" placeholder="발송된 인증번호를 입력하세요"></el-input>
         <!-- 3분 지나면 인증확인 버튼 disable되게 -->
         <el-button type="primary" v-if="this.timeCounter == 0" disabled >인증확인</el-button>
-        <el-button type="primary" v-else-if="this.timeCounter > 0" @click="emailAuth(verificationCode)">인증확인</el-button><br>
+        <el-button type="primary" v-else-if="this.timeCounter > 0" @click="emailAuth(verificationCode), emailInfo(userinfo)">인증확인</el-button><br>
         <el-button type="primary" @click="countdownReset(), successMessage(), emailCode(userinfo)">인증번호 다시받기</el-button>        
       </div>
 
@@ -65,7 +65,7 @@ export default {
     },
 
 	methods: {
-    ...mapActions(['fromPasswordFindView', 'emailCode']),
+    ...mapActions(['fromPasswordFindView', 'emailCode', 'emailInfo']),
 
     countdownTimer() {
       if (this.timeCounter >= 0) {

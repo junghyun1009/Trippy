@@ -27,7 +27,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
     @Transactional
     @Override
     public Long saveCommunityPost(RequestCommunityPostDto requestCommunityPostDto) {
-        Optional<Location> location = locationRepository.findByCityNameAndCountryName(requestCommunityPostDto.getCityName(), requestCommunityPostDto.getCountryName());
+        Optional<Location> location = locationRepository.findByCountryNameAndCityName(requestCommunityPostDto.getCountryName(), requestCommunityPostDto.getCityName());
         if (location.isPresent()) {
             requestCommunityPostDto.setLocationId(location.get().getId());
         } else {
@@ -49,7 +49,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
     @Override
     public void updateCommunityPost(Long id, RequestCommunityPostDto requestCommunityPostDto) {
         CommunityPost communityPost = communityPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-        Optional<Location> location = locationRepository.findByCityNameAndCountryName(requestCommunityPostDto.getCityName(), requestCommunityPostDto.getCountryName());
+        Optional<Location> location = locationRepository.findByCountryNameAndCityName(requestCommunityPostDto.getCountryName(), requestCommunityPostDto.getCityName());
         if(!location.isPresent()){
             Long locationId = locationRepository.save(Location.builder().cityName(requestCommunityPostDto.getCityName()).countryName(requestCommunityPostDto.getCountryName()).build()).getId();
             requestCommunityPostDto.setLocationId(locationId);
@@ -80,6 +80,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
             Location location = locationRepository.findById(communityPost.getLocation().getId()).get();
             System.out.println("location.getId() = " + location.getId());
             ResponseCommunityPostDto responseCommunityPostDto = ResponseCommunityPostDto.builder()
+                    .id(communityPost.getId())
                     .category(communityPost.getCategory())
                     .cityName(location.getCityName())
                     .countryName(location.getCountryName())

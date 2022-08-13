@@ -32,30 +32,33 @@ public class DetailLocation extends BaseEntity{
     @JoinColumn(name="POST_ID")
     private Post post;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="LOCATION_ID")
-    private Location location;
+    private String filename;
 
     public void setPost(Post post){
         this.post = post;
         post.getDetailLocations().add(this);
     }
 
+    public void setFilename(String filename){
+        this.filename = filename;
+    }
+
     @Builder
-    public DetailLocation(Long id, String detailLocationName, float rating, String detailLocationContent,Post post, Location location) {
+    public DetailLocation(Long id, String detailLocationName, float rating, String detailLocationContent,Post post,String filename) {
         this.id=id;
         this.detailLocationContent = detailLocationContent;
         this.detailLocationName = detailLocationName;
         this.rating = rating;
         this.post = post;
-        this.location = location;
+        this.filename = filename;
     }
 
 
-    public void update(String detailLocationContent, String detailLocationName, float rating){
+    public void update(String detailLocationContent, String detailLocationName, float rating, String filename){
         this.detailLocationContent = detailLocationContent;
         this.detailLocationName = detailLocationName;
         this.rating = rating;
+        this.filename = filename;
     }
 
 }

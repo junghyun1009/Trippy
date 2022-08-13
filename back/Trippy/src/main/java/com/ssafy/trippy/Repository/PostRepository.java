@@ -17,6 +17,6 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByCompany(int count);
     List<Post> findAllByMember(Member member);
-
-
+    Optional<Post> findById(Long id);
+    Optional<List<Post>> findAllByLocationId(Long location_id);
 }
