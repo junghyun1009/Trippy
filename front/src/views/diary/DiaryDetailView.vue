@@ -9,7 +9,7 @@
         <div class="icons">
           <!-- 여기부터는 공통 -->
           <div class="icon-cnt">
-            <span v-if="!isLiked" class="material-symbols-outlined" @click="isLiked=1">favorite</span>
+            <span v-if="!isLiked" class="material-symbols-outlined" @click="isLiked=1, likeDiary(diary.id)">favorite</span>
             <span v-else class="material-symbols-outlined filled-heart" @click="isLiked=0">favorite</span>
             <span class="cnt">777</span>
           </div>
@@ -70,7 +70,7 @@
           </router-link>
           <!-- <span>{{ diary.member_id.name }}</span> -->
           <router-link :to="{ name: 'profile' }">
-            <span class="username">나유저</span>
+            <span class="username">{{ diary.name }}</span>
           </router-link>
         </div>
         <div class="btn-tag">
@@ -91,7 +91,7 @@
             <!-- <el-tag>{{ diary.cityName }}</el-tag> -->
             <el-tag class="tag">{{ diary.startDate.substr(5, 5) }}-{{ diary.endDate.substr(5, 5) }}</el-tag>
             <el-tag class="tag">{{ partyTag }} ({{ diary.count }}명)</el-tag>
-            <el-tag class="tag" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.transport.name }}</el-tag>
+            <el-tag class="tag" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.name }}</el-tag>
           </div>
         </div>
       </div>
@@ -199,10 +199,10 @@ export default {
     photoUrl(file) {
       const newUrl = URL.createObjectURL(file)
       return newUrl
-    }
+    },
   },
   methods: {
-    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent']),
+    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary']),
     addMarkers() {
       const map = new google.maps.Map(document.getElementById("map"), {
           center: {lat: this.diary.routes[0].lat, lng: this.diary.routes[0].lng},
@@ -231,7 +231,7 @@ export default {
 
     closeInfo() {
       this.hideParent()
-    }
+    },
   },
   created() {
     this.fetchDiary(this.diaryPk)
