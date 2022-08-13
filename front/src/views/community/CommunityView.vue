@@ -132,10 +132,10 @@ export default {
       })
       // console.log(post)
       // console.log(this.posts[0]['category'])
-      this.posts.forEach((el) => {
-          const startDate = el.startDate
-          console.log(typeof(startDate))
-      })
+      // this.posts.forEach((el) => {
+      //     const startDate = el.startDate
+      //     console.log(typeof(startDate))
+      // })
     }
   }
 </script>

@@ -74,6 +74,25 @@ export default ({
           router.push({ name: 'notFound404' })
         }
       })
-    }
+    },
+    // 게시글 UPDATE
+    updatePost({ commit, getters }, post) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/community/${post.id}`,
+        method: 'PUT',
+        data: post.content,
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        console.log(res.data)
+        commit('SET_POST', post)
+        router.push({
+          name: 'communityDetail',
+          params: { postPk: res.data }
+        })
+      })
+    },
+    // 게시글 DELETE
+
   },
 })

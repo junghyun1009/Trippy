@@ -59,7 +59,10 @@
         <el-input v-model="newPost.place" placeholder="모임 장소를 입력하세요." />
       </el-form-item>
       <el-form-item v-if="action==='create'">
-        <el-button @click="onSubmit">{{ action }}</el-button>
+        <el-button @click="onSubmit">작성하기</el-button>
+      </el-form-item>
+      <el-form-item v-else-if="action==='update'">
+        <el-button @click="onSubmit">수정하기</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -139,22 +142,28 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['createPost']),
+    ...mapActions(['createPost', 'updatePost']),
     onInput() {
       this.newPost.startAge = this.age[0]
       this.newPost.endAge = this.age[1]
     },
     onSubmit() {
-      if (this.action === 'create') {
-        // this.newPost.meetingTime = '0000-00-00 ' + this.newPost.meetingTime
-        const post = this.newPost
-        if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
-          console.log(this.newPost)
+      const post = this.newPost
+      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
+        console.log(this.newPost)
+        if (this.action === 'create') {
           this.createPost(this.newPost)
-        } else {
-          alert('빈 칸 없이 모든 필드를 채워주세요!')
+        } else if (this.action === 'update') {
+          const payload = {
+            id: this.post.id,
+            content: this.newPost
+          }
+          this.updatePost(payload)
         }
+      } else {
+        alert('빈 칸 없이 모든 필드를 채워주세요!')
       }
+      
     },
     disabledStartDate(date) {
       return date.getTime() < Date.now() - 3600 * 1000 * 24 

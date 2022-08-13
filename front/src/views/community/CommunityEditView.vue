@@ -1,13 +1,12 @@
 <template>
   <div>
-    <h1>Community Edit</h1>
-    <community-form :post="temp" action="update"></community-form>
+    <community-form :post="post" action="update"></community-form>
   </div>
 </template>
 
 <script>
 import CommunityForm from '@/components/community/CommunityForm.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'CommunityEditView',
@@ -15,7 +14,13 @@ export default {
       CommunityForm
     },
     computed: {
-      ...mapGetters(['temp'])
+      ...mapGetters(['post'])
+    },
+    methods: {
+      ...mapActions(['fetchPost'])
+    },
+    created() {
+      this.fetchPost(this.$route.params.postPk)
     }
 }
 </script>
