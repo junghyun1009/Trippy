@@ -42,6 +42,7 @@
     >
       <el-tab-pane label="My Diary">
         <!-- 내가 쓴 일지 목록 -->
+        <my-diaries-list :myDiaries="myDiaries"></my-diaries-list>
       </el-tab-pane>
       <el-tab-pane label="My Likes">
         <!-- 내가 좋아요 누른 일지 목록 -->
@@ -56,6 +57,7 @@
 <script>
 import FollowersList from '@/components/profile/FollowersList.vue'
 import FollowingsList from '@/components/profile/FollowingsList.vue'
+import MyDiariesList from '@/components/profile/MyDiariesList.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -63,6 +65,7 @@ export default {
   components: {
     FollowersList,
     FollowingsList,
+    MyDiariesList,
   },
   data() {
     return {
@@ -72,10 +75,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['profile'])
+    ...mapGetters(['profile', 'myDiaries'])
   },
   methods: {
-    ...mapActions(['fetchProfile']),
+    ...mapActions(['fetchProfile', 'fetchMyDiary']),
     followNow() {
       this.isFollow = !this.isFollow
     },
@@ -85,6 +88,7 @@ export default {
   },
   mounted() {
     this.fetchProfile()
+    this.fetchMyDiary()
   }
 }
 </script>
