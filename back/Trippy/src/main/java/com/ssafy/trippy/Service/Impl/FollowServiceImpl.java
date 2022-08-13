@@ -1,10 +1,13 @@
 package com.ssafy.trippy.Service.Impl;
 
 import com.ssafy.trippy.Domain.Follow;
+import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Exception.CustomApiException;
 import com.ssafy.trippy.Dto.Request.RequestFollowDto;
 import com.ssafy.trippy.Dto.Response.ResponseFollowDto;
+import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Repository.FollowRepository;
+import com.ssafy.trippy.Repository.MemberRepository;
 import com.ssafy.trippy.Service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ import java.util.List;
 @Transactional
 public class FollowServiceImpl implements FollowService {
     private final FollowRepository followRepository;
+
+    private final MemberRepository memberRepository;
 
     @Override
     public ResponseFollowDto follow(RequestFollowDto requestFollowDto) {
@@ -34,24 +39,26 @@ public class FollowServiceImpl implements FollowService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResponseFollowDto> getFollowers(Long memberId) {
+    public List<ResponseMemberDto> getFollowers(Long memberId) {
         List<Follow> followList = followRepository.findAllByFollowerId(memberId);
-        List<ResponseFollowDto> responseFollowDtoList = new ArrayList<>();
+        List<ResponseMemberDto> responseMemberDtos = new ArrayList<>();
         for (Follow follow : followList) {
-            responseFollowDtoList.add(new ResponseFollowDto(follow));
+            Member member = memberRepository.findById(follow.getFollower().getId()).orElseThrow();
+            responseMemberDtos.add(new ResponseMemberDto(member));
         }
-        return responseFollowDtoList;
+        return responseMemberDtos;
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResponseFollowDto> getFollowings(Long memberId) {
+    public List<ResponseMemberDto> getFollowings(Long memberId) {
         List<Follow> followList = followRepository.findAllByFollowingId(memberId);
-        List<ResponseFollowDto> responseFollowDtoList = new ArrayList<>();
+        List<ResponseMemberDto> responseMemberDtos = new ArrayList<>();
         for (Follow follow : followList) {
-            responseFollowDtoList.add(new ResponseFollowDto(follow));
+            Member member = memberRepository.findById(follow.getFollowing().getId()).orElseThrow();
+            responseMemberDtos.add(new ResponseMemberDto(member));
         }
-        return responseFollowDtoList;
+        return responseMemberDtos;
     }
 
     @Transactional(readOnly = true)

@@ -1,47 +1,29 @@
 <template>
-  <div>
-    <el-row>
-      <el-col :span="12">
-        <router-link :to="{ name: 'diaryDetail' }">
-          <!-- <el-card :body-style="{ padding: '0px' }" shadow="never">
-            <img :src="diaryTemp.stories[0].photoList[0].preview" class="image" :alt="diaryTemp.stories[0].photoList[0].preview"/>
-            <div style="padding: 3px">
-              <span class="title-span">{{ diaryTemp.title }}</span>
-            </div>
-          </el-card> -->
-          <div class="diary-card" :body-style="{ padding: '0px' }" shadow="never">
-            <img :src="diaryTemp.stories[0].photoList[0].preview" class="image" :alt="diaryTemp.stories[0].photoList[0].preview"/>
-            <div class="diary-card-desc">
-              <div style="padding: 3px">
-                <span class="title-span">{{ diaryTemp.title }}</span><br>
-                <!-- 이 부분에 게시글 작성자의 username이 올 것 -->
-                <!-- <span class="author-span">{{ diary.userid.name }}</span> -->
-              </div>
-            </div>
-          </div>
-
-        </router-link>
-      </el-col>
-    </el-row>
+  <div class="container">
+    <router-link :to="{ name: 'diaryDetail', params: { diaryPk: diary.id } }">
+      <el-card class="grid-content" :body-style="{ padding: 0 }" shadow="hover">
+        <img :src="diary.representativeImg" class="image"/>
+        <span class="title-span">{{ diary.title }}</span>
+      </el-card>
+    </router-link>
     <br>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 
 export default {
   name: "RecommendListItem",
-  computed: {
-    ...mapGetters(['diaryTemp', 'diary'])
-  }
+  props: {
+    diary: Object,
+  },
 }
 </script>
 
 <style scoped>
 .image {
   width: 100%;
-  height: 150px;
+  height: 100px;
   display: block;
   border-radius: 5%;
 }
@@ -51,6 +33,10 @@ export default {
   margin-left: 0%;
 }
 
+a {
+  text-decoration: none;
+}
+
 .diary-card {
   position: relative;
   width: 100%;
@@ -58,15 +44,22 @@ export default {
 
 .diary-card-desc {
   position: absolute;
-  /* background-color: rgb(255, 255, 255, 0.7); */
   margin-top: -30%;
-  /* width: 100%; */
-  /* height: 38%; */
 }
 
 .diary-card-desc span {
   font-weight: 500;
   text-decoration: none;
-  color: white;
+  color: black;
 }
+
+.grid-content {
+  border-radius: 4px;
+  min-height: 10vh;
+}
+
+.el-card__body:hover {
+  opacity: 0.2;
+}
+
 </style>

@@ -4,9 +4,9 @@
     <div v-if="!emailSent" class="email">
       <h3>이메일</h3>
       <p>trippy에 가입한 이메일을 작성해주세요</p>
-      <el-input v-model="userinfo.email" type="email" id="email" placeholder="username@email.com" @blur="checkEmail()"></el-input>
+      <el-input v-model="userinfo.email" type="email" id="email" placeholder="username@email.com"></el-input>
       <!-- 타이머 외않되?ㅠㅠ -->
-      <el-button type="primary" @click="countdownTimer(), checkEmail(), emailCode(userinfo)">인증번호 받기</el-button>
+      <el-button type="primary" @click="countdownTimer(), emailCode(userinfo), checkEmail()">인증번호 받기</el-button>
       <account-error-list :errorMessage="emailError" v-if="!emailFormat"></account-error-list>
     </div>
 
@@ -14,12 +14,11 @@
     <div class="verification-container" v-else>
       <div class="verification-code">
         <h3>인증번호 입력</h3>
-        <!-- 3분 카운트 하는 시계...왜 사라졌냐.. -->
-        <span>집나간 3분 타이머를 찾습니다 {{ resTimeData }}</span>
-        <el-input v-model="userinfo.verificationCode" placeholder="발송된 인증번호를 입력하세요"></el-input>
+        <span>{{ resTimeData }}</span>
+        <el-input v-model="verificationCode" placeholder="발송된 인증번호를 입력하세요"></el-input>
         <!-- 3분 지나면 인증확인 버튼 disable되게 -->
         <el-button type="primary" v-if="this.timeCounter == 0" disabled >인증확인</el-button>
-        <el-button type="primary" v-else-if="this.timeCounter > 0" @click="emailAuth(userinfo.verificationCode)">인증확인</el-button><br>
+        <el-button type="primary" v-else-if="this.timeCounter > 0" @click="emailAuth(verificationCode)">인증확인</el-button><br>
         <el-button type="primary" @click="countdownReset(), successMessage(), emailCode(userinfo)">인증번호 다시받기</el-button>        
       </div>
 
@@ -54,8 +53,8 @@ export default {
       return {
           userinfo: {
             email: '',
-            verificationCode: '',
           },
+          verificationCode: '',
           emailSent: false,
           timeCounter: 180,
           resTimeData: '',
@@ -94,6 +93,7 @@ export default {
           return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n
         },
 
+    // 타이머 모양 맞추기
     prettyTime() {
       let time = this.timeCounter / 60
       let minutes = parseInt(time)
@@ -101,26 +101,29 @@ export default {
       return this.pad(minutes, 2) + ":" + this.pad(seconds, 2)
     },
 
+    // 이메일 형식 검증하기
     checkEmail() {
       var inputEmail = document.getElementById('email').value;
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-      if (regEmail.test(inputEmail) === false) {
-        this.emailFormat = false;
-        this.emailSent = false
-        } if ( !this.userinfo.email ) {
+      if ( !this.userinfo.email ) {
           alert('이메일을 입력해주세요')
           this.emailSent = false
+        } else if (regEmail.test(inputEmail) === false) {
+        this.emailFormat = false;
+        this.emailSent = false
+        alert('이메일 형식을 확인해주세요')
         } else { 
           this.emailFormat = true
           this.emailSent = true
         }        
       },
     
+    // 받아온 인증번호와, 입력한 인증번호가 동일한지 확인
     emailAuth() {
-      console.log(this.userinfo.verificationCode)
-      if ( !this.userinfo.verificationCode ) {
-        alert('인증번호를 입력하세요') }
-      else if ( this.$store.getters.verificationCode === this.userinfo.verificationCode ){
+      console.log(this.verificationCode)
+      if ( !this.verificationCode ) {
+        alert('인증번호를 입력하세요') 
+      } else if ( this.$store.getters.verificationCode === this.verificationCode ){
         alert('인증이 완료되었습니다')
         this.fromPasswordFindView()
       } else {

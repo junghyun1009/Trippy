@@ -76,12 +76,14 @@ export default {
     }
 
   .login {
+    text-align: center;
     height: 92vh;
     background-color: #F16B51;
     overflow: hidden;
   }
 
   .input-box {
+    position: absolute;
     margin: 0 5%;
     padding-top: 50%
   }
@@ -107,6 +109,8 @@ export default {
 
 
   h1 {
+    position: relative;
+    bottom: 3rem;
     font-family: 'Alfa Slab One', cursive;
     font-weight: 300;
     font-size: 8vh;

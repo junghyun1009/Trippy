@@ -64,13 +64,6 @@
         <account-error-list :errorMessage="nicknameError" v-if="!nicknameFormat"></account-error-list>
       </div>
     </div>
-
-    <div class="change-delete">
-      <router-link :to="{ name: 'passwordChange' }">비밀번호 변경</router-link>
-      <span> | </span>
-      <p class="delete" @click="open(), deleteAccount()">회원 탈퇴하기</p>
-    </div>
-    <br>
       <el-button type="primary">완료</el-button>
   </div>
 </template>
@@ -79,8 +72,6 @@
 import { userErrorMessage } from '@/common/constant.js'
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
 import { mapActions, } from 'vuex'
-import { ElMessage, ElMessageBox } from 'element-plus'
-
 
 export default {
   name: 'ProfileEditView',
@@ -114,7 +105,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['deleteAccount', 'fetchCurrentUser',]),
+    ...mapActions(['fetchCurrentUser',]),
     mounted() {
       this.fetchCurrentUser()
       this.genderParsing()
@@ -152,33 +143,7 @@ export default {
     removePhoto() {
       this.profilePhoto = {}
     },
-
-    open() {
-      ElMessageBox.confirm(
-        '정말로 탈퇴하시곘습니까?',
-        'Warning',
-        {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning',
-        }
-      )
-        .then(() => {
-          ElMessage({
-            type: 'success',
-            message: '탈퇴가 완료되었습니다',
-          })
-          this.deleteAccount()
-        })
-        .catch(() => {
-          ElMessage({
-            type: 'info',
-            message: '탈퇴가 취소되었습니다',
-          })
-      })
-    }
-
-    }
+  }
 }
 </script>
 
