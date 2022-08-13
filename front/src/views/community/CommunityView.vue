@@ -21,7 +21,9 @@
             </p>
             <p class="option">
               <span class="material-symbols-outlined">event_note</span>
-              {{ convertDate }}, {{ convertTime }}
+              <!-- {{ convertDate }}, {{ convertTime }} -->
+              <span>{{ post.endDate ? ''+post.startDate.slice(5, 10) + '~' + ''+post.endDate.slice(5,10) : ''+post.startDate.slice(5, 10) }},</span>
+              <span>{{ ''+post.meetingTime.slice(11, 16) }}</span>
             </p>
             <p class="option">
               <span class="material-symbols-outlined">groups</span>
@@ -29,7 +31,8 @@
             </p>
           </div>
           <div class="content">
-            <p>{{ convertDesc }}</p>
+            <!-- <p>{{ convertDesc }}</p> -->
+            <p>{{ post.description.length > 50 ? post.description.slice(0, length - 2) + '...' : post.description}}</p>
           </div>
 
           
@@ -69,40 +72,41 @@ export default {
       recruitState() {
         return '모집중'
       },
-      convertDate() {
-        let date = ''
-        const posts = this.posts
-        posts.forEach((el) => {
-          let startDate = ''+el.startDate
-          let endDate = ''+el.endDate
-          if (!el.isDay) {
-            date = `${startDate.slice(5,10)}~${endDate.slice(5,10)}`
-          } else {
-            date = startDate
-          }
-        })
-        return date
-      },
-      convertTime() {
-        let time = ''
-        const posts = this.posts
-        posts.forEach((el) => {
-          let meetingTime = ''+el.meetingTime
-          time = meetingTime.slice(11, 16)
-        })
-        return time
-      },
-      convertDesc() {
-        let length = 50
-        let desc = ''
-        const posts = this.posts
-        posts.forEach((el) => {
-          if (el.description.length > length) {
-            desc = el.description.substr(0, length - 2) + '...'
-          }
-        })
-        return desc
-      }
+      // convertDate() {
+      //   const posts = this.posts
+      //   const date = posts.forEach((el) => {
+      //     const startDate = ''+el.startDate
+      //     const endDate = ''+el.endDate
+      //     console.log(startDate, endDate)
+      //     console.log(el.day)
+      //     return startDate
+      //     // if (el.day) {
+      //     //   return `${startDate.slice(5,10)}~${endDate.slice(5,10)}`
+      //     // } else {
+      //     //   return startDate
+      //     // }
+      //   })
+      //   return date
+      // },
+      // convertTime() {
+      //   const posts = this.posts
+      //   const time = posts.forEach((el) => {
+      //     const meetingTime = ''+el.meetingTime
+      //     meetingTime.slice(11, 16)
+      //   })
+      //   return time
+      // },
+      // convertDesc() {
+      //   let length = 50
+      //   let desc = ''
+      //   const posts = this.posts
+      //   posts.forEach((el) => {
+      //     if (el.description.length > length) {
+      //       desc = el.description.substr(0, length - 2) + '...'
+      //     }
+      //   })
+      //   return desc
+      // }
     },
     methods: {
       ...mapActions(['fetchPosts']),
