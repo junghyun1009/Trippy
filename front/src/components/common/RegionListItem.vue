@@ -1,68 +1,79 @@
 <template>
   <div>
     <div class="regions"
-        data-flickity='{ "pageDots": false, "cellAlign": "left" }'>
-        <div class="region">
-            <div class="image" id="all" ><span @click="diaryFilter(this.target)">전체</span></div>
-        </div>
+			data-flickity='{ "pageDots": false, "cellAlign": "left" }'>
+			<div class="region">
+				<div class="image" id="all" ><span @click="diaryFilter(this.target)">전체</span></div>
+			</div>
 
-        <div class="region">
-            <div class="image" id="seoul" ><span @click="diaryFilter(this)">서울</span></div>
-        </div>
+			<div class="region">
+				<div class="image" id="seoul" ><span @click="diaryFilter(this)">서울</span></div>
+			</div>
 
-        <div class="region">
-            <div class="image" id="jeju"><span @click="diaryFilter(this)">제주</span></div>
-        </div>
+			<div class="region">
+				<div class="image" id="jeju"><span @click="diaryFilter(this)">제주</span></div>
+			</div>
 
-        <div class="region">
-            <div class="image" id="busan"><span @click="diaryFilter(this)">부산</span></div>
-        </div>
+			<div class="region">
+				<div class="image" id="busan"><span @click="diaryFilter(this)">부산</span></div>
+			</div>
 
-        <div class="region">
-            <div class="image" id="tokyo"><span @click="diaryFilter(this)">도쿄</span></div>
-        </div>
+			<div class="region">
+				<div class="image" id="tokyo"><span @click="diaryFilter(this)">도쿄</span></div>
+			</div>
     </div>
 
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'RegionListItem',
   data() {
     return {
-
+      region: {
+				country: '',
+				city: '',
+			},
     }
   },
   methods: {
+    ...mapActions(['fetchAllDiaries', 'fetchRegionDiaries']),
     diaryFilter() {
       console.log(event.currentTarget.innerText)
       if ( event.currentTarget.innerText == '전체') {
         console.log('all')
-        // 모든 일지를 axios로 호출해서 뿌림
+        this.fetchAllDiaries()
       } 
       else if ( event.currentTarget.innerText == '서울') {
         console.log('seoul')
-        // 모든 일지를 axios로 호출해서 가져오면
-        // 오 근데 도시별 게시물 전체조회가 있네...???
-        // 그러면 백에서 걍 호출해주면될거같기도함-- 나중에 api 완성돼야 알수있을듯
+				this.region.country = '대한민국'
+        this.region.city = '서울특별시'
+        this.fetchRegionDiaries(this.region)
       }
       else if ( event.currentTarget.innerText == '제주') {
         console.log('jeju')
+				this.region.country = '대한민국'
+        this.region.city = '제주'
+				console.log(this.region)
+        this.fetchRegionDiaries(this.region)
       }
       else if ( event.currentTarget.innerText == '부산') {
         console.log('busan')
+				this.region.country = '대한민국'
+        this.region.city = '부산'
+        this.fetchRegionDiaries(this.region)
       }
       else if ( event.currentTarget.innerText == '도쿄') {
         console.log('tokyo')
+				this.region.country = '대한민국'
+        this.region.city = '도쿄'
+        this.fetchRegionDiaries(this.region)
       }
     }
   },
-  created() {
-    window.onpopstate = function () {
-    location.reload()
-    };
-  }
 }
 </script>
 
