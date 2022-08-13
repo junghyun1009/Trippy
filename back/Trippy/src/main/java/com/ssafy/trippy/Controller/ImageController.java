@@ -38,7 +38,7 @@ public class ImageController {
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestPart(value = "file") MultipartFile file){
         try {
-            ResponseImageDto responseImageDto = s3Uploader.upload(file,"static",null);
+            ResponseImageDto responseImageDto = s3Uploader.upload(file,"static");
             return new ResponseEntity<>(responseImageDto,HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,7 +50,7 @@ public class ImageController {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         ResponseImageDto responseImageDto = null;
         try {
-            responseImageDto = s3Uploader.upload(file,"static",null);
+            responseImageDto = s3Uploader.upload(file,"static");
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>("cannot upload image",HttpStatus.BAD_REQUEST);
@@ -63,11 +63,11 @@ public class ImageController {
         return new ResponseEntity<>(responseImageDto,HttpStatus.OK);
     }
 
-    @PostMapping("/upload/post/{detail_location_id}")
-    public ResponseEntity<?> updatePostProfile(@RequestPart(value = "file") MultipartFile file, @PathVariable("detail_location_id") Long detailLocId){
+    @PostMapping("/upload/post")
+    public ResponseEntity<?> updatePostProfile(@RequestPart(value = "file") MultipartFile file){
         ResponseImageDto responseImageDto = null;
         try {
-            responseImageDto = s3Uploader.upload(file,"static",detailLocId);
+            responseImageDto = s3Uploader.upload(file,"static");
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>("cannot upload image",HttpStatus.BAD_REQUEST);

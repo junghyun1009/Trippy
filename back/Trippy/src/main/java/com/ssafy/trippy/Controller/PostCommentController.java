@@ -38,7 +38,7 @@ public class PostCommentController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
+            return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
