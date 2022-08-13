@@ -1,11 +1,13 @@
 <template>
   <div class="container">
-    <div class="region-diaries">
+    <div v-if="regionDiaries" class="region-diaries">
+      <el-row>
         <el-col :span="8" v-for="diary in regionDiaries" :key="diary.id">
           <recommend-list-item :diary="diary"></recommend-list-item>
         </el-col>
+      </el-row>
     </div>
-    <div class="all-diaries">
+    <div v-if="!regionDiaries" class="all-diaries">
       <el-row>
         <!-- infinite scroll -->
         <el-col :span="8" v-for="diary in allDiaries.slice(0,10)" :key="diary.id">
