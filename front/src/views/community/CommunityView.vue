@@ -8,7 +8,9 @@
         <el-card class="card">
           <div>
             <el-tag class="tag">{{ post.cityName }}</el-tag>
-            <el-tag class="tag">{{ convertTag }}</el-tag>
+            <!-- <el-tag class="tag">{{ convertTag }}</el-tag> -->
+            <el-tag class="tag">{{ post.category === 1 ? '식사' : post.category === 2 ? '동행' : post.category === 3 ? '파티' : post.category === 4 ? '이동수단 셰어' : '기타' }}</el-tag>
+            <!-- <el-tag class="tag" v-for="(tag, idx) in convertTag" :key="idx">{{ tag }} </el-tag> -->
           </div>
           <div class="title">
             <span class="state">{{ recruitState }}</span>
@@ -32,7 +34,7 @@
           </div>
           <div class="content">
             <!-- <p>{{ convertDesc }}</p> -->
-            <p>{{ post.description.length > 50 ? post.description.slice(0, length - 2) + '...' : post.description}}</p>
+            <p>{{ post.description.length > 50 ? ''+post.description.slice(0, 45) + '...' : post.description}}</p>
           </div>
 
           
@@ -58,17 +60,23 @@ export default {
       }
     },
     computed: {
-      ...mapGetters(['posts']),
-      convertTag() {
-        let tag = ''
-        const posts = this.posts
-        posts.forEach((el) => {
-          const category = el.category
-          const categoryList = ['식사', '동행', '파티', '이동수단 셰어', '기타']
-          tag = categoryList[category-1]
-        })
-        return tag
-      },
+      ...mapGetters(['posts', 'post']),
+      // convertTag() {
+      //   const posts = this.posts
+      //   let cat = ''
+      //   posts.forEach((el) => {
+      //     const category = el.category
+      //     console.log(category)
+      //     const categoryList = ['식사', '동행', '파티', '이동수단 셰어', '기타']
+      //     cat = categoryList[category-1]
+      //   })
+      //   return cat
+        // let cat = ''
+        // for (let values of tag.values()) {
+        //   cat = values
+        // }
+        // return cat
+      // },
       recruitState() {
         return '모집중'
       },
@@ -125,11 +133,11 @@ export default {
     },
     created() {
       this.fetchPosts()
-      console.log(this.posts)
-      // console.log(this.posts[1].category)
-      this.posts.forEach(i => {
-        console.log(i.category)
-      })
+      // console.log(this.posts)
+      // // console.log(this.posts[1].category)
+      // this.posts.forEach(i => {
+      //   console.log(i.category)
+      // })
       // console.log(post)
       // console.log(this.posts[0]['category'])
       // this.posts.forEach((el) => {

@@ -26,7 +26,8 @@
       </p>
       <p class="option">
         <span class="material-symbols-outlined">event_note</span>
-        {{ convertDate }}, {{ convertTime }}
+        <span>{{ post.endDate ? ''+post.startDate.slice(5, 10) + '~' + ''+post.endDate.slice(5,10) : ''+post.startDate.slice(5, 10) }},</span>
+        <span>{{ ''+post.meetingTime.slice(11, 16) }}</span>
       </p>
       <p class="option">
         <span class="material-symbols-outlined">location_on</span>
@@ -85,20 +86,20 @@ export default {
       const categoryList = ['식사', '동행', '파티', '이동수단 셰어', '기타']
       return categoryList[category-1]
     },
-    convertDate() {
-      let date = ''
-      if (!this.post.isDay) {
-        date = this.post.startDate.substr(5,5) + '~' + this.post.endDate.substr(5,5)
-      } else {
-        date = this.post.startDate.substr(5,5)
-      }
-      return date
-    },
-    convertTime() {
-      let time = ''
-      time = this.post.meetingTime.substr(11,5)
-      return time
-    }
+    // convertDate() {
+    //   let date = ''
+    //   if (!this.post.isDay) {
+    //     date = this.post.startDate.substr(5,5) + '~' + this.post.endDate.substr(5,5)
+    //   } else {
+    //     date = this.post.startDate.substr(5,5)
+    //   }
+    //   return date
+    // },
+    // convertTime() {
+    //   let time = ''
+    //   time = this.post.meetingTime.substr(11,5)
+    //   return time
+    // }
   },
   methods: {
     ...mapActions(['fetchPost'])
