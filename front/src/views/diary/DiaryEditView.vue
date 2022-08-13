@@ -1,8 +1,8 @@
 <template>
   <div class="diary-create-div">
     <!-- <diary-form v-if="isDiary" :diary="diaryTemp" action="update"></diary-form> -->
-    <diary-edit-form :diary="diary" :story="convertStories" action="update"></diary-edit-form>
-    <!-- {{ convertStories }} -->
+    <!-- {{ diary }} -->
+    <diary-edit-form :diary="diary" :story="convertStories" :trans="convertTransports" action="update"></diary-edit-form>
   </div>
 </template>
 
@@ -21,7 +21,48 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isDiary', 'diary']),
+    ...mapGetters(['isDiary', 'diary', 'images']),
+    convertTransports() {
+      const trans = [];
+      this.diary.postTransports.forEach((each) => {
+        if (each.name === '뚜벅이') {
+          trans.push({transport: 
+          {
+            id: 1,
+            name: '뚜벅이'
+          }})
+        }
+        else if (each.name === '대중교통') {
+          trans.push({transport: 
+          {
+            id: 2,
+            name: '대중교통'
+          }})         
+        }
+        else if (each.name === '따릉이') {
+          trans.push({transport: 
+          {
+            id: 3,
+            name: '따릉이'
+          }}) 
+        }
+        else if (each.name === '택시') {
+          trans.push({transport: 
+          {
+            id: 4,
+            name: '택시'
+          }})           
+        }
+        else if (each.name === '자차') {
+          trans.push({transport: 
+          {
+            id: 5,
+            name: '자차'
+          }})           
+        }       
+      })
+      return trans
+    },
     convertStories() {
       const convert = [];
       this.diary.detailLocations.forEach((story) => {

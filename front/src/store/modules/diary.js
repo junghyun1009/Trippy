@@ -7,6 +7,8 @@ export default ({
   state: {
     diaries: [],
     diary: {},
+    // images: [],
+    // image: {},
 
     comment: '',
     comments: [],
@@ -17,6 +19,8 @@ export default ({
   getters: {
     diaries: state => state.diaries,
     diary: state => state.diary,
+    // images: state => state.images,
+    // image: state => state.image,
     comment: state => state.comment,
     comments: state => state.comments,
     isChild: state => state.isChild,
@@ -35,21 +39,11 @@ export default ({
       console.log(state.diary)
     },
 
-    FETCH_DIARY(state, diary) {
-      diary.detailLocations.forEach((location) => {
-        if (location.filepath.substr(-1) != '/') {
-          diary.representativeImg = location.filepath
-          return false
-        }
-      })
-      state.diary = diary
-      console.log(state.diary)
-    },
-
-    SET_IMAGES(state, images) {
-      state.images = images
-      console.log(state.images)
-    },
+    // SET_IMAGES(state, image) {
+    //   state.image = image
+    //   state.images.push(image)
+    //   console.log(state.images)
+    // },
 
     SET_COMMENT(state, comment) {
       state.comment = comment
@@ -125,7 +119,12 @@ export default ({
         headers: getters.authHeader
       })
       .then(res => {
-        commit('FETCH_DIARY', res.data)
+        commit('SET_DIARY', res.data)
+        // const diary = res.data
+        // diary.detailLocations.forEach((location) => {
+        //   const imagePk = location.id
+        //   dispatch('fetchImage', imagePk)
+        // })
       })
       .catch(err => {
         console.error(err.response)
@@ -134,6 +133,18 @@ export default ({
         }
       })
     },
+
+    // fetchImage({ commit, getters }, imagePk) {
+    //   axios({
+    //     url: `http://i7a506.p.ssafy.io:8080/api/posts/images/${imagePk}`,
+    //     method: 'get',
+    //     headers: getters.authHeader
+    //   })
+    //   .then((res) => {
+    //     console.log(res.data)
+    //     commit('SET_IMAGES', res.data)
+    //   })
+    // },
 
     // 일지 UPDATE
     updateDiary({ commit, getters }, diary) {

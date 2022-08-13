@@ -151,7 +151,6 @@
                 <span>(선택)</span>
               </div>
 
-              <div v-if="action==='create'">
                 <div v-if="images[k].length === 0" class="photo-div">
                   <label :for=k>
                     <span class="material-symbols-outlined">add_photo_alternate</span>
@@ -169,27 +168,6 @@
                     <span class="photo-description">사진을 클릭하면 삭제할 수 있어요.</span>
                   </div>
                 </div>
-              </div>
-
-              <div v-else>
-                <div v-if="imgEdit[k].length === 0" class="photo-div">
-                  <label :for=k>
-                    <span class="material-symbols-outlined">add_photo_alternate</span>
-                  </label>
-                  <input class="photo-input" type="file" :id=k :ref="`${k}th-file`" accept="image/*" @change="uploadPhoto(k)"/>
-                  <div class="photo-des-div">
-                    <span class="photo-description">아이콘을 눌러 사진을 추가해주세요.</span>
-                    <span class="photo-description-sec">(스토리 당 한 개의 사진을 첨부할 수 있어요.)</span>
-                  </div>
-                </div>
-
-                <div v-else class="photo-content-div">
-                  <div class="photo-preview-group">
-                    <img :src="newStory.preview" alt="photo" @click="removePhoto(k)">
-                    <span class="photo-description">사진을 클릭하면 삭제할 수 있어요.</span>
-                  </div>
-                </div>
-              </div>
 
             </div>
             
@@ -207,12 +185,10 @@
 
       </div>
 
-      <div v-if="action==='create'" class="submit-btn">
+      <div class="submit-btn">
         <el-button @click="onSubmit">작성하기</el-button>
       </div>
-      <div v-else-if="action==='update'" class="submit-btn">
-        <el-button @click="onSubmit">수정하기</el-button>
-      </div>
+
     </form>
   </div>
 </template>
@@ -306,36 +282,6 @@ export default {
       const transportation = this.newDiary.postTransports
       return transportation
     },
-    // convertToFile(url) {
-    //   async (url) => {
-    //     const response = await fetch(url)
-    //     const data = await response.blob()
-    //     const ext = url.split(".").pop()
-    //     const filename = url.split("/").pop()
-    //     const metadata = { type: `image/${ext}`}
-    //     return new File([data], filename, metadata)
-    //   }
-    // },
-    imgEdit() {
-      const images = []
-      this.newDiary.detailLocations.forEach((location) => {
-        if (location.filename === null) {
-          images.push([])
-        } else {
-          const url = location.filepath
-          const file = async () => {
-            const response = await fetch(url)
-            const data = await response.blob()
-            const ext = url.split(".").pop()
-            const filename = url.split("/").pop()
-            const metadata = { type: `image/${ext}`}
-            return new File([data], filename, metadata)
-          }
-          images.push(file)
-        }
-      })
-      return images
-    }
   },
   methods: {
     ...mapActions(['createDiary', 'updateDiary', 'saveImage']),
@@ -567,73 +513,53 @@ export default {
     // },
 
     onSubmit() {
-      if (this.action === 'create') {
-        this.newStories.forEach((each) => {
-          // each.pk = this.newStories.indexOf(each) + 1
-          delete each.preview
-        })
-        this.newDiary.detailLocations = this.newStories
+      this.newStories.forEach((each) => {
+        // each.pk = this.newStories.indexOf(each) + 1
+        delete each.preview
+      })
+      this.newDiary.detailLocations = this.newStories
 
-        if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
-        && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
-          console.log(this.newDiary)
-          // const imageList = new FormData()
-          const diary = new FormData()
-          // console.log(this.images)
-          // console.log(imageList)
-          // for (let key in this.newDiary) {
-            //   const value = this.newDiary[key]
-          //   diary.append(key, JSON.stringify(value))
-          // }
-          diary.append("post", new Blob([JSON.stringify(this.newDiary)], {type: "application/json"}))
-          // diary.append("diary", JSON.stringify(this.newDiary))
-          this.images.forEach((image) => {
-            if (image.length === 0) {
-              // diary.append("images", this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
-              // console.log(this.images.indexOf(image))
-              // console.log(this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
-              const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
-              diary.append("images", empty)
-            } else {
-              diary.append("images", image)
-            }
-          })
-          // diary.append("images", imageList)
-          for (var key of diary.keys()) {
-            console.log(key);
+      if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
+      && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
+        console.log(this.newDiary)
+        // const imageList = new FormData()
+        const diary = new FormData()
+        // console.log(this.images)
+        // console.log(imageList)
+        // for (let key in this.newDiary) {
+          //   const value = this.newDiary[key]
+        //   diary.append(key, JSON.stringify(value))
+        // }
+        diary.append("post", new Blob([JSON.stringify(this.newDiary)], {type: "application/json"}))
+        // diary.append("diary", JSON.stringify(this.newDiary))
+        this.images.forEach((image) => {
+          if (image.length === 0) {
+            // diary.append("images", this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
+            // console.log(this.images.indexOf(image))
+            // console.log(this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
+            const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
+            diary.append("images", empty)
+          } else {
+            diary.append("images", image)
           }
-          for (var value of diary.values()) {
-            console.log(value);
-          }
-          // for (var imagekey of imageList.keys()) {
-          //   console.log(imagekey);
-          // }
-          // for (var imagevalue of imageList.values()) {
-          //   console.log(imagevalue);
-          // }
-          this.createDiary(diary)
-          // this.saveImage(imageList)
-        } else {
-          alert("빈 칸 없이 모든 필드를 채워주세요!")
-        }
-      } else if (this.action === 'update') {
-        this.newStories.forEach((each) => {
-          // each.pk = this.newStories.indexOf(each) + 1
-          delete each.dialogVisible
         })
-        this.newDiary.detailLocations = this.newStories
-
-        if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
-        && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
-          console.log(this.newDiary)
-          const payload = {
-            id: this.diary.id,
-            content: this.newDiary
-          }
-          this.updateDiary(payload)
-        } else {
-          alert("빈 칸 없이 모든 필드를 채워주세요!")
+        // diary.append("images", imageList)
+        for (var key of diary.keys()) {
+          console.log(key);
         }
+        for (var value of diary.values()) {
+          console.log(value);
+        }
+        // for (var imagekey of imageList.keys()) {
+        //   console.log(imagekey);
+        // }
+        // for (var imagevalue of imageList.values()) {
+        //   console.log(imagevalue);
+        // }
+        this.createDiary(diary)
+        // this.saveImage(imageList)
+      } else {
+        alert("빈 칸 없이 모든 필드를 채워주세요!")
       }
     }
   },

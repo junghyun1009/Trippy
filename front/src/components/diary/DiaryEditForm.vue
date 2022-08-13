@@ -9,7 +9,7 @@
       </div>
 
       <div class="demo-collapse">
-                <el-collapse>
+        <el-collapse>
           <!-- 장소 -->
           <el-collapse-item class="place-select" title="장소" name="1">
             <div>
@@ -29,7 +29,7 @@
                   </el-tag>
                   <el-tag v-for="trans in transportationTag" :key="trans" class="option-tag" 
                   closable :disable-transitions="false" type='' @close="handleClose(trans)">
-                    {{ trans.name }}
+                    {{ trans.transport.name }}
                   </el-tag>
                 </div>
               </el-scrollbar>
@@ -143,10 +143,24 @@
               <el-input v-model="newStory.detailLocationContent" maxlength="500"
               placeholder="내용을 입력해주세요." show-word-limit type="textarea" rows=7 resize="none" class="content-input"/>
             </div>
+
+            <div class="story-btn">
+              <el-button @click="addStory()" v-show="newStories.length < 10" :disabled="k != newStories.length - 1" link>
+                <span class="material-symbols-outlined">note_add</span>
+              </el-button>
+              <el-button @click="removeStory(k)" v-show="(newStories.length >= 1) && k!=0" link>
+                <span class="material-symbols-outlined">delete</span>
+              </el-button>
+            </div>
+            <hr>
           </div>
         </div>
       </div>
-      
+
+      <div class="submit-btn">
+        <el-button @click="onSubmit">수정하기</el-button>
+      </div>
+
     </form>
   </div>
 </template>
@@ -158,7 +172,8 @@ export default {
   name: 'DiaryEditForm',
   props: {
     diary: Object,
-    story: Array
+    story: Array,
+    trans: Array
   },
   data() {
     return {
@@ -218,7 +233,7 @@ export default {
         endDate: this.diary.endDate,
         company: this.diary.company,
         count: this.diary.count,
-        postTransports: this.diary.postTransports,
+        postTransports: this.trans,
         routes: this.diary.routes,
         detailLocations: this.diary.detailLocations
       },
@@ -360,6 +375,47 @@ export default {
       })
       this.addMarkers()
     },
+
+    addStory() {
+      if (this.newStories[this.newStories.length - 1].detailLocationName === '' || this.newStories[this.newStories.length - 1].detailLocationContent === '') {
+        alert('내용 작성 후 스토리를 추가해주세요!')
+      } else {
+        this.newStories.push({
+          // pk: 0,
+          detailLocationName: '',
+          // images: [],
+          // dialogVisible: false,
+          detailLocationContent: '',
+          rating: null,
+          preview: ''
+        }),
+        this.images.push([])
+      }
+    },
+
+    removeStory(index) {
+      this.newStories.splice(index, 1)
+    },
+
+    onSubmit() {
+      this.newStories.forEach((each) => {
+        // each.pk = this.newStories.indexOf(each) + 1
+        delete each.preview
+      })
+      this.newDiary.detailLocations = this.newStories
+
+      if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
+      && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
+        console.log(this.newDiary)
+        const payload = {
+          id: this.diary.id,
+          content: this.newDiary
+        }
+        this.updateDiary(payload)
+      } else {
+        alert("빈 칸 없이 모든 필드를 채워주세요!")
+      }
+    }
   },
   mounted() {
     this.initMap()
