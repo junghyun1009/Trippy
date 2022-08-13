@@ -1,11 +1,13 @@
 import router from "@/router"
 import axios from "axios"
+import VueCookies from 'vue-cookies'
 // import _ from 'lodash'
 
 export default ({
   state: {
     diaries: [],
     diary: {},
+    images: [],
 
     comment: '',
     comments: [],
@@ -35,6 +37,7 @@ export default ({
   getters: {
     diaries: state => state.diaries,
     diary: state => state.diary,
+    images: state => state.images,
     comment: state => state.comment,
     comments: state => state.comments,
     isChild: state => state.isChild,
@@ -48,17 +51,22 @@ export default ({
     // isDiary: state => !_.isEmpty(state.diary)
   },
   mutations: {
-    CREATE_DIARY(state, diary) {
-      state.diary = diary
-      // 얘는 지워도 될 것 같은데 일단 실험해봐야 함
-      // state.diaries.push(state.diary)
-      console.log(state.diary)
-      // console.log(state.diaries)
-    },
+    // CREATE_DIARY(state, diary) {
+    //   state.diary = diary
+    //   // 얘는 지워도 될 것 같은데 일단 실험해봐야 함
+    //   // state.diaries.push(state.diary)
+    //   console.log(state.diary)
+    //   // console.log(state.diaries)
+    // },
 
     SET_DIARY(state, diary) {
       state.diary = diary
       console.log(state.diary)
+    },
+
+    SET_IMAGES(state, images) {
+      state.images = images
+      console.log(state.images)
     },
 
     SET_COMMENT(state, comment) {
@@ -90,7 +98,7 @@ export default ({
   actions: {
     // 일지 CREATE
     // 일지 저장
-    createDiary({ commit, getters }, diary) {
+    createDiary({ commit }, diary) {
       // commit('CREATE_DIARY', diary)
       // console.log(1)
       console.log(diary)
@@ -98,16 +106,44 @@ export default ({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts',
         method: 'post',
         data: diary,
-        headers: getters.authHeader,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`
+        }
       })
       .then(res => {
         console.log(res.data)
-        commit('CREATE_DIARY', res.data)
+        commit('SET_DIARY', diary)
         // console.log(3)
-        console.log(getters.diary)
+        // console.log(getters.diary)
         router.push({
           name: 'diaryDetail',
-          params: { diaryPk: getters.diary.id }
+          params: { diaryPk: res.data }
+        })
+      })
+    },
+
+    saveImage({ commit },imageList) {
+      // commit('CREATE_DIARY', diary)
+      // console.log(1)
+      console.log(imageList)
+      axios({
+        url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts',
+        method: 'post',
+        data: imageList,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`
+        }
+      })
+      .then(res => {
+        console.log(res.data)
+        commit('SET_IMAGES', imageList)
+        // console.log(3)
+        // console.log(getters.diary)
+        router.push({
+          name: 'diaryDetail',
+          params: { diaryPk: res.data }
         })
       })
     },
@@ -130,15 +166,33 @@ export default ({
     },
 
     // 일지 UPDATE
+    updateDiary({ commit, getters }, diary) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/posts/${diary.id}`,
+        method: 'put',
+        data: diary.content,
+        headers: getters.authHeader
+      })
+      .then(res => {
+        console.log(res.data)
+        commit('SET_DIARY', diary)
+        router.push({
+          name: 'DiaryDetail',
+          parmas: { diaryPk: res.data }
+        })
+      })
+    },
+
     // 일지 DELETE
     deleteDiary({ commit, getters }, diaryPk) {
       axios({
-        url: `http://localhost:8000/posts/api/${diaryPk}`,
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/posts/${diaryPk}`,
         method: 'delete',
         headers: getters.authHeader
       })
-      .then(() => {
+      .then(res => {
         commit('SET_DIARY', {})
+        console.log(res)
         router.push({ name: 'home' })
       })
       .catch(err => console.error(err.response))
@@ -232,6 +286,23 @@ export default ({
         commit('SHOW_ALL_DIARY', allDiary)
       })
     },
+
+    likeDiary({ commit, getters }, diaryPk) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/likepost`,
+        method: 'post',
+        data: {post_id: diaryPk},
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        commit('SET_DIARY', res.data)
+        console.log(res.data)
+        router.push({
+          name: 'DiaryDetail',
+          params: { diaryPk: diaryPk }
+        })
+      })
+    }
   },
 
 })
