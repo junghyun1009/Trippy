@@ -88,7 +88,7 @@
             <!-- 여기는 공통 -->
             <!-- <el-tag>{{ diary.countryName }}</el-tag> -->
             <!-- <el-tag>{{ diary.cityName }}</el-tag> -->
-            <el-tag class="tag">{{ diary.startDate.substr(5, 5) }}-{{ diary.endDate.substr(5, 5) }}</el-tag>
+            <el-tag class="tag">{{ diary.startDate }}-{{ diary.endDate }}</el-tag>
             <el-tag class="tag">{{ partyTag }} ({{ diary.count }}명)</el-tag>
             <el-tag class="tag" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.name }}</el-tag>
           </div>
@@ -129,7 +129,7 @@
             <!-- <el-carousel indicator-position="outside" trigger="click" height="10rem" :autoplay=false arrow="always"> -->
               <!-- <el-carousel-item v-for="(photo, index) in story.photoList" :key="index"> -->
                 <!-- {{ photo }} -->
-            <img v-if="story.filepath.substr(-1)!='/'" :src="story.filepath" :alt="story.filepath"/>
+            <img v-if="story.filename!=null" :src="story.filepath" :alt="story.filepath"/>
               <!-- </el-carousel-item> -->
             <!-- </el-carousel> -->
           </div>
@@ -189,7 +189,7 @@ export default {
   },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
-    ...mapGetters(['isAuthor', 'diary', 'diaryTemp', 'isChild', 'parentComment', 'currentUser']),
+    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser']),
     partyTag() {
       const party = this.diary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -203,6 +203,7 @@ export default {
   methods: {
     ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'fetchCurrentUser']),
     addMarkers() {
+      console.log(this.diary.routes)
       const map = new google.maps.Map(document.getElementById("map"), {
           center: {lat: this.diary.routes[0].lat, lng: this.diary.routes[0].lng},
           zoom: 13,
@@ -237,7 +238,7 @@ export default {
     this.fetchCurrentUser()
   },
   mounted() {
-    this.addMarkers()
+    setTimeout(() => this.addMarkers(), 500)
   }
 }
 </script>
