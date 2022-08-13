@@ -19,14 +19,10 @@ public class DetailLocationServiceImpl implements DetailLocationService {
     private final DetailLocationRepository detailLocationRepository;
 
     @Override
-    public RequestDetailLocationDto findDetailLocation(Long id) {
+    public ResponseDetailLocationDto findDetailLocation(Long id) {
         DetailLocation detailLocation = detailLocationRepository.findById(id).get();
-        RequestDetailLocationDto requestDetailLocationDto = RequestDetailLocationDto.builder()
-                .detailLocationContent(detailLocation.getDetailLocationContent())
-                .detailLocationName(detailLocation.getDetailLocationName())
-                .detailLocationContent(detailLocation.getDetailLocationContent())
-                .build();
-        return requestDetailLocationDto;
+        ResponseDetailLocationDto responseDetailLocationDto = new ResponseDetailLocationDto(detailLocation);
+        return responseDetailLocationDto;
     }
 
     @Override
