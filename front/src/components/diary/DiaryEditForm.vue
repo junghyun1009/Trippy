@@ -1,6 +1,7 @@
 <template>
   <div>
     <form @submit.prevent="onSubmit">
+      
       <!-- 제목 -->
       <div class="title-box">
         <p>제목</p>
@@ -8,7 +9,7 @@
       </div>
 
       <div class="demo-collapse">
-        <el-collapse>
+                <el-collapse>
           <!-- 장소 -->
           <el-collapse-item class="place-select" title="장소" name="1">
             <div>
@@ -28,7 +29,7 @@
                   </el-tag>
                   <el-tag v-for="trans in transportationTag" :key="trans" class="option-tag" 
                   closable :disable-transitions="false" type='' @close="handleClose(trans)">
-                    {{ trans.transport.name }}
+                    {{ trans.name }}
                   </el-tag>
                 </div>
               </el-scrollbar>
@@ -123,7 +124,6 @@
         </el-collapse>
       </div>
 
-      <!-- 스토리 -->
       <div class="story-form">
         <p class="story-p">스토리</p>
         <div>
@@ -143,89 +143,22 @@
               <el-input v-model="newStory.detailLocationContent" maxlength="500"
               placeholder="내용을 입력해주세요." show-word-limit type="textarea" rows=7 resize="none" class="content-input"/>
             </div>
-
-            <!-- 사진 잠깐 주석 -->
-            <div class="story-photo">
-              <div class="story-photo-title">
-                <span>사진</span>
-                <span>(선택)</span>
-              </div>
-
-              <div v-if="action==='create'">
-                <div v-if="images[k].length === 0" class="photo-div">
-                  <label :for=k>
-                    <span class="material-symbols-outlined">add_photo_alternate</span>
-                  </label>
-                  <input class="photo-input" type="file" :id=k :ref="`${k}th-file`" accept="image/*" @change="uploadPhoto(k)"/>
-                  <div class="photo-des-div">
-                    <span class="photo-description">아이콘을 눌러 사진을 추가해주세요.</span>
-                    <span class="photo-description-sec">(스토리 당 한 개의 사진을 첨부할 수 있어요.)</span>
-                  </div>
-                </div>
-
-                <div v-else class="photo-content-div">
-                  <div class="photo-preview-group">
-                    <img :src="newStory.preview" alt="photo" @click="removePhoto(k)">
-                    <span class="photo-description">사진을 클릭하면 삭제할 수 있어요.</span>
-                  </div>
-                </div>
-              </div>
-
-              <div v-else>
-                <div v-if="imgEdit[k].length === 0" class="photo-div">
-                  <label :for=k>
-                    <span class="material-symbols-outlined">add_photo_alternate</span>
-                  </label>
-                  <input class="photo-input" type="file" :id=k :ref="`${k}th-file`" accept="image/*" @change="uploadPhoto(k)"/>
-                  <div class="photo-des-div">
-                    <span class="photo-description">아이콘을 눌러 사진을 추가해주세요.</span>
-                    <span class="photo-description-sec">(스토리 당 한 개의 사진을 첨부할 수 있어요.)</span>
-                  </div>
-                </div>
-
-                <div v-else class="photo-content-div">
-                  <div class="photo-preview-group">
-                    <img :src="newStory.preview" alt="photo" @click="removePhoto(k)">
-                    <span class="photo-description">사진을 클릭하면 삭제할 수 있어요.</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            
-            <div class="story-btn">
-              <el-button @click="addStory()" v-show="newStories.length < 10" :disabled="k != newStories.length - 1" link>
-                <span class="material-symbols-outlined">note_add</span>
-              </el-button>
-              <el-button @click="removeStory(k)" v-show="(newStories.length >= 1) && k!=0" link>
-                <span class="material-symbols-outlined">delete</span>
-              </el-button>
-            </div>
-            <hr>
           </div>
         </div>
-
       </div>
-
-      <div v-if="action==='create'" class="submit-btn">
-        <el-button @click="onSubmit">작성하기</el-button>
-      </div>
-      <div v-else-if="action==='update'" class="submit-btn">
-        <el-button @click="onSubmit">수정하기</el-button>
-      </div>
+      
     </form>
   </div>
 </template>
 
 <script>
 /* eslint-disable no-undef */
-import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'DiaryForm',
+  name: 'DiaryEditForm',
   props: {
     diary: Object,
-    action: String
+    story: Array
   },
   data() {
     return {
@@ -266,11 +199,8 @@ export default {
           }
         },
       ],
-      flag: 0,
-      route: {},
-      images: [[]],
       newStories: [
-        ...this.diary.detailLocations,
+        ...this.story,
         { 
           // pk: 0,
           detailLocationName: '',
@@ -279,7 +209,7 @@ export default {
           rating: null,
           preview: ''
         }
-      ],      
+      ],   
       newDiary: {
         title: this.diary.title,
         countryName: this.diary.countryName,
@@ -291,12 +221,11 @@ export default {
         postTransports: this.diary.postTransports,
         routes: this.diary.routes,
         detailLocations: this.diary.detailLocations
-      }
+      },
+      images: []
     }
   },
   computed: {
-    // update할 때 diaryTemp 대신 해당 pk 다이어리 가져와야 함 -> 편집 창으로 들어오면 해당 pk 다이어리 내용 fetch하는 함수
-    ...mapGetters(['diaryTemp']),
     partyTag() {
       const party = this.newDiary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -306,40 +235,36 @@ export default {
       const transportation = this.newDiary.postTransports
       return transportation
     },
-    // convertToFile(url) {
-    //   async (url) => {
-    //     const response = await fetch(url)
-    //     const data = await response.blob()
-    //     const ext = url.split(".").pop()
-    //     const filename = url.split("/").pop()
-    //     const metadata = { type: `image/${ext}`}
-    //     return new File([data], filename, metadata)
-    //   }
+    // convertStories() {
+    //   const stories = this.newDiary.detailLocations
+    //   const convert = []
+    //   stories.forEach((story) => {
+    //     const each = {}
+    //     each.detailLocationName = story.detailLocationName
+    //     each.detailLocationContent = story.detailLocationContent
+    //     each.rating = story.rating
+    //     if (story.filename === null) {
+    //       each.preview = ''
+    //       this.images.push([])
+    //     } else {
+    //       const url = story.filepath
+    //       const file = async () => {
+    //         const response = await fetch(url)
+    //         const data = await response.blob()
+    //         const ext = url.split(".").pop()
+    //         const filename = url.split("/").pop()
+    //         const metadata = { type: `image/${ext}`}
+    //         return new File([data], filename, metadata)
+    //       }
+    //       each.preview = URL.createObjectURL(file)
+    //       this.images.push(file)
+    //     }
+    //     convert.push(each)
+    //   })
+    //   return convert
     // },
-    imgEdit() {
-      const images = []
-      this.newDiary.detailLocations.forEach((location) => {
-        if (location.filename === null) {
-          images.push([])
-        } else {
-          const url = location.filepath
-          const file = async () => {
-            const response = await fetch(url)
-            const data = await response.blob()
-            const ext = url.split(".").pop()
-            const filename = url.split("/").pop()
-            const metadata = { type: `image/${ext}`}
-            return new File([data], filename, metadata)
-          }
-          images.push(file)
-        }
-      })
-      return images
-    }
   },
   methods: {
-    ...mapActions(['createDiary', 'updateDiary', 'saveImage']),
-
     handleClose(tag) {
       this.newDiary.postTransports.splice(this.newDiary.postTransports.indexOf(tag), 1)
     },
@@ -435,216 +360,15 @@ export default {
       })
       this.addMarkers()
     },
-
-    addStory() {
-      if (this.newStories[this.newStories.length - 1].detailLocationName === '' || this.newStories[this.newStories.length - 1].detailLocationContent === '') {
-        alert('내용 작성 후 스토리를 추가해주세요!')
-      } else {
-        this.newStories.push({
-          // pk: 0,
-          detailLocationName: '',
-          // images: [],
-          // dialogVisible: false,
-          detailLocationContent: '',
-          rating: null,
-          preview: ''
-        }),
-        this.images.push([])
-      }
-    },
-
-    removeStory(index) {
-      this.newStories.splice(index, 1)
-    },
-
-    uploadPhoto(index) {
-      console.log(index)
-      console.log(this.$refs[`${index}th-file`])
-      console.log(this.$refs[`${index}th-file`][0].files)
-
-      for (let i = 0; i < this.$refs[`${index}th-file`][0].files.length; i++) {
-        let photo = this.$refs[`${index}th-file`][0].files[i]
-        if (photo.type.substr(0, 5) === "image") {
-          this.images[index] = this.$refs[`${index}th-file`][0].files[i]
-          console.log(this.images[index])
-          this.newStories[index].preview = URL.createObjectURL(this.$refs[`${index}th-file`][0].files[i])
-        } else {
-          alert("사진 파일만 추가 가능합니다")
-        }
-      }
-      console.log(this.images[index])
-      console.log(this.images)
-      console.log(this.newStories[index].preview)
-      let fileInput = document.getElementsByClassName("photo-input")
-      fileInput[fileInput.length - 1].value = ''
-    },
-
-    // uploadPhoto(index) {
-    //   console.log(index)
-    //   let addedPhotoList = this.newStories[index].images
-    //   // console.log(addedPhotoList)
-    //   // fileInput.value = index
-    //   console.log(this.$refs.files)
-    //   console.log(this.$refs.files[index].files)
-    //   for (let i = 0; i < this.$refs.files[index].files.length; i++) {
-    //     let photo = this.$refs.files[index].files[i]
-    //     // console.log(photo)
-    //     if (photo.type.substr(0, 5) === "image") {
-    //       addedPhotoList = [
-    //         ...addedPhotoList,
-    //         // 1차 실험 코드 (사진 미리보기는 없음)
-    //         // this.$refs.files[index].files[i]
-    //         // 여기 잠깐 주석
-    //         {
-    //           // 실제 파일
-    //           file: this.$refs.files[index].files[i],
-    //           // 사진 미리보기
-    //           preview: URL.createObjectURL(this.$refs.files[index].files[i]),
-    //           // 삭제 및 관리를 위한 number
-    //           // number: i
-    //         }
-    //       ]
-    //       // num = i
-    //     } else {
-    //       alert("사진 파일만 추가 가능합니다")
-    //     }
-    //   }
-    //   this.newStories[index].images = addedPhotoList
-    //   console.log(this.newStories[index].images)
-    //   let fileInput = document.getElementsByClassName("photo-input")
-    //   // // console.log(fileInput)
-    //   // console.log(fileInput[0].value)
-    //   // console.log(fileInput[fileInput.length - 1].value)
-    //   fileInput[fileInput.length - 1].value = ''
-    //   // for (let j = 0; j < fileInput.length; j++) {
-    //   //   console.log(fileInput[j].value)
-    //   //   fileInput[j].value = ''
-    //   // }
-    // },
-
-    removePhoto(index) {
-      // if (this.newStories[index].photoList.length === 1) {
-      //   this.dialogVisible = false
-      // }
-      this.images[index] = []
-      this.newStories[index].preview = ''
-    },
-
-    // addPhoto(index) {
-    //   // console.log('add', index)
-    //   let addedPhotoList = this.newStories[index].images
-    //   // let fileInput = document.getElementsByClassName("photo-input-sec")
-    //   // console.log(fileInput)
-    //   console.log(this.$refs.files)
-    //   console.log(this.$refs.files[index].files)
-    //   for (let i = 0; i < this.$refs.files[index].files.length; i++) {
-    //     let photo = this.$refs.files[index].files[i]
-    //     if (photo.type.substr(0, 5) === "image") {
-    //       addedPhotoList = [
-    //         ...addedPhotoList,
-    //         {
-    //           file: this.$refs.files[index].files[i],
-    //           preview: URL.createObjectURL(this.$refs.files[index].files[i]),
-    //         }
-    //       ]
-    //     } else {
-    //       alert("사진 파일만 추가 가능합니다")
-    //     }
-    //   }
-    //   this.newStories[index].images = addedPhotoList
-    //   console.log(this.newStories[index].images)
-    //   let fileInput = document.getElementsByClassName("photo-input-add")
-    //   // console.log(fileInput[0].value)
-    //   // console.log(fileInput[fileInput.length - 1].value)
-    //   // fileInput.forEach((each) => {
-    //   //   each.value = ''
-    //   // })
-    //   fileInput[fileInput.length - 1].value = ''
-    //   // for (let j = 0; j < fileInput.length; j++) {
-    //   //   console.log(fileInput[j].value)
-    //   //   fileInput[j].value = ''
-    //   // }
-    // },
-
-    onSubmit() {
-      if (this.action === 'create') {
-        this.newStories.forEach((each) => {
-          // each.pk = this.newStories.indexOf(each) + 1
-          delete each.preview
-        })
-        this.newDiary.detailLocations = this.newStories
-
-        if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
-        && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
-          console.log(this.newDiary)
-          // const imageList = new FormData()
-          const diary = new FormData()
-          // console.log(this.images)
-          // console.log(imageList)
-          // for (let key in this.newDiary) {
-            //   const value = this.newDiary[key]
-          //   diary.append(key, JSON.stringify(value))
-          // }
-          diary.append("post", new Blob([JSON.stringify(this.newDiary)], {type: "application/json"}))
-          // diary.append("diary", JSON.stringify(this.newDiary))
-          this.images.forEach((image) => {
-            if (image.length === 0) {
-              // diary.append("images", this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
-              // console.log(this.images.indexOf(image))
-              // console.log(this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
-              const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
-              diary.append("images", empty)
-            } else {
-              diary.append("images", image)
-            }
-          })
-          // diary.append("images", imageList)
-          for (var key of diary.keys()) {
-            console.log(key);
-          }
-          for (var value of diary.values()) {
-            console.log(value);
-          }
-          // for (var imagekey of imageList.keys()) {
-          //   console.log(imagekey);
-          // }
-          // for (var imagevalue of imageList.values()) {
-          //   console.log(imagevalue);
-          // }
-          this.createDiary(diary)
-          // this.saveImage(imageList)
-        } else {
-          alert("빈 칸 없이 모든 필드를 채워주세요!")
-        }
-      } else if (this.action === 'update') {
-        this.newStories.forEach((each) => {
-          // each.pk = this.newStories.indexOf(each) + 1
-          delete each.dialogVisible
-        })
-        this.newDiary.detailLocations = this.newStories
-
-        if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
-        && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
-          console.log(this.newDiary)
-          const payload = {
-            id: this.diary.id,
-            content: this.newDiary
-          }
-          this.updateDiary(payload)
-        } else {
-          alert("빈 칸 없이 모든 필드를 채워주세요!")
-        }
-      }
-    }
   },
-  
   mounted() {
     this.initMap()
-  },
+  }
 }
 </script>
 
 <style scoped>
+
 .title-box {
   display: flex;
   justify-content: start;
