@@ -12,7 +12,17 @@ export default {
   },
   mutations: {
     SET_PROFILE: (state, profile) => state.profile = profile,
-    FETCH_MY_DIARY: (state, myDiaries) => state.myDiaries = myDiaries
+    FETCH_MY_DIARY: (state, myDiaries) => {
+      myDiaries.forEach((diary) => {
+        diary.detailLocations.forEach((location) => {
+          if (location.filename != null) {
+            diary.representativeImg = location.filepath
+            return false
+          }
+        })
+      })
+      state.myDiaries = myDiaries
+    }
   },
   actions: {
     fetchProfile({ commit, getters }) {

@@ -42,7 +42,7 @@
     >
       <el-tab-pane label="My Diary">
         <!-- 내가 쓴 일지 목록 -->
-        <my-diaries-list :myDiaries="myDiaries"></my-diaries-list>
+        <my-diaries-list></my-diaries-list>
       </el-tab-pane>
       <el-tab-pane label="My Likes">
         <!-- 내가 좋아요 누른 일지 목록 -->
