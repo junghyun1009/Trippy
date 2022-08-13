@@ -44,19 +44,21 @@ public class DetailLocation extends BaseEntity{
     }
 
     @Builder
-    public DetailLocation(Long id, String detailLocationName, float rating, String detailLocationContent,Post post) {
+    public DetailLocation(Long id, String detailLocationName, float rating, String detailLocationContent,Post post,String filename) {
         this.id=id;
         this.detailLocationContent = detailLocationContent;
         this.detailLocationName = detailLocationName;
         this.rating = rating;
         this.post = post;
+        this.filename = filename;
     }
 
 
-    public void update(String detailLocationContent, String detailLocationName, float rating){
+    public void update(String detailLocationContent, String detailLocationName, float rating, String filename){
         this.detailLocationContent = detailLocationContent;
         this.detailLocationName = detailLocationName;
         this.rating = rating;
+        this.filename = filename;
     }
 
 }
