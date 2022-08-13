@@ -9,7 +9,17 @@ export default ({
 			allDiaries: state => state.allDiaries,
     },
     mutations: {
-			GET_ALL_DIARIES: (state, allDiaries) => state.allDiaries = allDiaries,
+			GET_ALL_DIARIES (state, allDiaries) {
+				allDiaries.forEach((diary) => {
+					diary.detailLocations.forEach((location) => {
+						if (location.filename != null) {
+							diary.representativeImg = location.filepath
+							return false
+						}
+					})
+				})
+				state.allDiaries = allDiaries
+			}
     },
     actions: {
 			fetchAllDiaries({ commit }) {
