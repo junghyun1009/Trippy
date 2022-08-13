@@ -39,10 +39,8 @@ public class PostController {
 
 
     @PostMapping("/auth/posts")
-    public ResponseEntity<?> savePost(HttpServletRequest request, @RequestPart("post") @Valid RequestPostDto requestPostDto
+    public ResponseEntity<?> savePost(@RequestPart("post") @Valid RequestPostDto requestPostDto
             , @RequestPart("images") List<MultipartFile> images) {
-        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        requestPostDto.setMember_id(memberId);
         try {
             Long id = postService.savePost(requestPostDto, images);
             return new ResponseEntity<>(id, HttpStatus.OK);
@@ -65,9 +63,10 @@ public class PostController {
     }
 
     @PutMapping("/auth/posts/{post_id}")
-    public ResponseEntity<?> updatePost(@PathVariable("post_id") Long post_id, @RequestBody @Valid RequestPostDto requestPostDto) {
+    public ResponseEntity<?> updatePost(@PathVariable("post_id") Long post_id, @RequestPart("post") @Valid RequestPostDto requestPostDto
+            , @RequestPart("images") List<MultipartFile> images) {
         try {
-            postService.updatePost(post_id, requestPostDto);
+            postService.updatePost(post_id, requestPostDto, images);
             return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -134,7 +133,7 @@ public class PostController {
             Resource resource = s3Uploader.getObject(responseDetailLocationDto.getFilename());
             return ResponseEntity
                     .ok()
-                    .contentType(MediaType.IMAGE_JPEG)
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
                     .body(resource);
 
         } catch (IOException e) {
