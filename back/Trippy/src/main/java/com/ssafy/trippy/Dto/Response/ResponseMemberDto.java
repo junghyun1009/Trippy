@@ -31,6 +31,7 @@ public class ResponseMemberDto {
     private LocalDateTime birth;
     private String img_path;
     private String description;
+    private String img_link;
 
     //Entity -> Dto
     public ResponseMemberDto(Member member){
@@ -45,4 +46,7 @@ public class ResponseMemberDto {
         this.description = member.getDescription();
     }
 
+    public void setImg_link(String img_link) {
+        this.img_link = img_link;
+    }
 }
