@@ -93,6 +93,17 @@ export default ({
       })
     },
     // 게시글 DELETE
-
+    deletePost({ commit, getters }, postPk) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/community/${postPk}`,
+        method: 'DELETE',
+        headers: getters.authHeader,
+      })
+      .then(() => {
+        commit('SET_POST', {})
+        router.push({ name: 'community' })
+      })
+      .catch(err => console.error(err.response))
+    }
   },
 })
