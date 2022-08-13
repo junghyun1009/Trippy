@@ -62,8 +62,11 @@ public class S3Uploader {
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
-    public Resource getObject(String date, String fileName) throws IOException {
-        S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket + "/" + date, fileName));
+    public Resource getObject(String fileName) throws IOException {
+        if(fileName == null){
+            fileName = "static/noImg.jpg";
+        }
+        S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, fileName));
         S3ObjectInputStream objectInputStream = o.getObjectContent();
         byte[] bytes = IOUtils.toByteArray(objectInputStream);
 
