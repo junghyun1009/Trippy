@@ -12,7 +12,7 @@ export default ({
 			GET_ALL_DIARIES (state, allDiaries) {
 				allDiaries.forEach((diary) => {
 					diary.detailLocations.forEach((location) => {
-						if (location.filepath.substr(-1) != '/') {
+						if (location.filename != null) {
 							diary.representativeImg = location.filepath
 							return false
 						}
