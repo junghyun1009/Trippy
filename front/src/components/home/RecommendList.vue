@@ -1,10 +1,18 @@
 <template>
   <div class="container">
-    <el-row>
-      <el-col :span="8" v-for="diary in diaries" :key="diary.id">
-        <recommend-list-item :diary="diary"></recommend-list-item>
-      </el-col>
-    </el-row>
+    <div class="region-diaries">
+        <el-col :span="8" v-for="diary in regionDiaries" :key="diary.id">
+          <recommend-list-item :diary="diary"></recommend-list-item>
+        </el-col>
+    </div>
+    <div class="all-diaries">
+      <el-row>
+        <!-- infinite scroll -->
+        <el-col :span="8" v-for="diary in allDiaries.slice(0,10)" :key="diary.id">
+          <recommend-list-item :diary="diary"></recommend-list-item>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -17,22 +25,20 @@ export default {
   components: { 
       RecommendListItem 
   },
+
   created() {
     this.fetchAllDiaries()
   },
+
   computed: {
-    ...mapGetters(['allDiaries']),
-    diaries() {
-      const diaries = this.$store.getters.allDiaries
-      console.log(diaries)
-      return diaries
-    }
+    ...mapGetters(['regionDiaries', 'allDiaries']),
   },
+
   methods: {
-    ...mapActions(['fetchAllDiaries'])
+    ...mapActions(['fetchAllDiaries', 'getRegionDiaries'])
   }
 }
-</script>
+</script> 
 
 <style scoped>
 .container {
