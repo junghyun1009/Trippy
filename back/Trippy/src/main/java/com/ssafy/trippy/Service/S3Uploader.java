@@ -1,17 +1,18 @@
 package com.ssafy.trippy.Service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.ssafy.trippy.Domain.Image;
 import com.ssafy.trippy.Dto.Response.ResponseImageDto;
 import com.ssafy.trippy.Repository.ImageRespository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,6 +60,18 @@ public class S3Uploader {
 
     public String getS3(String fileName) {
         return amazonS3Client.getUrl(bucket, fileName).toString();
+    }
+
+    public Resource getObject(String fileName) throws IOException {
+        if(fileName == null){
+            fileName = "static/noImg.jpg";
+        }
+        S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, fileName));
+        S3ObjectInputStream objectInputStream = o.getObjectContent();
+        byte[] bytes = IOUtils.toByteArray(objectInputStream);
+
+        Resource resource = new ByteArrayResource(bytes);
+        return resource;
     }
 
     public void deleteS3(String fileName){

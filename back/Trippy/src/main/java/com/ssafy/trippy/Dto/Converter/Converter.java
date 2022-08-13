@@ -46,7 +46,8 @@ public class Converter {
             ResponseDetailLocationDto dto = ResponseDetailLocationDto.builder()
                     .detailLocation(detailLocation).build();
             detailLocations.add(dto);
-            dto.setFilepath(s3Uploader.getS3(detailLocation.getFilename()));
+            if(detailLocation.getFilename()!= null)
+                dto.setFilepath(s3Uploader.getS3(detailLocation.getFilename()));
         }
         return detailLocations;
     }
