@@ -37,6 +37,7 @@ public class ResponseCommunityPostDto {
     private String place;
     private boolean Day;
     private Long memberId;
+    private String name;
 
 
     public ResponseCommunityPostDto(CommunityPost communityPost) {
@@ -58,10 +59,11 @@ public class ResponseCommunityPostDto {
         this.place = communityPost.getPlace();
         this.Day = communityPost.isDay();
         this.memberId = communityPost.getMember().getId();
+        this.name = communityPost.getMember().getName();
     }
 
     @Builder
-    public ResponseCommunityPostDto(Long id, String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, String place, boolean Day, Long memberId) {
+    public ResponseCommunityPostDto(Long id, String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, String place, boolean Day, Long memberId, String name) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -80,5 +82,6 @@ public class ResponseCommunityPostDto {
         this.place = place;
         this.Day = Day;
         this.memberId = memberId;
+        this.name = name;
     }
 }

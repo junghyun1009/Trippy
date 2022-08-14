@@ -111,7 +111,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
         Optional<CommunityPost> communityPost = communityPostRepository.findById(id);
         Member member = memberRepository.findByEmail(communityPost.get().getMember().getEmail()).get();
         ResponseCommunityPostDto responseCommunityPostDto = new ResponseCommunityPostDto(communityPost.get());
-        responseCommunityPostDto.builder().memberId(member.getId()).build();
+        responseCommunityPostDto.builder().memberId(member.getId()).name(member.getName()).build();
         return responseCommunityPostDto;
 
     }
