@@ -17,7 +17,7 @@
           <img :src=badge.image :alt=badge.image @click="badge.drawer=true" :style="[ badge.obtained ? 'filter: none' : 'filter: grayscale']" >
           <p class="badge-name">{{ badge.name }}</p>
           <el-drawer v-model=badge.drawer direction="btt" size="50%">
-            <img :src=badge.image :alt=badge.image style="width: 70px; height: 70px;">
+            <img :src=badge.image :alt=badge.image :style="[ badge.obtained ? 'filter: none' : 'filter: grayscale']" style="width: 70px; height: 70px;">
             <p>{{ badge.name }}</p>
             <span>{{ badge.description }}</span><br>
             <span>앞으로도 Trippy에서 여행의 기억을 쌓아가세요!</span>
@@ -80,7 +80,7 @@ export default {
           description: '첫 동행 글을 작성하셨군요!',
           image: require('@/assets/badge-chat.png'),
           drawer: false,
-          obtained: false,
+          obtained: true,
         },
         {
           pk: 4,
