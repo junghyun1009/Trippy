@@ -3,12 +3,14 @@ package com.ssafy.trippy.Dto.Update;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class UpdateCommunityPostDto {
     private String title;
@@ -35,8 +37,9 @@ public class UpdateCommunityPostDto {
     private boolean Local;
     private String place;
     private boolean Day;
+    private Long memberId;
 
-    public UpdateCommunityPostDto(String title, String description, int category, Long locationId, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, boolean Day, String place, String countryName, String cityName) {
+    public UpdateCommunityPostDto(String title, String description, int category, Long locationId, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, boolean Day, String place, String countryName, String cityName, Long memberId) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -53,5 +56,6 @@ public class UpdateCommunityPostDto {
         this.cityName = cityName;
         this.Day = Day;
         this.place = place;
+        this.memberId= memberId;
     }
 }

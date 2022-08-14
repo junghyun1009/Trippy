@@ -50,28 +50,27 @@ public class CommunityPostServiceImpl implements CommunityPostService {
 
     @Transactional
     @Override
-    public void updateCommunityPost(Long id, RequestCommunityPostDto requestCommunityPostDto) {
+    public void updateCommunityPost(Long id, UpdateCommunityPostDto updateCommunityPostDto) {
         CommunityPost communityPost = communityPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-        Optional<Location> location = locationRepository.findByCountryNameAndCityName(requestCommunityPostDto.getCountryName(), requestCommunityPostDto.getCityName());
+        Optional<Location> location = locationRepository.findByCountryNameAndCityName(updateCommunityPostDto.getCountryName(), updateCommunityPostDto.getCityName());
         if(!location.isPresent()){
-            Long locationId = locationRepository.save(Location.builder().cityName(requestCommunityPostDto.getCityName()).countryName(requestCommunityPostDto.getCountryName()).build()).getId();
-            requestCommunityPostDto.setLocationId(locationId);
+            locationRepository.save(Location.builder().cityName(updateCommunityPostDto.getCityName()).countryName(updateCommunityPostDto.getCountryName()).build()).getId();
         }
-        communityPost.update(requestCommunityPostDto.getTitle(),
-                requestCommunityPostDto.getDescription(),
-                requestCommunityPostDto.getCategory(),
-                requestCommunityPostDto.getMeetingTime(),
-                requestCommunityPostDto.getStartDate(),
-                requestCommunityPostDto.getEndDate(),
-                requestCommunityPostDto.getRecruitVolume(),
-                requestCommunityPostDto.getRecruitCurrentVolume(),
-                requestCommunityPostDto.getStartAge(),
-                requestCommunityPostDto.getEndAge(),
-                requestCommunityPostDto.getGender(),
-                requestCommunityPostDto.isLocal(),
-                Location.builder().id(requestCommunityPostDto.getLocationId()).build(),
-                requestCommunityPostDto.getPlace(),
-                requestCommunityPostDto.isDay());
+        communityPost.update(updateCommunityPostDto.getTitle(),
+                updateCommunityPostDto.getDescription(),
+                updateCommunityPostDto.getCategory(),
+                updateCommunityPostDto.getMeetingTime(),
+                updateCommunityPostDto.getStartDate(),
+                updateCommunityPostDto.getEndDate(),
+                updateCommunityPostDto.getRecruitVolume(),
+                updateCommunityPostDto.getRecruitCurrentVolume(),
+                updateCommunityPostDto.getStartAge(),
+                updateCommunityPostDto.getEndAge(),
+                updateCommunityPostDto.getGender(),
+                updateCommunityPostDto.isLocal(),
+                location.get(),
+                updateCommunityPostDto.getPlace(),
+                updateCommunityPostDto.isDay());
     }
 
     @Override
