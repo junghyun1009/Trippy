@@ -1,6 +1,6 @@
 <template>
   <div>
-		<input class="search-bar-input" v-model="searchInput.title" type="text" placeholder="어디로 떠날까요?" @click="isClicked=true" @keyup.enter="showInput(), searchDiary(searchInput)"/>
+		<input class="search-bar-input" v-model="searchInput.title" type="text" placeholder="어디로 떠날까요?" @click="isClicked=true" @keyup.enter="showInput()"/>
 		<div v-show="isClicked">
 			<div class="switch-close-div">
 				<el-switch v-model="isDetail" active-text="상세검색" inactive-text="전체검색"/>
@@ -63,9 +63,11 @@ export default {
 			// console.log(this.selectMonth)
 			console.log(this.selectTrans)
 			console.log(this.selectCompany)
-			this.searchInput.title = ''
 			this.transParsing()
 			this.companyParsing()
+			console.log(this.searchInput.title)
+			this.searchDiary(this.searchInput)
+			this.searchInput.title = ''
 		},
 
 		// 지금은 두 개 한꺼번에 보내는게 안됨 - 그래서 일단 하나로 함
@@ -88,7 +90,6 @@ export default {
 			}
 		},
 
-		// 동행 종류랑 1 2 3 4 맞춰야 함
 		companyParsing() {
 			let companyNumber = this.selectCompany
 			for ( var key in this.selectCompany ) {

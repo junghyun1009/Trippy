@@ -11,10 +11,11 @@ export default ({
     getters: {
 			allDiaries: state => state.allDiaries,
 			regionDiaries: state => state.regionDiaries,
+			searchDiaries: state => state.searchDiaries,
     },
     mutations: {
-			SET_REGION_DIARIES: (state, regionDiaries) => state.regionDiaries = regionDiaries,
-			SET_SEARCH_DIARIES: (state, searchDiaries) => state.searchDiaries = searchDiaries,
+			// SET_REGION_DIARIES: (state, regionDiaries) => state.regionDiaries = regionDiaries,
+			// SET_SEARCH_DIARIES: (state, searchDiaries) => state.searchDiaries = searchDiaries,
 			GET_ALL_DIARIES (state, allDiaries) {
 				allDiaries.forEach((diary) => {
 					diary.detailLocations.forEach((location) => {
@@ -25,20 +26,31 @@ export default ({
 					})
 				})
 				state.allDiaries = allDiaries
+			},
+			SET_REGION_DIARIES (state, regionDiaries) {
+				regionDiaries.forEach((diary) => {
+					diary.detailLocations.forEach((location) => {
+						if (location.filename != null) {
+							diary.representativeImg = location.filepath
+							return false
+						}
+					})
+				})
+				state.regionDiaries = regionDiaries
+			},
+			SET_SEARCH_DIARIES (state, searchDiaries) {
+				searchDiaries.forEach((diary) => {
+					diary.detailLocations.forEach((location) => {
+						if (location.filename != null) {
+							diary.representativeImg = location.filepath
+							return false
+						}
+					})
+				})
+				state.searchDiaries = searchDiaries
 			}
     },
     actions: {
-			// getRegionDiaries({ dispatch, commit }, region) {
-			// 	dispatch('fetchAllDiaries')
-			// 	const diaryArray = this.getters.allDiaries
-			// 	const diaryIndex = diaryArray.filter(diaryArray => diaryArray.cityName === region);
-			// 	commit('GET_REGION_DIARIES')
-			// 	console.log(diaryIndex)
-			// 	if ( diaryIndex.length === 0 ) {
-			// 		alert(' 해당 지역에의 정보가 없습니다. 전체 리스트로 돌아갑니다 ')
-			// 	}
-			// },
-
 			fetchAllDiaries({ commit }) {
 				axios({
 					url: 'http://i7a506.p.ssafy.io:8080/api/posts',
@@ -81,8 +93,13 @@ export default ({
 				const title = searchInput.title
 				const company = searchInput.company
 				const transport = searchInput.transportId
+				console.log(title)
+				console.log(company)
+				console.log(transport)
 				axios({
 					url: `http://i7a506.p.ssafy.io:8080/api/search?title=${title}&company=${company}&transportId=${transport}`,
+					// url: `http://i7a506.p.ssafy.io:8080/api/search?title=${title}`,
+					// url: 'http://i7a506.p.ssafy.io:8080/api/search' + '?' + `${title}` + '?' + `${company}` + '?' + `${transport}`,
 					method: 'get',
 					params: title, company, transport
 				})
@@ -90,6 +107,7 @@ export default ({
 					console.log(res.data)
 					commit('SET_SEARCH_DIARIES', res.data),
 					console.log('search completed')
+					router.push({ name: 'search'})
 					}
 				)
 			}
