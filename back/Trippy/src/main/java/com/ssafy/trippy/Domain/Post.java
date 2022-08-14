@@ -47,10 +47,10 @@ public class Post extends BaseEntity{
     @JoinColumn(name="MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy="post")
+    @OneToMany(mappedBy="post", cascade = CascadeType.REMOVE)
     private List<Route> routes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<PostTransport> postTransports = new ArrayList<>();
 
     @OneToMany(mappedBy="post", cascade = CascadeType.REMOVE)
