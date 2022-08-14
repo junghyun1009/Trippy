@@ -13,7 +13,17 @@ export default ({
     },
     mutations: {
 			SET_REGION_DIARIES: (state, regionDiaries) => state.regionDiaries = regionDiaries,
-			GET_ALL_DIARIES: (state, allDiaries) => state.allDiaries = allDiaries,
+			GET_ALL_DIARIES (state, allDiaries) {
+				allDiaries.forEach((diary) => {
+					diary.detailLocations.forEach((location) => {
+						if (location.filename != null) {
+							diary.representativeImg = location.filepath
+							return false
+						}
+					})
+				})
+				state.allDiaries = allDiaries
+			}
     },
     actions: {
 			// getRegionDiaries({ dispatch, commit }, region) {

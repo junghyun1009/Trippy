@@ -25,7 +25,7 @@ export default {
         count: 1,
         postTransports: [],
         routes: [],
-        detailLocations: []
+        detailLocations: [],
       }
     }
   }
