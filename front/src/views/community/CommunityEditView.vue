@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- {{post}} -->
     <community-form :post="post" action="update"></community-form>
   </div>
 </template>

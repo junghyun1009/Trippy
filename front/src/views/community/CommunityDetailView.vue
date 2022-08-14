@@ -9,7 +9,7 @@
       <router-link class="router" :to="{ name: 'profile' }">
         <div class="profile">
           <el-avatar class="profile-image" :size="40" src="" />
-          <span class="username">나유저</span>
+          <span class="username">{{ post.name }}</span>
         </div>
       </router-link>
       <edit-delete-button class="edit-delete"></edit-delete-button>
@@ -26,7 +26,7 @@
       </p>
       <p class="option">
         <span class="material-symbols-outlined">event_note</span>
-        <span>{{ post.endDate ? ''+post.startDate.slice(5, 10) + '~' + ''+post.endDate.slice(5,10) : ''+post.startDate.slice(5, 10) }},</span>
+        <span>{{ post.endDate ? `${post.startDate.slice(5, 10)}~${post.endDate.slice(5,10)}` : ''+post.startDate.slice(5, 10) }},</span>
         <span>{{ ''+post.meetingTime.slice(11, 16) }}</span>
       </p>
       <p class="option">
@@ -77,7 +77,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['temp', 'post']),
+    ...mapGetters(['post']),
     recruitState() {
       return '모집중'
     },

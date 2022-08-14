@@ -88,7 +88,7 @@ export default ({
         commit('SET_POST', post)
         router.push({
           name: 'communityDetail',
-          params: { postPk: res.data }
+          params: { postPk: post.id }
         })
       })
     },

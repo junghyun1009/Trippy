@@ -140,7 +140,7 @@ const routes = [
     component: CommunityCreateView
   },
   {
-    path: '/community/edit',
+    path: '/community/edit/:postPk',
     name: 'communityEdit',
     component: CommunityEditView
   },
