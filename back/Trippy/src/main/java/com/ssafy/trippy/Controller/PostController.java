@@ -1,13 +1,15 @@
 package com.ssafy.trippy.Controller;
 
 
-import com.ssafy.trippy.Domain.DetailLocation;
 import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponseDetailLocationDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
-import com.ssafy.trippy.Service.*;
+import com.ssafy.trippy.Service.DetailLocationService;
+import com.ssafy.trippy.Service.MemberService;
+import com.ssafy.trippy.Service.PostService;
+import com.ssafy.trippy.Service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -53,29 +55,42 @@ public class PostController {
     }
 
     @DeleteMapping("/auth/posts/{post_id}")
-    public ResponseEntity<?> deletePost(@PathVariable("post_id") Long post_id) {
-        try {
-            postService.deletePost(post_id);
-            return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+    public ResponseEntity<?> deletePost(HttpServletRequest request, @PathVariable("post_id") Long post_id) {
+        ResponsePostDto post = postService.findPostId(post_id);
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
+        if (memberId == post.getMemberId()) {
+            try {
+                postService.deletePost(post_id);
+                return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("삭제할 수 없습니다.", HttpStatus.BAD_REQUEST);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>("삭제할 수 없습니다.", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>("다른 사용자는 삭제할 수 없습니다", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/auth/posts/{post_id}")
-    public ResponseEntity<?> updatePost(@PathVariable("post_id") Long post_id, @RequestPart("post") @Valid RequestPostDto requestPostDto
+    public ResponseEntity<?> updatePost(HttpServletRequest request, @PathVariable("post_id") Long post_id, @RequestPart("post") @Valid RequestPostDto requestPostDto
             , @RequestPart("images") List<MultipartFile> images) {
-        try {
-            Long id =postService.updatePost(post_id, requestPostDto, images);
-            return new ResponseEntity<>(id, HttpStatus.OK);
+        ResponsePostDto post = postService.findPostId(post_id);
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
+        if (memberId == post.getMemberId()) {
+            try {
+                Long id = postService.updatePost(post_id, requestPostDto, images);
+                return new ResponseEntity<>(id, HttpStatus.OK);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>("수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>("다른 사용자는 삭제할 수 없습니다", HttpStatus.BAD_REQUEST);
         }
     }
+
 
     @GetMapping("/posts")
     public ResponseEntity<?> getAllPost() {
@@ -129,7 +144,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/images/{detail_loc_id}")
-    public ResponseEntity<?> getImageByDetailLocId(@PathVariable("detail_loc_id") Long detailLocId){
+    public ResponseEntity<?> getImageByDetailLocId(@PathVariable("detail_loc_id") Long detailLocId) {
         ResponseDetailLocationDto responseDetailLocationDto = detailLocationService.findDetailLocation(detailLocId);
         try {
             Resource resource = s3Uploader.getObject(responseDetailLocationDto.getFilename());
@@ -142,6 +157,6 @@ public class PostController {
             e.printStackTrace();
             throw new IllegalArgumentException("resource 불러오기 불가");
         }
-        
+
     }
 }
