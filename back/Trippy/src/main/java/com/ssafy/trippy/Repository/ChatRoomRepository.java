@@ -2,7 +2,9 @@ package com.ssafy.trippy.Repository;
 
 import com.ssafy.trippy.Dto.ChatDto.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ChatRoomRepository extends JpaRepository<ChatRoom, String> {
+@Repository
+public interface ChatRoomRepository {
 
 }

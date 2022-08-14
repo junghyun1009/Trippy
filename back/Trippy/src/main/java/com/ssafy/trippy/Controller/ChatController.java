@@ -39,13 +39,14 @@ public class ChatController {
 
     @MessageMapping("/chat/message")
     public void message(ChatMessage message){
-        if(ChatMessage.MessageType.ENTER.equals(message.getType())){
+        if(ChatMessage.MessageType.ENTER.equals(message.getType())) {
             chatService.enterChatRoom(message.getRoomId());
-            message.setMessage(message.getSender()+"님이 입장하셨습니다. 환영합니다");
-        }else if(ChatMessage.MessageType.QUIT.equals(message.getMessage())){
-            message.setMessage(message.getSender()+"님이 퇴장하셨습니다.");
-            chatService.deleteById(ChatRoom.builder().roomId(message.getRoomId()).build());
+            message.setMessage(message.getSender() + "님이 입장하셨습니다. 환영합니다");
         }
+//        }else if(ChatMessage.MessageType.QUIT.equals(message.getMessage())){
+//            message.setMessage(message.getSender()+"님이 퇴장하셨습니다.");
+//            chatService.deleteById(ChatRoom.builder().roomId(message.getRoomId()).build());
+//        }
         redisPublisher.publish(chatService.getTopic(message.getRoomId()), message);
     }
 }
