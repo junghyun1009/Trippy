@@ -15,7 +15,7 @@ public class PostTransport extends BaseEntity{
     @Column(name="POST_TRANSPORT_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name="POST_ID")
     private Post post;
 
