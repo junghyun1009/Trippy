@@ -200,28 +200,23 @@ public class PostServiceImpl implements PostService {
         // 기존의 detailLocation에 저장되어 있는 image를 amazon s3 서버에서도 마찬가지로 삭제
         for (int i = 0; i < oldDetailLocation.size(); i++) {
             detailLocationRepository.delete(oldDetailLocation.get(i));
-            if (images.get(i).getOriginalFilename().equals(oldDetailLocation.get(i).getFilename())) {
-                try {
-                    s3Uploader.deleteS3(oldDetailLocation.get(i).getFilename());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            s3Uploader.deleteS3(oldDetailLocation.get(i).getFilename());
+
         }
 
         // 기존의 detailLocation을 삭제 후 새로운 detailLocation 추가
         for (int i = 0; i < newDetailLocations.size(); i++) {
             DetailLocation detailLocation = newDetailLocations.get(i);
-            detailLocation.setPost(post);
-            detailLocationsTmp.add(detailLocation);
             // 빈 이미지나 이미지 파일 이름이 db저장명이랑 똑같으면 처리 x
             try {
                 ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i), "static");
                 detailLocation.setFilename(responseImageDto.getFileName());
-                detailLocationRepository.save(detailLocation);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            detailLocation.setPost(post);
+            detailLocationsTmp.add(detailLocation);
+            detailLocationRepository.save(detailLocation);
         }
 
 
