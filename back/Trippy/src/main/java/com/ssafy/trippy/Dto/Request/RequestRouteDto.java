@@ -18,7 +18,7 @@ import javax.persistence.ManyToOne;
 public class RequestRouteDto {
     private Long id;
     private String routeName;
-    private int idx;
+    private int index;
     private Long postId;
 
     private Double lng;
@@ -30,7 +30,7 @@ public class RequestRouteDto {
         return Route.builder().
                 id(id)
                 .routeName(routeName)
-                .idx(idx)
+                .idx(index)
                 .lat(lat)
                 .lng(lng)
                 .post(Post.builder().id(postId).build())
@@ -38,13 +38,12 @@ public class RequestRouteDto {
     }
 
     @Builder
-    public RequestRouteDto(Long id, String routeName,int idx, Long postId, Double lat, Double lng) {
+    public RequestRouteDto(Long id, String routeName,int index, Long postId, Double lat, Double lng) {
         this.id = id;
         this.routeName = routeName;
-        this.idx = idx;
+        this.index = index;
         this.postId = postId;
         this.lat = lat;
         this.lng = lng;
-//        this.geocodeId = geocodeId;
     }
 }

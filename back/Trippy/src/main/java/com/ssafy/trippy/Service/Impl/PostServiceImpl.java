@@ -162,9 +162,6 @@ public class PostServiceImpl implements PostService {
     public Long updatePost(Long id, RequestPostDto requestPostDto, List<MultipartFile> images) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
 
-        List<DetailLocation> detailLocationList = post.getDetailLocations();
-
-
         // PostTransport 테이블에도 수정된 값 넣어주기
         for (PostTransport postTransport : requestPostDto.toEntity().getPostTransports().stream().collect(Collectors.toList())) {
             if (postTransport.getTransport().getName().equals("뚜벅이")) {
@@ -201,7 +198,6 @@ public class PostServiceImpl implements PostService {
         for (int i = 0; i < oldDetailLocation.size(); i++) {
             detailLocationRepository.delete(oldDetailLocation.get(i));
             s3Uploader.deleteS3(oldDetailLocation.get(i).getFilename());
-
         }
 
         // 기존의 detailLocation을 삭제 후 새로운 detailLocation 추가
