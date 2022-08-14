@@ -239,7 +239,8 @@ export default {
     this.fetchCurrentUser()
   },
   mounted() {
-    setTimeout(() => this.addMarkers(), 1000)
+    setTimeout(() => this.addMarkers(), 500)
+    // this.addMarkers()
   }
 }
 </script>
