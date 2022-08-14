@@ -92,7 +92,7 @@ public class PostServiceImpl implements PostService {
         for (int i = 0; i < detailLocations.size(); i++) {
             DetailLocation detailLocation = detailLocations.get(i);
             detailLocation.setPost(post);
-            System.out.println(images.get(i).getOriginalFilename());
+
             if(!images.get(i).getOriginalFilename().equals("empty.txt")) {
                 try {
                     ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i),"static");
@@ -102,7 +102,6 @@ public class PostServiceImpl implements PostService {
                 }
             }
             detailLocationRepository.save(detailLocation);
-
         }
 //        for (DetailLocation detailLocation : requestPostDto.toEntity().getDetailLocations().stream().collect(Collectors.toList())) {
 //            detailLocation.setPost(post);
@@ -161,7 +160,7 @@ public class PostServiceImpl implements PostService {
     // post 수정
     @Transactional
     @Override
-    public void updatePost(Long id, RequestPostDto requestPostDto) {
+    public void updatePost(Long id, RequestPostDto requestPostDto,List<MultipartFile> images) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
 
         List<DetailLocation> detailLocationList = post.getDetailLocations();
@@ -193,17 +192,28 @@ public class PostServiceImpl implements PostService {
             requestPostDto.setLocation_id(locationId);
         }
 
-        List<DetailLocation> detailLocation = requestPostDto.toEntity().getDetailLocations().stream().collect(Collectors.toList());
-        List<DetailLocation> detailLocations = new ArrayList<>();
-        for (DetailLocation detail : detailLocation) {
-            detail.setPost(post);
-            detailLocations.add(detail);
+        List<DetailLocation> detailLocations = requestPostDto.toEntity().getDetailLocations().stream().collect(Collectors.toList());
+        List<DetailLocation> detailLocationsTmp = new ArrayList<>();
+        for (int i = 0; i < detailLocations.size(); i++) {
+            DetailLocation detailLocation = detailLocations.get(i);
+            detailLocation.setPost(post);
+            detailLocationsTmp.add(detailLocation);
+            // 빈 이미지나 이미지 파일 이름이 db저장명이랑 똑같으면 처리 x
+            if(!images.get(i).getOriginalFilename().equals("empty.txt") && !(images.get(i).getOriginalFilename().equals(detailLocations.get(i).getFilename()))) {
+                try {
+                    ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i),"static");
+                    s3Uploader.deleteS3(detailLocations.get(i).getFilename());
+                    detailLocation.setFilename(responseImageDto.getFileName());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-
-        for (int i = 0; i < detailLocation.size(); i++) {
+        for (int i = 0; i < detailLocations.size(); i++) {
             detailLocationList.get(i).update(detailLocations.get(i).getDetailLocationContent(),
                     detailLocations.get(i).getDetailLocationName(),
-                    detailLocations.get(i).getRating());
+                    detailLocations.get(i).getRating(),
+                    detailLocations.get(i).getFilename());
         }
 
         // PostTransport 테이블에도 수정된 값 넣어주기
@@ -244,7 +254,7 @@ public class PostServiceImpl implements PostService {
                 requestPostDto.getEndDate(),
                 requestPostDto.getRepresentativeImg(),
                 postTransport,
-                detailLocations,
+                detailLocationsTmp,
                 oldRoute,
                 location.get());
     }

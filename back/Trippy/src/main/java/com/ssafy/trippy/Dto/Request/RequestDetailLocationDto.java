@@ -21,6 +21,8 @@ public class RequestDetailLocationDto {
 
     private String detailLocationContent;
 
+    private String filename;
+
     private Long post_id;
 
     public DetailLocation toEntity() {
@@ -29,14 +31,16 @@ public class RequestDetailLocationDto {
                 .post(Post.builder().id(post_id).build())
                 .rating(rating)
                 .detailLocationName(detailLocationName)
+                .filename(filename)
                 .build();
     }
 
     @Builder
-    public RequestDetailLocationDto(String detailLocationName, float rating, String detailLocationContent, Long post_id) {
+    public RequestDetailLocationDto(String detailLocationName, float rating, String detailLocationContent, Long post_id,String filename) {
         this.detailLocationName = detailLocationName;
         this.rating = rating;
         this.detailLocationContent = detailLocationContent;
         this.post_id = post_id;
+        this.filename = filename;
     }
 }
