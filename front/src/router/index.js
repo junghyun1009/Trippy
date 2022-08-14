@@ -129,7 +129,7 @@ const routes = [
   },
 
   {
-    path: '/community/detail',
+    path: '/community/:postPk',
         // 나중에 pk 추가하기
     name: 'communityDetail',
     component: CommunityDetailView
@@ -140,7 +140,7 @@ const routes = [
     component: CommunityCreateView
   },
   {
-    path: '/community/edit',
+    path: '/community/edit/:postPk',
     name: 'communityEdit',
     component: CommunityEditView
   },
