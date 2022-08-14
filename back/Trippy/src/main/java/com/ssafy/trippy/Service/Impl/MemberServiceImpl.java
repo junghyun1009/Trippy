@@ -2,18 +2,22 @@ package com.ssafy.trippy.Service.Impl;
 
 import com.ssafy.trippy.Config.JwtProvider;
 import com.ssafy.trippy.Domain.Member;
+import com.ssafy.trippy.Domain.Post;
 import com.ssafy.trippy.Dto.Request.RequestLoginDto;
 import com.ssafy.trippy.Dto.Request.RequestMemberDto;
 import com.ssafy.trippy.Dto.Response.ResponseLoginDto;
 import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Dto.Update.UpdateMemberDto;
 import com.ssafy.trippy.Repository.MemberRepository;
+import com.ssafy.trippy.Repository.PostRepository;
 import com.ssafy.trippy.Service.MemberService;
 import com.ssafy.trippy.Service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -22,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -68,6 +73,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void deleteMember(Long id){
+        List<Post> posts = postRepository.findAllByMember(memberRepository.findById(id).get());
+        for (Post post : posts) {
+            postRepository.delete(post);
+        }
         memberRepository.deleteById(id);
     }
 
