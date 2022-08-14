@@ -43,14 +43,14 @@ public class Post extends BaseEntity{
 //    @NotBlank(message="대표이미지를 입력하세요")
     private int representiveImg;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name="MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy="post")
+    @OneToMany(mappedBy="post",cascade = CascadeType.ALL)
     private List<Route> routes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private List<PostTransport> postTransports = new ArrayList<>();
 
     @OneToMany(mappedBy="post", cascade = CascadeType.REMOVE)
