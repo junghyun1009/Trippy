@@ -5,7 +5,8 @@ import axios from 'axios'
 export default ({
     state: {
 			allDiaries: [],
-			regionDiaries: []
+			regionDiaries: [],
+			searchDiaries: [],
     },
     getters: {
 			allDiaries: state => state.allDiaries,
@@ -13,6 +14,7 @@ export default ({
     },
     mutations: {
 			SET_REGION_DIARIES: (state, regionDiaries) => state.regionDiaries = regionDiaries,
+			SET_SEARCH_DIARIES: (state, searchDiaries) => state.searchDiaries = searchDiaries,
 			GET_ALL_DIARIES (state, allDiaries) {
 				allDiaries.forEach((diary) => {
 					diary.detailLocations.forEach((location) => {
@@ -73,6 +75,23 @@ export default ({
 						router.push({ name: 'home' })
 					}
 				})
+			},
+
+			searchDiary({commit}, searchInput){
+				const title = searchInput.title
+				const company = searchInput.company
+				const transport = searchInput.transportId
+				axios({
+					url: `http://i7a506.p.ssafy.io:8080/api/search?title=${title}&company=${company}&transportId=${transport}`,
+					method: 'get',
+					params: title, company, transport
+				})
+				.then( res => {
+					console.log(res.data)
+					commit('SET_SEARCH_DIARIES', res.data),
+					console.log('search completed')
+					}
+				)
 			}
     },
     modules: {
