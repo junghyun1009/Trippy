@@ -1,7 +1,6 @@
 package com.ssafy.trippy.Service.Impl;//package com.ssafy.trippy.Service.Impl;
 
 import com.ssafy.trippy.Domain.*;
-import com.ssafy.trippy.Dto.Request.RequestDetailLocationDto;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
 import com.ssafy.trippy.Dto.Response.ResponseImageDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
@@ -9,7 +8,6 @@ import com.ssafy.trippy.Repository.*;
 import com.ssafy.trippy.Service.PostService;
 import com.ssafy.trippy.Service.S3Uploader;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.internal.engine.messageinterpolation.InterpolationTerm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,7 +74,7 @@ public class PostServiceImpl implements PostService {
         requestPostDto.setMember_id(member.getId());
 
         // 요청들어온 post 내의 countryName, cityName으로 location 저장
-        Optional<Location> location = locationRepository.findByCountryNameAndCityName(requestPostDto.getCountryName(),requestPostDto.getCityName());
+        Optional<Location> location = locationRepository.findByCountryNameAndCityName(requestPostDto.getCountryName(), requestPostDto.getCityName());
         // location의 Id값을 Post에 저장
         if (location.isPresent()) {
             requestPostDto.setLocation_id(location.get().getId());
@@ -94,9 +92,9 @@ public class PostServiceImpl implements PostService {
             DetailLocation detailLocation = detailLocations.get(i);
             detailLocation.setPost(post);
 
-            if(!images.get(i).getOriginalFilename().equals("empty.txt")) {
+            if (!images.get(i).getOriginalFilename().equals("empty.txt")) {
                 try {
-                    ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i),"static");
+                    ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i), "static");
                     detailLocation.setFilename(responseImageDto.getFileName());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -161,7 +159,7 @@ public class PostServiceImpl implements PostService {
     // post 수정
     @Transactional
     @Override
-    public void updatePost(Long id, RequestPostDto requestPostDto,List<MultipartFile> images) {
+    public void updatePost(Long id, RequestPostDto requestPostDto, List<MultipartFile> images) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
 
         List<DetailLocation> detailLocationList = post.getDetailLocations();
@@ -175,16 +173,16 @@ public class PostServiceImpl implements PostService {
                 postTransport.getTransport().builder().id(metroId).build();
             } else if (postTransport.getTransport().getName().equals("따릉이")) {
                 postTransport.getTransport().builder().id(bikeId).build();
-            } else if (postTransport.getTransport().getName().equals("택시")){
+            } else if (postTransport.getTransport().getName().equals("택시")) {
                 postTransport.getTransport().builder().id(taxiId).build();
-            } else{
+            } else {
                 postTransport.getTransport().builder().id(carId).build();
             }
 
         }
         // detailLocation 테이블에도 수정된 값 넣어주기
         // location의 Id값을 detailLocation에 저장
-        Optional<Location> location = locationRepository.findByCountryNameAndCityName( requestPostDto.getCountryName(),requestPostDto.getCityName());
+        Optional<Location> location = locationRepository.findByCountryNameAndCityName(requestPostDto.getCountryName(), requestPostDto.getCityName());
         if (location.isPresent()) {
             requestPostDto.setLocation_id(location.get().getId());
         } else {
@@ -201,24 +199,26 @@ public class PostServiceImpl implements PostService {
         // 기존의 detailLocation을 삭제
         for (DetailLocation detailLocation : oldDetailLocation) {
             detailLocationRepository.delete(detailLocation);
+            s3Uploader.deleteS3(detailLocation.getFilename());
         }
+
         // 기존의 detailLocation을 삭제 후 새로운 detailLocation 추가
         for (int i = 0; i < newDetailLocations.size(); i++) {
             DetailLocation detailLocation = newDetailLocations.get(i);
             detailLocation.setPost(post);
-            detailLocationRepository.save(detailLocation);
             detailLocationsTmp.add(detailLocation);
             // 빈 이미지나 이미지 파일 이름이 db저장명이랑 똑같으면 처리 x
-            if(!images.get(i).getOriginalFilename().equals("empty.txt") & !(images.get(i).getOriginalFilename().equals(newDetailLocations.get(i).getFilename()))) {
+            if (!images.get(i).getOriginalFilename().equals("empty.txt") & !(images.get(i).getOriginalFilename().equals(newDetailLocations.get(i).getFilename()))) {
                 try {
-                    ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i),"static");
-                    s3Uploader.deleteS3(newDetailLocations.get(i).getFilename());
+                    ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i), "static");
                     detailLocation.setFilename(responseImageDto.getFileName());
+                    detailLocationRepository.save(detailLocation);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
+
 //        for (int i = 0; i < detailLocationsTmp.size(); i++) {
 //            detailLocationList.get(i).update(detailLocationsTmp.get(i).getDetailLocationContent(),
 //                    detailLocationsTmp.get(i).getDetailLocationName(),
@@ -293,7 +293,7 @@ public class PostServiceImpl implements PostService {
         List<ResponsePostDto> postDtos = new ArrayList<>();
         Set<Long> postId = new HashSet<>();
         // locationId로 detailLocation찾기
-        Optional<Location> location1 = locationRepository.findByCountryNameAndCityName(location.getCountryName(),location.getCityName());
+        Optional<Location> location1 = locationRepository.findByCountryNameAndCityName(location.getCountryName(), location.getCityName());
         // detailLocationId로 Post찾기
         List<Post> post = postRepository.findAllByLocationId(location1.get().getId()).orElseThrow();
         for (Post post1 : post) {
