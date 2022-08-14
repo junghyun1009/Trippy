@@ -67,10 +67,10 @@ public class CommunityPost extends BaseEntity {
 
     //    @Column(nullable = false)
 //    @NotBlank(message="참여가능지역을 입력하세요")
-    private boolean isLocal;
+    private boolean Local;
 
     private String place;
-    private boolean isDAY;
+    private boolean Day;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
@@ -84,7 +84,7 @@ public class CommunityPost extends BaseEntity {
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder
-    public CommunityPost(Long id, String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean isLocal, Member member, Location location, String place, boolean isDAY) {
+    public CommunityPost(Long id, String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, Member member, Location location, String place, boolean Day) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -97,15 +97,15 @@ public class CommunityPost extends BaseEntity {
         this.startAge = startAge;
         this.endAge = endAge;
         this.gender = gender;
-        this.isLocal = isLocal;
+        this.Local = Local;
         this.member = member;
         this.location = location;
         this.place = place;
-        this.isDAY = isDAY;
+        this.Day = Day;
     }
 
     // update문
-    public void update(String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean isLocal, Location location, String place, boolean isDAY) {
+    public void update(String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, Location location, String place, boolean Day) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -117,10 +117,10 @@ public class CommunityPost extends BaseEntity {
         this.startAge = startAge;
         this.endAge = endAge;
         this.gender = gender;
-        this.isLocal = isLocal;
+        this.Local = Local;
         this.location = location;
         this.place = place;
-        this.isDAY = isDAY;
+        this.Day = Day;
     }
 
 }

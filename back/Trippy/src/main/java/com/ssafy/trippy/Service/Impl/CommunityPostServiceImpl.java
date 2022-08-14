@@ -89,14 +89,14 @@ public class CommunityPostServiceImpl implements CommunityPostService {
                     .startAge(communityPost.getStartAge())
                     .endDate(communityPost.getEndDate())
                     .gender(communityPost.getGender())
-                    .isLocal(communityPost.isLocal())
+                    .Local(communityPost.isLocal())
                     .meetingTime(communityPost.getMeetingTime())
                     .recruitCurrentVolume(communityPost.getRecruitCurrentVolume())
                     .recruitVolume(communityPost.getRecruitVolume())
                     .startDate(communityPost.getStartDate())
                     .title(communityPost.getTitle())
                     .place(communityPost.getPlace())
-                    .isDAY(communityPost.isDAY())
+                    .Day(communityPost.isDay())
                     .build();
             communityPostDtos.add(responseCommunityPostDto);
         }

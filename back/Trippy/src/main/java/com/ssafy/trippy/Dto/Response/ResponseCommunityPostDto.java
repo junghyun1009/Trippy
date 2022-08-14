@@ -32,9 +32,9 @@ public class ResponseCommunityPostDto {
     private int startAge;
     private int endAge;
     private String gender;
-    private boolean isLocal;
+    private boolean Local;
     private String place;
-    private boolean isDAY;
+    private boolean Day;
 
 
     public ResponseCommunityPostDto(CommunityPost communityPost) {
@@ -52,13 +52,13 @@ public class ResponseCommunityPostDto {
         this.startAge = communityPost.getStartAge();
         this.endAge = communityPost.getEndAge();
         this.gender = communityPost.getGender();
-        this.isLocal = communityPost.isLocal();
+        this.Local = communityPost.isLocal();
         this.place = communityPost.getPlace();
-        this.isDAY = communityPost.isDAY();
+        this.Day = communityPost.isDay();
     }
 
     @Builder
-    public ResponseCommunityPostDto(Long id, String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean isLocal, String place, boolean isDAY) {
+    public ResponseCommunityPostDto(Long id, String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, String place, boolean Day) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -73,8 +73,8 @@ public class ResponseCommunityPostDto {
         this.startAge = startAge;
         this.endAge = endAge;
         this.gender = gender;
-        this.isLocal = isLocal;
+        this.Local = Local;
         this.place = place;
-        this.isDAY = isDAY;
+        this.Day = Day;
     }
 }

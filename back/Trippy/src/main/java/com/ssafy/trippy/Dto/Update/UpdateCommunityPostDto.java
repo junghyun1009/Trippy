@@ -1,8 +1,10 @@
 package com.ssafy.trippy.Dto.Update;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -13,19 +15,28 @@ public class UpdateCommunityPostDto {
     private String description;
     private int category;
 
-    private Long locationId;
+    private String countryName;
+    private String cityName;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime meetingTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
     private int recruitVolume;
     private int recruitCurrentVolume;
     private int startAge;
     private int endAge;
-    private int gender;
-    private boolean isLocal;
+    private String gender;
+    private boolean Local;
+    private String place;
+    private boolean Day;
 
-    public UpdateCommunityPostDto(String title, String description, int category, Long locationId, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, int gender, boolean isLocal) {
+    public UpdateCommunityPostDto(String title, String description, int category, Long locationId, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, boolean Day, String place, String countryName, String cityName) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -37,7 +48,10 @@ public class UpdateCommunityPostDto {
         this.startAge = startAge;
         this.endAge = endAge;
         this.gender = gender;
-        this.isLocal = isLocal;
-        this.locationId = locationId;
+        this.Local = Local;
+        this.countryName = countryName;
+        this.cityName = cityName;
+        this.Day = Day;
+        this.place = place;
     }
 }
