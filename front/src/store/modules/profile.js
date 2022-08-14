@@ -8,10 +8,12 @@ export default {
   },
   getters: {
     profile: state => state.profile,
-    myDiaries: state => state.myDiaries
+    myDiaries: state => state.myDiaries,
+    myBadge: state => state.myBadge
   },
   mutations: {
     SET_PROFILE: (state, profile) => state.profile = profile,
+    SET_MY_BADGE: (state, badge) => state.badge = badge,
     FETCH_MY_DIARY: (state, myDiaries) => {
       myDiaries.forEach((diary) => {
         diary.detailLocations.forEach((location) => {
@@ -36,6 +38,7 @@ export default {
         commit('SET_PROFILE', res.data)
       })
     },
+
     fetchMyDiary({ commit, getters }) {
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts/memberDetail',
@@ -46,6 +49,10 @@ export default {
         console.log(res.data)
         commit('FETCH_MY_DIARY', res.data)
       })
-    } 
+    },
+
+    fetchMyBadge({ commit }) {
+      commit('SET_MY_BADGE')
+    }
   }
 }

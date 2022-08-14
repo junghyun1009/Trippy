@@ -90,13 +90,11 @@ const routes = [
   },
   {
     path: '/diary/:diaryPk',
-    // 나중에 pk 추가하기
     name: 'diaryDetail',
     component: DiaryDetailView
   },
   {
     path: '/diary/edit/:diaryPk',
-    // 나중에 pk 추가하기
     name: 'diaryEdit',
     component: DiaryEditView
   },
@@ -109,14 +107,12 @@ const routes = [
 
 
   {
-    path: '/profile',
-    // 나중에 pk 추가하기
+    path: '/profile/:authorId',
     name: 'profile',
     component: ProfileView
   },
   {
     path: '/profile/edit',
-    // 나중에 pk 추가하기
     name: 'profileEdit',
     component: ProfileEditView
   },
@@ -130,7 +126,6 @@ const routes = [
 
   {
     path: '/community/:postPk',
-        // 나중에 pk 추가하기
     name: 'communityDetail',
     component: CommunityDetailView
   },
@@ -175,10 +170,10 @@ router.beforeEach((to, from, next) => {
   const accessToken = VueCookies.get('accessToken')
 
   const authPages = [
-    'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
+    'diaryCreate', 'diaryEdit', 'diaryDetail',
     'profile', 'profileEdit', 
     'community', 'communityEdit', 'communityDetail', 'communityCreate',
-    'badgeList'
+    'badgeList', 'chatList'
   ]
 
   const isAuthRequired = authPages.includes(to.name)
