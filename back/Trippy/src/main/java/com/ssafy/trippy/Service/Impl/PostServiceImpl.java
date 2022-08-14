@@ -197,9 +197,16 @@ public class PostServiceImpl implements PostService {
         List<DetailLocation> detailLocationsTmp = new ArrayList<>();
 
         // 기존의 detailLocation을 삭제
-        for (DetailLocation detailLocation : oldDetailLocation) {
-            detailLocationRepository.delete(detailLocation);
-            s3Uploader.deleteS3(detailLocation.getFilename());
+        // 기존의 detailLocation에 저장되어 있는 image를 amazon s3 서버에서도 마찬가지로 삭제
+        for (int i = 0; i < oldDetailLocation.size(); i++) {
+            detailLocationRepository.delete(oldDetailLocation.get(i));
+            if (images.get(i).getOriginalFilename().equals(oldDetailLocation.get(i).getFilename())) {
+                try {
+                    s3Uploader.deleteS3(oldDetailLocation.get(i).getFilename());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         // 기존의 detailLocation을 삭제 후 새로운 detailLocation 추가
@@ -208,23 +215,15 @@ public class PostServiceImpl implements PostService {
             detailLocation.setPost(post);
             detailLocationsTmp.add(detailLocation);
             // 빈 이미지나 이미지 파일 이름이 db저장명이랑 똑같으면 처리 x
-            if (!images.get(i).getOriginalFilename().equals("empty.txt") & !(images.get(i).getOriginalFilename().equals(newDetailLocations.get(i).getFilename()))) {
-                try {
-                    ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i), "static");
-                    detailLocation.setFilename(responseImageDto.getFileName());
-                    detailLocationRepository.save(detailLocation);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i), "static");
+                detailLocation.setFilename(responseImageDto.getFileName());
+                detailLocationRepository.save(detailLocation);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
-//        for (int i = 0; i < detailLocationsTmp.size(); i++) {
-//            detailLocationList.get(i).update(detailLocationsTmp.get(i).getDetailLocationContent(),
-//                    detailLocationsTmp.get(i).getDetailLocationName(),
-//                    detailLocationsTmp.get(i).getRating(),
-//                    detailLocationsTmp.get(i).getFilename());
-//        }
 
         // PostTransport 테이블에도 수정된 값 넣어주기
         // 기존의 transport 삭제
@@ -240,9 +239,6 @@ public class PostServiceImpl implements PostService {
             postTransportRepository.save(postTrans);
         }
 
-//        for (int i = 0; i < postTransport.size(); i++) {
-//            oldPostTransport.get(i).update(changePostTransportList.get(i).getTransport());
-//        }
 
         // Route 테이블에도 수정된 값 넣어주기.
         List<Route> oldRoute = routeRepository.findAllByPostId(post.getId());
@@ -259,13 +255,6 @@ public class PostServiceImpl implements PostService {
             routeRepository.save(newRoute);
         }
 
-//        for (int i = 0; i < routes.size(); i++) {
-//            oldRoute.get(i).update(changeRoutes.get(i).getRouteName(),
-//                    changeRoutes.get(i).getIdx(),
-//                    changeRoutes.get(i).getLat(),
-//                    changeRoutes.get(i).getLng());
-//
-//        }
         post.update(
                 requestPostDto.getTitle(),
                 requestPostDto.getCompany(),
