@@ -22,14 +22,15 @@ public class ResponsePostDto {
     private int count;
     private String countryName;
     private String cityName;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime startDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime endDate;
     private int representativeImg;
     private String name;
+    private Long memberId;
     private List<ResponseTransport> postTransports;
     private List<ResponseDetailLocationDto> detailLocations;
 
@@ -53,5 +54,6 @@ public class ResponsePostDto {
         this.detailLocations = Converter.convertDetailLocationList(post.getDetailLocations());
         this.comments = Converter.convertPostCommentList(post.getPostComments());
         this.routes = Converter.convertRouteList(post.getRoutes());
+        this.memberId = post.getMember().getId();
     }
 }

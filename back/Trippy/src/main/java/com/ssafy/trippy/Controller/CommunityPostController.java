@@ -2,6 +2,7 @@ package com.ssafy.trippy.Controller;
 
 import com.ssafy.trippy.Dto.Request.RequestCommunityPostDto;
 import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
+import com.ssafy.trippy.Dto.Update.UpdateCommunityPostDto;
 import com.ssafy.trippy.Service.CommunityPostService;
 import com.ssafy.trippy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -49,11 +50,11 @@ public class CommunityPostController {
     }
 
     @PutMapping("/auth/community/{community_post_id}")
-    public ResponseEntity<?> updateCommunityPost(HttpServletRequest request, @PathVariable("community_post_id") Long community_post_id, @RequestBody @Valid RequestCommunityPostDto requestCommunityPostDto) {
+    public ResponseEntity<?> updateCommunityPost(HttpServletRequest request, @PathVariable("community_post_id") Long community_post_id, @RequestBody @Valid UpdateCommunityPostDto updateCommunityPostDto) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        requestCommunityPostDto.setMember_id(memberId);
+        updateCommunityPostDto.setMemberId(memberId);
         try {
-            communityPostService.updateCommunityPost(community_post_id, requestCommunityPostDto);
+            communityPostService.updateCommunityPost(community_post_id, updateCommunityPostDto);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
