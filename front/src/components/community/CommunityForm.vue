@@ -15,7 +15,7 @@
       <el-form-item label="날짜">
         <el-date-picker v-model="newPost.startDate" type="date" placeholder="동행 시작일을 선택해주세요." value-format="YYYY-MM-DD HH:mm:ss" :disabled-date="disabledStartDate"/>
         <!-- <el-switch class="switch" v-model="newPost.isDay" size="small" active-text="당일"></el-switch> -->
-        <el-switch class="switch" v-model="newPost.day" size="small" active-text="당일"></el-switch>
+        <el-switch class="switch" v-model="newPost.day" size="small" active-text="당일" @click="clearEndDate"></el-switch>
       </el-form-item>
       <!-- <el-form-item class="end_date" v-if="!newPost.isDay"> -->
       <el-form-item class="end_date" v-if="!newPost.day">
@@ -136,6 +136,9 @@ export default {
       if (startAge === undefined && endAge === undefined || startAge === 19 && endAge === 70) {
         age = '누구나'
       }
+      if (startAge === endAge) {
+        age = startAge + '살'
+      }
       // const isLocal = this.newPost.isLocal
       // let local = ''
       // if (isLocal === false) {
@@ -179,7 +182,11 @@ export default {
       } else {
         alert('빈 칸 없이 모든 필드를 채워주세요!')
       }
-      
+    },
+    clearEndDate() {
+      if (this.newPost.day) {
+        return this.newPost.endDate = ''
+      }
     },
     disabledStartDate(date) {
       return date.getTime() < Date.now() - 3600 * 1000 * 24 

@@ -26,7 +26,10 @@ export default ({
   getters: {
     posts: state => state.posts,
     post: state => state.post,
-    temp: state => state.temp,
+    isPostAuthor: (state, getters) => {
+      return state.post.name === getters.currentUser.name
+    }
+    // temp: state => state.temp,
   },
   mutations: {
     SET_POSTS: (state, posts) => state.posts = posts,
