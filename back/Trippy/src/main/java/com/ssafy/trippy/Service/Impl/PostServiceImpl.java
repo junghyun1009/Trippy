@@ -159,7 +159,7 @@ public class PostServiceImpl implements PostService {
     // post 수정
     @Transactional
     @Override
-    public void updatePost(Long id, RequestPostDto requestPostDto, List<MultipartFile> images) {
+    public Long updatePost(Long id, RequestPostDto requestPostDto, List<MultipartFile> images) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
 
         List<DetailLocation> detailLocationList = post.getDetailLocations();
@@ -265,6 +265,7 @@ public class PostServiceImpl implements PostService {
                 detailLocationsTmp,
                 newRoutes,
                 location.get());
+        return post.getId();
     }
 
 
