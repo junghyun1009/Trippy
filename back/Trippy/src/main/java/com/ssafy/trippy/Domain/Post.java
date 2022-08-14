@@ -43,7 +43,7 @@ public class Post extends BaseEntity{
 //    @NotBlank(message="대표이미지를 입력하세요")
     private int representiveImg;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBER_ID")
     private Member member;
 
