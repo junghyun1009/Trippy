@@ -48,20 +48,5 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-    /**
-     * 단일 Topic 사용을 위한 Bean 설정
-     */
-    @Bean
-    public ChannelTopic channelTopic() {
-        return new ChannelTopic("chatroom");
-    }
-
-    /**
-     * 실제 메시지를 처리하는 subscriber 설정 추가
-     */
-    @Bean
-    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
-        return new MessageListenerAdapter(subscriber, "sendMessage");
-    }
 
 }
