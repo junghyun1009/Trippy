@@ -41,6 +41,7 @@ export default {
       if (confirm('정말 삭제하시겠습니까?')) {
         if (this.$route.name === 'diaryDetail') {
           console.log('다이어리 삭제')
+          this.$router.push({ name: 'diaryDelete' })
           this.deleteDiary(this.$route.params.diaryPk)
         } else {
           console.log('동행찾기 삭제')
