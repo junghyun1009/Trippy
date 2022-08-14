@@ -37,18 +37,18 @@ public class RequestCommunityPostDto {
     private int startAge;
     private int endAge;
     private String gender;
-    private boolean isLocal;
+    private boolean Local;
 
     private String place;
-    private boolean isDay;
+    private boolean Day;
 
 
     // DTO -> ENTITY
     public CommunityPost toEntity() {
         return CommunityPost.builder()
                 .id(id)
-                .isDAY(isDay)
-                .isLocal(isLocal)
+                .Day(Day)
+                .Local(Local)
                 .category(category)
                 .description(description)
                 .endAge(endAge)

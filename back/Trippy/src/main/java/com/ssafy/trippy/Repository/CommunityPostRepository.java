@@ -9,4 +9,5 @@ import java.util.List;
 
 @Repository
 public interface CommunityPostRepository extends JpaRepository<CommunityPost, Long> {
+    List<CommunityPost> findAllByMember(Member member);
 }

@@ -2,6 +2,7 @@
   <div class="container">
     <div class="background">
       <div class="profile-picture">
+        <!-- {{ profile }} -->
         <el-avatar :size="90"> user </el-avatar>
       </div>
     </div>
@@ -10,7 +11,7 @@
       <div class="user-info">
         <div class="username-follow">
           <div class="username">
-            <h2>username</h2>
+            <h2>{{ profile.name }}</h2>
             <div class="follow-button">
               <el-button v-if="isFollow===false" type="primary" @click="followNow()">팔로우</el-button>
               <el-button v-else type="primary" plain @click="unfollowNow()">팔로잉</el-button>
@@ -21,7 +22,7 @@
     </div>
 
     <div class="description">
-      <p>ㄴr는 ㄱr끔 눈물을 흘린ㄷㅏ...😭</p>
+      <p>{{ profile.description }}</p>
     </div>
     
     <div class="followers">
@@ -41,6 +42,7 @@
     >
       <el-tab-pane label="My Diary">
         <!-- 내가 쓴 일지 목록 -->
+        <my-diaries-list></my-diaries-list>
       </el-tab-pane>
       <el-tab-pane label="My Likes">
         <!-- 내가 좋아요 누른 일지 목록 -->
@@ -55,12 +57,15 @@
 <script>
 import FollowersList from '@/components/profile/FollowersList.vue'
 import FollowingsList from '@/components/profile/FollowingsList.vue'
+import MyDiariesList from '@/components/profile/MyDiariesList.vue'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'ProfileView',
   components: {
     FollowersList,
     FollowingsList,
+    MyDiariesList,
   },
   data() {
     return {
@@ -69,7 +74,11 @@ export default {
       followingList: [],
     }
   },
+  computed: {
+    ...mapGetters(['profile', 'myDiaries'])
+  },
   methods: {
+    ...mapActions(['fetchProfile', 'fetchMyDiary']),
     followNow() {
       this.isFollow = !this.isFollow
     },
@@ -77,6 +86,10 @@ export default {
       this.isFollow = !this.isFollow
     }
   },
+  mounted() {
+    this.fetchProfile()
+    this.fetchMyDiary()
+  }
 }
 </script>
 
