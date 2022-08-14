@@ -1,12 +1,14 @@
 package com.ssafy.trippy.Service.Impl;
 
 import com.ssafy.trippy.Domain.Location;
+import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestCommunityPostDto;
 import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
 import com.ssafy.trippy.Dto.Update.UpdateCommunityPostDto;
 import com.ssafy.trippy.Domain.CommunityPost;
 import com.ssafy.trippy.Repository.CommunityPostRepository;
 import com.ssafy.trippy.Repository.LocationRepository;
+import com.ssafy.trippy.Repository.MemberRepository;
 import com.ssafy.trippy.Service.CommunityPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
 
     private final CommunityPostRepository communityPostRepository;
     private final LocationRepository locationRepository;
+    private final MemberRepository memberRepository;
 
 
     @Transactional
@@ -107,6 +110,10 @@ public class CommunityPostServiceImpl implements CommunityPostService {
     @Transactional(readOnly = true)
     public ResponseCommunityPostDto findCommunityPost(Long id) {
         Optional<CommunityPost> communityPost = communityPostRepository.findById(id);
-        return new ResponseCommunityPostDto(communityPost.get());
+        Member member = memberRepository.findByEmail(communityPost.get().getMember().getEmail()).get();
+        ResponseCommunityPostDto responseCommunityPostDto = new ResponseCommunityPostDto(communityPost.get());
+        responseCommunityPostDto.builder().memberId(member.getId()).build();
+        return responseCommunityPostDto;
+
     }
 }

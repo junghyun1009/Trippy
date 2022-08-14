@@ -263,7 +263,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public ResponsePostDto findPostId(Long id) {
         Post post = postRepository.findById(id).get();
-        return new ResponsePostDto(post);
+        Member member = memberRepository.findByEmail(post.getMember().getEmail()).get();
+        ResponsePostDto responsePostDto = new ResponsePostDto(post);
+        responsePostDto.setMemberId(member.getId());
+        return responsePostDto;
     }
 
     @Override

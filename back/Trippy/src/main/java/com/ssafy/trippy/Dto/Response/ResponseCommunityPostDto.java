@@ -5,6 +5,7 @@ import com.ssafy.trippy.Domain.CommunityPost;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,7 @@ public class ResponseCommunityPostDto {
     private boolean Local;
     private String place;
     private boolean Day;
+    private Long memberId;
 
 
     public ResponseCommunityPostDto(CommunityPost communityPost) {
@@ -55,10 +57,11 @@ public class ResponseCommunityPostDto {
         this.Local = communityPost.isLocal();
         this.place = communityPost.getPlace();
         this.Day = communityPost.isDay();
+        this.memberId = communityPost.getMember().getId();
     }
 
     @Builder
-    public ResponseCommunityPostDto(Long id, String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, String place, boolean Day) {
+    public ResponseCommunityPostDto(Long id, String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, String place, boolean Day, Long memberId) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -76,5 +79,6 @@ public class ResponseCommunityPostDto {
         this.Local = Local;
         this.place = place;
         this.Day = Day;
+        this.memberId = memberId;
     }
 }
