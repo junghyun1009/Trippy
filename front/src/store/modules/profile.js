@@ -4,16 +4,22 @@ import axios from "axios"
 export default {
   state: {
     profile: {},
-    myDiaries: []
+    myDiaries: [],
+    isMyProfile: false,
+    theirProfile: {},
   },
   getters: {
     profile: state => state.profile,
     myDiaries: state => state.myDiaries,
-    myBadge: state => state.myBadge
+    myBadge: state => state.myBadge,
+    isMyProfile: state => state.isMyProfile,
+    theirProfile: state => state.theirProfile,
   },
   mutations: {
     SET_PROFILE: (state, profile) => state.profile = profile,
     SET_MY_BADGE: (state, badge) => state.badge = badge,
+    IS_MY_PROFILE: (state, isMyProfile) => state.isMyProfile = isMyProfile,
+    SET_THEIR_PROFILE: (state, theirProfile) => state.theirProfile = theirProfile,
     FETCH_MY_DIARY: (state, myDiaries) => {
       myDiaries.forEach((diary) => {
         diary.detailLocations.forEach((location) => {
@@ -49,10 +55,30 @@ export default {
         console.log(res.data)
         commit('FETCH_MY_DIARY', res.data)
       })
+      .catch(err => {
+        console.log(err)
+      })
     },
 
-    fetchMyBadge({ commit }) {
-      commit('SET_MY_BADGE')
+    fetchTheirProfile({commit}, memberId) {
+      console.log(memberId)
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/members/${memberId}`,
+        method: 'get',
+        params: memberId
+      })
+      .then( res => {
+        console.log(res)
+        commit('SET_THEIR_PROFILE', res.data)
+      })
+      .catch(err => 
+        console.log(err))
     }
+    
+    // fetchMyBadge({ commit }) {
+    //   commit('SET_MY_BADGE')
+    // }
+
+
   }
 }

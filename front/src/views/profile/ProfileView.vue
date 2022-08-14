@@ -8,23 +8,26 @@
     </div>
     <div class="background-info">
       <div class="blank"></div>
-      <div class="user-info">
-        <div class="username-follow">
-          <div class="username">
-            <!-- 내 프로필 페이지라면 -->
-            <!-- 남의 프로필 페이지라면 -->
-            <h2>{{ profile.name }}</h2>
+      <div class="username-follow">
+          <!-- 내 프로필 페이지라면 팔로우 버튼 안뜸 -->
+          <!-- 만약 fetchCurrentUser의 id와 profile param의 id가 같다면 -->
+          <div class="my-page-username" v-if="isMyProfile">
+            <h2 >{{ profile.name }}</h2>
+          </div>
+          <!-- 남의 프로필 페이지라면 팔로우 버튼 뜸-->
+          <div class="their-page-username" v-else>
+            <h2>{{ theirProfile.name }}</h2>
             <div class="follow-button">
               <el-button v-if="isFollow===false" type="primary" @click="followNow()">팔로우</el-button>
               <el-button v-else type="primary" plain @click="unfollowNow()">팔로잉</el-button>
             </div>
-          </div>
         </div>
       </div>
     </div>
 
     <div class="description">
-      <p>{{ profile.description }}</p>
+      <p v-if="isMyProfile">{{ profile.description }}</p>
+      <p v-else>{{ theirProfile.description }}</p>
     </div>
     
     <div class="followers">
@@ -72,15 +75,20 @@ export default {
   data() {
     return {
       isFollow: false,
+      isMyProfile: false,
       followerList: [],
       followingList: [],
     }
   },
   computed: {
-    ...mapGetters(['profile', 'myDiaries'])
+    ...mapGetters(['profile', 'myDiaries', 'theirProfile']),
+    fetchTheirId() {
+      const memberId = this.$route.params.authorId 
+      return memberId
+    }
   },
   methods: {
-    ...mapActions(['fetchProfile', 'fetchMyDiary']),
+    ...mapActions(['fetchProfile', 'fetchMyDiary', 'fetchTheirProfile']),
     followNow() {
       this.isFollow = !this.isFollow
     },
@@ -90,6 +98,7 @@ export default {
   },
   mounted() {
     this.fetchProfile()
+    this.fetchTheirProfile(this.$route.params.authorId)
     this.fetchMyDiary()
   }
 }
@@ -122,22 +131,11 @@ export default {
   }
 
   .username-follow {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .username {
-    display: flex;
+    width: 50vw;
   }
 
   .follow-button {
     margin-left: 5%;
-  }
-
-
-  .username h2 {
-    margin: 0
   }
 
   .followers {
@@ -163,7 +161,7 @@ export default {
   }
 
   .blank {
-    width: 30%;
+    width: 25%;
   }
 
   .description {
