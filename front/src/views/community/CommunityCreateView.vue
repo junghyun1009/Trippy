@@ -19,7 +19,8 @@ export default {
         category: 1,
         description: '',
         startDate: '',
-        isDay: true,
+        // isDay: true,
+        day: true,
         endDate: '',
         meetingTime: '',
         recruitCurrentVolume: 0,
@@ -29,7 +30,8 @@ export default {
         gender: '누구나',
         startAge: 0,
         endAge: 70,
-        isLocal: true,
+        // isLocal: true,
+        local: true,
         place: '',
       }
     }

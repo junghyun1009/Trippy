@@ -14,9 +14,11 @@
       </el-form-item>
       <el-form-item label="날짜">
         <el-date-picker v-model="newPost.startDate" type="date" placeholder="동행 시작일을 선택해주세요." value-format="YYYY-MM-DD HH:mm:ss" :disabled-date="disabledStartDate"/>
-        <el-switch class="switch" v-model="newPost.isDay" size="small" active-text="당일"></el-switch>
+        <!-- <el-switch class="switch" v-model="newPost.isDay" size="small" active-text="당일"></el-switch> -->
+        <el-switch class="switch" v-model="newPost.day" size="small" active-text="당일"></el-switch>
       </el-form-item>
-      <el-form-item class="end_date" v-if="!newPost.isDay">
+      <!-- <el-form-item class="end_date" v-if="!newPost.isDay"> -->
+      <el-form-item class="end_date" v-if="!newPost.day">
         <el-date-picker v-model="newPost.endDate" type="date" placeholder="동행 종료일을 선택해주세요." value-format="YYYY-MM-DD HH:mm:ss" :disabled-date="disabledEndDate"/>
       </el-form-item>
       <el-form-item label="시간">
@@ -50,7 +52,8 @@
               <el-slider class="slider" v-model="age" range :min="19" :max="70" @input="onInput"/>
             </el-form-item>
             <el-form-item label="지역 제한">
-              <el-switch v-model="newPost.isLocal" />
+              <!-- <el-switch v-model="newPost.isLocal" /> -->
+              <el-switch v-model="newPost.local" />
             </el-form-item>
           </el-collapse-item>
         </el-collapse>
@@ -108,7 +111,8 @@ export default {
         category: this.post.category,
         description: this.post.description,
         startDate: this.post.startDate,
-        isDay: this.post.isDay,
+        // isDay: this.post.isDay,
+        day: this.post.day,
         endDate: this.post.endDate,
         meetingTime: this.post.meetingTime,
         recruitCurrentVolume: this.post.recruitCurrentVolume,
@@ -116,7 +120,8 @@ export default {
         countryName: this.post.countryName,
         cityName: this.post.cityName,
         gender: this.post.gender,
-        isLocal: this.post.isLocal,
+        // isLocal: this.post.isLocal,
+        local: this.post.local,
         place: this.post.place,
         // locationId: this.post.locationId,
       }
@@ -131,14 +136,22 @@ export default {
       if (startAge === undefined && endAge === undefined || startAge === 19 && endAge === 70) {
         age = '누구나'
       }
-      const isLocal = this.newPost.isLocal
-      let local = ''
-      if (isLocal === false) {
-        local = '어디서나'
+      // const isLocal = this.newPost.isLocal
+      // let local = ''
+      // if (isLocal === false) {
+      //   local = '어디서나'
+      // } else {
+      //   local = '같은 지역만'
+      // }
+      // return [gender, age, local]
+      const local = this.newPost.local
+      let isLocal = ''
+      if (local === false) {
+        isLocal = '어디서나'
       } else {
-        local = '같은 지역만'
+        isLocal = '같은 지역만'
       }
-      return [gender, age, local]
+      return [gender, age, isLocal]
     },
   },
   methods: {
@@ -149,8 +162,9 @@ export default {
     },
     onSubmit() {
       const post = this.newPost
-      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
-        console.log(this.newPost)
+      // if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
+      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.day || post.endDate)) {
+        // console.log(this.newPost)
         if (this.action === 'create') {
           this.createPost(this.newPost)
         } else if (this.action === 'update') {
@@ -158,6 +172,8 @@ export default {
             id: this.post.id,
             content: this.newPost
           }
+          // console.log(1)
+          console.log(payload.content)
           this.updatePost(payload)
         }
       } else {
