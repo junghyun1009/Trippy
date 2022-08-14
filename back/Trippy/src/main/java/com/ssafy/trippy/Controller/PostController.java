@@ -68,8 +68,8 @@ public class PostController {
     public ResponseEntity<?> updatePost(@PathVariable("post_id") Long post_id, @RequestPart("post") @Valid RequestPostDto requestPostDto
             , @RequestPart("images") List<MultipartFile> images) {
         try {
-            postService.updatePost(post_id, requestPostDto, images);
-            return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+            Long id =postService.updatePost(post_id, requestPostDto, images);
+            return new ResponseEntity<>(id, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
