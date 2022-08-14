@@ -18,7 +18,7 @@ public class Route {
     private Double lat;
     private Double lng;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="POST_ID")
     private Post post;
 ;
