@@ -153,10 +153,6 @@ public class PostServiceImpl implements PostService {
         for (PostComment postComment : postComments) {
             postCommentRepository.delete(postComment);
         }
-        List<DetailLocation> detailLocations = detailLocationRepository.findAllByPostId(id).get();
-        for (DetailLocation detailLocation : detailLocations) {
-            detailLocationRepository.delete(detailLocation);
-        }
         postRepository.deleteById(id);
     }
 
