@@ -247,15 +247,13 @@ public class PostServiceImpl implements PostService {
         }
         post.update(
                 requestPostDto.getTitle(),
-                requestPostDto.getIsDelete(),
                 requestPostDto.getCompany(),
                 requestPostDto.getCount(),
                 requestPostDto.getStartDate(),
                 requestPostDto.getEndDate(),
-                requestPostDto.getRepresentativeImg(),
                 postTransport,
                 detailLocationsTmp,
-                oldRoute,
+                changeRoutes,
                 location.get());
     }
 
