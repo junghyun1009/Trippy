@@ -28,7 +28,7 @@ public class DetailLocation extends BaseEntity{
 //    @NotBlank(message="상세지역글을 입력하세요")
     private String detailLocationContent;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="POST_ID")
     private Post post;
 
