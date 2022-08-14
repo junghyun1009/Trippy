@@ -55,7 +55,6 @@ public class RequestPostDto {
                 .startDate(startDate)
                 .detailLocations(detailLocationList)
                 .title(title)
-                .isDelete(isDelete)
                 .representiveImg(representativeImg)
                 .routes(routeList)
                 .location(Location.builder().id(location_id).build())
