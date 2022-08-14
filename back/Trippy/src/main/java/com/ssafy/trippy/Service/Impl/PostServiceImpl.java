@@ -209,7 +209,7 @@ public class PostServiceImpl implements PostService {
                 }
             }
         }
-        for (int i = 0; i < detailLocations.size(); i++) {
+        for (int i = 0; i < detailLocationsTmp.size(); i++) {
             detailLocationList.get(i).update(detailLocationsTmp.get(i).getDetailLocationContent(),
                     detailLocationsTmp.get(i).getDetailLocationName(),
                     detailLocationsTmp.get(i).getRating(),
