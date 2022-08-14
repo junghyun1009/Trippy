@@ -1,6 +1,5 @@
 package com.ssafy.trippy.Config;
 
-import com.ssafy.trippy.Config.Handler.StompHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -15,7 +14,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-    private final StompHandler stompHandler;
     /*어플리케이션 내부에서 사용할 path를 지정할 수 있음*/
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -30,12 +28,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         //Get /info 404 Error가 발생한다. 그래서 아래와 같이 2개의 계층으로 분리하고
         //origins를 개발 도메인으로 변경하니 잘 동작하였다.
         //이유는 왜 그런지 아직 찾지 못함
-        registry.addEndpoint("/ws-stomp")
+        registry.addEndpoint("/chatting")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
-    }
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(stompHandler);
     }
 }

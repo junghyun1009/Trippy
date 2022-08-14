@@ -3,7 +3,7 @@ package com.ssafy.trippy.Controller;
 import com.ssafy.trippy.Config.JwtProvider;
 import com.ssafy.trippy.Dto.ChatDto.ChatRoom;
 import com.ssafy.trippy.Dto.Response.ResponseLoginDto;
-import com.ssafy.trippy.Repository.ChatRoomRepository;
+import com.ssafy.trippy.Service.Impl.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/chat")
-@CrossOrigin("*")
 public class ChatRoomController {
 
-    private final ChatRoomRepository chatRoomRepository;
+    private final ChatService chatService;
     private final JwtProvider jwtTokenProvider;
     private final String SUCCESS = "OK";
     private final String FAIL = "ERROR";
@@ -28,8 +27,7 @@ public class ChatRoomController {
     @GetMapping("/rooms")
     public ResponseEntity<?> room() {
         try {
-            List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
-            chatRooms.stream().forEach(room -> room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId())));
+            List<ChatRoom> chatRooms = chatService.findAllRoom();
             return new ResponseEntity<>(chatRooms, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,10 +36,10 @@ public class ChatRoomController {
     }
 
     // 채팅방 생성
-    @PostMapping("/room/{roomName}")
-    public ResponseEntity<?> createRoom(@PathVariable("roomName") String roomName) {
+    @PostMapping("/room")
+    public ResponseEntity<?> createRoom(@RequestParam String roomName) {
         try {
-            chatRoomRepository.createChatRoom(roomName);
+            chatService.createChatRoom(roomName);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(FAIL, HttpStatus.NOT_FOUND);
@@ -49,23 +47,23 @@ public class ChatRoomController {
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 
-    @DeleteMapping("/room/{roomId}")
-    public ResponseEntity<?> deleteRoom(@PathVariable("roomId") String roomId){
-        try{
-            chatRoomRepository.deleteChatRoom(roomId);
-        }catch(Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
-        }
-        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
-    }
+//    @DeleteMapping("/room/{roomId}")
+//    public ResponseEntity<?> deleteRoom(@PathVariable("roomId") String roomId){
+//        try{
+//            chatRoomRepository.deleteChatRoom(roomId);
+//        }catch(Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(FAIL, HttpStatus.METHOD_NOT_ALLOWED);
+//        }
+//        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+//    }
 
     // 특정 채팅방 조회
     @GetMapping("/room/{roomId}")
     public ResponseEntity<?> roomInfo(@PathVariable("roomId") String roomId) {
         ChatRoom room;
         try {
-            room = chatRoomRepository.findRoomById(roomId);
+            room = chatService.findRoomById(roomId);
             return new ResponseEntity<>(room, HttpStatus.OK);
         }catch(Exception e){
             e.printStackTrace();
