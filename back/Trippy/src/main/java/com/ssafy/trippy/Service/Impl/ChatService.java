@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -21,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Repository
+@Service
 public class ChatService {
     // 채팅방(topic)에 발행되는 메시지를 처리할 Listner
     private final RedisMessageListenerContainer redisMessageListener;
@@ -60,9 +61,9 @@ public class ChatService {
     /**
      * 채팅방 삭제
      */
-    public void deleteById(ChatRoom chatRoom){
-        chatRoomRepository.delete(chatRoom);
-    }
+//    public void deleteById(ChatRoom chatRoom){
+//        chatRoomRepository.delete(chatRoom);
+//    }
 
     /**
      * 채팅방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정한다.
