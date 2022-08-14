@@ -199,7 +199,7 @@ public class PostServiceImpl implements PostService {
             detailLocation.setPost(post);
             detailLocationsTmp.add(detailLocation);
             // 빈 이미지나 이미지 파일 이름이 db저장명이랑 똑같으면 처리 x
-            if(!images.get(i).getOriginalFilename().equals("empty.txt") & !(images.get(i).getOriginalFilename().equals(detailLocations.get(i).getFilename()))) {
+            if(!images.get(i).getOriginalFilename().equals("empty.txt") && !(images.get(i).getOriginalFilename().equals(detailLocations.get(i).getFilename()))) {
                 try {
                     ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i),"static");
                     s3Uploader.deleteS3(detailLocations.get(i).getFilename());
@@ -210,10 +210,10 @@ public class PostServiceImpl implements PostService {
             }
         }
         for (int i = 0; i < detailLocations.size(); i++) {
-            detailLocationList.get(i).update(detailLocations.get(i).getDetailLocationContent(),
-                    detailLocations.get(i).getDetailLocationName(),
-                    detailLocations.get(i).getRating(),
-                    detailLocations.get(i).getFilename());
+            detailLocationList.get(i).update(detailLocationsTmp.get(i).getDetailLocationContent(),
+                    detailLocationsTmp.get(i).getDetailLocationName(),
+                    detailLocationsTmp.get(i).getRating(),
+                    detailLocationsTmp.get(i).getFilename());
         }
 
         // PostTransport 테이블에도 수정된 값 넣어주기
