@@ -2,7 +2,8 @@
   <div class="diary-create-div">
     <!-- <diary-form v-if="isDiary" :diary="diaryTemp" action="update"></diary-form> -->
     <!-- {{ diary }} -->
-    <diary-edit-form :diary="diary" :story="convertStories" :trans="convertTransports" action="update"></diary-edit-form>
+    <!-- {{ convertImg }} -->
+    <diary-edit-form :diary="diary" :story="convertStories" :trans="convertTransports" :editimages="convertImg" action="update"></diary-edit-form>
   </div>
 </template>
 
@@ -71,6 +72,7 @@ export default {
         each.detailLocationName = story.detailLocationName
         each.detailLocationContent = story.detailLocationContent
         each.rating = story.rating
+        each.filename = story.filename
         // if (story.filename === null) {
         //   each.preview = ''
         //   this.images.push([])
@@ -92,6 +94,31 @@ export default {
       })
       return convert
     },
+    // convertImg() {
+    //   const images = []
+    //   this.diary.detailLocations.forEach((location) => {
+    //     images.push(location.filepath)
+    //   })
+    //   // images.push([])
+    //   return images
+    // },
+    // convertFile() {
+    //   const filenames = []
+    //   this.diary.detailLocations.forEach((location) => {
+    //     filenames.push(location.filename)
+    //   })
+    //   filenames.push('')
+    //   return filenames
+    // }
+    convertImg() {
+      const images = []
+      this.diary.detailLocations.forEach((location) => {
+        console.log(location)
+        images.push([])
+      })
+      images.push([])
+      return images
+    }
   },
   methods: {
     ...mapActions(['fetchDiary'])
