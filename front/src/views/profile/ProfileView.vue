@@ -11,6 +11,8 @@
       <div class="user-info">
         <div class="username-follow">
           <div class="username">
+            <!-- 내 프로필 페이지라면 -->
+            <!-- 남의 프로필 페이지라면 -->
             <h2>{{ profile.name }}</h2>
             <div class="follow-button">
               <el-button v-if="isFollow===false" type="primary" @click="followNow()">팔로우</el-button>

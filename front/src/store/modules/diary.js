@@ -68,6 +68,7 @@ export default ({
 
     SET_AUTHOR_ID(state, authorId) { 
       state.authorId = authorId
+      console.log(state.authorId)
     },
 
     // 홈화면에 추천(일단은 전부 띄우는 것)
@@ -132,7 +133,9 @@ export default ({
       })
       .then(res => {
         commit('SET_DIARY', res.data)
-        commit('SET_AUTHOR_ID', res.data.memberId)
+        console.log('diary set')
+        const authorId = res.data.memberId
+        commit('SET_AUTHOR_ID', authorId)
         // const diary = res.data
         // diary.detailLocations.forEach((location) => {
         //   const imagePk = location.id

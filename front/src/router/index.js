@@ -16,6 +16,7 @@ import SettingView from '@/views/account/SettingView.vue'
 import PasswordFindView from '@/views/account/PasswordFindView.vue'
 import PasswordChangeView from '@/views/account/PasswordChangeView.vue'
 
+// import MyProfileView from '@/views/profile/MyProfileView.vue'
 import ProfileView from '@/views/profile/ProfileView.vue'
 import ProfileEditView from '@/views/profile/ProfileEditView.vue'
 
@@ -109,48 +110,48 @@ const routes = [
   {
     path: '/profile/:authorId',
     name: 'profile',
-    component: ProfileView
+    component: ProfileView,
   },
   {
     path: '/profile/edit',
     name: 'profileEdit',
-    component: ProfileEditView
+    component: ProfileEditView,
   },
 
 
   {
     path: '/community',
     name: 'community',
-    component: CommunityView
+    component: CommunityView,
   },
 
   {
     path: '/community/:postPk',
     name: 'communityDetail',
-    component: CommunityDetailView
+    component: CommunityDetailView,
   },
   {
     path: '/community/create',
     name: 'communityCreate',
-    component: CommunityCreateView
+    component: CommunityCreateView,
   },
   {
     path: '/community/edit/:postPk',
     name: 'communityEdit',
-    component: CommunityEditView
+    component: CommunityEditView,
   },
 
   
   {
     path: '/badge',
     name: 'badgeList',
-    component: BadgeListView
+    component: BadgeListView,
   },
   
   {
     path: '/chat',
     name: 'chatList',
-    component: ChatListView
+    component: ChatListView,
   },
   
 

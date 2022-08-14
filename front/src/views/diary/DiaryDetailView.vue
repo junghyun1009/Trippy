@@ -169,7 +169,6 @@ export default {
       commentClicked: false,
       diaryPk: this.$route.params.diaryPk,
       isFollowed: 0,
-      authorId: this.$store.getters.authorId,
       commentsTemp: [
         {
           member: '유송',
