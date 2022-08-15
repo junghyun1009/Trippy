@@ -25,6 +25,6 @@ public interface PostService {
     ResponsePostDto findPostId(Long id);
     List<ResponsePostDto> findByCity(Location location);
 
-
+    Long cntPostsByMemberId(Long memberId);
 
 }

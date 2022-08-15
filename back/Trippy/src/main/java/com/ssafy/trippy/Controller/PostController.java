@@ -3,7 +3,9 @@ package com.ssafy.trippy.Controller;
 import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
+import com.ssafy.trippy.Dto.Response.ResponseBadgeDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
+import com.ssafy.trippy.Dto.Response.ResponseSavepostDto;
 import com.ssafy.trippy.Dto.Update.UpdatePostDto;
 import com.ssafy.trippy.Service.*;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +40,12 @@ public class PostController {
         requestPostDto.setMember_id(memberId);
         try {
             Long id = postService.savePost(requestPostDto, images);
-            return new ResponseEntity<>(id, HttpStatus.OK);
+            ResponseSavepostDto responseSavepostDto = new ResponseSavepostDto(id);
+            Long cnt = postService.cntPostsByMemberId(memberId);
+            if(cnt==1){
+                responseSavepostDto.addBadge(new ResponseBadgeDto("기록의 시작"));
+            }
+            return new ResponseEntity<>(responseSavepostDto, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("저장할 수 없습니다.", HttpStatus.BAD_REQUEST);
