@@ -6,6 +6,7 @@ export default ({
   state: {
     posts: [],
     post: {},
+    // isBookmark: false,
 
     // temp: {
     //   title: '가평에서 같이 노실분~',
@@ -27,6 +28,7 @@ export default ({
   getters: {
     posts: state => state.posts,
     post: state => state.post,
+    // isBookmark: state => state.isBookmark,
     isPostAuthor: (state, getters) => {
       return state.post.name === getters.currentUser.name
     }
@@ -125,13 +127,14 @@ export default ({
     },
     // 게시글 북마크 설정
     createBookmark({ commit, getters }, postPk) {
-      console.log(postPk)
+      // console.log(postPk)
       axios({
         url: `http://i7a506.p.ssafy.io:8080/api/auth/bookmark/${postPk}`,
         method: 'POST',
         headers: getters.authHeader,
       })
       .then(res => {
+        // getters.isBookmark = true
         console.log(res.data)
         commit('SET_POST_BOOKMARK', res.data)
         // router.push({
@@ -148,7 +151,9 @@ export default ({
         method: 'DELETE',
         headers: getters.authHeader
       })
-      .then(() => {
+      .then((res) => {
+        console.log(res.data)
+        // getters.isBookmark = false
         commit('SET_POST_BOOKMARK', {})
       })
       .catch(err => console.err(err.response))

@@ -7,8 +7,8 @@
         <el-tag class="tag">장소</el-tag>
       </div>
       <div>
-        <span v-if="isBookmark===0" class="material-symbols-outlined" @click="goBookmark()">bookmark_add</span>
-        <span v-else class="material-symbols-outlined filled" @click="cancelBookmark()">bookmark</span>
+        <span v-if="!this.isBookmark" class="material-symbols-outlined" @click="this.isBookmark=true, goBookmark()">bookmark_add</span>
+        <span v-else-if="this.isBookmark" class="material-symbols-outlined filled" @click="this.isBookmark=false, cancelBookmark()">bookmark</span>
       </div>
       <router-link class="router" :to="{ name: 'profile' }">
         <div class="profile">
@@ -78,12 +78,12 @@ export default {
   },
   data() {
     return {
-      isBookmark: 0,
+      isBookmark: false,
       postPk: this.$route.params.postPk
     }
   },
   computed: {
-    ...mapGetters(['post', 'isPostAuthor']),
+    ...mapGetters(['post', 'isBookmark', 'isPostAuthor']),
     recruitState() {
       return '모집중'
     },
@@ -111,11 +111,11 @@ export default {
     ...mapActions(['fetchPost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark', 'deleteBookmark']),
     goBookmark() {
       this.createBookmark(this.postPk)
-      this.isBookmark = 1
+      console.log(1, this.isBookmark)
     },
     cancelBookmark() {
       this.deleteBookmark(this.postPk)
-      this.isBookmark = 0
+      console.log(2, this.isBookmark)
     }
   },
   created() {
