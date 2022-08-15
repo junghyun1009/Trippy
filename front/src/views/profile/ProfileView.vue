@@ -18,7 +18,7 @@
           <div class="their-page-username" v-else>
             <h2>{{ theirProfile.name }}</h2>
             <div class="follow-button">
-              <el-button v-if="isFollow===false" type="primary" @click="followNow()">팔로우</el-button>
+              <el-button v-if="isFollow===false" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
               <el-button v-else type="primary" plain @click="unfollowNow()">팔로잉</el-button>
             </div>
         </div>
@@ -40,6 +40,7 @@
     </div>
 
     <el-tabs
+    v-if="isMyProfile"
     v-model="activeName"
     type="card"
     class="demo-tabs"
@@ -54,6 +55,25 @@
       </el-tab-pane>
       <el-tab-pane label="My Companions">
         <!-- 내가 북마크한 동행 찾기 목록 -->
+      </el-tab-pane>
+    </el-tabs>
+
+    <el-tabs
+    v-else
+    v-model="activeName"
+    type="card"
+    class="demo-tabs"
+    @tab-click="handleClick"
+    >
+      <el-tab-pane label="My Diary">
+        <!-- 상대방이 쓴 일지 목록 -->
+        <!-- <my-diaries-list></my-diaries-list> -->
+      </el-tab-pane>
+      <el-tab-pane label="My Likes">
+        <!-- 상대방이 좋아요 누른 일지 목록 -->
+      </el-tab-pane>
+      <el-tab-pane label="My Companions">
+        <!-- 상대방이 북마크한 동행 찾기 목록 -->
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -74,6 +94,11 @@ export default {
   },
   data() {
     return {
+      followId: {
+        follower_id: null,
+        following_id: null,
+        id: null,
+      },
       isFollow: false,
       isMyProfile: false,
       followerList: [],
@@ -85,10 +110,29 @@ export default {
     fetchTheirId() {
       const memberId = this.$route.params.authorId 
       return memberId
-    }
+    },
   },
   methods: {
-    ...mapActions(['fetchProfile', 'fetchMyDiary', 'fetchTheirProfile']),
+    ...mapActions([
+      'fetchProfile', 
+      'fetchMyDiary', 
+      'fetchTheirProfile', 
+      'follow', 
+      'unfollow',
+      'myFollowers',
+      'myFollowersCount',
+      'myFollowings',
+      'myFollowingsCount',
+      ]),
+
+    myProfile(){
+      if ( this.profile.id === this.theirProfile.id ) { 
+        this.isMyProfile = true
+        this.fetchMyDiary()
+      } else {
+        this.isMyProfile = false
+      }
+    },
     followNow() {
       this.isFollow = !this.isFollow
     },
@@ -99,8 +143,10 @@ export default {
   mounted() {
     this.fetchProfile()
     this.fetchTheirProfile(this.$route.params.authorId)
-    this.fetchMyDiary()
-  }
+    this.myProfile()
+    this.myFollowings()
+    this.myFollowers()
+  },
 }
 </script>
 
@@ -166,7 +212,6 @@ export default {
 
   .description {
     display: flex;
-    padding-top: 5%;
   }
 
 </style>

@@ -18,7 +18,7 @@
         </div>
         
       </el-dialog>
-        <p>{{ followerList.length }}</p>
+        <p>{{ followerCount }}</p>
 
     </div>
   </div>
@@ -26,6 +26,7 @@
 
 <script>
 import FollowersListItem from '@/components/profile/FollowersListItem.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'FollowersList.vue',
@@ -33,6 +34,7 @@ export default {
     FollowersListItem,
   },
 	computed: {
+    ...mapGetters(['followerList', 'followingList', 'followerCount', 'followingCount',]),
 		followers() {
 			// 이부분에 데이터 들어오면 될듯
 			return this.$store.state.profile.image
@@ -41,7 +43,6 @@ export default {
   data() {
     return {
       visible: false,
-      followerList: [],
     }
   },
   methods: {
