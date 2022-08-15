@@ -3,6 +3,7 @@ package com.ssafy.trippy.Dto.ChatDto;
 import java.io.Serializable;
 import java.util.UUID;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,12 +15,20 @@ public class ChatRoom implements Serializable {
 
     private String roomId;
     private String name;
-    private Long userCount;
 
     public static ChatRoom create(String name) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();
         chatRoom.name = name;
         return chatRoom;
+    }
+
+    public ChatRoom() {
+    }
+
+    @Builder
+    public ChatRoom(String roomId, String name) {
+        this.roomId = roomId;
+        this.name = name;
     }
 }

@@ -2,10 +2,9 @@
   <div class="container">
     <search-bar></search-bar>
     
-    <p class="search-result">검색 결과</p>
-
+    <h3 class="search-result">검색 결과</h3>
     <div class="search-list">
-      <recommend-list></recommend-list>
+      <recommend-list></recommend-list> 
     </div>
   </div>
 </template>
@@ -30,8 +29,8 @@ export default {
   }
 
   .search-result {
-    font-size: 2.5vh;
     font-weight: 500;
+    margin-left: 5%;
   }
 
   .search-list {

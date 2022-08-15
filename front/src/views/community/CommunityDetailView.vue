@@ -2,45 +2,49 @@
   <div>
     <div class="header">
       <div class="tags">
-        <el-tag class="tag">{{ temp.category }}</el-tag>
+        <!-- {{ post }} -->
+        <el-tag class="tag">{{ convertTag }}</el-tag>
         <el-tag class="tag">장소</el-tag>
       </div>
       <router-link class="router" :to="{ name: 'profile' }">
         <div class="profile">
           <el-avatar class="profile-image" :size="40" src="" />
-          <span class="username">나유저</span>
+          <span class="username">{{ post.name }}</span>
         </div>
       </router-link>
-      <edit-delete-button class="edit-delete"></edit-delete-button>
+      <div v-if="isPostAuthor">
+        <edit-delete-button class="edit-delete"></edit-delete-button>
+      </div>
       <hr>
     </div> 
     <div class="title">
       <span class="state">{{ recruitState }}</span>
-      <h4>{{ temp.title }}</h4>
+      <h4>{{ post.title }}</h4>
     </div>
     <div class="options">
       <p class="option">
         <span class="material-symbols-outlined">groups</span>
-        {{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 | {{ temp.option.gender }}
+        {{ post.startAge === post.endAge ? post.startAge : `${post.startAge}~${post.endAge}`}}세 | {{ post.gender }}
       </p>
       <p class="option">
         <span class="material-symbols-outlined">event_note</span>
-        {{ convertDate }}, {{ temp.time }}
+        <span>{{ post.endDate ? `${post.startDate.slice(5, 10)}~${post.endDate.slice(5,10)}` : ''+post.startDate.slice(5, 10) }},</span>
+        <span>{{ ''+post.meetingTime.slice(11, 16) }}</span>
       </p>
       <p class="option">
         <span class="material-symbols-outlined">location_on</span>
-        {{ temp.place }}
+        {{ post.place }}
       </p>
     </div>
     
     <div class="content">
-      <p class="description">{{ this.temp.desc }}</p>
+      <p class="description">{{ post.description }}</p>
       <hr>
     </div>
     <div class="members">
       <p class="member-count">
-        <span>{{ recruitCount }}</span>
-        / {{ temp.recruit_volume }}명 참여
+        <span>{{ post.recruitCurrentVolume }}</span>
+        / {{ post.recruitVolume }}명 참여
       </p>
       <div class="users">
         <div class="user">
@@ -60,7 +64,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
 
 export default {
@@ -70,27 +74,42 @@ export default {
   },
   data() {
     return {
-      isBookmark: true
+      isBookmark: true,
+      postPk: this.$route.params.postPk
     }
   },
   computed: {
-    ...mapGetters(['temp']),
+    ...mapGetters(['post', 'isPostAuthor']),
     recruitState() {
       return '모집중'
     },
-    recruitCount() {
-      return 3
+    convertTag() {
+      const category = this.post.category
+      const categoryList = ['식사', '동행', '파티', '이동수단 셰어', '기타']
+      return categoryList[category-1]
     },
-    convertDate() {
-      let date = ''
-      if (!this.temp.isDay) {
-        date = this.temp.start_date + '~' + this.temp.end_date
-      } else {
-        date = this.temp.start_date
-      }
-      return date
-    },
+    // convertDate() {
+    //   let date = ''
+    //   if (!this.post.isDay) {
+    //     date = this.post.startDate.substr(5,5) + '~' + this.post.endDate.substr(5,5)
+    //   } else {
+    //     date = this.post.startDate.substr(5,5)
+    //   }
+    //   return date
+    // },
+    // convertTime() {
+    //   let time = ''
+    //   time = this.post.meetingTime.substr(11,5)
+    //   return time
+    // }
   },
+  methods: {
+    ...mapActions(['fetchPost', 'fetchCurrentUser'])
+  },
+  created() {
+    this.fetchPost(this.postPk)
+    this.fetchCurrentUser()
+  }
 }
 </script>
 

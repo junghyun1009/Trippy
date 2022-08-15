@@ -11,4 +11,5 @@ import java.util.List;
 public interface CommunityPostRepository extends JpaRepository<CommunityPost, Long> {
 
     Long countAllByMemberId(Long memberId);
+    List<CommunityPost> findAllByMember(Member member);
 }

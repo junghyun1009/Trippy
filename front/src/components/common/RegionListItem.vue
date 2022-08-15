@@ -1,26 +1,26 @@
 <template>
   <div>
     <div class="regions"
-        data-flickity='{ "pageDots": false, "cellAlign": "left" }'>
-        <div class="region">
-            <div class="image" id="all" ><span @click="diaryFilter(this.target)">전체</span></div>
-        </div>
+			data-flickity='{ "pageDots": false, "cellAlign": "left" }'>
+			<div class="region">
+				<div class="image" id="all" ><span @click="diaryFilter(this.target)">전체</span></div>
+			</div>
 
-        <div class="region">
-            <div class="image" id="seoul" ><span @click="diaryFilter(this)">서울</span></div>
-        </div>
+			<div class="region">
+				<div class="image" id="seoul" ><span @click="diaryFilter(this)">서울</span></div>
+			</div>
 
-        <div class="region">
-            <div class="image" id="jeju"><span @click="diaryFilter(this)">제주</span></div>
-        </div>
+			<div class="region">
+				<div class="image" id="jeju"><span @click="diaryFilter(this)">제주</span></div>
+			</div>
 
-        <div class="region">
-            <div class="image" id="busan"><span @click="diaryFilter(this)">부산</span></div>
-        </div>
+			<div class="region">
+				<div class="image" id="busan"><span @click="diaryFilter(this)">부산</span></div>
+			</div>
 
-        <div class="region">
-            <div class="image" id="tokyo"><span @click="diaryFilter(this)">도쿄</span></div>
-        </div>
+			<div class="region">
+				<div class="image" id="tokyo"><span @click="diaryFilter(this)">도쿄</span></div>
+			</div>
     </div>
 
   </div>
@@ -33,11 +33,14 @@ export default {
   name: 'RegionListItem',
   data() {
     return {
-      region: '',
+      region: {
+				country: '',
+				city: '',
+			},
     }
   },
   methods: {
-    ...mapActions(['fetchAllDiaries', 'getRegionDiaries']),
+    ...mapActions(['fetchAllDiaries', 'fetchRegionDiaries']),
     diaryFilter() {
       console.log(event.currentTarget.innerText)
       if ( event.currentTarget.innerText == '전체') {
@@ -46,31 +49,31 @@ export default {
       } 
       else if ( event.currentTarget.innerText == '서울') {
         console.log('seoul')
-        this.region = '서울특별시'
-        this.getRegionDiaries(this.region)
+				this.region.country = '대한민국'
+        this.region.city = '서울특별시'
+        this.fetchRegionDiaries(this.region)
       }
       else if ( event.currentTarget.innerText == '제주') {
         console.log('jeju')
-        this.region = '제주'
-        this.getRegionDiaries(this.region)
+				this.region.country = '대한민국'
+        this.region.city = '제주'
+				console.log(this.region)
+        this.fetchRegionDiaries(this.region)
       }
       else if ( event.currentTarget.innerText == '부산') {
         console.log('busan')
-        this.region = '부산'
-        this.getRegionDiaries(this.region)
+				this.region.country = '대한민국'
+        this.region.city = '부산'
+        this.fetchRegionDiaries(this.region)
       }
       else if ( event.currentTarget.innerText == '도쿄') {
         console.log('tokyo')
-        this.region = '도쿄'
-        this.getRegionDiaries(this.region)
+				this.region.country = '대한민국'
+        this.region.city = '도쿄'
+        this.fetchRegionDiaries(this.region)
       }
     }
   },
-  // created() {
-  //   window.onpopstate = function () {
-  //   location.reload()
-  //   };
-  // }
 }
 </script>
 

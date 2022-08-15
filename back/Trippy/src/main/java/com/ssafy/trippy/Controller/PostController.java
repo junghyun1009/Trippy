@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,11 +55,18 @@ public class PostController {
         }
     }
 
+
     @DeleteMapping("/auth/posts/{post_id}")
-    public ResponseEntity<?> deletePost(@PathVariable("post_id") Long post_id) {
+    public ResponseEntity<?> deletePost(HttpServletRequest request, @PathVariable("post_id") Long post_id) {
+        ResponsePostDto post = postService.findPostId(post_id);
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         try {
-            postService.deletePost(post_id);
-            return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+            if (memberId == post.getMemberId()) {
+                postService.deletePost(post_id);
+                return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("본인이 작성한 글만 삭제가 가능합니다.", HttpStatus.BAD_REQUEST);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,23 +75,36 @@ public class PostController {
     }
 
     @PutMapping("/auth/posts/{post_id}")
-    public ResponseEntity<?> updatePost(@PathVariable("post_id") Long post_id, @RequestBody @Valid RequestPostDto requestPostDto) {
+    public ResponseEntity<?> updatePost(HttpServletRequest request, @PathVariable("post_id") Long
+            post_id, @RequestPart("post") @Valid RequestPostDto requestPostDto
+            , @RequestPart("images") List<MultipartFile> images) {
+        ResponsePostDto post = postService.findPostId(post_id);
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         try {
-            postService.updatePost(post_id, requestPostDto);
-            return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
-
+            if (memberId == post.getMemberId()) {
+                Long id = postService.updatePost(post_id, requestPostDto, images);
+                return new ResponseEntity<>(id, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("본인이 작성한 글만 수정이 가능합니다.", HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
     }
 
+
     @GetMapping("/posts")
     public ResponseEntity<?> getAllPost() {
-        List<ResponsePostDto> responsePostDtos = new ArrayList<>();
+        List<ResponsePostDto> responsePostDtos;
         try {
             responsePostDtos = postService.findAll();
-            return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
+            if (responsePostDtos.size() == 0) {
+                return new ResponseEntity<>("작성한 글이 없습니다.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
+
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,7 +130,11 @@ public class PostController {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         try {
             List<ResponsePostDto> responsePostDtos = postService.findAllByMember(Member.builder().id(memberId).build());
-            return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
+            if (responsePostDtos.size() == 0) {
+                return new ResponseEntity<>("작성한 게시글이 없습니다.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("게시물이 없습니다.", HttpStatus.BAD_REQUEST);

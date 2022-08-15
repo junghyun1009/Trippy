@@ -32,9 +32,9 @@ public class MemberController {
     @ApiOperation(value = "회원가입")
     @ApiImplicitParam(name = "userData", value = "유저의 정보를 담은 객체")
     @PostMapping("/members/join")
-    public ResponseEntity<?> join(@RequestBody RequestMemberDto requestMemberDto){
+    public ResponseEntity<?> join(@RequestBody RequestMemberDto requestMemberDto) {
         ResponseMemberDto responseMemberDto = memberService.signup(requestMemberDto);
-        if(responseMemberDto.getEmail()==null){
+        if (responseMemberDto.getEmail() == null) {
             return new ResponseEntity<>("이메일 중복", HttpStatus.BAD_REQUEST);
         }
         ResponseBadgeDto responseBadgeDto = badgeService.saveBadge(1L,responseMemberDto.getId());
@@ -45,13 +45,13 @@ public class MemberController {
     // 로그인
     @PostMapping("/members/login")
     public ResponseEntity<?> login(@RequestBody RequestLoginDto user) {
-        if(user.getEmail() == null){
+        if (user.getEmail() == null) {
             throw new IllegalArgumentException("이메일 null");
         }
-        if(user.getPassword() == null){
+        if (user.getPassword() == null) {
             throw new IllegalArgumentException("패스워드 null");
         }
-        ResponseLoginDto responseLoginDto = memberService.login(user.getEmail(),user.getPassword());
+        ResponseLoginDto responseLoginDto = memberService.login(user.getEmail(), user.getPassword());
 
         return new ResponseEntity<>(responseLoginDto, HttpStatus.OK);
     }
@@ -65,7 +65,7 @@ public class MemberController {
 
     // 회원 삭제
     @DeleteMapping("/auth/members/remove")
-    public ResponseEntity<?> removeMember(HttpServletRequest request){
+    public ResponseEntity<?> removeMember(HttpServletRequest request) {
         Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         memberService.deleteMember(id);
         return new ResponseEntity<>("회원삭제성공", HttpStatus.OK);
@@ -73,17 +73,28 @@ public class MemberController {
 
     // 회원 수정
     @PutMapping("/auth/members/modify")
-    public ResponseEntity<?> modifyMember(HttpServletRequest request, @RequestBody UpdateMemberDto updateMemberDto){
+    public ResponseEntity<?> modifyMember(HttpServletRequest request, @RequestBody UpdateMemberDto updateMemberDto) {
         Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        memberService.updateMember(id,updateMemberDto);
+        memberService.updateMember(id, updateMemberDto);
         return new ResponseEntity<>("회원수정성공", HttpStatus.OK);
     }
 
     // 회원 정보 받아오기
     @GetMapping("/auth/members")
-    public ResponseMemberDto getMember(HttpServletRequest request){
+    public ResponseMemberDto getMember(HttpServletRequest request) {
         Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         return memberService.selectMember(id);
+    }
+
+    @GetMapping("/members/{memberId}")
+    public ResponseEntity<?> getMemberById(@PathVariable("memberId") Long memberId) {
+        try {
+            ResponseMemberDto responseMemberDto = memberService.selectMember(memberId);
+            return new ResponseEntity<>(responseMemberDto, HttpStatus.OK);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("해당 유저 정보를 가져올 수 없습니다",HttpStatus.NOT_FOUND);
+        }
     }
 
     // 로그아웃
@@ -97,7 +108,7 @@ public class MemberController {
 
     // 비밀번호 변경
     @PostMapping("/members/change_pw")
-    public String changePw(@RequestBody RequestLoginDto requestLoginDto){
+    public String changePw(@RequestBody RequestLoginDto requestLoginDto) {
         memberService.changePw(requestLoginDto);
         return "비밀번호 변경 완료";
     }
@@ -118,9 +129,9 @@ public class MemberController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<?> emailConfirm(
-            @RequestBody @ApiParam(value="이메일정보 정보", required = true) Map<String, String> email) throws Exception {
+            @RequestBody @ApiParam(value = "이메일정보 정보", required = true) Map<String, String> email) throws Exception {
         String confirm = emailService.sendSimpleMessage(email.get("email"));
-        return new ResponseEntity<>(confirm,HttpStatus.OK);
+        return new ResponseEntity<>(confirm, HttpStatus.OK);
     }
 
 }

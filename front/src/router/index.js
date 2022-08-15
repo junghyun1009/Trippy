@@ -7,6 +7,7 @@ import SearchView from '@/views/home/SearchView.vue'
 import DiaryCreateView from '../views/diary/DiaryCreateView.vue'
 import DiaryDetailView from '../views/diary/DiaryDetailView.vue'
 import DiaryEditView from '../views/diary/DiaryEditView.vue'
+import DiaryDeleteView from '../views/diary/DiaryDeleteView.vue'
 // import DiaryCommentView from '../components/diary/DiaryCommentView.vue'
 
 import LoginView from '@/views/account/LoginView.vue'
@@ -100,6 +101,11 @@ const routes = [
     name: 'diaryEdit',
     component: DiaryEditView
   },
+  {
+    path: '/diary/delete',
+    name: 'diaryDelete',
+    component: DiaryDeleteView
+  },
   // {
   //   path: '/diary/comment',
   //   // 나중에 pk 추가하기
@@ -129,7 +135,7 @@ const routes = [
   },
 
   {
-    path: '/community/detail',
+    path: '/community/:postPk',
         // 나중에 pk 추가하기
     name: 'communityDetail',
     component: CommunityDetailView
@@ -140,7 +146,7 @@ const routes = [
     component: CommunityCreateView
   },
   {
-    path: '/community/edit',
+    path: '/community/edit/:postPk',
     name: 'communityEdit',
     component: CommunityEditView
   },
