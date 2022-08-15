@@ -1,11 +1,8 @@
 package com.ssafy.trippy.Dto.Converter;
 
 import com.ssafy.trippy.Domain.*;
-import com.ssafy.trippy.Dto.Response.ResponseDetailLocationDto;
+import com.ssafy.trippy.Dto.Response.*;
 import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
-import com.ssafy.trippy.Dto.Response.ResponsePostCommentDto;
-import com.ssafy.trippy.Dto.Response.ResponseRouteDto;
-import com.ssafy.trippy.Dto.Response.ResponseTransport;
 import com.ssafy.trippy.Service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +78,6 @@ public class Converter {
         }
         return transports;
     }
-
 
 }
 

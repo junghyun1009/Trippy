@@ -284,4 +284,9 @@ public class PostServiceImpl implements PostService {
         return postDtos;
     }
 
+    @Override
+    public Long cntPostsByMemberId(Long memberId) {
+        return postRepository.countAllByMemberId(memberId);
+    }
+
 }
