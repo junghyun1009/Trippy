@@ -165,7 +165,8 @@ export default {
       this.$router.push({ name:  'search' })
     },
     goProfile() {
-      this.$router.push({ name: 'profile' })
+      const userid = this.profile.id
+      this.$router.push({ name: 'profile', params: { authorId: userid} })
     },
     goMyDiary() {
       this.$router.push({ name: 'profile'})

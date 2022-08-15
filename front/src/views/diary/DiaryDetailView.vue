@@ -67,11 +67,11 @@
       <div class="diary-detail-body">
         <div class="profile-div">
           <!-- <el-avatar :size="100" :src="diary.member_id.img_path" /> -->
-          <router-link :to="{ name: 'profile' }">
+          <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
             <el-avatar :size="80" src="" />
           </router-link>
           <!-- <span>{{ diary.member_id.name }}</span> -->
-          <router-link :to="{ name: 'profile' }">
+          <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
             <span class="username">{{ diary.name }}</span>
           </router-link>
         </div>
@@ -194,7 +194,7 @@ export default {
   },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
-    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing']),
+    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing', 'authorId']),
     partyTag() {
       const party = this.diary.company
       const partyList = ['가족', '커플', '친구', '개인']

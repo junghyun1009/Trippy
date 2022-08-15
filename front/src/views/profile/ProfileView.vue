@@ -8,21 +8,26 @@
     </div>
     <div class="background-info">
       <div class="blank"></div>
-      <div class="user-info">
-        <div class="username-follow">
-          <div class="username">
-            <h2>{{ profile.name }}</h2>
+      <div class="username-follow">
+          <!-- 내 프로필 페이지라면 팔로우 버튼 안뜸 -->
+          <!-- 만약 fetchCurrentUser의 id와 profile param의 id가 같다면 -->
+          <div class="my-page-username" v-if="isMyProfile">
+            <h2 >{{ profile.name }}</h2>
+          </div>
+          <!-- 남의 프로필 페이지라면 팔로우 버튼 뜸-->
+          <div class="their-page-username" v-else>
+            <h2>{{ theirProfile.name }}</h2>
             <div class="follow-button">
-              <el-button v-if="isFollow===false" type="primary" @click="followNow()">팔로우</el-button>
+              <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
               <el-button v-else type="primary" plain @click="unfollowNow()">팔로잉</el-button>
             </div>
-          </div>
         </div>
       </div>
     </div>
 
     <div class="description">
-      <p>{{ profile.description }}</p>
+      <p v-if="isMyProfile">{{ profile.description }}</p>
+      <p v-else>{{ theirProfile.description }}</p>
     </div>
     
     <div class="followers">
@@ -34,11 +39,14 @@
       </div>
     </div>
 
+    <!-- vue warn 나서 일단 이거 뺴놓음  -->
+    <!-- @tab-click="handleClick" -->
     <el-tabs
+    v-if="isMyProfile"
     v-model="activeName"
     type="card"
     class="demo-tabs"
-    @tab-click="handleClick"
+    
     >
       <el-tab-pane label="My Diary">
         <!-- 내가 쓴 일지 목록 -->
@@ -49,6 +57,24 @@
       </el-tab-pane>
       <el-tab-pane label="My Companions">
         <!-- 내가 북마크한 동행 찾기 목록 -->
+      </el-tab-pane>
+    </el-tabs>
+
+    <el-tabs
+    v-else
+    v-model="activeName"
+    type="card"
+    class="demo-tabs"
+    >
+      <el-tab-pane label="My Diary">
+        <!-- 상대방이 쓴 일지 목록 -->
+        <!-- <my-diaries-list></my-diaries-list> -->
+      </el-tab-pane>
+      <el-tab-pane label="My Likes">
+        <!-- 상대방이 좋아요 누른 일지 목록 -->
+      </el-tab-pane>
+      <el-tab-pane label="My Companions">
+        <!-- 상대방이 북마크한 동행 찾기 목록 -->
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -69,16 +95,46 @@ export default {
   },
   data() {
     return {
+      followId: {
+        follower_id: null,
+        following_id: null,
+        id: null,
+      },
       isFollow: false,
+      isMyProfile: false,
       followerList: [],
       followingList: [],
+      activeName: '',
     }
   },
   computed: {
-    ...mapGetters(['profile', 'myDiaries'])
+    ...mapGetters(['profile', 'myDiaries', 'theirProfile']),
+    fetchTheirId() {
+      const memberId = this.$route.params.authorId 
+      return memberId
+    },
   },
   methods: {
-    ...mapActions(['fetchProfile', 'fetchMyDiary']),
+    ...mapActions([
+      'fetchProfile', 
+      'fetchMyDiary', 
+      'fetchTheirProfile', 
+      'follow', 
+      'unfollow',
+      'myFollowers',
+      'myFollowersCount',
+      'myFollowings',
+      'myFollowingsCount',
+      ]),
+
+    myProfile(){
+      if ( this.profile.id === this.theirProfile.id ) { 
+        this.isMyProfile = true
+        this.fetchMyDiary()
+      } else {
+        this.isMyProfile = false
+      }
+    },
     followNow() {
       this.isFollow = !this.isFollow
     },
@@ -88,8 +144,11 @@ export default {
   },
   mounted() {
     this.fetchProfile()
-    this.fetchMyDiary()
-  }
+    this.fetchTheirProfile(this.$route.params.authorId)
+    this.myProfile()
+    this.myFollowings()
+    this.myFollowers()
+  },
 }
 </script>
 
@@ -120,22 +179,11 @@ export default {
   }
 
   .username-follow {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .username {
-    display: flex;
+    width: 50vw;
   }
 
   .follow-button {
     margin-left: 5%;
-  }
-
-
-  .username h2 {
-    margin: 0
   }
 
   .followers {
@@ -161,12 +209,11 @@ export default {
   }
 
   .blank {
-    width: 30%;
+    width: 25%;
   }
 
   .description {
     display: flex;
-    padding-top: 5%;
   }
 
 </style>
