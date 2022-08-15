@@ -43,7 +43,9 @@
                   <p>@{{ parentComment }}님에게 답글 남기는 중</p>
                   <span @click="closeInfo">x</span>
                 </div>
-                <comment-form :diaryPk="this.diaryPk"></comment-form>
+                <!-- 수정할 댓글 comment로 보냄 -->
+                <comment-edit-form v-if="isEditing" :diaryPk="this.diaryPk" :commentToEdit="commentToEdit"></comment-edit-form>
+                <comment-form v-else :diaryPk="this.diaryPk"></comment-form>
               </div>
             </template>
           </el-drawer>
@@ -155,6 +157,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
 import CommentForm from '@/components/diary/CommentForm.vue'
+import CommentEditForm from '@/components/diary/CommentEditForm.vue'
 import CommentItem from '@/components/diary/CommentItem.vue'
 
 export default {
@@ -162,6 +165,7 @@ export default {
   components: {
     EditDeleteButton,
     CommentForm,
+    CommentEditForm,
     CommentItem,
   },
   data() {
@@ -190,7 +194,7 @@ export default {
   },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
-    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser']),
+    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing']),
     partyTag() {
       const party = this.diary.company
       const partyList = ['가족', '커플', '친구', '개인']

@@ -12,8 +12,9 @@ export default ({
 
     comment: {},
     comments: [],
+    commentToEdit: {},
     isChild: false,
-    isUpdating: false,
+    isEditing: false,
     parentComment: '',
   },
   getters: {
@@ -23,8 +24,9 @@ export default ({
     // image: state => state.image,
     comment: state => state.comment,
     comments: state => state.comments,
+    commentToEdit: state => state.commentToEdit,
     isChild: state => state.isChild,
-    isUpdating: state => state.isUpdating,
+    isEditing: state => state.isEditing,
     parentComment: state => state.parentComment,
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
@@ -59,8 +61,11 @@ export default ({
       state.comment = {}
     },
 
-    SET_STATUS(state) {
-      state.isUpdating = true
+    SWITCH_IS_EDITING(state, comment) {
+      console.log(3, comment)
+      state.commentToEdit = comment
+      console.log(state.commentToEdit)
+      state.isEditing = true
     },
 
     EMPTY_COMMENTS(state) {
@@ -208,7 +213,7 @@ export default ({
       .catch((err) => console.error(err.response))
     },
 
-    // 일지 댓글 조회
+    // 일지 댓글 목록 조회
     fetchComment({ getters, commit, dispatch }, diaryPk) {
       axios({
         url: `http://i7a506.p.ssafy.io:8080/api/comment/${diaryPk}`,
@@ -229,6 +234,7 @@ export default ({
       })
     },
 
+    // 각 댓글 유저 조회
     fetchUser({ getters, commit }, comment) {
       axios({
         url: `http://i7a506.p.ssafy.io:8080/api/members/${comment.memberId}`,
@@ -244,6 +250,12 @@ export default ({
         }
         commit('SET_COMMENT', payload)
       })
+    },
+
+    // 댓글 수정 상태 전환 및 댓글 정보 보내기
+    switchIsEditing({ commit }, comment) {
+      console.log(2, comment)
+      commit('SWITCH_IS_EDITING', comment)
     },
     // updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
     //   const comment = { content, diaryPk, commentPk }

@@ -22,6 +22,7 @@
     <div v-for="(comment, idx) in comments" :key="idx" class="parent-child">
       <!-- 댓글 -->
       <div class="parent-comment">
+        <!-- userId 보내줘야 함 -->
         <router-link :to="{ name: 'profile' }">
           <el-avatar :size="40" src="" />
         </router-link>
@@ -30,7 +31,7 @@
           <p class="content">{{ comment.info.content }}</p>
           <!-- 나중에는 comment.pk로 바꿔서 보내야할 듯 -->
           <span class="leave-comment" @click="sendInfo(comment.member)">답글 달기</span>
-          <span class="leave-comment" @click="editComment(comment.content)">수정</span>
+          <span class="leave-comment" @click="editComment(comment)">수정</span>
           <span class="leave-comment">삭제</span>
         </div>
       </div>
@@ -64,33 +65,22 @@ export default {
   },
   data() {
     return {
-      isEditing: false,
-      // payload: {
-      //   diaryPk: this.comment.diary.pk,
-      //   commentPk: this.comment.pk,
-      //   content: this.comment.content
-      // },
     }
   },
   computed: {
     ...mapGetters(['currentUser', 'comments']),
   },
   methods: {
-    ...mapActions(['updateComment', 'deleteComment', 'showParent', 'fetchComment']),
-    switchIsEditing() {
-      this.isEditing = !this.isEditing
-    },
-    onUpdate() {
-      this.updateComment(this.payload)
-      this.isEditing = false
-    },
+    ...mapActions(['updateComment', 'deleteComment', 'showParent', 'fetchComment', 'switchIsEditing']),
     sendInfo(member) {
       console.log(member)
       this.showParent(member)
     },
-    editComment(content) {
-      console.log(content)
-      this.updateComment(content)
+    editComment(comment) {
+      console.log(1, comment)
+      this.switchIsEditing(comment)
+      // console.log(content)
+      // this.updateComment(content)
     },
   },
   mounted() {
