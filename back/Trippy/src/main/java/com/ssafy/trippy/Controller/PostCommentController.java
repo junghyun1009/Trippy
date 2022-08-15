@@ -66,7 +66,7 @@ public class PostCommentController {
     @GetMapping("/comment/{postId}")
     public ResponseEntity<?> getAllPostComment(@PathVariable("postId") Long postId) {
         try {
-            List<ResponsePostCommentDto> postCommentList = postCommentService.findPostCommentByPostId(postId);
+            List<ResponsePostCommentDto> postCommentList = postCommentService.findAllByPostId(postId);
             return new ResponseEntity<>(postCommentList, HttpStatus.OK);
 
         } catch (Exception e) {
