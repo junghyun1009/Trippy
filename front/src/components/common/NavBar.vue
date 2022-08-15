@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
 	name: 'NavBar',
 	data() {
@@ -57,7 +59,16 @@ export default {
 			isClicked: false,
 		}
 	},
+  computed: {
+    ...mapGetters(['profile'])
+  },
+  mounted() {
+    this.fetchProfile()
+    console.log(this.profile.id)
+  },
 	methods: {
+    ...mapActions(['fetchProfile']),
+
 		toggle() {
 			this.isClicked = !this.isClicked
 		},	
@@ -82,8 +93,13 @@ export default {
     },
 		goProfile() {
       this.isClicked = false
-			this.$router.push({ name: 'profile' })
-		}
+      const userid = this.profile.id
+			// this.$router.push({ name: 'profile', params: { username }})
+			// this.$router.push({ name: 'profile', params: { authorId: `${username}` }})
+			this.$router.push({ name: 'profile', params: { authorId: userid }})
+			// this.$router.push({ path: `/profile/${username}` })
+		},
+    
 	},
 }
 </script>

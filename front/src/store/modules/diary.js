@@ -16,6 +16,7 @@ export default ({
     isChild: false,
     isEditing: false,
     parentComment: '',
+    authorId: null,
   },
   getters: {
     diaries: state => state.diaries,
@@ -32,6 +33,7 @@ export default ({
     isAuthor: (state, getters) => {
       return state.diary?.name === getters.currentUser.name
     },
+    authorId: state => state.authorId,
     // isDiary: state => !_.isEmpty(state.diary)
   },
   mutations: {
@@ -70,6 +72,11 @@ export default ({
 
     EMPTY_COMMENTS(state) {
       state.comments = []
+    },
+
+    SET_AUTHOR_ID(state, authorId) { 
+      state.authorId = authorId
+      console.log(state.authorId)
     },
 
     // 홈화면에 추천(일단은 전부 띄우는 것)
@@ -134,6 +141,9 @@ export default ({
       })
       .then(res => {
         commit('SET_DIARY', res.data)
+        console.log('diary set')
+        const authorId = res.data.memberId
+        commit('SET_AUTHOR_ID', authorId)
         // const diary = res.data
         // diary.detailLocations.forEach((location) => {
         //   const imagePk = location.id
@@ -143,7 +153,7 @@ export default ({
       .catch(err => {
         console.error(err.response)
         if (err.response.status === 404) {
-          router.push({ name: 'notFound404' })
+          router.push({ name: 'notFound404' }) 
         }
       })
     },

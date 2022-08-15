@@ -15,7 +15,7 @@
         </template>
         <followings-list-item v-for="following in followings" :key="following.id" :following="following"></followings-list-item>
       </el-dialog>
-			<p>{{ followingList.length }}</p>
+			<p>{{ followingCount }}</p>
 
     </div>
   </div>
@@ -23,6 +23,7 @@
 
 <script>
 import FollowingsListItem from '@/components/profile/FollowingsListItem.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'FollowingsList.vue',
@@ -30,20 +31,18 @@ export default {
     FollowingsListItem,
   },
 	computed: {
-			followings() {
-					// 이부분에 데이터 들어오면 될듯
-					return this.$store.state.profile.image
-			}
+    ...mapGetters(['followerList', 'followingList', 'followerCount', 'followingCount',]),
+    followings() {
+        // 이부분에 데이터 들어오면 될듯
+        return this.$store.state.profile.image
+    }
 	},
   data() {
     return {
       visible: false,
-			followingList: [],
     }
   },
   methods: {
-    
-
   }
 }
 </script>
