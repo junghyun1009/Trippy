@@ -1,6 +1,5 @@
 package com.ssafy.trippy.Controller;
 
-
 import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestPostDto;
@@ -11,17 +10,15 @@ import com.ssafy.trippy.Dto.Update.UpdatePostDto;
 import com.ssafy.trippy.Service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -31,9 +28,7 @@ public class PostController {
 
     private final MemberService memberService;
 
-    private final DetailLocationService detailLocationService;
-
-    private final S3Uploader s3Uploader;
+    private final BadgeService badgeService;
     private static final String SUCCESS = "OK";
     private static final String FAIL = "ERROR";
 
@@ -47,8 +42,9 @@ public class PostController {
             Long id = postService.savePost(requestPostDto, images);
             ResponseSavepostDto responseSavepostDto = new ResponseSavepostDto(id);
             Long cnt = postService.cntPostsByMemberId(memberId);
-            if(cnt==1){
-                responseSavepostDto.addBadge(new ResponseBadgeDto("기록의 시작"));
+            if(cnt==1L){
+                ResponseBadgeDto responseBadgeDto = badgeService.saveBadge(2L,memberId);
+                responseSavepostDto.addBadge(responseBadgeDto);
             }
             return new ResponseEntity<>(responseSavepostDto, HttpStatus.OK);
         } catch (Exception e) {
@@ -154,22 +150,5 @@ public class PostController {
             e.printStackTrace();
             return new ResponseEntity<>("해당 게시물을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
-    }
-
-    @GetMapping("/posts/images/{detail_loc_id}")
-    public ResponseEntity<?> getImageByDetailLocId(@PathVariable("detail_loc_id") Long detailLocId) {
-        ResponseDetailLocationDto responseDetailLocationDto = detailLocationService.findDetailLocation(detailLocId);
-        try {
-            Resource resource = s3Uploader.getObject(responseDetailLocationDto.getFilename());
-            return ResponseEntity
-                    .ok()
-                    .contentType(MediaType.MULTIPART_FORM_DATA)
-                    .body(resource);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("resource 불러오기 불가");
-        }
-
     }
 }

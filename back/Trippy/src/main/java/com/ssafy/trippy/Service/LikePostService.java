@@ -13,4 +13,5 @@ public interface LikePostService {
     List<ResponsePostDto> getLikePosts(Long memberId);
 
     void deleteLikePost(RequestLikePostDto requestLikePostDto);
+    boolean existsByMemberIdAndPostId(Long memberId, Long postId);
 }
