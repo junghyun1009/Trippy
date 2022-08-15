@@ -24,7 +24,6 @@ public class RequestRouteDto {
     private Double lng;
     private Double lat;
 
-//    private Long geocodeId;
 
     public Route toEntity() {
         return Route.builder().

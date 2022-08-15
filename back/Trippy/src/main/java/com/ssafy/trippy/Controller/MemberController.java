@@ -2,9 +2,11 @@ package com.ssafy.trippy.Controller;
 
 import com.ssafy.trippy.Dto.Request.RequestLoginDto;
 import com.ssafy.trippy.Dto.Request.RequestMemberDto;
+import com.ssafy.trippy.Dto.Response.ResponseBadgeDto;
 import com.ssafy.trippy.Dto.Response.ResponseLoginDto;
 import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Dto.Update.UpdateMemberDto;
+import com.ssafy.trippy.Service.BadgeService;
 import com.ssafy.trippy.Service.EmailService;
 import com.ssafy.trippy.Service.MemberService;
 import io.swagger.annotations.*;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Map;
 
 @Slf4j
@@ -24,23 +27,29 @@ public class MemberController {
 
     private final MemberService memberService;
     private final EmailService emailService;
+    private final BadgeService badgeService;
 
-
-    // 회원가입
+    /**
+     * 회원가입
+     */
     @ApiOperation(value = "회원가입")
     @ApiImplicitParam(name = "userData", value = "유저의 정보를 담은 객체")
     @PostMapping("/members/join")
-    public ResponseEntity<?> join(@RequestBody RequestMemberDto requestMemberDto) {
+    public ResponseEntity<?> join(@RequestBody @Valid RequestMemberDto requestMemberDto) {
         ResponseMemberDto responseMemberDto = memberService.signup(requestMemberDto);
         if (responseMemberDto.getEmail() == null) {
             return new ResponseEntity<>("이메일 중복", HttpStatus.BAD_REQUEST);
         }
+        ResponseBadgeDto responseBadgeDto = badgeService.saveBadge(1L,responseMemberDto.getId());
+        responseMemberDto.addBadge(responseBadgeDto);
         return new ResponseEntity<>(responseMemberDto, HttpStatus.OK);
     }
 
-    // 로그인
+    /**
+     * 로그인
+     */
     @PostMapping("/members/login")
-    public ResponseEntity<?> login(@RequestBody RequestLoginDto user) {
+    public ResponseEntity<?> login(@RequestBody @Valid RequestLoginDto user) {
         if (user.getEmail() == null) {
             throw new IllegalArgumentException("이메일 null");
         }
@@ -52,14 +61,18 @@ public class MemberController {
         return new ResponseEntity<>(responseLoginDto, HttpStatus.OK);
     }
 
-    // Access-Token 재발급
+    /**
+     * Access Token 재발급
+     */
     @GetMapping("/members/re-issue")
     public ResponseEntity<?> reIssue(@RequestParam String email, @RequestParam String refreshToken) {
         ResponseLoginDto responseLoginDto = memberService.reIssueAccessToken(email, refreshToken);
         return new ResponseEntity<>(responseLoginDto, HttpStatus.OK);
     }
 
-    // 회원 삭제
+    /**
+     * 회원 삭제
+     */
     @DeleteMapping("/auth/members/remove")
     public ResponseEntity<?> removeMember(HttpServletRequest request) {
         Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
@@ -67,7 +80,9 @@ public class MemberController {
         return new ResponseEntity<>("회원삭제성공", HttpStatus.OK);
     }
 
-    // 회원 수정
+    /**
+     * 회원 수정
+     */
     @PutMapping("/auth/members/modify")
     public ResponseEntity<?> modifyMember(HttpServletRequest request, @RequestBody UpdateMemberDto updateMemberDto) {
         Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
@@ -75,13 +90,18 @@ public class MemberController {
         return new ResponseEntity<>("회원수정성공", HttpStatus.OK);
     }
 
-    // 회원 정보 받아오기
+    /**
+     * 회원 정보 받아오기
+     */
     @GetMapping("/auth/members")
     public ResponseMemberDto getMember(HttpServletRequest request) {
         Long id = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         return memberService.selectMember(id);
     }
 
+    /**
+     * pk값만으로 회원정보 가져오기
+     */
     @GetMapping("/members/{memberId}")
     public ResponseEntity<?> getMemberById(@PathVariable("memberId") Long memberId) {
         try {
@@ -93,7 +113,9 @@ public class MemberController {
         }
     }
 
-    // 로그아웃
+    /**
+     * 로그아웃
+     */
     @GetMapping("members/logout")
     public String logout(HttpServletRequest request) {
         String accessToken = request.getHeader("X-AUTH-TOKEN");
@@ -102,20 +124,26 @@ public class MemberController {
         return "로그아웃 완료";
     }
 
-    // 비밀번호 변경
+    /**
+     * 비밀번호 변경
+     */
     @PostMapping("/members/change_pw")
     public String changePw(@RequestBody RequestLoginDto requestLoginDto) {
         memberService.changePw(requestLoginDto);
         return "비밀번호 변경 완료";
     }
 
-    // 이메일 중복확인
+    /**
+     * 이메일 중복 확인
+     */
     @GetMapping("/members/duplicate")
     public boolean chkDup(@RequestParam("email") String email) {
         return memberService.chkDuplicate(email);
     }
 
-    // 인증 메일 보내기
+    /**
+     * 인증 이메일 보내기
+     */
     @PostMapping("/members/join/authmail")
     @ApiOperation(value = "회원 가입시 이메인 인증", notes = "기존사용하고 있는 이메일을 통해 인증")
     @ApiResponses({
@@ -124,6 +152,9 @@ public class MemberController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
+    /**
+     * 이메일 확인하기
+     */
     public ResponseEntity<?> emailConfirm(
             @RequestBody @ApiParam(value = "이메일정보 정보", required = true) Map<String, String> email) throws Exception {
         String confirm = emailService.sendSimpleMessage(email.get("email"));

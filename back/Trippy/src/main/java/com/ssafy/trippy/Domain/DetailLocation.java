@@ -16,16 +16,10 @@ public class DetailLocation extends BaseEntity{
     @Column(name="DETAIL_LOCATION_ID")
     private Long id;
 
-//    @Column(nullable = false)
-//    @NotBlank(message="상세지역명을 입력하세요")
     private String detailLocationName;
 
-//    @Column(nullable = false)
-//    @NotBlank(message="별점을 입력하세요")
     private float rating;
 
-//    @Column(nullable = false)
-//    @NotBlank(message="상세지역글을 입력하세요")
     private String detailLocationContent;
 
     @ManyToOne(fetch = FetchType.LAZY)

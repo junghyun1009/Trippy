@@ -25,14 +25,7 @@ public class LikePost extends BaseEntity{
     @JoinColumn(name="MEMBER_ID")
     private Member member;
 
-//    public void setMember(Member member){
-//        this.member = member;
-//        if(member.getLikePosts().contains(this)){
-//            member.getLikePosts().remove(this);
-//        }else{
-//            member.getLikePosts().add(this);
-//        }
-//    }
+
     public LikePost(Post post, Member member) {
         this.post = post;
         this.member = member;

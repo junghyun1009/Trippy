@@ -6,6 +6,7 @@ import com.ssafy.trippy.Domain.Post;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 
@@ -15,10 +16,13 @@ import java.util.List;
 @ToString
 public class RequestDetailLocationDto {
 
+    @NotBlank(message="상세지역명은 필수값입니다.")
     private String detailLocationName;
 
+    @NotBlank(message="상세지역명은 필수값입니다.")
     private float rating;
 
+    @NotBlank(message="상세지역명은 필수값입니다.")
     private String detailLocationContent;
 
     private String filename;
