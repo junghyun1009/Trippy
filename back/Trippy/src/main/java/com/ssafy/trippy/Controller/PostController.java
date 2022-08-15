@@ -29,6 +29,8 @@ public class PostController {
     private final PostService postService;
 
     private final MemberService memberService;
+
+    private final BadgeService badgeService;
     private static final String SUCCESS = "OK";
     private static final String FAIL = "ERROR";
 
@@ -42,8 +44,9 @@ public class PostController {
             Long id = postService.savePost(requestPostDto, images);
             ResponseSavepostDto responseSavepostDto = new ResponseSavepostDto(id);
             Long cnt = postService.cntPostsByMemberId(memberId);
-            if(cnt==1){
-                responseSavepostDto.addBadge(new ResponseBadgeDto("기록의 시작"));
+            if(cnt==1L){
+                ResponseBadgeDto responseBadgeDto = badgeService.saveBadge(2L,memberId);
+                responseSavepostDto.addBadge(responseBadgeDto);
             }
             return new ResponseEntity<>(responseSavepostDto, HttpStatus.OK);
         } catch (Exception e) {

@@ -32,6 +32,7 @@ public class ResponseMemberDto {
     private String img_path;
     private String description;
     private String img_link;
+    private List<ResponseBadgeDto> responseBadgeDtos = new ArrayList<>();
 
     //Entity -> Dto
     public ResponseMemberDto(Member member){
@@ -48,5 +49,9 @@ public class ResponseMemberDto {
 
     public void setImg_link(String img_link) {
         this.img_link = img_link;
+    }
+
+    public void addBadge(ResponseBadgeDto responseBadgeDto){
+        responseBadgeDtos.add(responseBadgeDto);
     }
 }

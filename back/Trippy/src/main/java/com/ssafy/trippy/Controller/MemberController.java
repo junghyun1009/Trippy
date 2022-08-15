@@ -2,9 +2,11 @@ package com.ssafy.trippy.Controller;
 
 import com.ssafy.trippy.Dto.Request.RequestLoginDto;
 import com.ssafy.trippy.Dto.Request.RequestMemberDto;
+import com.ssafy.trippy.Dto.Response.ResponseBadgeDto;
 import com.ssafy.trippy.Dto.Response.ResponseLoginDto;
 import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Dto.Update.UpdateMemberDto;
+import com.ssafy.trippy.Service.BadgeService;
 import com.ssafy.trippy.Service.EmailService;
 import com.ssafy.trippy.Service.MemberService;
 import io.swagger.annotations.*;
@@ -24,7 +26,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final EmailService emailService;
-
+    private final BadgeService badgeService;
 
     // 회원가입
     @ApiOperation(value = "회원가입")
@@ -35,6 +37,8 @@ public class MemberController {
         if(responseMemberDto.getEmail()==null){
             return new ResponseEntity<>("이메일 중복", HttpStatus.BAD_REQUEST);
         }
+        ResponseBadgeDto responseBadgeDto = badgeService.saveBadge(1L,responseMemberDto.getId());
+        responseMemberDto.addBadge(responseBadgeDto);
         return new ResponseEntity<>(responseMemberDto, HttpStatus.OK);
     }
 

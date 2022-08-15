@@ -109,4 +109,9 @@ public class CommunityPostServiceImpl implements CommunityPostService {
         Optional<CommunityPost> communityPost = communityPostRepository.findById(id);
         return new ResponseCommunityPostDto(communityPost.get());
     }
+
+    @Override
+    public Long cntCommunityPostsByMemberId(Long memberId) {
+        return communityPostRepository.countAllByMemberId(memberId);
+    }
 }

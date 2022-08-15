@@ -9,4 +9,6 @@ import java.util.List;
 
 @Repository
 public interface CommunityPostRepository extends JpaRepository<CommunityPost, Long> {
+
+    Long countAllByMemberId(Long memberId);
 }
