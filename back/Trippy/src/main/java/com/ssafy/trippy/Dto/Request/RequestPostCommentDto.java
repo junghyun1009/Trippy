@@ -5,6 +5,7 @@ import com.ssafy.trippy.Domain.PostComment;
 import com.ssafy.trippy.Dto.Response.ResponsePostCommentDto;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class RequestPostCommentDto {
 
     private Long id;
+    @NotBlank(message = "본문은 필수 입력 값입니다.")
     private String content;
     private Long memberId;
 

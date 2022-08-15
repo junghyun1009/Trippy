@@ -20,27 +20,23 @@ public class Post extends BaseEntity{
     @Column(name="POST_ID")
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
 
-//    @Column(nullable = false)
-//    @NotBlank(message="일행타입을 입력하세요")
+    @Column(nullable = false)
     private int company;
 
-//    @Column(nullable = false)
-//    @NotBlank(message="일행수를 입력하세요")
+    @Column(nullable = false)
     private int count;
 
-//    @Column(nullable = false)
-//    @NotBlank(message="시작날짜를 입력하세요")
+    @Column(nullable = false)
     private LocalDateTime startDate;
 
-//    @Column(nullable = false)
-//    @NotBlank(message="끝나는 날짜를 입력하세요")
+    @Column(nullable = false)
     private LocalDateTime endDate;
 
-//    @Column(name="REPRESENTIVE_IMG",nullable = false)
-//    @NotBlank(message="대표이미지를 입력하세요")
+    @Column(name="REPRESENTIVE_IMG",nullable = false)
     private int representiveImg;
 
     @ManyToOne(fetch = FetchType.LAZY)
