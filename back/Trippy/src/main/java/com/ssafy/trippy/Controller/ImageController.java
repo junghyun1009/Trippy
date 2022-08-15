@@ -56,6 +56,7 @@ public class ImageController {
             return new ResponseEntity<>("cannot upload image",HttpStatus.BAD_REQUEST);
         }
         ResponseMemberDto responseMemberDto = memberService.selectMember(memberId);
+        s3Uploader.deleteS3(responseMemberDto.getImg_path());
         UpdateMemberDto updateMemberDto = new UpdateMemberDto(responseMemberDto.getName(), responseMemberDto.getEmail(),
                 responseMemberDto.getPhone(), responseMemberDto.getGender(),responseMemberDto.getBirth(),responseImageDto.getFileName(),responseMemberDto.getDescription());
         memberService.updateMember(memberId, updateMemberDto);

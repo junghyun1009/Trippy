@@ -7,6 +7,9 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 public class ResponseDetailLocationDto {
+
+    private Long id;
+
     private String detailLocationName;
 
     private float rating;
@@ -19,6 +22,7 @@ public class ResponseDetailLocationDto {
 
     @Builder
     public ResponseDetailLocationDto(DetailLocation detailLocation) {
+        this.id = detailLocation.getId();
         this.detailLocationName = detailLocation.getDetailLocationName();
         this.rating = detailLocation.getRating();
         this.detailLocationContent =detailLocation.getDetailLocationContent();
