@@ -19,7 +19,7 @@
           </router-link> -->
           <div class="icon-cnt" @click="commentClicked=true">
             <span class="material-symbols-outlined">chat_bubble</span>
-            <span class="cnt">7</span>
+            <span class="cnt">{{ diary.comments.length }}</span>
           </div>
           
           <!-- 댓글 창 열림 -->
