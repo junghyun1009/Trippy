@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class RequestPostDto {
     private String title;
-    private Byte isDelete;
     private String countryName;
     private String cityName;
     private int company;
@@ -65,9 +64,8 @@ public class RequestPostDto {
 
 
     @Builder
-    public RequestPostDto(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representativeImg, Long memberId, List<RequestPostTransPortDto> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes) {
+    public RequestPostDto(String title, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representativeImg, Long memberId, List<RequestPostTransPortDto> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes,Long member_id) {
         this.title = title;
-        this.isDelete = isDelete;
         this.company = company;
         this.count = count;
         this.startDate = startDate;

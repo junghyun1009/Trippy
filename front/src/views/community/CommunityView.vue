@@ -3,7 +3,7 @@
     <span class="material-symbols-outlined location" @click="getLocation">my_location</span>
 
     <!-- <region-list></region-list> -->
-    <div v-for="post in posts" :key="post.id">
+    <div v-for="post in posts.slice().reverse()" :key="post.id">
        <router-link :to="{ name: 'communityDetail', params: { postPk: post.id } }">
         <el-card class="card">
           <div>
@@ -19,7 +19,7 @@
           <div class="options">
             <p class="option">
               <span class="material-symbols-outlined">groups</span>
-              {{ post.startAge }}~{{ post.endAge }}세 | {{ post.gender }} 참여 가능
+              {{ post.startAge === post.endAge ? post.startAge : `${post.startAge}~${post.endAge}`}}세 | {{ post.gender }} 참여 가능
             </p>
             <p class="option">
               <span class="material-symbols-outlined">event_note</span>

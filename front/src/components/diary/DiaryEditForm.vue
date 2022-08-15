@@ -1,5 +1,7 @@
 <template>
   <div>
+    {{ diary }}
+    {{ newDiary.postTransports }}
     <form @submit.prevent="onSubmit">
       
       <!-- 제목 -->
@@ -144,6 +146,39 @@
               placeholder="내용을 입력해주세요." show-word-limit type="textarea" rows=7 resize="none" class="content-input"/>
             </div>
 
+            <div class="story-photo">
+              <div class="story-photo-title">
+                <span>사진</span>
+                <span>(선택)</span>
+              </div>
+
+                <div v-if="images[k].length === 0" class="photo-div">
+                  <label :for=k>
+                    <span class="material-symbols-outlined">add_photo_alternate</span>
+                  </label>
+                  <input class="photo-input" type="file" :id=k :ref="`${k}th-file`" accept="image/*" @change="uploadPhoto(k)"/>
+                  <div class="photo-des-div">
+                    <span class="photo-description">아이콘을 눌러 사진을 추가해주세요.</span>
+                    <span class="photo-description-sec">(스토리 당 한 개의 사진을 첨부할 수 있어요.)</span>
+                  </div>
+                </div>
+
+                <!-- <div v-else-if="(images[k].length != 0) && (typeof(images[k]) === 'string')" class="photo-content-div">
+                  <div class="photo-preview-group">
+                    <img :src="images[k]" :alt="images[k]" @click="removePhoto(k)">
+                    <span class="photo-description">사진을 클릭하면 삭제할 수 있어요.</span>
+                  </div>
+                </div> -->
+
+                <div v-else class="photo-content-div">
+                  <div class="photo-preview-group">
+                    <img :src="newStory.preview" alt="photo" @click="removePhoto(k)">
+                    <span class="photo-description">사진을 클릭하면 삭제할 수 있어요.</span>
+                  </div>
+                </div>
+
+            </div>
+
             <div class="story-btn">
               <el-button @click="addStory()" v-show="newStories.length < 10" :disabled="k != newStories.length - 1" link>
                 <span class="material-symbols-outlined">note_add</span>
@@ -167,13 +202,16 @@
 
 <script>
 /* eslint-disable no-undef */
+import { mapActions } from 'vuex'
+
 
 export default {
   name: 'DiaryEditForm',
   props: {
     diary: Object,
     story: Array,
-    trans: Array
+    trans: Array,
+    editimages: Array,
   },
   data() {
     return {
@@ -215,15 +253,7 @@ export default {
         },
       ],
       newStories: [
-        ...this.story,
-        { 
-          // pk: 0,
-          detailLocationName: '',
-          // dialogVisible: false,
-          detailLocationContent: '',
-          rating: null,
-          preview: ''
-        }
+        ...this.story
       ],   
       newDiary: {
         title: this.diary.title,
@@ -237,7 +267,8 @@ export default {
         routes: this.diary.routes,
         detailLocations: this.diary.detailLocations
       },
-      images: []
+      images : [...this.editimages],
+      route: {},
     }
   },
   computed: {
@@ -280,6 +311,7 @@ export default {
     // },
   },
   methods: {
+    ...mapActions(['updateDiary']),
     handleClose(tag) {
       this.newDiary.postTransports.splice(this.newDiary.postTransports.indexOf(tag), 1)
     },
@@ -307,6 +339,7 @@ export default {
           geocoder
               .geocode({ placeId: place.place_id })
               .then(({ results }) => {
+                console.log(results[0])
               map.setZoom(15);
               map.setCenter(results[0].geometry.location)
 
@@ -376,6 +409,38 @@ export default {
       this.addMarkers()
     },
 
+    uploadPhoto(index) {
+      console.log(index)
+      console.log(this.$refs[`${index}th-file`])
+      console.log(this.$refs[`${index}th-file`][0].files)
+
+      for (let i = 0; i < this.$refs[`${index}th-file`][0].files.length; i++) {
+        let photo = this.$refs[`${index}th-file`][0].files[i]
+        if (photo.type.substr(0, 5) === "image") {
+          this.images[index] = this.$refs[`${index}th-file`][0].files[i]
+          console.log(this.images[index])
+          this.newStories[index].preview = URL.createObjectURL(this.$refs[`${index}th-file`][0].files[i])
+          this.newStories[index].filename = this.$refs[`${index}th-file`][0].files[i].name
+        } else {
+          alert("사진 파일만 추가 가능합니다")
+        }
+      }
+      console.log(this.images[index])
+      console.log(this.images)
+      console.log(this.newStories[index].preview)
+      let fileInput = document.getElementsByClassName("photo-input")
+      fileInput[fileInput.length - 1].value = ''
+    },
+
+    removePhoto(index) {
+      // if (this.newStories[index].photoList.length === 1) {
+      //   this.dialogVisible = false
+      // }
+      this.images[index] = []
+      this.newStories[index].preview = ''
+      this.newStories[index].filename = ''
+    },
+
     addStory() {
       if (this.newStories[this.newStories.length - 1].detailLocationName === '' || this.newStories[this.newStories.length - 1].detailLocationContent === '') {
         alert('내용 작성 후 스토리를 추가해주세요!')
@@ -387,7 +452,8 @@ export default {
           // dialogVisible: false,
           detailLocationContent: '',
           rating: null,
-          preview: ''
+          preview: '',
+          filename: ''
         }),
         this.images.push([])
       }
@@ -395,6 +461,7 @@ export default {
 
     removeStory(index) {
       this.newStories.splice(index, 1)
+      this.images.splice(index, 1)
     },
 
     onSubmit() {
@@ -407,9 +474,41 @@ export default {
       if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
       && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
         console.log(this.newDiary)
+
+        const diary = new FormData()
+        diary.append("post", new Blob([JSON.stringify(this.newDiary)], {type: "application/json"}))
+        // diary.append("diary", JSON.stringify(this.newDiary))
+        this.images.forEach((image) => {
+          console.log(image)
+          if (image.length === 0) {
+            // 비어있는 경우
+            const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
+            diary.append("images", empty)
+          } else if (typeof(image) === 'string') {
+            // 사진 변경이 안된 경우
+            // empty처럼 인식할 수 있게 하는 방법이 있으려나..?
+            const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
+            diary.append("images", empty)
+            // const blob = fetch(image).blob()
+            // const file = new File([blob], `${image}.jpg`, )
+            // diary.append("images", file)
+            // diary.append("images", image)
+          } else {
+            // 사진이 변경된 경우 혹은 새로 추가한 경우
+            diary.append("images", image)
+          }
+        })
+        // diary.append("images", imageList)
+        for (var key of diary.keys()) {
+          console.log(key);
+        }
+        for (var value of diary.values()) {
+          console.log(value);
+        }
+
         const payload = {
           id: this.diary.id,
-          content: this.newDiary
+          content: diary
         }
         this.updateDiary(payload)
       } else {

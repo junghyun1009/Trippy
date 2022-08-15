@@ -37,12 +37,12 @@ export default ({
   mutations: {
 
     SET_DIARY(state, diary) {
-      diary.detailLocations.forEach((location) => {
-        if (location.filename != null) {
-          diary.representativeImg = location.filepath
-          return false
-        }
-      })
+      // diary.detailLocations.forEach((location) => {
+      //   if (location.filename != null) {
+      //     diary.representativeImg = location.filepath
+      //     return false
+      //   }
+      // })
       state.diary = diary
       console.log(state.diary)
     },

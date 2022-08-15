@@ -2,6 +2,7 @@
   <div>
     <!-- diaryTemp -> diary로 바꿔 -->
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
+    <!-- {{ diary }} -->
     <div class="diary-detail-header">
       <div class="title-icons">
         <h3>{{ diary.title }}</h3>
@@ -88,7 +89,7 @@
             <!-- 여기는 공통 -->
             <!-- <el-tag>{{ diary.countryName }}</el-tag> -->
             <!-- <el-tag>{{ diary.cityName }}</el-tag> -->
-            <el-tag class="tag">{{ diary.startDate }}-{{ diary.endDate }}</el-tag>
+            <el-tag class="tag">{{ diary.startDate.substr(0, 10) }}-{{ diary.endDate.substr(0, 10) }}</el-tag>
             <el-tag class="tag">{{ partyTag }} ({{ diary.count }}명)</el-tag>
             <el-tag class="tag" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.name }}</el-tag>
           </div>
@@ -239,6 +240,7 @@ export default {
   },
   mounted() {
     setTimeout(() => this.addMarkers(), 500)
+    // this.addMarkers()
   }
 }
 </script>
