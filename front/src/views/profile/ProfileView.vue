@@ -12,7 +12,10 @@
           <!-- 내 프로필 페이지라면 팔로우 버튼 안뜸 -->
           <!-- 만약 fetchCurrentUser의 id와 profile param의 id가 같다면 -->
           <div class="my-page-username" v-if="isMyProfile">
-            <h2 >{{ profile.name }}</h2>
+            <h2>{{ profile.name }}</h2>
+            <el-button class="button" link @click="goProfileEdit()">
+              <span class="material-symbols-outlined icon">edit</span>
+            </el-button>
           </div>
           <!-- 남의 프로필 페이지라면 팔로우 버튼 뜸-->
           <div class="their-page-username" v-else>
@@ -124,6 +127,10 @@ export default {
       'isFollowed',
       ]),
 
+    goProfileEdit(){
+      this.$router.push({ name: 'profileEdit' })
+    },
+
     myProfile(){
       if ( this.profile.id === this.theirProfile.id ) { 
         this.isMyProfile
@@ -209,6 +216,10 @@ export default {
     margin-right: 65%;
   }
 
+  .my-page-username {
+    display: flex;
+  }
+  
   .user-follow:first-child {
     margin-right: 15px;
   }
