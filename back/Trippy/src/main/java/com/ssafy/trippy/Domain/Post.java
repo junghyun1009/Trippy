@@ -20,23 +20,18 @@ public class Post extends BaseEntity{
     @Column(name="POST_ID")
     private Long id;
 
-    @Column(nullable = false)
     private String title;
 
 
-    @Column(nullable = false)
     private int company;
 
-    @Column(nullable = false)
     private int count;
 
-    @Column(nullable = false)
     private LocalDateTime startDate;
 
-    @Column(nullable = false)
     private LocalDateTime endDate;
 
-    @Column(name="REPRESENTIVE_IMG",nullable = false)
+    @Column(name="REPRESENTIVE_IMG")
     private int representiveImg;
 
     @ManyToOne(fetch = FetchType.LAZY)
