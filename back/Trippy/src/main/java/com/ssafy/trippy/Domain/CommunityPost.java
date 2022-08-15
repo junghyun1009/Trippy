@@ -20,44 +20,32 @@ public class CommunityPost extends BaseEntity {
     @Column(name = "COMMUNITY_POST_ID")
     private Long id;
 
-    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
     private int category;
 
-    @Column(nullable = false)
     private LocalDateTime meetingTime;
 
-    @Column(nullable = false)
     private LocalDateTime startDate;
 
-    @Column(nullable = false)
     private LocalDateTime endDate;
 
-    @Column(nullable = false)
     private int recruitVolume;
 
-    @Column(nullable = false)
     private int recruitCurrentVolume;
 
-    @Column(nullable = false)
     private int startAge;
 
-    @Column(nullable = false)
     private int endAge;
 
-    @Column(nullable = false)
     private String gender;
 
-    @Column(nullable = false, name="IS_LOCAL")
+    @Column( name="IS_LOCAL")
     private boolean Local;
-    @Column(nullable = false)
     private String place;
-    @Column(nullable = false, name="IS_DAY")
+    @Column( name="IS_DAY")
     private boolean Day;
 
     @ManyToOne(fetch = FetchType.LAZY)
