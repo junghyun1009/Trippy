@@ -12,7 +12,6 @@
       ></el-input>
       <el-button type="primary" @click="checkEmailDuplicate(userData)">중복확인</el-button>
       <account-error-list :errorMessage="emailError" v-if="!emailFormat"></account-error-list>
-
     </div>
 
     <br>
@@ -42,6 +41,17 @@
     </div>
 
     <br>
+    <div class="phone">
+      <p>핸드폰 번호</p>
+      <el-input  id="phone"
+      class="input"
+      v-model="userData.phone" 
+      placeholder="010-1234-5678"
+      @blur="checkPhone()"
+      ></el-input>
+      <account-error-list :errorMessage="phoneError" v-if="!phoneFormat"></account-error-list>
+    </div>
+
     <div class="nickname">
       <p>닉네임</p>
       <el-input 
@@ -106,6 +116,7 @@ export default {
                 gender: '',
                 name: '',
                 password: '',
+                phone: '',
             },
             options: [
                 {
@@ -124,6 +135,7 @@ export default {
             alreadyRegistered: userErrorMessage.alreadyRegistered,
             emailFormat: true,
             passwordFormat: true,
+            phoneFormat: true,
             passwordMatch: true,
             nicknameFormat: true,
             passwordCheck: '',
@@ -168,7 +180,7 @@ export default {
       checkPasswordValidity() {
         var inputPassword = document.getElementById('password').value;
         // 문자, 숫자, 그리고 최소 하나의 특수문자
-        var regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d~$@$!%*#?&()+|=]{8,20}$/;
+        var regPassword = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}/;
         if (regPassword.test(inputPassword)) {
           this.passwordFormat = true
           this.pass = true
@@ -176,6 +188,19 @@ export default {
             this.passwordFormat = false
             this.pass = false
           }
+      },
+
+      // 휴대폰 형식 확인 regex
+      checkPhone() {
+        var inputPhone = document.getElementById('phone').value;
+        var regPhone = /^01(?:0|1|[6-9])[.-]?(\d{3}|\d{4})[.-]?(\d{4})$/;
+        if (regPhone.test(inputPhone)) {
+          this.phoneFormat = true
+          this.pass = true
+        } else {
+          this.phoneFormat = false
+          this.pass = false
+        }
       },
 
       // 닉네임 형식 확인 regex
