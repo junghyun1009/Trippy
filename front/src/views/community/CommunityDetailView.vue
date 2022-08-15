@@ -2,9 +2,13 @@
   <div>
     <div class="header">
       <div class="tags">
-        <!-- {{ post }} -->
+        {{ post }}
         <el-tag class="tag">{{ convertTag }}</el-tag>
         <el-tag class="tag">장소</el-tag>
+      </div>
+      <div>
+        <span v-if="!isBookmark" class="material-symbols-outlined" @click="isBookmark=1, onClick()">bookmark_add</span>
+        <span v-else class="material-symbols-outlined filled" @click="isBookmark=0">bookmark</span>
       </div>
       <router-link class="router" :to="{ name: 'profile' }">
         <div class="profile">
@@ -74,7 +78,7 @@ export default {
   },
   data() {
     return {
-      isBookmark: true,
+      isBookmark: 0,
       postPk: this.$route.params.postPk
     }
   },
@@ -104,11 +108,15 @@ export default {
     // }
   },
   methods: {
-    ...mapActions(['fetchPost', 'fetchCurrentUser'])
+    ...mapActions(['fetchPost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark']),
+    onClick() {
+      this.createBookmark({ postPk: this.post.id, isBookmark: this.isBookmark })
+    }
   },
   created() {
     this.fetchPost(this.postPk)
     this.fetchCurrentUser()
+    this.fetchBookmark()
   }
 }
 </script>
@@ -137,6 +145,14 @@ hr {
 .tag {
   margin-right: 0.3rem;
   margin-bottom: 1rem;
+}
+
+.filled {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
 }
 
 .router {
