@@ -26,8 +26,8 @@
           <el-avatar :size="40" src="" />
         </router-link>
         <div>
-          <p class="member">{{ comment.member }}</p>
-          <p class="content">{{ comment.content }}</p>
+          <p class="member">{{ comment.user }}</p>
+          <p class="content">{{ comment.info.content }}</p>
           <!-- 나중에는 comment.pk로 바꿔서 보내야할 듯 -->
           <span class="leave-comment" @click="sendInfo(comment.member)">답글 달기</span>
           <span class="leave-comment" @click="editComment(comment.content)">수정</span>

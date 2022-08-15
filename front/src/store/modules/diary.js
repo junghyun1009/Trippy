@@ -10,7 +10,7 @@ export default ({
     // images: [],
     // image: {},
 
-    comment: '',
+    comment: {},
     comments: [],
     isChild: false,
     isUpdating: false,
@@ -51,17 +51,20 @@ export default ({
     //   console.log(state.images)
     // },
 
-    SET_COMMENT(state, comment) {
-      state.comment = comment
+    SET_COMMENT(state, payload) {
+      state.comment.user = payload.user
+      state.comment.info = payload.info
       console.log(state.comment)
+      state.comments.push(state.comment)
+      state.comment = {}
     },
 
     SET_STATUS(state) {
       state.isUpdating = true
     },
 
-    SET_COMMENTS(state, comments) {
-      state.comments = comments
+    EMPTY_COMMENTS(state) {
+      state.comments = []
     },
 
     // 홈화면에 추천(일단은 전부 띄우는 것)
@@ -206,19 +209,40 @@ export default ({
     },
 
     // 일지 댓글 조회
-    fetchComment({ getters, commit}, diaryPk) {
+    fetchComment({ getters, commit, dispatch }, diaryPk) {
       axios({
         url: `http://i7a506.p.ssafy.io:8080/api/comment/${diaryPk}`,
         method: 'get',
         headers: getters.authHeader
       })
-      .then( res => {
-        commit('SET_COMMENTS', res.data)
+      .then((res) => {
+        console.log(res.data)
+        commit('EMPTY_COMMENTS')
+        res.data.forEach((comment) => {
+          dispatch('fetchUser', comment)
+        })
       })
       .catch(err => {
         if (err.response.status === 404) {
           router.push({ name: 'notFound404'})
         }
+      })
+    },
+
+    fetchUser({ getters, commit }, comment) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/members/${comment.memberId}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        const user = res.data.name
+        const payload = {
+          user: user,
+          info: comment
+        }
+        commit('SET_COMMENT', payload)
       })
     },
     // updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
