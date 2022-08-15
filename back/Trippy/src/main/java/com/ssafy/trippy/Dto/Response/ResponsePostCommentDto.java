@@ -20,10 +20,11 @@ public class ResponsePostCommentDto implements Serializable {
     private Long memberId;
     private Long parentId;
 
-    private List<PostComment> children = new ArrayList<>();
+    private List<ResponsePostCommentDto> children = new ArrayList<>();
 
     @Builder
     public ResponsePostCommentDto(PostComment postComment) {
+        this.id = postComment.getId();
         this.content = postComment.getContent();
         this.postId = postComment.getPost().getId();
         this.parentId = postComment.getParent()== null ? 0 : postComment.getParent().getId();
