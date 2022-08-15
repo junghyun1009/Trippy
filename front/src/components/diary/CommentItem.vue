@@ -61,7 +61,7 @@ export default {
   name: 'CommentItem',
   props: { 
     // comments: Array,
-    diaryPk: Number
+    diaryPk: String
   },
   data() {
     return {

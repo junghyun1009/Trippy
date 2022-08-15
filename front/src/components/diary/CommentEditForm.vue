@@ -14,17 +14,39 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  name: 'CommentEditForm',
-  props: {
-    diaryPk: Number,
-    commentToEdit: Object
-  },
-  data() {
-    return {
-      originalContent: this.commentToEdit.info.content
+    name: 'CommentEditForm',
+
+    props: {
+      diaryPk: String,
+      commentToEdit: Object
+    },
+
+    data() {
+      return {
+        originalContent: this.commentToEdit.info.content
+      }
+    },
+
+    methods: {
+      ...mapActions(['updateComment']),
+      onSubmit() {
+        // diary.pk diarydetail에서 props로 받아와서 같이 넘겨주기
+        // console.log(this.commentToEdit)
+        const payload = {
+          id: this.commentToEdit.info.id,
+          data: {
+            content: this.originalContent,
+            memberId: this.commentToEdit.info.memberId,
+            postId: this.diaryPk
+          }
+        }
+        this.updateComment(payload),
+        this.content = ''
+      }
     }
-  },
 }
 </script>
 

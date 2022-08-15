@@ -2,21 +2,12 @@
   <div>
     <form @submit.prevent="onSubmit">
       <div class="comment-form">
-        <!-- 수정 상태인지 아닌지 체크 -->
 				<el-input class="comment-input" type="text" id="comment" v-model="content" required/>
 				<el-button class="btn" link @click="onSubmit">
           <span class="material-symbols-outlined">send</span>
         </el-button>
 			</div>
 
-      <!-- <div class="comment-form">
-        {{ commentToEdit }}
-        {{ originalContent }}
-				<el-input class="comment-input" type="text" id="comment" v-model="originalContent" required/>
-				<el-button class="btn" link @click="onSubmit">
-          <span class="material-symbols-outlined">send</span>
-        </el-button>
-      </div> -->
     </form>
   </div>
 </template>
@@ -27,17 +18,15 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
     name: 'CommentForm',
     props: {
-      diaryPk: Number,
-      // commentToEdit: Object
+      diaryPk: String,
     },
     data() {
       return {
         content: '',
-        // originalContent: this.commentToEdit
       }
     },
     computed: {
-      ...mapGetters(['isEditing', 'profile']),
+      ...mapGetters(['profile']),
     },
 		methods: {
 			...mapActions(['createComment', 'fetchProfile']),

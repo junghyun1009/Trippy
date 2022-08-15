@@ -257,6 +257,27 @@ export default ({
       console.log(2, comment)
       commit('SWITCH_IS_EDITING', comment)
     },
+
+    // 댓글 수정
+    updateComment({ commit, getters }, comment) {
+      console.log(comment)
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/comment/${comment.id}`,
+        method: 'put',
+        data: comment.data,
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data);
+        commit('SET_COMMENT', comment.data)
+        router.push({
+          name: 'diaryDetail',
+          parmas: { diaryPk: comment.data.postId }
+        })
+        location.reload()
+      })
+      .catch((err) => console.error(err.response))
+    },
     // updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
     //   const comment = { content, diaryPk, commentPk }
     //   axios({
@@ -270,10 +291,10 @@ export default ({
     //   })
     //   .catch(err => console.error(err.response))
     // },
-    updateComment({ commit }, content) {
-      commit('SET_COMMENT', content)
-      commit('SET_STATUS')
-    },
+    // updateComment({ commit }, content) {
+    //   commit('SET_COMMENT', content)
+    //   commit('SET_STATUS')
+    // },
 
   
     deleteComment({ getters, commit}, diaryPk, commentPk) {
