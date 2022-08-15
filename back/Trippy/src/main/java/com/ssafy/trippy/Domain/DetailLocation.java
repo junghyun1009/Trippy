@@ -16,13 +16,10 @@ public class DetailLocation extends BaseEntity{
     @Column(name="DETAIL_LOCATION_ID")
     private Long id;
 
-    @Column(nullable = false)
     private String detailLocationName;
 
-    @Column(nullable = false)
     private float rating;
 
-    @Column(nullable = false)
     private String detailLocationContent;
 
     @ManyToOne(fetch = FetchType.LAZY)

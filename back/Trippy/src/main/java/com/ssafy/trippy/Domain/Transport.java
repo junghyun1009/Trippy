@@ -17,7 +17,6 @@ public class Transport extends BaseEntity{
     @Column(name="TRANSPORT_ID")
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
     @Builder
