@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 @Setter
 @NoArgsConstructor
 public class RequestFollowDto {
-    private Long id;
+
     @JsonProperty("following_id")
     private Long followingId;
     @JsonProperty("follower_id")
@@ -24,7 +24,6 @@ public class RequestFollowDto {
 
     public Follow toEntity() {
         return Follow.builder()
-                .id(id)
                 .follower(Member.builder().id(followerId).build())
                 .following(Member.builder().id(followingId).build())
                 .build();
