@@ -2,7 +2,7 @@
   <div>
     <!-- diaryTemp -> diary로 바꿔 -->
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
-    <!-- {{ diary }} -->
+    {{ diary }}
     <div class="diary-detail-header">
       <div class="title-icons">
         <h3>{{ diary.title }}</h3>
@@ -35,7 +35,7 @@
                   </li>
                 </ul>
               </div> -->
-              <comment-item :comments="commentsTemp"></comment-item>
+              <comment-item :diaryPk="this.diaryPk"></comment-item>
             </template>
             <template #footer>
               <div class="comment-form">

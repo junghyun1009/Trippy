@@ -164,7 +164,7 @@ export default ({
         console.log(res.data)
         commit('SET_DIARY', diary)
         router.push({
-          name: 'DiaryDetail',
+          name: 'diaryDetail',
           parmas: { diaryPk: res.data }
         })
       })
@@ -186,25 +186,40 @@ export default ({
     },
 
     // 일지 댓글 CREATE
-    // createComment({ getters, commit }, diaryPk, content) {
-    //   const comment = { content }
-    //   axios({
-    //     url: `http://localhost:8000/comments/post/${diaryPk}`,
-    //     method: 'post',
-    //     data: comment,
-    //     headers: getters.authHeader
-    //   })
-    //   .then( res => {
-    //     commit('SET_COMMENTS'),
-    //     res.data
-    //     router.push('DiaryCommentView')
-    //   })
-    //   .catch(err => console.error(err.response))
-    // },
-    createComment({ commit }, content) {
-      commit('SET_COMMENT', content)
+    createComment({ commit, getters }, payload) {
+      axios({
+        url: 'http://i7a506.p.ssafy.io:8080/api/auth/comment',
+        method: 'post',
+        data: payload,
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data);
+        commit('SET_COMMENT', payload)
+        router.push({
+          name: 'diaryDetail',
+          parmas: { diaryPk: payload.postId }
+        })
+      })
+      .catch((err) => console.error(err.response))
     },
 
+    // 일지 댓글 조회
+    fetchComment({ getters, commit}, diaryPk) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/comment/${diaryPk}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then( res => {
+        commit('SET_COMMENTS', res.data)
+      })
+      .catch(err => {
+        if (err.response.status === 404) {
+          router.push({ name: 'notFound404'})
+        }
+      })
+    },
     // updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
     //   const comment = { content, diaryPk, commentPk }
     //   axios({
@@ -223,21 +238,6 @@ export default ({
       commit('SET_STATUS')
     },
 
-    fetchComment({ getters, commit}, diaryPk) {
-      axios({
-        url: `http://localhost:8000/comments/post/${diaryPk}`,
-        method: 'get',
-        headers: getters.authHeader
-      })
-      .then( res => {
-        commit('SET_COMMENTS', res.data)
-      })
-      .catch(err => {
-        if (err.response.status === 404) {
-          router.push({ name: 'notFound404'})
-        }
-      })
-    },
   
     deleteComment({ getters, commit}, diaryPk, commentPk) {
       if (confirm('정말 삭제하시겠습니까?')) {

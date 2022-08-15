@@ -18,6 +18,7 @@
       <a class="editdelete" @click="deleteComment(payload)"><i class="fa-solid fa-trash-can"></i></a>
     </span>
   </li> -->
+  {{ comments }}
     <div v-for="(comment, idx) in comments" :key="idx" class="parent-child">
       <!-- 댓글 -->
       <div class="parent-comment">
@@ -58,7 +59,8 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'CommentItem',
   props: { 
-    comments: Array,
+    // comments: Array,
+    diaryPk: Number
   },
   data() {
     return {
@@ -71,10 +73,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentUser',]),
+    ...mapGetters(['currentUser', 'comments']),
   },
   methods: {
-    ...mapActions(['updateComment', 'deleteComment', 'showParent']),
+    ...mapActions(['updateComment', 'deleteComment', 'showParent', 'fetchComment']),
     switchIsEditing() {
       this.isEditing = !this.isEditing
     },
@@ -89,8 +91,11 @@ export default {
     editComment(content) {
       console.log(content)
       this.updateComment(content)
-    }
+    },
   },
+  mounted() {
+    this.fetchComment(this.diaryPk)
+  }
 }
 </script>
 

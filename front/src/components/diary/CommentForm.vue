@@ -4,7 +4,7 @@
       <div class="comment-form">
         <!-- 수정 상태인지 아닌지 체크 -->
 				<el-input class="comment-input" type="text" id="comment" v-model="content" required/>
-				<el-button class="btn" link>
+				<el-button class="btn" link @click="onSubmit">
           <span class="material-symbols-outlined">send</span>
         </el-button>
 			</div>
@@ -22,29 +22,35 @@ export default {
         content: '',
       }
     },
+    props: {
+      diaryPk: Number,
+    },
     computed: {
-      ...mapGetters(['comment', 'isUpdating']),
+      ...mapGetters(['comment', 'isUpdating', 'profile']),
       // content() {
       //   return this.comment
       // }
     },
 		methods: {
-			...mapActions(['createComment']),
+			...mapActions(['createComment', 'fetchProfile']),
 			onSubmit() {
         // diary.pk diarydetail에서 props로 받아와서 같이 넘겨주기
-				this.createComment(this.content),
+        const payload = {
+          content: this.content,
+          memberId: this.profile.id,
+          postId: this.diaryPk
+        }
+				this.createComment(payload),
 				this.content = ''
 			}
-		}
+		},
+    mounted() {
+      this.fetchProfile()
+    }
 }
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;500&display=swap');
-
-  * { 
-      font-family: 'IBM Plex Sans KR', sans-serif;
-    } 
 
 button {
   margin-left: 12px;
