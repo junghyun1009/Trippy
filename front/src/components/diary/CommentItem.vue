@@ -143,6 +143,7 @@ i {
 .member {
   color: black;
   font-size: 0.8rem;
+  font-weight: 400;
 }
 
 .content {
