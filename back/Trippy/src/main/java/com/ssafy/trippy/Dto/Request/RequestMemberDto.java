@@ -31,8 +31,10 @@ public class RequestMemberDto {
     @NotEmpty(message="핸드폰 번호는 빈값일 수 없습니다.")
     private String phone;
     @ApiParam(value = "성별")
+    @NotNull(message="성별은 빈값일 수 없습니다.")
     private int gender;
     @ApiParam(value = "생일")
+    @NotNull(message="성별은 빈값일 수 없습니다.")
     private LocalDateTime birth;
     @ApiParam(value = "프로필 이미지 경로")
     private String img_path;
