@@ -12,7 +12,9 @@
           <span class="username">{{ post.name }}</span>
         </div>
       </router-link>
-      <edit-delete-button class="edit-delete"></edit-delete-button>
+      <div v-if="isPostAuthor">
+        <edit-delete-button class="edit-delete"></edit-delete-button>
+      </div>
       <hr>
     </div> 
     <div class="title">
@@ -22,7 +24,7 @@
     <div class="options">
       <p class="option">
         <span class="material-symbols-outlined">groups</span>
-        {{ post.startAge }}~{{ post.endAge }}세 | {{ post.gender }}
+        {{ post.startAge === post.endAge ? post.startAge : `${post.startAge}~${post.endAge}`}}세 | {{ post.gender }}
       </p>
       <p class="option">
         <span class="material-symbols-outlined">event_note</span>
@@ -77,7 +79,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['post']),
+    ...mapGetters(['post', 'isPostAuthor']),
     recruitState() {
       return '모집중'
     },
@@ -102,10 +104,11 @@ export default {
     // }
   },
   methods: {
-    ...mapActions(['fetchPost'])
+    ...mapActions(['fetchPost', 'fetchCurrentUser'])
   },
   created() {
     this.fetchPost(this.postPk)
+    this.fetchCurrentUser()
   }
 }
 </script>
