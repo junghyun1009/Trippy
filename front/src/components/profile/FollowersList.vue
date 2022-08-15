@@ -1,26 +1,26 @@
 <template>
   <div>
-    <div class="container">
-      <p @click="visible = true">
-        FOLLOWERS
-      </p>
-      <el-dialog v-model="visible" :show-close="false">
-        <template #header="{ close, titleId, titleClass }">
-          <div class="my-header">
-              <h4 :id="titleId" :class="titleClass">FOLLOWERS</h4>
-              <el-button type="danger" @click="close">
-              x
-              </el-button>
-          </div>
-        </template>
-        <div class="profileimage row row-cols-3 row-cols-md5-g-4">
-        <followers-list-item v-for="follower in followers" :key="follower.id" :follower="follower"></followers-list-item>
+    <p @click="visible = true">
+      FOLLOWERS
+    </p>
+    <el-dialog class="follower-modal" v-model="visible" :show-close="false">
+      <template #header="{ close, titleId, titleClass }">
+        <div class="my-header">
+            <h4 :id="titleId" :class="titleClass">FOLLOWERS</h4>
+            <el-button type="danger" @click="close">
+            x
+            </el-button>
         </div>
-        
-      </el-dialog>
-        <p>{{ followerCount }}</p>
-
-    </div>
+        <div>
+          <el-row>
+            <el-col :span="8">
+              <followers-list-item v-for="follower in followers" :key="follower.id" :follower="follower"></followers-list-item>
+            </el-col>
+          </el-row>
+        </div>
+      </template>
+    </el-dialog>
+      <p>{{ followerCount }}</p>
   </div>
 </template>
 
@@ -55,8 +55,13 @@ export default {
 <style scoped>
 .my-header {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
+  margin: 0;
+}
+
+.follower-modal {
+  width: 80vw;
+  margin: 0;
 }
 
 </style>

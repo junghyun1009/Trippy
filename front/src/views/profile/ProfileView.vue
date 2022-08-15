@@ -18,7 +18,7 @@
           <div class="their-page-username" v-else>
             <h2>{{ theirProfile.name }}</h2>
             <div class="follow-button">
-              <el-button v-if="isFollow===false" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
+              <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
               <el-button v-else type="primary" plain @click="unfollowNow()">팔로잉</el-button>
             </div>
         </div>
@@ -39,12 +39,14 @@
       </div>
     </div>
 
+    <!-- vue warn 나서 일단 이거 뺴놓음  -->
+    <!-- @tab-click="handleClick" -->
     <el-tabs
     v-if="isMyProfile"
     v-model="activeName"
     type="card"
     class="demo-tabs"
-    @tab-click="handleClick"
+    
     >
       <el-tab-pane label="My Diary">
         <!-- 내가 쓴 일지 목록 -->
@@ -63,7 +65,6 @@
     v-model="activeName"
     type="card"
     class="demo-tabs"
-    @tab-click="handleClick"
     >
       <el-tab-pane label="My Diary">
         <!-- 상대방이 쓴 일지 목록 -->
@@ -103,6 +104,7 @@ export default {
       isMyProfile: false,
       followerList: [],
       followingList: [],
+      activeName: '',
     }
   },
   computed: {

@@ -7,7 +7,7 @@ export default {
     myDiaries: [],
     isMyProfile: false,
     theirProfile: {},
-    followerList: {},
+    followerList: [],
     followingList: {},
     followerCount: null,
     followingCount: null,
@@ -65,6 +65,7 @@ export default {
       })
       .then(res => {
         console.log(res.data)
+        console.log('^ my diary list')
         commit('FETCH_MY_DIARY', res.data)
       })
       .catch(err => {
@@ -80,7 +81,7 @@ export default {
         params: memberId
       })
       .then( res => {
-        console.log(res)
+        console.log('authors profile from url param:', res.data)
         commit('SET_THEIR_PROFILE', res.data)
       })
       .catch(err => 
@@ -96,8 +97,7 @@ export default {
         headers: getters.authHeader
       })
       .then( res => {
-        console.log('my follower list')
-        console.log(res.data)
+        console.log('my follower list:', res.data)
         commit('FOLLOWER_LIST', res.data)
         dispatch('myFollowersCount')
       })
@@ -110,8 +110,7 @@ export default {
         headers: getters.authHeader
       })
       .then( res => {
-        console.log('number of my followers')
-        console.log(res.data)
+        console.log('number of my followers:', res.data)
         commit('FOLLOWER_COUNT', res.data)
       })
     },
@@ -123,8 +122,7 @@ export default {
         headers: getters.authHeader
       })
       .then( res => {
-        console.log('my following list')
-        console.log(res.data)
+        console.log('my following list:', res.data)
         commit('FOLLOWING_LIST', res.data)
         dispatch('myFollowingsCount')
       })
@@ -137,8 +135,7 @@ export default {
         headers: getters.authHeader
       })
       .then( res => {
-        console.log('number of people I follow')
-        console.log(res.data)
+        console.log('number of people I follow:', res.data)
         commit('FOLLOWING_COUNT', res.data)
       })
     },
