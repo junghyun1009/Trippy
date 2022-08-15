@@ -33,17 +33,16 @@ public class ResponsePostCommentDto implements Serializable {
         this.memberId = postComment.getMember().getId();
     }
 
-    public ResponsePostCommentDto(Long id, String content, Long postId,Long memberId,List<PostComment> children) {
+    public ResponsePostCommentDto(Long id, String content, Long postId,Long memberId) {
         this.id = id;
         this.content = content;
         this.postId = postId;
         this.memberId = memberId;
-        this.children = Converter.convertPostCommentList(children);
     }
 
 
     public static ResponsePostCommentDto convertCommentToDto(PostComment postComment){
-        return new ResponsePostCommentDto(postComment.getId(),postComment.getContent(), postComment.getPost().getId(), postComment.getMember().getId(), postComment.getChildren());
+        return new ResponsePostCommentDto(postComment.getId(),postComment.getContent(), postComment.getPost().getId(), postComment.getMember().getId());
 
     }
 
