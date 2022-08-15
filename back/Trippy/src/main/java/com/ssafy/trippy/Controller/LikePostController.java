@@ -1,7 +1,6 @@
 package com.ssafy.trippy.Controller;
 
 import com.ssafy.trippy.Dto.Request.RequestLikePostDto;
-import com.ssafy.trippy.Dto.Response.ResponseLikePostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Service.LikePostService;
 import com.ssafy.trippy.Service.MemberService;
@@ -24,25 +23,42 @@ public class LikePostController {
     private final LikePostService likePostService;
 
     private final MemberService memberService;
-    private static final String SUCCESS = "success";
+    private static final String SUCCESS = "SUCCESS";
+    private static final String FAIL = "ERROR";
 
     @PostMapping
-    public ResponseEntity<?> saveLikePost(HttpServletRequest request, @RequestBody RequestLikePostDto requestLikePostDto){
+    public ResponseEntity<?> saveLikePost(HttpServletRequest request, @RequestBody RequestLikePostDto requestLikePostDto) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        requestLikePostDto.setMemberId(memberId);
-        likePostService.saveLikePost(requestLikePostDto);
-        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+        try {
+            if (likePostService.existsByMemberIdAndPostId(memberId, requestLikePostDto.getPostId())) {
+                return new ResponseEntity<>("이미 좋아요 누른 게시글입니다", HttpStatus.NOT_FOUND);
+            } else {
+                requestLikePostDto.setMemberId(memberId);
+                likePostService.saveLikePost(requestLikePostDto);
+                return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("좋아요를 누를 수 없습니다", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping
     public ResponseEntity<?> getLikePosts(HttpServletRequest request) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        List<ResponsePostDto> responsePostDtos = likePostService.getLikePosts(memberId);
-        return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
+        try {
+            List<ResponsePostDto> responsePostDtos = likePostService.getLikePosts(memberId);
+            if (responsePostDtos.size() == 0) {
+                return new ResponseEntity<>("좋아요 누른 게시글이 없습니다", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
+            }
+        }catch(Exception e){
+            return new ResponseEntity<>(FAIL,HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping
-    public ResponseEntity<?> removeLikePost(HttpServletRequest request, @RequestBody RequestLikePostDto requestLikePostDto){
+    public ResponseEntity<?> removeLikePost(HttpServletRequest request, @RequestBody RequestLikePostDto requestLikePostDto) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         requestLikePostDto.setMemberId(memberId);
         likePostService.deleteLikePost(requestLikePostDto);

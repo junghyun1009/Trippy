@@ -47,4 +47,12 @@ public class LikePostServiceImpl implements LikePostService {
         }
         likePostRepository.deleteByMemberIdAndPostId(requestLikePostDto.getMemberId(),requestLikePostDto.getPostId());
     }
+
+    @Override
+    public boolean existsByMemberIdAndPostId(Long memberId, Long postId) {
+        if(likePostRepository.existsByMemberIdAndPostId(memberId, postId)){
+            return true;
+        }
+        return false;
+    }
 }

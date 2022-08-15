@@ -18,15 +18,6 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     List<Follow> findAllByFollowingId(Long followingId);
     Long countByFollowerId(Long followerId);
     Long countByFollowingId(Long followerId);
-//    Follow findByFollowingIdAndFollowerId(long followingId, long followerId);
-//    List<Follow> findAllByFollowingIdAndMemberId(Long followingId, Long memberId);
-//    List<Follow> findAllByFollowerIdAndMemberId(Long followerId, Long memberId);
-//    @Modifying
-//    @Query(value = "INSERT INTO follow(following, follower) VALUES(:fromId, :toId)", nativeQuery = true)
-//    Long follow(long fromId, long toId);
 
-//    @Modifying
-//    @Query(value = "DELETE FROM follow WHERE following = :fromId AND follower = :toId", nativeQuery = true)
-//    void unFollow(long fromId, long toId);
 
 }
