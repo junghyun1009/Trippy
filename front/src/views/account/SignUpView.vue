@@ -133,6 +133,7 @@ export default {
             passwordValidityError: userErrorMessage.passwordValidityError,
             nicknameError: userErrorMessage.nicknameError,
             alreadyRegistered: userErrorMessage.alreadyRegistered,
+            phoneError: userErrorMessage.phoneError,
             emailFormat: true,
             passwordFormat: true,
             phoneFormat: true,
@@ -184,10 +185,10 @@ export default {
         if (regPassword.test(inputPassword)) {
           this.passwordFormat = true
           this.pass = true
-          } else {
-            this.passwordFormat = false
-            this.pass = false
-          }
+        } else {
+          this.passwordFormat = false
+          this.pass = false
+        }
       },
 
       // 휴대폰 형식 확인 regex
@@ -222,10 +223,11 @@ export default {
       checkBlank() {
         var emailBlank = document.getElementById('email').value
         var passwordBlank = document.getElementById('password').value
+        var phoneBlank = document.getElementById('phone').value
         var nicknameBlank = document.getElementById('nickname').value
         var genderBlank = document.getElementById('gender').value
         var birthdateBlank = document.getElementById('birthdate').value
-        if ( emailBlank == '' | passwordBlank == '' | nicknameBlank == '' | genderBlank == '' | birthdateBlank == '' ) {
+        if ( emailBlank == '' | passwordBlank == '' | nicknameBlank == '' | genderBlank == '' | birthdateBlank == '' | phoneBlank == '') {
           alert("빈 칸 없이 모든 필드를 채워주세요!")
           console.log(this.userData)
         } 
