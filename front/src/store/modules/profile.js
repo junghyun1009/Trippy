@@ -11,6 +11,7 @@ export default {
     followingList: {},
     followerCount: null,
     followingCount: null,
+    followingStatus: null,
   },
   getters: {
     profile: state => state.profile,
@@ -22,6 +23,7 @@ export default {
     followingList: state => state.followingList,
     followerCount: state => state.followerCount,
     followingCount: state => state.followingCount,
+    followingStatus: state => state.followingStatus,
   },
   mutations: {
     SET_PROFILE: (state, profile) => state.profile = profile,
@@ -32,6 +34,7 @@ export default {
     FOLLOWING_LIST: (state, followingList) => state.followingList = followingList,
     FOLLOWER_COUNT: (state, followerCount) => state.followerCount = followerCount,
     FOLLOWING_COUNT: (state, followingCount) => state.followingCount = followingCount,
+    FOLLOWING_STATUS: (state, followingStatus ) => state.followingStatus = followingStatus,
     FETCH_MY_DIARY: (state, myDiaries) => {
       myDiaries.forEach((diary) => {
         diary.detailLocations.forEach((location) => {
@@ -73,7 +76,7 @@ export default {
       })
     },
 
-    fetchTheirProfile({commit}, memberId) {
+    fetchTheirProfile({commit, getters }, memberId) {
       console.log(memberId)
       axios({
         url: `http://i7a506.p.ssafy.io:8080/api/members/${memberId}`,
@@ -83,6 +86,8 @@ export default {
       .then( res => {
         console.log('authors profile from url param:', res.data)
         commit('SET_THEIR_PROFILE', res.data)
+        console.log('getters check after fetching their profile')
+        console.log(getters.theirProfile)
       })
       .catch(err => 
         console.log(err))
@@ -90,7 +95,7 @@ export default {
 
     // 팔로잉 기능
     // 내 follower/following
-    myFollowers({dispatch, getters, commit}) {
+    myFollowers({dispatch, getters, commit }) {
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/follower',
         method: 'get',
@@ -103,7 +108,7 @@ export default {
       })
     },
 
-    myFollowersCount({getters, commit}) {
+    myFollowersCount({getters, commit }) {
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/follower/cnt',
         method: 'get',
@@ -115,7 +120,7 @@ export default {
       })
     },
 
-    myFollowings({dispatch, getters, commit}) {
+    myFollowings({dispatch, getters, commit }) {
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/following',
         method: 'get',
@@ -128,7 +133,7 @@ export default {
       })
     },
 
-    myFollowingsCount({getters, commit}) {
+    myFollowingsCount({getters, commit }) {
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/following/cnt',
         method: 'get',
@@ -142,7 +147,7 @@ export default {
 
 
     // 팔로우 언팔로우
-    follow({ getters }, followId) {
+    follow({ getters, commit }, followId) {
       console.log(followId)
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow',
@@ -152,10 +157,13 @@ export default {
       })
       .then( res => {
         console.log('followed!', res.data)
+        commit('FOLLOWING_STATUS', true)
+        console.log('setgetters')
+        console.log(getters.followingStatus)
       })
     },
 
-    unfollow({ getters }, followId) {
+    unfollow({ getters, commit }, followId) {
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/undo',
         method: 'post',
@@ -164,6 +172,27 @@ export default {
       })
       .then( res => {
         console.log('unfollowed!', res.data)
+        commit('FOLLOWING_STATUS', false)
+        console.log('setgetters')
+        console.log(getters.followingStatus)
+      })
+    },
+
+    setFollowingStatus({ getters, commit }, following_id) {
+      console.log(following_id)
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/follow/chk/${following_id}`,
+        method: 'get',
+        headers: getters.authHeader,
+        params: following_id
+      })
+      .then( res => {
+        console.log(res.data)
+          commit('FOLLOWING_STATUS', res.data)
+          console.log(getters.followingStatus)
+      })
+      .catch( err => {
+        console.log(err)
       })
     }
     

@@ -27,6 +27,7 @@
         </div>
       </div>
     </div>
+    
 
     <div class="description">
       <p v-if="isMyProfile">{{ profile.description }}</p>
@@ -41,7 +42,7 @@
         <followings-list/>
       </div>
     </div>
-
+    
     <!-- vue warn 나서 일단 이거 뺴놓음  -->
     <!-- @tab-click="handleClick" -->
     <el-tabs
@@ -76,7 +77,6 @@
         <my-diaries-list></my-diaries-list>
       </el-tab-pane>
     </el-tabs>
-
   </div>
 </template>
 
@@ -107,11 +107,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['profile', 'myDiaries', 'theirProfile']),
+    ...mapGetters(['profile', 'myDiaries', 'theirProfile', 'followingStatus']),
     fetchTheirId() {
       const memberId = this.$route.params.authorId 
       return memberId
     },
+  },
+  watch: {
+    followingStatus(newVal) {
+      this.isFollow = newVal
+    }
   },
   methods: {
     ...mapActions([
@@ -124,7 +129,7 @@ export default {
       'myFollowersCount',
       'myFollowings',
       'myFollowingsCount',
-      'isFollowed',
+      'setFollowingStatus',
       ]),
 
     goProfileEdit(){
@@ -132,11 +137,12 @@ export default {
     },
 
     myProfile(){
+      console.log(this.theirProfile)
       if ( this.profile.id === this.theirProfile.id ) { 
-        this.isMyProfile
+        this.isMyProfile = true
         this.fetchMyDiary()
       } else {
-        this.isMyProfile = !this.isMyProfile
+        this.isMyProfile = false
       }
     },
     followNow() {
@@ -153,14 +159,24 @@ export default {
       this.followId.follower_id = this.profile.id
       this.followId.following_id = this.theirProfile.id
     },
+    // isFollowed() {
+    //   console.log( this.followingStatus)
+    //   console.log( '버튼true?', this.isFollow)
+    //   if ( this.followingStatus === true ) {
+    //     this.isFollow = true
+    //     console.log( '버튼true????', this.isFollow)
+    //   } else { this.isFollow = false }
+    // },
   },
   mounted() {
     this.fetchProfile()
     this.fetchTheirProfile(this.$route.params.authorId)
-    this.myProfile()
     this.myFollowings()
     this.myFollowers()
-  },
+    this.setFollowingStatus(this.$route.params.authorId)
+    this.myProfile()
+    // this.isFollowed()
+ },
 }
 </script>
 
@@ -219,7 +235,7 @@ export default {
   .my-page-username {
     display: flex;
   }
-  
+
   .user-follow:first-child {
     margin-right: 15px;
   }
