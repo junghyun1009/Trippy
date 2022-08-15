@@ -18,7 +18,6 @@ public class Transport extends BaseEntity{
     private Long id;
 
     @Column(nullable = false)
-//    @NotBlank(message="운송수단을 입력하세요")
     private String name;
 
     @Builder

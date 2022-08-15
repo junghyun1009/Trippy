@@ -18,6 +18,7 @@ public class PostComment extends BaseEntity {
     @Column(name="COMMENT_ID")
     private Long id;
 
+    @Column(nullable = false)
     private String content;
 
     private LocalDateTime regDt;

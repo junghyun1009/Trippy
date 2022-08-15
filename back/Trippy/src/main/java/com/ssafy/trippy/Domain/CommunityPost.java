@@ -1,6 +1,5 @@
 package com.ssafy.trippy.Domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,55 +20,44 @@ public class CommunityPost extends BaseEntity {
     @Column(name = "COMMUNITY_POST_ID")
     private Long id;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="제목을 입력하세요")
+    @Column(nullable = false)
     private String title;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="활동내용을 입력하세요")
+    @Column(nullable = false)
     private String description;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="카테고리를 입력하세요")
+    @Column(nullable = false)
     private int category;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="만나는 시간을 입력하세요")
+    @Column(nullable = false)
     private LocalDateTime meetingTime;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="시작날을 입력하세요")
+    @Column(nullable = false)
     private LocalDateTime startDate;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="끝나는 날을 입력하세요")
+    @Column(nullable = false)
     private LocalDateTime endDate;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="최대인원을 입력하세요")
+    @Column(nullable = false)
     private int recruitVolume;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="현재인원을 입력하세요")
+    @Column(nullable = false)
     private int recruitCurrentVolume;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="최소나이를 입력하세요")
+    @Column(nullable = false)
     private int startAge;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="최대나이를 입력하세요")
+    @Column(nullable = false)
     private int endAge;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="성별을 입력하세요")
+    @Column(nullable = false)
     private String gender;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="참여가능지역을 입력하세요")
+    @Column(nullable = false, name="IS_LOCAL")
     private boolean Local;
-
+    @Column(nullable = false)
     private String place;
+    @Column(nullable = false, name="IS_DAY")
     private boolean Day;
 
     @ManyToOne(fetch = FetchType.LAZY)

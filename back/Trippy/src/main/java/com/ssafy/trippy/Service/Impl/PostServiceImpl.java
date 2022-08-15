@@ -79,9 +79,6 @@ public class PostServiceImpl implements PostService {
         if (location.isPresent()) {
             requestPostDto.setLocation_id(location.get().getId());
         } else {
-//            Long locationId = locationRepository.save(Location.builder().countryName(requestPostDto.getCountryName())
-//                    .cityName(requestPostDto.getCityName()).build()).getId();
-//            requestPostDto.setLocation_id(locationId);
             throw new IllegalArgumentException("잘못된 장소 정보입니다.");
         }
 
@@ -102,26 +99,6 @@ public class PostServiceImpl implements PostService {
             }
             detailLocationRepository.save(detailLocation);
         }
-//        for (DetailLocation detailLocation : requestPostDto.toEntity().getDetailLocations().stream().collect(Collectors.toList())) {
-//            detailLocation.setPost(post);
-//            DetailLocation loc = detailLocationRepository.save(detailLocation);
-//        }
-
-//        for(RequestDetailLocationDto requestDetailLocationDto: requestPostDto.getDetailLocations()){
-//            List<MultipartFile> images = requestDetailLocationDto.getImages();
-//            DetailLocation detailLoc = requestDetailLocationDto.toEntity();
-//            detailLoc.setPost(post);
-//            DetailLocation detailLocation = detailLocationRepository.save(detailLoc);
-//            for (MultipartFile image:images){
-//                try {
-//                    s3Uploader.upload(image,"static",detailLocation.getId());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                    throw new IllegalArgumentException("POST 이미지 저장 error");
-//                }
-//            }
-//        }
-
 
         for (PostTransport postTransport : requestPostDto.toEntity().getPostTransports().stream().collect(Collectors.toList())) {
             postTransport.setPost(post);
