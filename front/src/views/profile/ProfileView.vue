@@ -60,6 +60,8 @@
       </el-tab-pane>
     </el-tabs>
 
+
+    <!-- 남의 페이지라면 -->
     <el-tabs
     v-else
     v-model="activeName"
@@ -70,13 +72,8 @@
         <!-- 상대방이 쓴 일지 목록 -->
         <my-diaries-list></my-diaries-list>
       </el-tab-pane>
-      <el-tab-pane label="My Likes">
-        <!-- 상대방이 좋아요 누른 일지 목록 -->
-      </el-tab-pane>
-      <el-tab-pane label="My Companions">
-        <!-- 상대방이 북마크한 동행 찾기 목록 -->
-      </el-tab-pane>
     </el-tabs>
+
   </div>
 </template>
 
