@@ -73,23 +73,6 @@ export default {
         each.detailLocationContent = story.detailLocationContent
         each.rating = story.rating
         each.filename = story.filename
-        // if (story.filename === null) {
-        //   each.preview = ''
-        //   this.images.push([])
-        // } else {
-        //   const url = story.filepath
-        //   const file = async function urltofile () {
-        //     const response = await fetch(url)
-        //     const data = await response.blob()
-        //     const ext = url.split(".").pop()
-        //     const filename = url.split("/").pop()
-        //     const metadata = { type: `image/${ext}`}
-        //     return new File([data], filename, metadata)
-        //   }
-        //   console.log(file())
-        //   each.preview = URL.createObjectURL(file)
-        //   this.images.push(file)
-        // }
         convert.push(each)
       })
       return convert
@@ -116,7 +99,6 @@ export default {
         console.log(location)
         images.push([])
       })
-      images.push([])
       return images
     }
   },

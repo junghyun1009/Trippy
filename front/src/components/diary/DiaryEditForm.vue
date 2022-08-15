@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ diary }}
     {{ newDiary.postTransports }}
     <form @submit.prevent="onSubmit">
       
