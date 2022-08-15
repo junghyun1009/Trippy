@@ -278,35 +278,23 @@ export default ({
       })
       .catch((err) => console.error(err.response))
     },
-    // updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
-    //   const comment = { content, diaryPk, commentPk }
-    //   axios({
-    //     url:'http://localhost:8000/comments/api/post',
-    //     method: 'put',
-    //     data: comment,
-    //     headers: getters.authHeader,
-    //   })
-    //   .then(res => {
-    //     commit('SET_COMMENTS', res.data)
-    //   })
-    //   .catch(err => console.error(err.response))
-    // },
-    // updateComment({ commit }, content) {
-    //   commit('SET_COMMENT', content)
-    //   commit('SET_STATUS')
-    // },
 
-  
-    deleteComment({ getters, commit}, diaryPk, commentPk) {
+    // 댓글 삭제
+    deleteComment({ getters, commit }, pk) {
       if (confirm('정말 삭제하시겠습니까?')) {
         axios({
-          url: `http://localhost:8000/comments/post/`,
+          url: `http://i7a506.p.ssafy.io:8080/api/auth/comment/${pk.commentId}`,
           method: 'delete',
-          data: {diaryPk, commentPk},
           headers: getters.authHeader,
         })
         .then(res => {
-          commit('SET_COMMENTS', res.data)
+          console.log(res.data)
+          commit('SET_COMMENT', {})
+          router.push({
+            name: 'diaryDetail',
+            parmas: { diaryPk: pk.diaryId }
+          })
+          location.reload()
         })
         .catch(err => console.error(err.response))
       }

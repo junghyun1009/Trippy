@@ -33,7 +33,7 @@
           <!-- 나중에는 comment.pk로 바꿔서 보내야할 듯 -->
           <span class="leave-comment" @click="sendInfo(comment.member)">답글 달기</span>
           <span v-if="comment.user === currentUser.name" class="leave-comment" @click="editComment(comment)">수정</span>
-          <span class="leave-comment">삭제</span>
+          <span v-if="comment.user === currentUser.name" class="leave-comment" @click="removeComment(comment.info.id)">삭제</span>
         </div>
       </div>
       <!-- 대댓글 -->
@@ -83,6 +83,13 @@ export default {
       // console.log(content)
       // this.updateComment(content)
     },
+    removeComment(commentId) {
+      const payload = {
+        commentId: commentId,
+        diaryId: this.diaryPk
+      }
+      this.deleteComment(payload)
+    }
   },
   mounted() {
     this.fetchComment(this.diaryPk)
