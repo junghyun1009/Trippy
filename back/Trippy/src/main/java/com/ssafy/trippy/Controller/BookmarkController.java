@@ -67,4 +67,11 @@ public class BookmarkController {
             return new ResponseEntity<>("북마크를 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/chk/{community_post_id}")
+    public ResponseEntity<?> chkBookmark(HttpServletRequest request,@PathVariable("community_post_id") Long communityPostId){
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
+        return new ResponseEntity<>(bookmarkService.findBookMarKByMemberAndCommunityPost(memberId,communityPostId),HttpStatus.OK);
+    }
+
 }
