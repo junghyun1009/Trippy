@@ -200,6 +200,7 @@ export default ({
           name: 'diaryDetail',
           parmas: { diaryPk: payload.postId }
         })
+        location.reload()
       })
       .catch((err) => console.error(err.response))
     },
