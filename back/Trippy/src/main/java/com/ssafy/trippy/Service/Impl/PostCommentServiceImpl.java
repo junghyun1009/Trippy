@@ -70,7 +70,7 @@ public class PostCommentServiceImpl {
         postComments.stream().forEach(c -> {
             ResponsePostCommentDto dto = ResponsePostCommentDto.convertCommentToDto(c);
             map.put(dto.getId(),dto);
-            if(c.getParent() != null) map.get(c.getParent().getId()).getChildren().add(c);
+            if(c.getParent() != null) map.get(c.getParent().getId()).getChildren().add(ResponsePostCommentDto.convertCommentToDto(c));
             else result.add(dto);
         });
         return result;
