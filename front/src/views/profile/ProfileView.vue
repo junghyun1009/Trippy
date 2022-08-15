@@ -19,7 +19,7 @@
             <h2>{{ theirProfile.name }}</h2>
             <div class="follow-button">
               <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
-              <el-button v-else type="primary" plain @click="unfollowNow()">팔로잉</el-button>
+              <el-button v-else type="primary" plain @click="unfollowNow(), unfollow(followId)">팔로잉</el-button>
             </div>
         </div>
       </div>
@@ -68,7 +68,7 @@
     >
       <el-tab-pane label="My Diary">
         <!-- 상대방이 쓴 일지 목록 -->
-        <!-- <my-diaries-list></my-diaries-list> -->
+        <my-diaries-list></my-diaries-list>
       </el-tab-pane>
       <el-tab-pane label="My Likes">
         <!-- 상대방이 좋아요 누른 일지 목록 -->
@@ -98,10 +98,9 @@ export default {
       followId: {
         follower_id: null,
         following_id: null,
-        id: null,
       },
       isFollow: false,
-      isMyProfile: false,
+      isMyProfile: true,
       followerList: [],
       followingList: [],
       activeName: '',
@@ -125,22 +124,31 @@ export default {
       'myFollowersCount',
       'myFollowings',
       'myFollowingsCount',
+      'isFollowed',
       ]),
 
     myProfile(){
       if ( this.profile.id === this.theirProfile.id ) { 
-        this.isMyProfile = true
+        this.isMyProfile
         this.fetchMyDiary()
       } else {
-        this.isMyProfile = false
+        this.isMyProfile = !this.isMyProfile
       }
     },
     followNow() {
       this.isFollow = !this.isFollow
+      // follower_id - 내가 팔로우 하게 되는 사람의 아이디
+      // following_id - 내 아이디
+      this.followId.follower_id = this.profile.id
+      this.followId.following_id = this.theirProfile.id
     },
     unfollowNow() {
       this.isFollow = !this.isFollow
-    }
+      // follower_id - 내가 언팔로우 하게 되는 사람의 아이디
+      // following_id - 내 아이디
+      this.followId.follower_id = this.profile.id
+      this.followId.following_id = this.theirProfile.id
+    },
   },
   mounted() {
     this.fetchProfile()

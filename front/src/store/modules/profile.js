@@ -143,18 +143,27 @@ export default {
 
     // 팔로우 언팔로우
     follow({ getters }, followId) {
+      console.log(followId)
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow',
+        method: 'post',
         headers: getters.authHeader,
         data: followId
+      })
+      .then( res => {
+        console.log('followed!', res.data)
       })
     },
 
     unfollow({ getters }, followId) {
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/undo',
+        method: 'post',
         headers: getters.authHeader,
         data: followId
+      })
+      .then( res => {
+        console.log('unfollowed!', res.data)
       })
     }
     
