@@ -15,10 +15,6 @@ public class MemberBadge extends BaseEntity{
     @Column(name="MEMBER_BADGE_ID")
     private Long id;
 
-    private String name;
-
-    private String description;
-
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "MENBER_ID")
     private Member member;
