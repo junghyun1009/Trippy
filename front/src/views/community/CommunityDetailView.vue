@@ -2,9 +2,13 @@
   <div>
     <div class="header">
       <div class="tags">
-        <!-- {{ post }} -->
+        {{ post }}
         <el-tag class="tag">{{ convertTag }}</el-tag>
         <el-tag class="tag">장소</el-tag>
+      </div>
+      <div>
+        <span v-if="!this.isBookmark" class="material-symbols-outlined" @click="this.isBookmark=true, goBookmark()">bookmark_add</span>
+        <span v-else-if="this.isBookmark" class="material-symbols-outlined filled" @click="this.isBookmark=false, cancelBookmark()">bookmark</span>
       </div>
       <router-link class="router" :to="{ name: 'profile' }">
         <div class="profile">
@@ -74,12 +78,12 @@ export default {
   },
   data() {
     return {
-      isBookmark: true,
+      isBookmark: false,
       postPk: this.$route.params.postPk
     }
   },
   computed: {
-    ...mapGetters(['post', 'isPostAuthor']),
+    ...mapGetters(['post', 'isBookmark', 'isPostAuthor']),
     recruitState() {
       return '모집중'
     },
@@ -104,11 +108,20 @@ export default {
     // }
   },
   methods: {
-    ...mapActions(['fetchPost', 'fetchCurrentUser'])
+    ...mapActions(['fetchPost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark', 'deleteBookmark']),
+    goBookmark() {
+      this.createBookmark(this.postPk)
+      console.log(1, this.isBookmark)
+    },
+    cancelBookmark() {
+      this.deleteBookmark(this.postPk)
+      console.log(2, this.isBookmark)
+    }
   },
   created() {
     this.fetchPost(this.postPk)
     this.fetchCurrentUser()
+    this.fetchBookmark()
   }
 }
 </script>
@@ -137,6 +150,14 @@ hr {
 .tag {
   margin-right: 0.3rem;
   margin-bottom: 1rem;
+}
+
+.filled {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
 }
 
 .router {
