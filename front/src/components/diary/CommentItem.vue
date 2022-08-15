@@ -18,7 +18,8 @@
       <a class="editdelete" @click="deleteComment(payload)"><i class="fa-solid fa-trash-can"></i></a>
     </span>
   </li> -->
-  {{ comments }}
+  <!-- {{ currentUser }} -->
+  <!-- {{ comments }} -->
     <div v-for="(comment, idx) in comments" :key="idx" class="parent-child">
       <!-- 댓글 -->
       <div class="parent-comment">
@@ -31,7 +32,7 @@
           <p class="content">{{ comment.info.content }}</p>
           <!-- 나중에는 comment.pk로 바꿔서 보내야할 듯 -->
           <span class="leave-comment" @click="sendInfo(comment.member)">답글 달기</span>
-          <span class="leave-comment" @click="editComment(comment)">수정</span>
+          <span v-if="comment.user === currentUser.name" class="leave-comment" @click="editComment(comment)">수정</span>
           <span class="leave-comment">삭제</span>
         </div>
       </div>
