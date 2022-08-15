@@ -1,7 +1,10 @@
 package com.ssafy.trippy.Controller;
 
 import com.ssafy.trippy.Dto.Request.RequestCommunityPostDto;
+import com.ssafy.trippy.Dto.Response.ResponseBadgeDto;
 import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
+import com.ssafy.trippy.Dto.Response.ResponseSavepostDto;
+import com.ssafy.trippy.Service.BadgeService;
 import com.ssafy.trippy.Dto.Update.UpdateCommunityPostDto;
 import com.ssafy.trippy.Service.CommunityPostService;
 import com.ssafy.trippy.Service.MemberService;
@@ -21,6 +24,8 @@ public class CommunityPostController {
     private final CommunityPostService communityPostService;
 
     private final MemberService memberService;
+
+    private final BadgeService badgeService;
     private static final String SUCCESS = "OK";
     private static final String FAIL = "ERROR";
 
@@ -30,7 +35,13 @@ public class CommunityPostController {
         requestCommunityPostDto.setMember_id(memberId);
         try {
             Long id = communityPostService.saveCommunityPost(requestCommunityPostDto);
-            return new ResponseEntity<>(id, HttpStatus.OK);
+            ResponseSavepostDto responseSavepostDto = new ResponseSavepostDto(id);
+            Long cnt = communityPostService.cntCommunityPostsByMemberId(memberId);
+            if(cnt==1L){
+                ResponseBadgeDto responseBadgeDto = badgeService.saveBadge(3L,memberId);
+                responseSavepostDto.addBadge(responseBadgeDto);
+            }
+            return new ResponseEntity<>(responseSavepostDto, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,7 +105,7 @@ public class CommunityPostController {
         try {
             ResponseCommunityPostDto responseCommunityPostDto = communityPostService.findCommunityPost(id);
             return new ResponseEntity<>(responseCommunityPostDto, HttpStatus.OK);
-        } catch (Exception e) {
+        }catch(Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
         }
