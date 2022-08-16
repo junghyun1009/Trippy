@@ -61,7 +61,7 @@ export default {
       const email = localStorage.getItem('email')
       const refreshToken = VueCookies.get('refreshToken')
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/members/re-issue?email=${email}&refreshToken=${refreshToken}`,
+        url: `https://i7a506.p.ssafy.io/api/members/re-issue?email=${email}&refreshToken=${refreshToken}`,
         method: 'get',
         params: email
       })
@@ -83,7 +83,7 @@ export default {
 
     login({ dispatch }, userinfo) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/login',
+        url: 'https://i7a506.p.ssafy.io/api/members/login',
         method: 'post',
         data: userinfo,
       })
@@ -114,7 +114,7 @@ export default {
       console.log(this.getters.userData.password)
       console.log(this.getters.userData.description)
         axios({
-          url: 'http://i7a506.p.ssafy.io:8080/api/members/join',
+          url: 'https://i7a506.p.ssafy.io/api/members/join',
           method: 'post',
           data: this.getters.userData,
         })
@@ -133,7 +133,7 @@ export default {
       console.log(getters)
       const email = userData.email
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/members/duplicate?email=${email}`,
+        url: `https://i7a506.p.ssafy.io/api/members/duplicate?email=${email}`,
         method: 'get',
         param: email
       })
@@ -153,7 +153,7 @@ export default {
     emailCode({commit}, userinfo) {
       console.log(userinfo)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/join/authmail',
+        url: 'https://i7a506.p.ssafy.io/api/members/join/authmail',
         method: 'post',
         data: userinfo
       })
@@ -183,7 +183,7 @@ export default {
     fetchCurrentUser({ getters, dispatch, commit }, ) {
       if (getters.isLoggedIn) {
         axios({
-          url: 'http://i7a506.p.ssafy.io:8080/api/auth/members',
+          url: 'https://i7a506.p.ssafy.io/api/auth/members',
           method: 'get',
           headers: getters.authHeader,
         })
@@ -208,7 +208,7 @@ export default {
 
     logout({ getters, dispatch }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/logout',
+        url: 'https://i7a506.p.ssafy.io/api/members/logout',
         method: 'get',
         headers: getters.authHeader,
       })
@@ -235,7 +235,7 @@ export default {
     changePassword({ commit, dispatch }, userinfo) {
       console.log(userinfo)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/change_pw',
+        url: 'https://i7a506.p.ssafy.io/api/members/change_pw',
         method: 'post',
         data: userinfo
       })
@@ -254,7 +254,7 @@ export default {
     deleteAccount({ getters }) {
       console.log(getters.authHeader)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/members/remove',
+        url: 'https://i7a506.p.ssafy.io/api/auth/members/remove',
         method: 'delete',
         headers: getters.authHeader,
       })
