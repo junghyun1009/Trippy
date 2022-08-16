@@ -1,6 +1,6 @@
 import router from "@/router"
 import axios from "axios"
-// import VueCookies from 'vue-cookies'
+import { ElMessageBox } from "element-plus"
 
 export default ({
   state: {
@@ -40,8 +40,28 @@ export default ({
     SET_POST_BOOKMARK: (state, bookmark) => (state.post.bookmark = bookmark)
   },
   actions: {
+    // 첫번째 게시글인가요?
+    checkFirstPost({ getters }) {
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/community/memberDetail',
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then( res => {
+        console.log(res)
+        const postList = res.data
+        if ( postList.length === 1 ){
+          ElMessageBox.alert('만남의 시작 뱃지를 획득하셨어요!', 
+          '뱃지 획득을 축하합니다!', {
+            confirmButtonText: 'OK'
+          })
+        }
+        console.log(res.data)
+      })
+    },
+
     // 게시글 CREATE
-    createPost({ commit, getters }, post) {
+    createPost({ commit, getters, dispatch }, post) {
       axios({
         url: 'https://i7a506.p.ssafy.io/api/auth/community',
         method: 'POST',
@@ -50,6 +70,7 @@ export default ({
       })
       .then(res => {
         console.log(res.data)
+        dispatch('checkFirstPost')
         commit('SET_POST', post)
         router.push({
           name: 'communityDetail',

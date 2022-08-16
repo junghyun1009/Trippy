@@ -30,29 +30,14 @@
       <el-input v-model="userinfo.description" placeholder="자신을 소개해주세요! 최대 50자 (선택)" maxlength="50"></el-input>
     </div>
     <!-- 완료하면 로그인 페이지로 이동 -->
-    <el-button type="primary" @click="finishSignUp(), mergeObjects()">완료</el-button>
-  
+    <el-button type="primary" @click="mergeObjects()">완료</el-button>
   
 
-    <!-- '여행의 시작' 뱃지 팝업 창 -->
-    <el-drawer v-model="badgePopup" direction="btt" size="50%">
-      <template #header>
-        <h2>회원가입을 축하합니다!</h2>
-      </template>
-      <template #default>
-        <img src="@/assets/badge-start.png" alt="globe">
-        <p>여행의 시작 뱃지를 획득하셨어요!</p>
-        <p>로그인 후 획득한 뱃지를 확인하실 수 있어요</p>
-      </template>
-    </el-drawer>
-  
-  
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import { ElMessageBox } from 'element-plus'
 
 export default {
   name: "SignUpOptionView",
@@ -119,15 +104,7 @@ export default {
     removePhoto() {
       this.profilePhoto = {}
     },
-    
-    finishSignUp() {
-      ElMessageBox.alert('여행의 시작 뱃지를 획득하셨어요! 로그인 후 획득한 뱃지를 확인하실 수 있어요', 
-      '회원가입을 축하합니다!', {
-        confirmButtonText: 'OK'
-      })
-      this.$router.push('/login')
-    },
-    
+
   }
 }
 </script>
