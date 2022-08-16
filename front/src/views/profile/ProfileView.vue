@@ -12,18 +12,22 @@
           <!-- 내 프로필 페이지라면 팔로우 버튼 안뜸 -->
           <!-- 만약 fetchCurrentUser의 id와 profile param의 id가 같다면 -->
           <div class="my-page-username" v-if="isMyProfile">
-            <h2 >{{ profile.name }}</h2>
+            <h2>{{ profile.name }}</h2>
+            <el-button class="button" link @click="goProfileEdit()">
+              <span class="material-symbols-outlined icon">edit</span>
+            </el-button>
           </div>
           <!-- 남의 프로필 페이지라면 팔로우 버튼 뜸-->
           <div class="their-page-username" v-else>
             <h2>{{ theirProfile.name }}</h2>
             <div class="follow-button">
               <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
-              <el-button v-else type="primary" plain @click="unfollowNow()">팔로잉</el-button>
+              <el-button v-else type="primary" plain @click="unfollowNow(), unfollow(followId)">팔로잉</el-button>
             </div>
         </div>
       </div>
     </div>
+    
 
     <div class="description">
       <p v-if="isMyProfile">{{ profile.description }}</p>
@@ -38,7 +42,7 @@
         <followings-list/>
       </div>
     </div>
-
+    
     <!-- vue warn 나서 일단 이거 뺴놓음  -->
     <!-- @tab-click="handleClick" -->
     <el-tabs
@@ -60,6 +64,8 @@
       </el-tab-pane>
     </el-tabs>
 
+
+    <!-- 남의 페이지라면 -->
     <el-tabs
     v-else
     v-model="activeName"
@@ -68,13 +74,7 @@
     >
       <el-tab-pane label="My Diary">
         <!-- 상대방이 쓴 일지 목록 -->
-        <!-- <my-diaries-list></my-diaries-list> -->
-      </el-tab-pane>
-      <el-tab-pane label="My Likes">
-        <!-- 상대방이 좋아요 누른 일지 목록 -->
-      </el-tab-pane>
-      <el-tab-pane label="My Companions">
-        <!-- 상대방이 북마크한 동행 찾기 목록 -->
+        <my-diaries-list></my-diaries-list>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -98,21 +98,25 @@ export default {
       followId: {
         follower_id: null,
         following_id: null,
-        id: null,
       },
       isFollow: false,
-      isMyProfile: false,
+      isMyProfile: true,
       followerList: [],
       followingList: [],
       activeName: '',
     }
   },
   computed: {
-    ...mapGetters(['profile', 'myDiaries', 'theirProfile']),
+    ...mapGetters(['profile', 'myDiaries', 'theirProfile', 'followingStatus']),
     fetchTheirId() {
       const memberId = this.$route.params.authorId 
       return memberId
     },
+  },
+  watch: {
+    followingStatus(newVal) {
+      this.isFollow = newVal
+    }
   },
   methods: {
     ...mapActions([
@@ -125,9 +129,15 @@ export default {
       'myFollowersCount',
       'myFollowings',
       'myFollowingsCount',
+      'setFollowingStatus',
       ]),
 
+    goProfileEdit(){
+      this.$router.push({ name: 'profileEdit' })
+    },
+
     myProfile(){
+      console.log(this.theirProfile)
       if ( this.profile.id === this.theirProfile.id ) { 
         this.isMyProfile = true
         this.fetchMyDiary()
@@ -137,18 +147,37 @@ export default {
     },
     followNow() {
       this.isFollow = !this.isFollow
+      // follower_id - 내가 팔로우 하게 되는 사람의 아이디
+      // following_id - 내 아이디
+      this.followId.follower_id = this.profile.id
+      this.followId.following_id = this.theirProfile.id
     },
     unfollowNow() {
       this.isFollow = !this.isFollow
-    }
+      // follower_id - 내가 언팔로우 하게 되는 사람의 아이디
+      // following_id - 내 아이디
+      this.followId.follower_id = this.profile.id
+      this.followId.following_id = this.theirProfile.id
+    },
+    // isFollowed() {
+    //   console.log( this.followingStatus)
+    //   console.log( '버튼true?', this.isFollow)
+    //   if ( this.followingStatus === true ) {
+    //     this.isFollow = true
+    //     console.log( '버튼true????', this.isFollow)
+    //   } else { this.isFollow = false }
+    // },
   },
   mounted() {
     this.fetchProfile()
     this.fetchTheirProfile(this.$route.params.authorId)
-    this.myProfile()
     this.myFollowings()
     this.myFollowers()
-  },
+    this.setFollowingStatus(this.$route.params.authorId)
+    this.myProfile()
+    // this.isFollowed()
+    this.fetchMyDiary()
+ },
 }
 </script>
 
@@ -202,6 +231,10 @@ export default {
     display: absolute;
     margin-top: 20%;
     margin-right: 65%;
+  }
+
+  .my-page-username {
+    display: flex;
   }
 
   .user-follow:first-child {

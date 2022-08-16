@@ -2,7 +2,7 @@
   <div>
     <!-- diaryTemp -> diary로 바꿔 -->
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
-    {{ diary }}
+    <!-- {{ diary }} -->
     <div class="diary-detail-header">
       <div class="title-icons">
         <h3>{{ diary.title }}</h3>
@@ -19,7 +19,7 @@
           </router-link> -->
           <div class="icon-cnt" @click="commentClicked=true">
             <span class="material-symbols-outlined">chat_bubble</span>
-            <span class="cnt">7</span>
+            <span class="cnt">{{ diary.comments.length }}</span>
           </div>
           
           <!-- 댓글 창 열림 -->
@@ -258,7 +258,7 @@ a {
 .diary-detail-header {
   /* position: relative; */
   width: 100%;
-  background-color: bisque;
+  background-color: #EFDFDE;
   padding: 0 0 1.3rem 0;
 }
 
@@ -289,6 +289,7 @@ a {
 .icon-cnt {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .filled-heart {
@@ -400,6 +401,7 @@ a {
 }
 
 .story-title h3 {
+  background-color: #EFDFDE;
   font-weight: 500;
   margin-top: 0.5rem;
   margin-bottom: 0;
@@ -410,6 +412,7 @@ a {
 }
 
 .story-image {
+  margin-left: 0.5rem;
   margin-top: 1rem;
 }
 
