@@ -4,11 +4,13 @@ import com.ssafy.trippy.Domain.Member;
 import io.swagger.annotations.ApiParam;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class RequestMemberDto {
 
@@ -34,7 +36,7 @@ public class RequestMemberDto {
     @NotNull(message="성별은 빈값일 수 없습니다.")
     private int gender;
     @ApiParam(value = "생일")
-    @NotNull(message="성별은 빈값일 수 없습니다.")
+    @NotNull(message="생일은 빈값일 수 없습니다.")
     private LocalDateTime birth;
     @ApiParam(value = "프로필 이미지 경로")
     private String img_path;
