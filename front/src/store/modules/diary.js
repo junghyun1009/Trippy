@@ -182,12 +182,15 @@ export default ({
     // },
 
     // 일지 UPDATE
-    updateDiary({ commit, getters }, diary) {
+    updateDiary({ commit }, diary) {
       axios({
         url: `https://i7a506.p.ssafy.io/api/auth/posts/${diary.id}`,
         method: 'put',
         data: diary.content,
-        headers: getters.authHeader
+        headers: {
+          "Content-Type": "multipart/form-data",
+          'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`
+        }
       })
       .then(res => {
         console.log(res.data)
