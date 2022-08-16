@@ -29,10 +29,12 @@ public class RequestPostCommentDto {
     private List<PostComment> children = new ArrayList<>();
 
     @Builder
-    public RequestPostCommentDto(Long id, String content, Long memberId) {
+    public RequestPostCommentDto(Long id, String content, Long memberId, String name, String imgPath) {
         this.id = id;
         this.content = content;
         this.memberId = memberId;
+        this.name = name;
+        this.imgPath = imgPath;
 
     }
 
