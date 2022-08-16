@@ -17,7 +17,8 @@ export default ({
     isEditing: false,
     parentComment: '',
     authorId: null,
-    parentId: null
+    parentId: null,
+    location: []
   },
   getters: {
     diaries: state => state.diaries,
@@ -36,6 +37,7 @@ export default ({
       return state.diary?.name === getters.currentUser.name
     },
     authorId: state => state.authorId,
+    location: state => state.location
     // isDiary: state => !_.isEmpty(state.diary)
   },
   mutations: {
@@ -104,6 +106,10 @@ export default ({
 
     HIDE_PARENT(state) {
       state.isChild = false
+    },
+
+    SET_LOCATION(state, location) {
+      state.location = location
     }
   },
   actions: {
@@ -321,17 +327,6 @@ export default ({
       commit('HIDE_PARENT')
     },
   
-    // showAllDiary({ commit }) {
-    //   axios({
-    //     url: 'https://localhost:8000/posts',
-    //     method: 'get'
-    //   })
-    //   .then((res) => {
-    //     const allDiary = res.data
-    //     commit('SHOW_ALL_DIARY', allDiary)
-    //   })
-    // },
-
     likeDiary({ commit, getters }, diaryPk) {
       axios({
         url: `https://i7a506.p.ssafy.io/api/auth/likepost`,
@@ -346,6 +341,16 @@ export default ({
           name: 'DiaryDetail',
           params: { diaryPk: diaryPk }
         })
+      })
+    },
+
+    fetchLocation({ commit }) {
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/locations',
+        method: 'get'
+      })
+      .then((res) => {
+        commit('SET_LOCATION', res.data)
       })
     }
   },
