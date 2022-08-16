@@ -20,6 +20,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 export default {
   name: 'DeleteEditButton',
@@ -37,17 +38,52 @@ export default {
         this.$router.push({ name: 'communityEdit' })
       }
     },
+    // goDelete() {
+    //   if (confirm('정말 삭제하시겠습니까?')) {
+    //     if (this.$route.name === 'diaryDetail') {
+    //       console.log('다이어리 삭제')
+    //       this.$router.push({ name: 'diaryDelete' })
+    //       this.deleteDiary(this.$route.params.diaryPk)
+    //     } else {
+    //       console.log('동행찾기 삭제')
+    //       this.deletePost(this.$route.params.postPk)
+    //     }
+    //   }
+    // },
     goDelete() {
-      if (confirm('정말 삭제하시겠습니까?')) {
+      ElMessageBox.confirm(
+        '정말 삭제하시겠습니까?',
+        'Warning',
+        {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }
+      )
+      .then(() => {
         if (this.$route.name === 'diaryDetail') {
           console.log('다이어리 삭제')
           this.$router.push({ name: 'diaryDelete' })
           this.deleteDiary(this.$route.params.diaryPk)
+          ElMessage({
+            type: 'success',
+            message: '삭제가 완료되었습니다',
+          })
         } else {
           console.log('동행찾기 삭제')
           this.deletePost(this.$route.params.postPk)
+          ElMessage({
+            type: 'success',
+            message: '삭제가 완료되었습니다',
+          })
         }
-      }
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '삭제가 취소되었습니다',
+        })
+      })
     }
   }
 }
