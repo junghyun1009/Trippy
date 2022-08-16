@@ -5,7 +5,10 @@
     <!-- {{ diary }} -->
     <div class="diary-detail-header">
       <div class="title-icons">
-        <h3>{{ diary.title }}</h3>
+        <div class="title-location">
+          <h3>{{ diary.title }}</h3>
+          <span>{{ diary.countryName }} | {{ diary.cityName }}</span>
+        </div>
         <div class="icons">
           <!-- 여기부터는 공통 -->
           <div class="icon-cnt">
@@ -91,9 +94,9 @@
             <!-- 여기는 공통 -->
             <!-- <el-tag>{{ diary.countryName }}</el-tag> -->
             <!-- <el-tag>{{ diary.cityName }}</el-tag> -->
-            <el-tag class="tag">{{ diary.startDate.substr(0, 10) }}-{{ diary.endDate.substr(0, 10) }}</el-tag>
-            <el-tag class="tag">{{ partyTag }} ({{ diary.count }}명)</el-tag>
-            <el-tag class="tag" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.name }}</el-tag>
+            <el-tag class="tag" effect="plain">{{ diary.startDate.substr(0, 10) }}-{{ diary.endDate.substr(0, 10) }}</el-tag>
+            <el-tag class="tag" effect="plain">{{ partyTag }} ({{ diary.count }}명)</el-tag>
+            <el-tag class="tag" effect="plain" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.name }}</el-tag>
           </div>
         </div>
       </div>
@@ -102,7 +105,7 @@
 
     <div id="map" style="height: 70vw; position: relative; overflow: hidden;"></div>
     <div class="route-tag">
-      <el-tag class="tag" v-for="(route, idx) in diary.routes" :key="idx">{{ route.index }}. {{ route.routeName }}</el-tag>
+      <el-tag class="tag" effect="dark" v-for="(route, idx) in diary.routes" :key="idx">{{ route.index }}. {{ route.routeName }}</el-tag>
     </div>
 
     <!-- <div>
@@ -269,9 +272,20 @@ a {
   margin-bottom: 1rem;
 }
 
-.title-icons > h3 {
+.title-location {
+  margin-top: 1rem;
+}
+
+.title-location > h3 {
   font-weight: 500;
   margin-left: 1rem;
+}
+
+.title-location > span {
+  margin-left: 1rem;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: #F16B51;
 }
 
 .icons {
@@ -372,8 +386,17 @@ a {
   margin-top: 0.5rem;
 }
 
+.el-tag {
+  border-color: var(--el-color-white);
+}
+
+.el-tag .el-tag--plain {
+  --el-tag-border-color: var(--el-color-white);
+}
+
 .info-tag .tag {
   margin-left: 0.3rem;
+  margin-top: 0.3rem;
 }
 
 .story-tab {
@@ -402,6 +425,7 @@ a {
 
 .story-title h3 {
   background-color: #EFDFDE;
+  padding-left: 0.3rem;
   font-weight: 500;
   margin-top: 0.5rem;
   margin-bottom: 0;
@@ -412,18 +436,22 @@ a {
 }
 
 .story-image {
-  margin-left: 0.5rem;
-  margin-top: 1rem;
+  margin: 1rem 0 1rem 0.5rem;
+  display: flex;
+  justify-content: left;
+  width: 16rem;
 }
 
 .story-image img {
-  height: 10rem;
+  width: 17.3rem;
+  /* height: 10rem; */
 }
 
 .story-content {
   text-align: left;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   margin-bottom: 2rem;
+  margin-left: 0.5rem;
 }
 
 .comment-form {
