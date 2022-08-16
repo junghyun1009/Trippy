@@ -53,7 +53,7 @@ export default ({
     actions: {
 			fetchAllDiaries({ commit }) {
 				axios({
-					url: 'http://i7a506.p.ssafy.io:8080/api/posts',
+					url: 'https://i7a506.p.ssafy.io/api/posts',
 					method: 'get',
 				})
 				.then( res => {
@@ -71,7 +71,7 @@ export default ({
 				const country = region.country
 				const city = region.city
 				axios({
-					url: `http://i7a506.p.ssafy.io:8080/api/posts/${country}/${city}`,
+					url: `https://i7a506.p.ssafy.io/api/posts/${country}/${city}`,
 					method: 'get',
 					params: country, city
 				})
@@ -97,9 +97,9 @@ export default ({
 				console.log(company)
 				console.log(transport)
 				axios({
-					url: `http://i7a506.p.ssafy.io:8080/api/search?title=${title}&company=${company}&transportId=${transport}`,
-					// url: `http://i7a506.p.ssafy.io:8080/api/search?title=${title}`,
-					// url: 'http://i7a506.p.ssafy.io:8080/api/search' + '?' + `${title}` + '?' + `${company}` + '?' + `${transport}`,
+					url: `https://i7a506.p.ssafy.io/api/search?title=${title}&company=${company}&transportId=${transport}`,
+					// url: `https://i7a506.p.ssafy.io/api/search?title=${title}`,
+					// url: 'https://i7a506.p.ssafy.io/api/search' + '?' + `${title}` + '?' + `${company}` + '?' + `${transport}`,
 					method: 'get',
 					params: title, company, transport
 				})
