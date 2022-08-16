@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -19,7 +20,7 @@ public class RequestDetailLocationDto {
     @NotBlank(message="상세지역명은 필수값입니다.")
     private String detailLocationName;
 
-    @NotBlank(message="상세지역명은 필수값입니다.")
+    @NotNull(message="상세지역명은 필수값입니다.")
     private float rating;
 
     @NotBlank(message="상세지역명은 필수값입니다.")
