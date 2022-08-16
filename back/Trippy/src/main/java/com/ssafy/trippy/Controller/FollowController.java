@@ -108,27 +108,27 @@ public class FollowController {
         }
     }
 
-    @GetMapping("/follower/cnt")
+    @GetMapping("/following/cnt")
     public ResponseEntity<?> getFollowingsCnt(HttpServletRequest request) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         Long responseCnt = followService.getFollowersCnt(memberId);
         return new ResponseEntity<>(responseCnt, HttpStatus.OK);
     }
 
-    @GetMapping("/following/cnt")
+    @GetMapping("/follower/cnt")
     public ResponseEntity<?> getFollowersCnt(HttpServletRequest request) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         Long responseCnt = followService.getFollowingsCnt(memberId);
         return new ResponseEntity<>(responseCnt, HttpStatus.OK);
     }
 
-    @GetMapping("/follower/cnt/{memberId}")
+    @GetMapping("/following/cnt/{memberId}")
     public ResponseEntity<?> getFollowingsCntByMemeberId(@PathVariable Long memberId){
         Long responseCnt = followService.getFollowersCnt(memberId);
         return new ResponseEntity<>(responseCnt, HttpStatus.OK);
     }
 
-    @GetMapping("/following/cnt/{memberId}")
+    @GetMapping("/follower/cnt/{memberId}")
     public ResponseEntity<?> getFollowersCntByMemeberId(@PathVariable Long memberId){
         Long responseCnt = followService.getFollowingsCnt(memberId);
         return new ResponseEntity<>(responseCnt, HttpStatus.OK);
