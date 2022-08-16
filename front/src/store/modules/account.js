@@ -1,6 +1,7 @@
 import router from '@/router/index.js'
 import axios from 'axios'
 import VueCookies from 'vue-cookies'
+import { ElMessageBox } from 'element-plus'
 // import jwt_decode from "jwt-decode"
 
 export default {
@@ -126,6 +127,10 @@ export default {
         })
           .then( () => {
             console.log('successfully created an account')
+            ElMessageBox.alert('여행의 시작 뱃지를 획득하셨어요! 로그인 후 획득한 뱃지를 확인하실 수 있어요', 
+            '회원가입을 축하합니다!', {
+              confirmButtonText: 'OK'
+            })
             router.push({ name: 'login' })
           })
           .catch(err => {
