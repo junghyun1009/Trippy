@@ -31,13 +31,9 @@
         <el-collapse class="collapse">
           <el-collapse-item title="장소">
             <template #title>
-              <div>
-                <span>장소</span>
-                <el-tag type="dark" v-if="!select[0]" class="option-tag"> 대한민국</el-tag>
-                <el-tag type="dark" v-else class="option-tag">{{ select[0] }}</el-tag>
-                <el-tag type="dark" v-if="!select[1]" class="option-tag">서울특별시</el-tag>
-                <el-tag type="dark" v-else class="option-tag">{{ select[1] }}</el-tag>
-              </div>
+              <span>장소</span>
+                <el-tag v-if="select[0]" type="dark" class="option-tag">{{ select[0] }}</el-tag>
+                <el-tag v-if="select[1]" type="dark" class="option-tag">{{ select[1] }}</el-tag>
             </template>
             <el-form-item>
                <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
@@ -114,7 +110,6 @@ export default {
         },
       ],
       age: [this.post.startAge, this.post.endAge],
-      select: [this.post.countryName, this.post.cityName],
       newPost: {
         id: this.post.id,
         title: this.post.title,
@@ -135,14 +130,22 @@ export default {
         place: this.post.place,
         // locationId: this.post.locationId,
       },
+      select: [this.post.countryName, this.post.cityName],
     }
   },
   computed: {
     ...mapGetters(['location']),
     optionTag() {
       const gender = this.newPost.gender
-      const startAge = this.newPost.startAge
-      const endAge = this.newPost.endAge
+      let startAge = 0
+      let endAge = 0
+      if (this.action === 'create') {
+        startAge = this.newPost.startAge
+        endAge = this.newPost.endAge
+      } else {
+        startAge = this.post.startAge
+        endAge = this.post.endAge
+      }
       let age = startAge + '~' + endAge + '살'
       if (startAge === undefined && endAge === undefined || startAge === 19 && endAge === 70) {
         age = '누구나'
@@ -205,7 +208,7 @@ export default {
       this.newPost.cityName = this.select[1]
       const post = this.newPost
       // if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
-      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.day || post.endDate)) {
+      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && post.countryName && post.cityName && (post.day || post.endDate)) {
         // console.log(this.newPost)
         console.log(post)
         if (this.action === 'create') {
@@ -245,6 +248,9 @@ export default {
       return this.makeRange(1, 59)
     },
   },
+  created() {
+    console.log(this.newPost)
+  },
   mounted() {
     this.fetchLocation()
   }
@@ -282,6 +288,6 @@ export default {
   position: fixed;
   width: 90%;
   bottom: 5rem;
-  --el-button-active-color: #F16B51
+  --el-button-active-color: #F16B51;
 }
 </style>
