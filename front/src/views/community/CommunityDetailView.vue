@@ -1,8 +1,8 @@
 <template>
   <div class="container">
       <div class="tags">
-        <el-tag class="tag">{{ post.cityName}}</el-tag>
-        <el-tag class="tag">{{ post.category === 1 ? '식사' : post.category === 2 ? '동행' : post.category === 3 ? '파티' : post.category === 4 ? '이동수단 셰어' : '기타' }}</el-tag>
+        <el-tag type="dark" class="tag">{{ post.cityName}}</el-tag>
+        <el-tag type="dark" class="tag">{{ post.category === 1 ? '식사' : post.category === 2 ? '동행' : post.category === 3 ? '파티' : post.category === 4 ? '이동수단 셰어' : '기타' }}</el-tag>
       </div>
     <div class="header">
       <router-link class="router" :to="{ name: 'profile' }">
@@ -21,13 +21,15 @@
     </div> 
     <hr>
     <div class="title">
-      <span class="state">{{ recruitState }}</span>
+      <span class="state">{{ post.recruitCurrentVolume < post.recruitVolume ? '모집중' : '모집마감' }}</span>
       <h4>{{ post.title }}</h4>
     </div>
     <div class="options">
       <p class="option">
         <span class="material-symbols-outlined">groups</span>
-        {{ post.startAge === post.endAge ? post.startAge : `${post.startAge}~${post.endAge}`}}세 | {{ post.gender }}
+        <span v-if="post.startAge===19 && post.endAge===70 && post.gender==='누구나'">누구나</span>
+        <span v-else>{{ post.startAge === post.endAge ? `${post.startAge}세` : post.startAge === 19 && post.endAge === 70 ? '누구나' : `${post.startAge}~${post.endAge}세`}} | {{ post.gender }}</span>
+        참여 가능
       </p>
       <p class="option">
         <span class="material-symbols-outlined">event_note</span>
@@ -83,9 +85,9 @@ export default {
   },
   computed: {
     ...mapGetters(['post', 'isPostAuthor']),
-    recruitState() {
-      return '모집중'
-    },
+    // recruitState() {
+    //   return '모집중'
+    // },
     convertTag() {
       const category = this.post.category
       const categoryList = ['식사', '동행', '파티', '이동수단 셰어', '기타']
