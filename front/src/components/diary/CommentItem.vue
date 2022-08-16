@@ -29,8 +29,8 @@
           <div>
             <p class="member">{{ child.user }}</p>
             <p class="content">{{ child.info.content }}</p>
-            <span class="leave-comment" @click="editComment(child.content)">수정</span>
-            <span class="leave-comment">삭제</span>
+            <span v-if="child.user === currentUser.name" class="leave-comment" @click="editComment(child)">수정</span>
+            <span v-if="child.user === currentUser.name" class="leave-comment" @click="removeComment(child.info.id)">삭제</span>
           </div>
         </div>
       </div>
