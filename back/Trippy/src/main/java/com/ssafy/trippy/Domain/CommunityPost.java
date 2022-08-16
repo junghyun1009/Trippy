@@ -42,10 +42,8 @@ public class CommunityPost extends BaseEntity {
 
     private String gender;
 
-    @Column( name="IS_LOCAL")
     private boolean Local;
     private String place;
-    @Column( name="IS_DAY")
     private boolean Day;
 
     @ManyToOne(fetch = FetchType.LAZY)
