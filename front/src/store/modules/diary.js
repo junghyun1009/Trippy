@@ -114,7 +114,7 @@ export default ({
       // console.log(1)
       console.log(diary)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts',
+        url: 'https://i7a506.p.ssafy.io/api/auth/posts',
         method: 'post',
         data: diary,
         headers: {
@@ -138,7 +138,7 @@ export default ({
     // 단일 일지
     fetchDiary({ commit, getters }, diaryPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/posts/detail/${diaryPk}`,
+        url: `https://i7a506.p.ssafy.io/api/posts/detail/${diaryPk}`,
         method: 'get',
         headers: getters.authHeader
       })
@@ -163,7 +163,7 @@ export default ({
 
     // fetchImage({ commit, getters }, imagePk) {
     //   axios({
-    //     url: `http://i7a506.p.ssafy.io:8080/api/posts/images/${imagePk}`,
+    //     url: `https://i7a506.p.ssafy.io/api/posts/images/${imagePk}`,
     //     method: 'get',
     //     headers: getters.authHeader
     //   })
@@ -176,7 +176,7 @@ export default ({
     // 일지 UPDATE
     updateDiary({ commit, getters }, diary) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/posts/${diary.id}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/posts/${diary.id}`,
         method: 'put',
         data: diary.content,
         headers: getters.authHeader
@@ -194,7 +194,7 @@ export default ({
     // 일지 DELETE
     deleteDiary({ commit, getters }, diaryPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/posts/${diaryPk}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/posts/${diaryPk}`,
         method: 'delete',
         headers: getters.authHeader
       })
@@ -210,7 +210,7 @@ export default ({
     createComment({ commit, getters }, payload) {
       console.log(payload)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/comment',
+        url: 'https://i7a506.p.ssafy.io/api/auth/comment',
         method: 'post',
         data: payload,
         headers: getters.authHeader
@@ -230,7 +230,7 @@ export default ({
     // 일지 댓글 목록 조회
     fetchComment({ getters, commit, dispatch }, diaryPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/comment/${diaryPk}`,
+        url: `https://i7a506.p.ssafy.io/api/comment/${diaryPk}`,
         method: 'get',
         headers: getters.authHeader
       })
@@ -252,7 +252,7 @@ export default ({
     fetchUser({ getters, commit }, comment) {
       console.log(comment)
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/members/${comment.memberId}`,
+        url: `https://i7a506.p.ssafy.io/api/members/${comment.memberId}`,
         method: 'get',
         headers: getters.authHeader
       })
@@ -277,7 +277,7 @@ export default ({
     updateComment({ commit, getters }, comment) {
       console.log(comment)
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/comment/${comment.id}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/comment/${comment.id}`,
         method: 'put',
         data: comment.data,
         headers: getters.authHeader
@@ -334,7 +334,7 @@ export default ({
 
     likeDiary({ commit, getters }, diaryPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/likepost`,
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost`,
         method: 'post',
         data: {post_id: diaryPk},
         headers: getters.authHeader
