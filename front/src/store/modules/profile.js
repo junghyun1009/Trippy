@@ -50,7 +50,7 @@ export default {
   actions: {
     fetchProfile({ commit, getters }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/members',
+        url: 'https://i7a506.p.ssafy.io/api/auth/members',
         method: 'get',
         headers: getters.authHeader,
       })
@@ -62,7 +62,7 @@ export default {
 
     fetchMyDiary({ commit, getters }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts/memberDetail',
+        url: 'https://i7a506.p.ssafy.io/api/auth/posts/memberDetail',
         method: 'get',
         headers: getters.authHeader,
       })
@@ -79,7 +79,7 @@ export default {
     fetchTheirProfile({commit, getters }, memberId) {
       console.log(memberId)
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/members/${memberId}`,
+        url: `https://i7a506.p.ssafy.io/api/members/${memberId}`,
         method: 'get',
         params: memberId
       })
@@ -97,7 +97,7 @@ export default {
     // 내 follower/following
     myFollowers({dispatch, getters, commit }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/follower',
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow/follower',
         method: 'get',
         headers: getters.authHeader
       })
@@ -110,7 +110,7 @@ export default {
 
     myFollowersCount({getters, commit }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/follower/cnt',
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow/follower/cnt',
         method: 'get',
         headers: getters.authHeader
       })
@@ -122,7 +122,7 @@ export default {
 
     myFollowings({dispatch, getters, commit }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/following',
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow/following',
         method: 'get',
         headers: getters.authHeader
       })
@@ -135,7 +135,7 @@ export default {
 
     myFollowingsCount({getters, commit }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/following/cnt',
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow/following/cnt',
         method: 'get',
         headers: getters.authHeader
       })
@@ -150,7 +150,7 @@ export default {
     follow({ getters, commit }, followId) {
       console.log(followId)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow',
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow',
         method: 'post',
         headers: getters.authHeader,
         data: followId
@@ -165,7 +165,7 @@ export default {
 
     unfollow({ getters, commit }, followId) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/undo',
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow/undo',
         method: 'post',
         headers: getters.authHeader,
         data: followId
@@ -181,7 +181,7 @@ export default {
     setFollowingStatus({ getters, commit }, following_id) {
       console.log(following_id)
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/follow/chk/${following_id}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/follow/chk/${following_id}`,
         method: 'get',
         headers: getters.authHeader,
         params: following_id
