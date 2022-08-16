@@ -9,3 +9,9 @@ export const userErrorMessage = Object.freeze({
     alreadyRegistered: '이미 가입이 된 이메일입니다',
     wrongVerificationCode: '인증번호가 일치하지 않습니다',
 })
+
+export const badgeNames = Object.freeze({ 
+    firstSignUp: '여행의 시작', 
+    firstDiary: '기록의 시작',
+    firstPost: '만남의 시작',
+})

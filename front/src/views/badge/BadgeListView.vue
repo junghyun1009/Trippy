@@ -27,6 +27,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { badgeNames } from '@/common/constant.js'
 
 export default {
   name: 'BadgeListView',
@@ -46,11 +47,11 @@ export default {
       var unlockedBadgeList = this.$store.getters.myBadges || []
         unlockedBadgeList.forEach( myBadge => {
           console.log(myBadge)
-          if ( myBadge.name === '여행의 시작') {
+          if ( myBadge.name === badgeNames.firstSignUp) {
             this.badgeList[0].obtained = true
-          } if ( myBadge.name === '기록의 시작') {
+          } if ( myBadge.name === badgeNames.firstDiary) {
             this.badgeList[1].obtained = true
-          } if ( myBadge.name === '만남의 시작') {
+          } if ( myBadge.name === badgeNames.firstPost) {
             this.badgeList[2].obtained = true
           }
         })
