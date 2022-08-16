@@ -3,12 +3,14 @@
     <div class="header">
       <div class="tags">
         {{ post }}
+        {{post.bookmark}}
+        <!-- {{this.isBookmark}} -->
         <el-tag class="tag">{{ convertTag }}</el-tag>
         <el-tag class="tag">장소</el-tag>
       </div>
       <div>
-        <span v-if="!this.isBookmark" class="material-symbols-outlined" @click="this.isBookmark=true, goBookmark()">bookmark_add</span>
-        <span v-else-if="this.isBookmark" class="material-symbols-outlined filled" @click="this.isBookmark=false, cancelBookmark()">bookmark</span>
+        <span v-if="post.bookmark===false" class="material-symbols-outlined" @click="goBookmark">bookmark_add</span>
+        <span v-else class="material-symbols-outlined filled" @click="cancelBookmark">bookmark</span>
       </div>
       <router-link class="router" :to="{ name: 'profile' }">
         <div class="profile">
@@ -83,7 +85,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['post', 'isBookmark', 'isPostAuthor']),
+    ...mapGetters(['post', 'isPostAuthor']),
     recruitState() {
       return '모집중'
     },
@@ -108,21 +110,36 @@ export default {
     // }
   },
   methods: {
-    ...mapActions(['fetchPost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark', 'deleteBookmark']),
+    ...mapActions(['fetchPost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark', 'deleteBookmark', 'checkBookmark']),
     goBookmark() {
       this.createBookmark(this.postPk)
-      console.log(1, this.isBookmark)
+      // this.switchIsBookmark()
+      this.checkBookmark(this.postPk)
+      // this.isBookmark = true
+      // console.log(1, this.isBookmark)
     },
     cancelBookmark() {
       this.deleteBookmark(this.postPk)
-      console.log(2, this.isBookmark)
-    }
+      // this.switchIsBookmark()
+      this.checkBookmark(this.postPk)
+      // console.log(2, this.isBookmark)
+    },
+    // switchIsBookmark() {
+    //   this.isBookmark = !this.isBookmark
+    // }
   },
   created() {
     this.fetchPost(this.postPk)
     this.fetchCurrentUser()
     this.fetchBookmark()
-  }
+    this.checkBookmark(this.postPk)
+  },
+  // mounted() {
+    
+  // },
+  // updated() {
+  //   this.checkBookmark(this.postPk)
+  // }
 }
 </script>
 

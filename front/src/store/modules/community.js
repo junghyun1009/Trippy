@@ -43,7 +43,7 @@ export default ({
     // 게시글 CREATE
     createPost({ commit, getters }, post) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/community',
+        url: 'https://i7a506.p.ssafy.io/api/auth/community',
         method: 'POST',
         data: post,
         headers: getters.authHeader,
@@ -60,7 +60,7 @@ export default ({
     // 게시글 목록 READ
     fetchPosts({ commit, getters }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/community',
+        url: 'https://i7a506.p.ssafy.io/api/community',
         method: 'GET',
         headers: getters.authHeader,
       })
@@ -70,7 +70,7 @@ export default ({
     // 단일 게시글 (디테일 페이지) READ
     fetchPost({ commit, getters }, postPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/community/${postPk}`,
+        url: `https://i7a506.p.ssafy.io/api/community/${postPk}`,
         method: 'GET',
         headers: getters.authHeader,
       })
@@ -85,7 +85,7 @@ export default ({
     // 게시글 UPDATE
     updatePost({ commit, getters }, post) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/community/${post.id}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/community/${post.id}`,
         method: 'PUT',
         data: post.content,
         headers: getters.authHeader,
@@ -102,7 +102,7 @@ export default ({
     // 게시글 DELETE
     deletePost({ commit, getters }, postPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/community/${postPk}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/community/${postPk}`,
         method: 'DELETE',
         headers: getters.authHeader,
       })
@@ -115,12 +115,12 @@ export default ({
     // 게시글 북마크 가져오기
     fetchBookmark({ commit, getters }) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/bookmark`,
+        url: `https://i7a506.p.ssafy.io/api/auth/bookmark`,
         method: 'GET',
         headers: getters.authHeader
       })
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         commit('SET_POST', res.data)
       })
       .catch(err => console.error(err.response))
@@ -129,14 +129,14 @@ export default ({
     createBookmark({ commit, getters }, postPk) {
       // console.log(postPk)
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/bookmark/${postPk}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/bookmark/${postPk}`,
         method: 'POST',
         headers: getters.authHeader,
       })
-      .then(res => {
+      .then((res) => {
         // getters.isBookmark = true
         console.log(res.data)
-        commit('SET_POST_BOOKMARK', res.data)
+        commit('SET_POST_BOOKMARK', true)
         // router.push({
         //   name: 'communityDetail',
         //   params: {postPk: postPk}
@@ -147,14 +147,32 @@ export default ({
     // 게시글 북마크 해제
     deleteBookmark({ commit, getters }, postPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/bookmark/${postPk}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/bookmark/${postPk}`,
         method: 'DELETE',
         headers: getters.authHeader
       })
       .then((res) => {
         console.log(res.data)
         // getters.isBookmark = false
-        commit('SET_POST_BOOKMARK', {})
+        commit('SET_POST_BOOKMARK', false)
+      })
+      .catch(err => console.err(err.response))
+    },
+    // 게시글 북마크 체크
+    checkBookmark({ commit, getters }, postPk) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/bookmark/chk/${postPk}`,
+        method: 'GET',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_POST_BOOKMARK', res.data)
+        // if (res.data === true) {
+        //   commit('SET_POST_BOOKMARK', true)
+        // } else {
+        //   commit('SET_POST_BOOKMARK', false)
+        // }
       })
       .catch(err => console.err(err.response))
     }
