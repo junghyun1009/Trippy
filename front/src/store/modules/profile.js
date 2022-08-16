@@ -258,7 +258,6 @@ export default {
         headers: getters.authHeader,
       })
       .then( res => {
-        console.log(res.data)
         const myBadgeList = res.data
         commit('SET_MY_BADGE', myBadgeList)
       })

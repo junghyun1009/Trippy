@@ -196,12 +196,22 @@
 <script>
 /* eslint-disable no-undef */
 import { mapActions, mapGetters } from 'vuex'
+import { ElMessageBox } from 'element-plus'
 
 export default {
   name: 'DiaryForm',
   props: {
     diary: Object,
     action: String
+  },
+  watch: {
+    myBadges(newValue) {
+      console.log(newValue)
+      ElMessageBox.alert('기록의 시작 뱃지를 획득하셨어요!', 
+      '뱃지 획득', {
+        confirmButtonText: 'OK'
+      })
+    }
   },
   data() {
     return {
@@ -272,7 +282,7 @@ export default {
   },
   computed: {
     // update할 때 diaryTemp 대신 해당 pk 다이어리 가져와야 함 -> 편집 창으로 들어오면 해당 pk 다이어리 내용 fetch하는 함수
-    ...mapGetters(['diaryTemp']),
+    ...mapGetters(['diaryTemp', 'myBadges']),
     partyTag() {
       const party = this.newDiary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -284,7 +294,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['createDiary', 'updateDiary', 'saveImage']),
+    ...mapActions(['createDiary', 'updateDiary', 'saveImage', 'fetchMyBadge']),
 
     handleClose(tag) {
       this.newDiary.postTransports.splice(this.newDiary.postTransports.indexOf(tag), 1)
@@ -566,6 +576,7 @@ export default {
   
   mounted() {
     this.initMap()
+    this.fetchMyBadge()
   },
 }
 </script>

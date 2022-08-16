@@ -72,13 +72,26 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import { ElMessageBox } from 'element-plus'
 
 export default {
   name: 'CommunityForm',
   props: {
     post: Object,
     action: String,
+  },
+  mounted() {
+    this.fetchMyBadge()
+  },
+  watch: {
+    myBadges(newValue) {
+      console.log(newValue)
+      ElMessageBox.alert('기록의 시작 뱃지를 획득하셨어요!', 
+      '뱃지 획득', {
+        confirmButtonText: 'OK'
+      })
+    }
   },
   data() {
     return {
@@ -128,6 +141,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['myBadges']),
     optionTag() {
       const gender = this.newPost.gender
       const startAge = this.newPost.startAge

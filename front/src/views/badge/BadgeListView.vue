@@ -43,7 +43,7 @@ export default {
   methods: {
     ...mapActions(['fetchMyBadge']),
     isBadgeUnlocked() {
-      console.log(this.$store.getters.myBadges)
+      // 왜 getters에서 바로 못가져오는지(this.myBadges) 아직도 의문
       var unlockedBadgeList = this.$store.getters.myBadges || []
         unlockedBadgeList.forEach( myBadge => {
           console.log(myBadge)
