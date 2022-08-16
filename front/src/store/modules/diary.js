@@ -17,6 +17,7 @@ export default ({
     isEditing: false,
     parentComment: '',
     authorId: null,
+    parentId: null
   },
   getters: {
     diaries: state => state.diaries,
@@ -29,6 +30,7 @@ export default ({
     isChild: state => state.isChild,
     isEditing: state => state.isEditing,
     parentComment: state => state.parentComment,
+    parentId: state => state.parentId,
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
       return state.diary?.name === getters.currentUser.name
@@ -94,9 +96,10 @@ export default ({
       state.diaries = diaries
     },
 
-    SHOW_PARENT(state, parentComment) {
+    SHOW_PARENT(state, parent) {
       state.isChild = true
-      state.parentComment = parentComment
+      state.parentComment = parent.member
+      state.parentId = parent.parentId
     },
 
     HIDE_PARENT(state) {
@@ -126,7 +129,7 @@ export default ({
         // console.log(getters.diary)
         router.push({
           name: 'diaryDetail',
-          params: { diaryPk: res.data }
+          params: { diaryPk: res.data.postId }
         })
       })
     },
@@ -205,6 +208,7 @@ export default ({
 
     // 일지 댓글 CREATE
     createComment({ commit, getters }, payload) {
+      console.log(payload)
       axios({
         url: 'http://i7a506.p.ssafy.io:8080/api/auth/comment',
         method: 'post',
@@ -246,6 +250,7 @@ export default ({
 
     // 각 댓글 유저 조회
     fetchUser({ getters, commit }, comment) {
+      console.log(comment)
       axios({
         url: `http://i7a506.p.ssafy.io:8080/api/members/${comment.memberId}`,
         method: 'get',
@@ -310,8 +315,8 @@ export default ({
       }
     },
   
-    showParent({ commit }, commentUser) {
-      commit('SHOW_PARENT', commentUser)
+    showParent({ commit }, parent) {
+      commit('SHOW_PARENT', parent)
     },
 
     hideParent({ commit }) {
