@@ -30,7 +30,9 @@
       <el-input v-model="userinfo.description" placeholder="자신을 소개해주세요! 최대 50자 (선택)" maxlength="50"></el-input>
     </div>
     <!-- 완료하면 로그인 페이지로 이동 -->
-    <el-button type="primary" @click="finishSignUp(), mergeObjects()">완료</el-button>
+    <el-button type="primary" @click="mergeObjects()">완료</el-button>
+  
+
   </div>
 </template>
 
@@ -48,6 +50,7 @@ export default {
         },
         profilePhoto: {},
         userData: {},
+        badgePopup: false,
     }
   },
 
@@ -101,12 +104,7 @@ export default {
     removePhoto() {
       this.profilePhoto = {}
     },
-    
-    finishSignUp() {
-      this.$router.push('/login')
-      alert('회원가입을 축하합니다!')
-    },
-    
+
   }
 }
 </script>
