@@ -28,6 +28,7 @@ public class PostServiceImpl implements PostService {
     private final LocationRepository locationRepository;
     private final PostCommentRepository postCommentRepository;
     private final RouteRepository routeRepository;
+    private final LikePostRepository likePostRepository;
     private final S3Uploader s3Uploader;
 
     private final Long walkId = 1L;
@@ -129,6 +130,11 @@ public class PostServiceImpl implements PostService {
         List<PostComment> postComments = postCommentRepository.findPostCommentByPostId(id);
         for (PostComment postComment : postComments) {
             postCommentRepository.delete(postComment);
+        }
+
+        List<LikePost> likePosts = likePostRepository.findLikePostByPostId(id);
+        for (LikePost likePost : likePosts) {
+            likePostRepository.delete(likePost);
         }
         postRepository.deleteById(id);
     }
