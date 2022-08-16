@@ -297,7 +297,7 @@ export default ({
     // 댓글 삭제
     deleteComment({ getters, commit }, pk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/comment/${pk.commentId}`,
+        url: `https://i7a506.p.ssafy.io:8080/api/auth/comment/${pk.commentId}`,
         method: 'delete',
         headers: getters.authHeader,
       })
@@ -323,7 +323,7 @@ export default ({
   
     showAllDiary({ commit }) {
       axios({
-        url: 'http://localhost:8000/posts',
+        url: 'https://localhost:8000/posts',
         method: 'get'
       })
       .then((res) => {
