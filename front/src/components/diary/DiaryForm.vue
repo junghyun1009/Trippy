@@ -18,7 +18,7 @@
               {{ location }}
               {{ locationTable }}
             </div> -->
-             <el-cascader :options="locationTable" v-model="select" clearable />
+             <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
           </el-collapse-item>
 
           <!-- 옵션 -->
@@ -554,7 +554,7 @@ export default {
       this.newDiary.cityName = this.select[1]
 
       if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
-      && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
+      && this.newDiary.routes.length && this.newDiary.detailLocations.length && this.newDiary.countryName && this.newDiary.cityName) {
         console.log(this.newDiary)
         // const imageList = new FormData()
         const diary = new FormData()
