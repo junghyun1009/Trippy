@@ -19,9 +19,6 @@ public class PostComment extends BaseEntity {
     private Long id;
 
     private String content;
-
-    private LocalDateTime regDt;
-
     private String name;
     private String imgPath;
 
