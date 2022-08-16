@@ -19,19 +19,19 @@
           </div>
           <div class="options">
             <p class="option">
-              <span class="material-symbols-outlined">groups</span>
+              <span class="material-symbols-outlined icon">sms</span>
               <span v-if="post.startAge===19 && post.endAge===70 && post.gender==='누구나'">누구나</span>
               <span v-else>{{ post.startAge === post.endAge ? `${post.startAge}세` : post.startAge === 19 && post.endAge === 70 ? '누구나' : `${post.startAge}~${post.endAge}세`}} | {{ post.gender }}</span>
               참여 가능
             </p>
             <p class="option">
-              <span class="material-symbols-outlined">event_note</span>
+              <span class="material-symbols-outlined icon">event_note</span>
               <!-- {{ convertDate }}, {{ convertTime }} -->
               <span>{{ post.endDate ? ''+post.startDate.slice(5, 10) + '~' + ''+post.endDate.slice(5,10) : ''+post.startDate.slice(5, 10) }},</span>
               <span>{{ ''+post.meetingTime.slice(11, 16) }}</span>
             </p>
             <p class="option">
-              <span class="material-symbols-outlined">groups</span>
+              <span class="material-symbols-outlined icon">groups</span>
               {{ post.recruitCurrentVolume }} / {{ post.recruitVolume }}명 참여
             </p>
           </div>
@@ -206,6 +206,10 @@ export default {
 
 .option > span {
   margin-right: 0.3rem;
+}
+
+.icon {
+  font-size: 1rem;
 }
 
 .content {

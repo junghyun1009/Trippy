@@ -6,12 +6,10 @@
         <el-tag type="dark" class="tag">{{ post.category === 1 ? '식사' : post.category === 2 ? '동행' : post.category === 3 ? '파티' : post.category === 4 ? '이동수단 셰어' : '기타' }}</el-tag>
       </div>
       <div class="header">
-        <router-link class="router" :to="{ name: 'profile' }">
-          <div class="profile">
-            <el-avatar class="profile-image" :size="40" src="" />
-            <span class="username">{{ post.name }}</span>
-          </div>
-        </router-link>
+        <div class="profile" @click="goProfile">
+          <el-avatar class="profile-image" :size="40" src="" />
+          <span class="username">{{ post.name }}</span>
+        </div>
         <div v-if="!isPostAuthor" class="bookmark">
           <span v-if="post.bookmark===false" class="material-symbols-outlined" @click="goBookmark">bookmark_add</span>
           <span v-else class="material-symbols-outlined filled" @click="cancelBookmark">bookmark</span>
@@ -27,18 +25,18 @@
     </div>
     <div class="options">
       <p class="option">
-        <span class="material-symbols-outlined">groups</span>
+        <span class="material-symbols-outlined icon">groups</span>
         <span v-if="post.startAge===19 && post.endAge===70 && post.gender==='누구나'">누구나</span>
         <span v-else>{{ post.startAge === post.endAge ? `${post.startAge}세` : post.startAge === 19 && post.endAge === 70 ? '누구나' : `${post.startAge}~${post.endAge}세`}} | {{ post.gender }}</span>
         참여 가능
       </p>
       <p class="option">
-        <span class="material-symbols-outlined">event_note</span>
+        <span class="material-symbols-outlined icon">event_note</span>
         <span>{{ post.endDate ? `${post.startDate.slice(5, 10)}~${post.endDate.slice(5,10)}` : ''+post.startDate.slice(5, 10) }},</span>
         <span>{{ ''+post.meetingTime.slice(11, 16) }}</span>
       </p>
       <p class="option">
-        <span class="material-symbols-outlined">location_on</span>
+        <span class="material-symbols-outlined icon">location_on</span>
         {{ post.place }}
       </p>
     </div>
@@ -127,6 +125,9 @@ export default {
     // switchIsBookmark() {
     //   this.isBookmark = !this.isBookmark
     // }
+    goProfile() {
+      this.$router.push({ name: 'profile' })
+    }
   },
   created() {
     this.checkBookmark(this.postPk)
@@ -168,14 +169,14 @@ hr {
   margin-bottom: 1rem;
 }
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    align-items: center;
-    position: relative;
-    padding: 0.5rem;
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-items: center;
+  position: relative;
+  padding: 0.5rem;
+}
 
 .bookmark {
   color: #F16B51;
@@ -187,10 +188,6 @@ hr {
   'wght' 400,
   'GRAD' 0,
   'opsz' 48
-}
-
-.router {
-  text-decoration: none;
 }
 
 .profile {
@@ -239,6 +236,10 @@ hr {
 
 .option > span {
   margin-right: 0.3rem;
+}
+
+.icon {
+  font-size: 1.2rem;
 }
 
 .content {
