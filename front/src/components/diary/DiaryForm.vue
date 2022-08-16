@@ -11,9 +11,14 @@
         <el-collapse>
           <!-- 장소 -->
           <el-collapse-item class="place-select" title="장소" name="1">
-            <div>
+            <!-- <div>
               {{ newDiary.countryName }}, {{ newDiary.cityName }}
-            </div>
+            </div> -->
+            <!-- <div>
+              {{ location }}
+              {{ locationTable }}
+            </div> -->
+             <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
           </el-collapse-item>
 
           <!-- 옵션 -->
@@ -267,12 +272,13 @@ export default {
         postTransports: this.diary.postTransports,
         routes: this.diary.routes,
         detailLocations: this.diary.detailLocations
-      }
+      },
+      select: [],
     }
   },
   computed: {
     // update할 때 diaryTemp 대신 해당 pk 다이어리 가져와야 함 -> 편집 창으로 들어오면 해당 pk 다이어리 내용 fetch하는 함수
-    ...mapGetters(['diaryTemp']),
+    ...mapGetters(['diaryTemp', 'location']),
     partyTag() {
       const party = this.newDiary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -282,9 +288,35 @@ export default {
       const transportation = this.newDiary.postTransports
       return transportation
     },
+    locationTable() {
+      const options = []
+      let countryName = ''
+      let j = 0
+      for (let i=0 ; i<this.location.length ; i++) {
+        const country = {}
+        if (countryName != this.location[i].countryName) {
+          country.value = this.location[i].countryName
+          country.label = this.location[i].countryName
+          country.children = []
+          const city = {}
+          city.value = this.location[i].cityName
+          city.label = this.location[i].cityName
+          country.children.push(city)
+          options.push(country)
+          countryName = this.location[i].countryName
+          j = i
+        } else {
+          const citySec = {}
+          citySec.value = this.location[i].cityName
+          citySec.label = this.location[i].cityName
+          options[j].children.push(citySec)
+        }
+      }
+      return options  
+    }
   },
   methods: {
-    ...mapActions(['createDiary', 'updateDiary', 'saveImage']),
+    ...mapActions(['createDiary', 'updateDiary', 'saveImage', 'fetchLocation']),
 
     handleClose(tag) {
       this.newDiary.postTransports.splice(this.newDiary.postTransports.indexOf(tag), 1)
@@ -518,9 +550,11 @@ export default {
         delete each.preview
       })
       this.newDiary.detailLocations = this.newStories
+      this.newDiary.countryName = this.select[0]
+      this.newDiary.cityName = this.select[1]
 
       if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
-      && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
+      && this.newDiary.routes.length && this.newDiary.detailLocations.length && this.newDiary.countryName && this.newDiary.cityName) {
         console.log(this.newDiary)
         // const imageList = new FormData()
         const diary = new FormData()
@@ -551,21 +585,25 @@ export default {
           console.log(value);
         }
         // for (var imagekey of imageList.keys()) {
-        //   console.log(imagekey);
+          //   console.log(imagekey);
         // }
         // for (var imagevalue of imageList.values()) {
-        //   console.log(imagevalue);
+          //   console.log(imagevalue);
         // }
         this.createDiary(diary)
         // this.saveImage(imageList)
       } else {
+        // console.log(this.locationPick)
+        // console.log(this.locationPick[0])
+        // console.log(this.locationPick[1])
         alert("빈 칸 없이 모든 필드를 채워주세요!")
       }
     }
   },
   
   mounted() {
-    this.initMap()
+    this.initMap(),
+    this.fetchLocation()
   },
 }
 </script>
