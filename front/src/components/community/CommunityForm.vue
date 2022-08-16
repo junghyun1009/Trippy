@@ -31,7 +31,8 @@
         <el-collapse class="collapse">
           <el-collapse-item title="장소">
             <div>
-              {{ newPost.countryName }}, {{ newPost.cityName }}
+              {{ select[0] }}, {{ select[1] }}
+               <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
             </div>
           </el-collapse-item>
           <el-collapse-item>
@@ -137,10 +138,12 @@ export default {
         local: this.post.local,
         place: this.post.place,
         // locationId: this.post.locationId,
-      }
+      },
+      select: [this.post.countryName, this.post.cityName],
     }
   },
   computed: {
+    ...mapGetters(['location']),
     ...mapGetters(['myBadges']),
     optionTag() {
       const gender = this.newPost.gender
@@ -170,9 +173,35 @@ export default {
       }
       return [gender, age, isLocal]
     },
+    locationTable() {
+      const options = []
+      let countryName = ''
+      let j = 0
+      for (let i=0 ; i<this.location.length ; i++) {
+        const country = {}
+        if (countryName != this.location[i].countryName) {
+          country.value = this.location[i].countryName
+          country.label = this.location[i].countryName
+          country.children = []
+          const city = {}
+          city.value = this.location[i].cityName
+          city.label = this.location[i].cityName
+          country.children.push(city)
+          options.push(country)
+          countryName = this.location[i].countryName
+          j = i
+        } else {
+          const citySec = {}
+          citySec.value = this.location[i].cityName
+          citySec.label = this.location[i].cityName
+          options[j].children.push(citySec)
+        }
+      }
+      return options  
+    }
   },
   methods: {
-    ...mapActions(['createPost', 'updatePost']),
+    ...mapActions(['createPost', 'updatePost', 'fetchLocation']),
     onInput() {
       this.newPost.startAge = this.age[0]
       this.newPost.endAge = this.age[1]
@@ -182,6 +211,9 @@ export default {
       // if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
       if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.day || post.endDate)) {
         // console.log(this.newPost)
+        post.countryName = this.select[0]
+        post.cityName = this.select[1]
+        console.log(post)
         if (this.action === 'create') {
           this.createPost(this.newPost)
         } else if (this.action === 'update') {
@@ -219,6 +251,9 @@ export default {
       return this.makeRange(1, 59)
     },
   },
+  mounted() {
+    this.fetchLocation()
+  }
 }
 </script>
 
