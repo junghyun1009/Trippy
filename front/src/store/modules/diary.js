@@ -296,23 +296,21 @@ export default ({
 
     // 댓글 삭제
     deleteComment({ getters, commit }, pk) {
-      if (confirm('정말 삭제하시겠습니까?')) {
-        axios({
-          url: `http://i7a506.p.ssafy.io:8080/api/auth/comment/${pk.commentId}`,
-          method: 'delete',
-          headers: getters.authHeader,
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/comment/${pk.commentId}`,
+        method: 'delete',
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        console.log(res.data)
+        commit('SET_COMMENT', {})
+        router.push({
+          name: 'diaryDetail',
+          parmas: { diaryPk: pk.diaryId }
         })
-        .then(res => {
-          console.log(res.data)
-          commit('SET_COMMENT', {})
-          router.push({
-            name: 'diaryDetail',
-            parmas: { diaryPk: pk.diaryId }
-          })
-          location.reload()
-        })
-        .catch(err => console.error(err.response))
-      }
+        location.reload()
+      })
+      .catch(err => console.error(err.response))
     },
   
     showParent({ commit }, parent) {
