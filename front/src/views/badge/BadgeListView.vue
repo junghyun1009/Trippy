@@ -11,9 +11,6 @@
     <div class="badge-list">
       <el-row>
         <el-col class="badge" :span="6" v-for="(badge, idx) in badgeList" :key="idx">
-          <!-- 나중에 조건 만족 시 data의 obtained를 true로 바꿈(그러면 불 들어옴) - 
-          근데 이게 개별 배지마다 설정을 어케하는지 아직 모르겠음
-          영 모르겠으면 for 문 돌리지말고 그냥... 하나하나 하는 수밖에 없을 듯-->
           <img :src=badge.image :alt=badge.image @click="badge.drawer=true" :style="[ badge.obtained ? 'filter: none' : 'filter: grayscale']" >
           <p class="badge-name">{{ badge.name }}</p>
           <el-drawer v-model=badge.drawer direction="btt" size="50%">
@@ -25,36 +22,43 @@
         </el-col>
       </el-row>
     </div>
-
-      <!-- 사용자의 뱃지 목록에 있다면 -->
-      <!-- <div class="badge">
-        <img class="obtained" :src=badge.image :alt=badge.image @click="badge.drawer=true">
-        <p>{{ badge.name }}</p>
-      </div>
-      <el-drawer v-model=badge.drawer direction="btt" size="50%">
-        <img :src=badge.image :alt=badge.image style="width: 70px; height: 90px;">
-        <p>{{ badge.name }}</p>
-        <span>{{ badge.description }}</span><br>
-        <span>앞으로도 Trippy에서 여행의 기억을 쌓아가세요!</span>
-      </el-drawer> -->
-      
-      <!-- 사용자의 뱃지 목록에 없다면 -->
-      <!-- <div class="badge">
-        <img class="not-obtained" :src=badge.image alt="not obtained" @click="badge.drawer=true">
-        <p>{{ badge.name }}</p>
-      </div>
-      <el-drawer v-model=badge.drawer direction="btt" size="50%">
-        <img :src=badge.image :alt=badge.image style="width: 70px; height: 90px;">
-        <p>{{ badge.name }}</p>
-        <span>{{ badge.description }}</span><br>
-        <span>어떤 모양의 뱃지일까요~?</span>
-      </el-drawer> -->
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'BadgeListView',
+  computed: {
+    ...mapGetters(['myBadges'])
+  },
+  watch: {
+    myBadges(newValue) {
+      console.log(newValue)
+      this.isBadgeUnlocked()
+    }
+  },
+  methods: {
+    ...mapActions(['fetchMyBadge']),
+    isBadgeUnlocked() {
+      console.log(this.$store.getters.myBadges)
+      var unlockedBadgeList = this.$store.getters.myBadges || []
+        unlockedBadgeList.forEach( myBadge => {
+          console.log(myBadge)
+          if ( myBadge.name === '여행의 시작') {
+            this.badgeList[0].obtained = true
+          } if ( myBadge.name === '기록의 시작') {
+            this.badgeList[1].obtained = true
+          } if ( myBadge.name === '만남의 시작') {
+            this.badgeList[2].obtained = true
+          }
+        })
+    }
+  },
+  mounted() {
+    this.fetchMyBadge()
+  },
   data () {
     return {
       badgeList: [
@@ -64,7 +68,7 @@ export default {
           description: 'Trippy에 오신 것을 환영합니다!',
           image: require('@/assets/badge-start.png'),
           drawer: false,
-          obtained: true,
+          obtained: false,
         },
         {
           pk: 2,
@@ -80,7 +84,7 @@ export default {
           description: '첫 동행 글을 작성하셨군요!',
           image: require('@/assets/badge-chat.png'),
           drawer: false,
-          obtained: true,
+          obtained: false,
         },
         {
           pk: 4,
@@ -222,21 +226,10 @@ export default {
   justify-content: center;
 }
 
-/* .obtained {
-  width: 20vw;
-  height: 20vw;
-}
-
-.not-obtained {
-  width: 20vw;
-  height: 20vw;
-  filter: grayscale(100%)
-} */
-
 img {
   width: 20vw;
   height: 20vw;
   filter: grayscale(100%)
 }
 
-</style>
+</style>\

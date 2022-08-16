@@ -5,6 +5,7 @@ export default {
   state: {
     profile: {},
     myDiaries: [],
+    myBadges: [],
     isMyProfile: false,
     theirProfile: {},
     followerList: [],
@@ -16,7 +17,7 @@ export default {
   getters: {
     profile: state => state.profile,
     myDiaries: state => state.myDiaries,
-    myBadge: state => state.myBadge,
+    myBadges: state => state.myBadgeList,
     isMyProfile: state => state.isMyProfile,
     theirProfile: state => state.theirProfile,
     followerList: state => state.followerList,
@@ -27,7 +28,7 @@ export default {
   },
   mutations: {
     SET_PROFILE: (state, profile) => state.profile = profile,
-    SET_MY_BADGE: (state, badge) => state.badge = badge,
+    SET_MY_BADGE: (state, myBadgeList) => state.myBadgeList = myBadgeList,
     IS_MY_PROFILE: (state, isMyProfile) => state.isMyProfile = isMyProfile,
     SET_THEIR_PROFILE: (state, theirProfile) => state.theirProfile = theirProfile,
     FOLLOWER_LIST: (state, followerList) => state.followerList = followerList,
@@ -248,11 +249,23 @@ export default {
       .catch( err => {
         console.log(err)
       })
-    }
+    },
     
-    // fetchMyBadge({ commit }) {
-    //   commit('SET_MY_BADGE')
-    // }
+    fetchMyBadge({ commit, getters }) {
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/members/badges',
+        method: 'get',
+        headers: getters.authHeader,
+      })
+      .then( res => {
+        console.log(res.data)
+        const myBadgeList = res.data
+        commit('SET_MY_BADGE', myBadgeList)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
 
 
   }
