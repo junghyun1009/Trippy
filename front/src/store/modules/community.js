@@ -49,11 +49,11 @@ export default ({
         headers: getters.authHeader,
       })
       .then(res => {
-        console.log(res.data)
+        console.log('create!!!!!!!!!!!!!!', res.data)
         commit('SET_POST', post)
         router.push({
           name: 'communityDetail',
-          params: { postPk: res.data }
+          params: { postPk: res.data.postId}
         })
       })
     },
@@ -113,18 +113,18 @@ export default ({
       .catch(err => console.error(err.response))
     },
     // 게시글 북마크 가져오기
-    fetchBookmark({ commit, getters }) {
-      axios({
-        url: `https://i7a506.p.ssafy.io/api/auth/bookmark`,
-        method: 'GET',
-        headers: getters.authHeader
-      })
-      .then(res => {
-        console.log(res.data)
-        commit('SET_POST', res.data)
-      })
-      .catch(err => console.error(err.response))
-    },
+    // fetchBookmark({ commit, getters }) {
+    //   axios({
+    //     url: `https://i7a506.p.ssafy.io/api/auth/bookmark`,
+    //     method: 'GET',
+    //     headers: getters.authHeader
+    //   })
+    //   .then(res => {
+    //     console.log(res.data)
+    //     commit('SET_POST_BOOKMARK', res.data)
+    //   })
+    //   .catch(err => console.error(err.response))
+    // },
     // 게시글 북마크 설정
     createBookmark({ commit, getters }, postPk) {
       // console.log(postPk)
@@ -133,10 +133,10 @@ export default ({
         method: 'POST',
         headers: getters.authHeader,
       })
-      .then(res => {
+      .then((res) => {
         // getters.isBookmark = true
         console.log(res.data)
-        commit('SET_POST_BOOKMARK', res.data)
+        commit('SET_POST_BOOKMARK', true)
         // router.push({
         //   name: 'communityDetail',
         //   params: {postPk: postPk}
@@ -154,7 +154,25 @@ export default ({
       .then((res) => {
         console.log(res.data)
         // getters.isBookmark = false
-        commit('SET_POST_BOOKMARK', {})
+        commit('SET_POST_BOOKMARK', false)
+      })
+      .catch(err => console.err(err.response))
+    },
+    // 게시글 북마크 체크
+    checkBookmark({ commit, getters }, postPk) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/bookmark/chk/${postPk}`,
+        method: 'GET',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_POST_BOOKMARK', res.data)
+        // if (res.data === true) {
+        //   commit('SET_POST_BOOKMARK', true)
+        // } else {
+        //   commit('SET_POST_BOOKMARK', false)
+        // }
       })
       .catch(err => console.err(err.response))
     }
