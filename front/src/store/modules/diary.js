@@ -104,7 +104,9 @@ export default ({
 
     HIDE_PARENT(state) {
       state.isChild = false
-    }
+    },
+
+    SET_DIARY_LIKE: (state, like) => (state.diary.like = like),
   },
   actions: {
     // 일지 CREATE
@@ -320,33 +322,34 @@ export default ({
     hideParent({ commit }) {
       commit('HIDE_PARENT')
     },
-  
-    // showAllDiary({ commit }) {
-    //   axios({
-    //     url: 'https://localhost:8000/posts',
-    //     method: 'get'
-    //   })
-    //   .then((res) => {
-    //     const allDiary = res.data
-    //     commit('SHOW_ALL_DIARY', allDiary)
-    //   })
-    // },
-
-    likeDiary({ commit, getters }, diaryPk) {
+    // 다이어리 좋아요
+    likeDiary({ commit, getters }, diary) {
+      console.log(diary.id)
       axios({
         url: `https://i7a506.p.ssafy.io/api/auth/likepost`,
         method: 'post',
-        data: {post_id: diaryPk},
+        data: {post_id: diary.id},
         headers: getters.authHeader
       })
       .then((res) => {
-        commit('SET_DIARY', res.data)
         console.log(res.data)
-        router.push({
-          name: 'DiaryDetail',
-          params: { diaryPk: diaryPk }
-        })
+        commit('SET_DIARY_LIKE', true)
       })
+      .catch(err => console.err(err.response))
+    },
+    // 좋아요 취소
+    unlikeDiary({ commit, getters }, diary) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost`,
+        method: 'delete',
+        data: {post_id: diary.id},
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_DIARY_LIKE', false)
+      })
+      .catch(err => console.err(err.response))
     }
   },
 

@@ -2,15 +2,15 @@
   <div>
     <!-- diaryTemp -> diary로 바꿔 -->
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
-    <!-- {{ diary }} -->
+    {{ diary }}
     <div class="diary-detail-header">
       <div class="title-icons">
         <h3>{{ diary.title }}</h3>
         <div class="icons">
           <!-- 여기부터는 공통 -->
           <div class="icon-cnt">
-            <span v-if="!isLiked" class="material-symbols-outlined" @click="isLiked=1, likeDiary(diary.id)">favorite</span>
-            <span v-else class="material-symbols-outlined filled-heart" @click="isLiked=0">favorite</span>
+            <span v-if="!diary.like" class="material-symbols-outlined" @click="isLiked=1, goLike()">favorite</span>
+            <span v-else class="material-symbols-outlined filled-heart" @click="isLiked=0, goUnlike()">favorite</span>
             <span class="cnt">777</span>
           </div>
           <!-- <router-link :to="{ name: 'diaryComment' }" class="icon-cnt">
@@ -206,7 +206,13 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'fetchCurrentUser']),
+    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'unlikeDiary', 'fetchCurrentUser']),
+    goLike() {
+      this.likeDiary(this.diary)
+    },
+    goUnlike() {
+      this.unlikeDiary(this.diary)
+    },
     addMarkers() {
       console.log(this.diary.routes)
       const map = new google.maps.Map(document.getElementById("map"), {
