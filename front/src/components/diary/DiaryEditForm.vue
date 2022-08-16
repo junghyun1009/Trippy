@@ -12,10 +12,15 @@
       <div class="demo-collapse">
         <el-collapse>
           <!-- 장소 -->
-          <el-collapse-item class="place-select" title="장소" name="1">
-            <div>
-              {{ newDiary.countryName }}, {{ newDiary.cityName }}
-            </div>
+          <el-collapse-item name="1">
+            <template #title>
+              <p class="option-p">장소</p>
+              <div>
+                <el-tag class="option-tag" type=''>{{ select[0] }}</el-tag>
+                <el-tag class="option-tag" type=''>{{ select[1] }}</el-tag>
+              </div>
+            </template>
+            <el-cascader :options="locationTable" v-model="select" clearable />
           </el-collapse-item>
 
           <!-- 옵션 -->
@@ -201,7 +206,7 @@
 
 <script>
 /* eslint-disable no-undef */
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 
 export default {
@@ -268,9 +273,11 @@ export default {
       },
       images : [...this.editimages],
       route: {},
+      select: [this.diary.countryName, this.diary.cityName]
     }
   },
   computed: {
+    ...mapGetters(['location']),
     partyTag() {
       const party = this.newDiary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -280,6 +287,32 @@ export default {
       const transportation = this.newDiary.postTransports
       return transportation
     },
+    locationTable() {
+      const options = []
+      let countryName = ''
+      let j = 0
+      for (let i=0 ; i<this.location.length ; i++) {
+        const country = {}
+        if (countryName != this.location[i].countryName) {
+          country.value = this.location[i].countryName
+          country.label = this.location[i].countryName
+          country.children = []
+          const city = {}
+          city.value = this.location[i].cityName
+          city.label = this.location[i].cityName
+          country.children.push(city)
+          options.push(country)
+          countryName = this.location[i].countryName
+          j = i
+        } else {
+          const citySec = {}
+          citySec.value = this.location[i].cityName
+          citySec.label = this.location[i].cityName
+          options[j].children.push(citySec)
+        }
+      }
+      return options  
+    }
     // convertStories() {
     //   const stories = this.newDiary.detailLocations
     //   const convert = []
@@ -310,7 +343,7 @@ export default {
     // },
   },
   methods: {
-    ...mapActions(['updateDiary']),
+    ...mapActions(['updateDiary', 'fetchLocation']),
     handleClose(tag) {
       this.newDiary.postTransports.splice(this.newDiary.postTransports.indexOf(tag), 1)
     },
@@ -516,7 +549,8 @@ export default {
     }
   },
   mounted() {
-    this.initMap()
+    this.initMap(),
+    this.fetchLocation()
   }
 }
 </script>
