@@ -76,7 +76,7 @@ export default {
       })
     },
 
-    fetchTheirProfile({commit, getters }, memberId) {
+    fetchTheirProfile({commit, }, memberId) {
       console.log(memberId)
       axios({
         url: `https://i7a506.p.ssafy.io/api/members/${memberId}`,
@@ -86,12 +86,11 @@ export default {
       .then( res => {
         console.log('authors profile from url param:', res.data)
         commit('SET_THEIR_PROFILE', res.data)
-        console.log('getters check after fetching their profile')
-        console.log(getters.theirProfile)
       })
       .catch(err => 
         console.log(err))
     },
+
 
     // 팔로잉 기능
     // 내 follower/following
@@ -145,6 +144,61 @@ export default {
       })
     },
 
+
+    // 다른 사람의 follower/following
+    yourFollowers({dispatch, commit }, memberId) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/follow/follower/${memberId}`,
+        method: 'get',
+        // headers: getters.authHeader,
+        params: memberId
+      })
+      .then( res => {
+        console.log('their follower list:', res.data)
+        commit('FOLLOWER_LIST', res.data)
+        dispatch('yourFollowersCount', memberId)
+      })
+    },
+
+    yourFollowersCount({ commit }, memberId) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/follow/follower/cnt/${memberId}`,
+        method: 'get',
+        // headers: getters.authHeader,
+        params: memberId
+      })
+      .then( res => {
+        console.log('number of their followers:', res.data)
+        commit('FOLLOWER_COUNT', res.data)
+      })
+    },
+
+    yourFollowings({dispatch, commit }, memberId) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/follow/following/${memberId}`,
+        method: 'get',
+        // headers: getters.authHeader,
+        params: memberId
+      })
+      .then( res => {
+        console.log('their following list:', res.data)
+        commit('FOLLOWING_LIST', res.data)
+        dispatch('yourFollowingsCount', memberId)
+      })
+    },
+
+    yourFollowingsCount({ commit }, memberId) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/follow/following/cnt/${memberId}`,
+        method: 'get',
+        // headers: getters.authHeader,
+        params: memberId
+      })
+      .then( res => {
+        console.log('number of people they follow:', res.data)
+        commit('FOLLOWING_COUNT', res.data)
+      })
+    },
 
     // 팔로우 언팔로우
     follow({ getters, commit }, followId) {
