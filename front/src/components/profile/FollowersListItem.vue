@@ -25,10 +25,5 @@ export default {
 </script>
 
 <style>
-/* .follower-profile {
-	background-color: black;
-	width: 70px;
-	height: 70px;
-	border-radius: 50%;
-} */
+
 </style>
