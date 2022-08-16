@@ -3,7 +3,9 @@
     <div class="background">
       <div class="profile-picture">
         <!-- {{ profile }} -->
-        <el-avatar :size="90"> user </el-avatar>
+        <el-avatar :size="90">
+          <img :src="profile.img_link" alt="user">
+        </el-avatar>
       </div>
     </div>
 

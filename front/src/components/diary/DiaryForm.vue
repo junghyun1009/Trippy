@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="form">
     <form @submit.prevent="onSubmit">
       <!-- 제목 -->
       <div class="title-box">
@@ -10,15 +10,17 @@
       <div class="demo-collapse">
         <el-collapse>
           <!-- 장소 -->
-          <el-collapse-item class="place-select" title="장소" name="1">
-            <!-- <div>
-              {{ newDiary.countryName }}, {{ newDiary.cityName }}
-            </div> -->
-            <!-- <div>
-              {{ location }}
-              {{ locationTable }}
-            </div> -->
-             <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
+          <el-collapse-item name="1">
+            <template #title>
+              <p class="option-p">장소</p>
+              <div v-if="select.length===2">
+                <el-tag class="option-tag" type="dark">{{ select[0] }}</el-tag>
+                <el-tag class="option-tag" type="dark">{{ select[1] }}</el-tag>
+              </div>
+            </template>
+            <div class="location-div">
+              <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
+            </div>
           </el-collapse-item>
 
           <!-- 옵션 -->
@@ -28,11 +30,11 @@
               <!-- 태그 -->
               <el-scrollbar>
                 <div class="option-tag-div">
-                  <el-tag class="option-tag" type=''>
+                  <el-tag class="option-tag" type="dark">
                     {{ partyTag }}
                   </el-tag>
                   <el-tag v-for="trans in transportationTag" :key="trans" class="option-tag" 
-                  closable :disable-transitions="false" type='' @close="handleClose(trans)">
+                  closable :disable-transitions="false" type="dark" @close="handleClose(trans)">
                     {{ trans.transport.name }}
                   </el-tag>
                 </div>
@@ -96,7 +98,7 @@
               <el-scrollbar>
                 <div class="option-tag-div">
                   <el-tag class="option-tag" v-for="(route, idx) in newDiary.routes" :key="idx"
-                  :disable-route="false" type=''>
+                  :disable-route="false" type="dark">
                     {{ route.routeName }}
                   </el-tag>
                 </div>
@@ -119,7 +121,7 @@
               <div id="map" style="height: 70vw; position: relative; overflow: hidden;"></div>
               <div class="route-tag-group">
                 <el-tag v-for="(route, idx) in newDiary.routes" :key="idx" class="route-tag"
-                closable :disable-route="false" type='' @close="removeRoute(idx)">
+                closable :disable-route="false" type="dark" @close="removeRoute(idx)">
                   {{ route.routeName }}
                 </el-tag>
               </div>
@@ -184,14 +186,14 @@
                 <span class="material-symbols-outlined">delete</span>
               </el-button>
             </div>
-            <hr>
+            <el-divider/>
           </div>
         </div>
 
       </div>
 
       <div class="submit-btn">
-        <el-button @click="onSubmit">작성하기</el-button>
+        <el-button @click="onSubmit" type="primary">작성하기</el-button>
       </div>
 
     </form>
@@ -620,6 +622,9 @@ export default {
 </script>
 
 <style scoped>
+.form {
+  margin-bottom: 5rem;
+}
 .title-box {
   display: flex;
   justify-content: start;
@@ -636,6 +641,9 @@ export default {
 .title-box .input-box {
   width: 80vw;
   margin-left: 0.5rem;
+}
+.location-div {
+  margin-left: 2.7rem;
 }
 .option-p {
   width: 10vw;
@@ -923,6 +931,13 @@ export default {
 }
 .submit-btn {
   margin-top: 1rem;
+  text-align: center;
 }
-
+.el-button--primary {
+  --el-button-active-bg-color: var(--el-color-primary);
+  /* --el-button-active-color: var(--el-color-primary); */
+  /* --el-button-disabled-bg-color: #EFDFDE;  */
+  --el-button-hover-bg-color: #FFD2C9;
+  --el-button-hover-border-color: #FFD2C9;
+}
 </style>

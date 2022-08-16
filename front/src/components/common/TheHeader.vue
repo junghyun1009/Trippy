@@ -48,7 +48,7 @@
         <div v-if="isLoggedIn">
           <div class="profile" @click="goProfile(), visible=false">
             <el-avatar class="img" :size="50" :src="profile.img_path"/>
-            <p class="name">{{ profile.name }} 이름
+            <p class="name">{{ profile.name }} 님
               <span class="material-symbols-outlined icon">arrow_forward_ios</span>
             </p> 
           </div>
