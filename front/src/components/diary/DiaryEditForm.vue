@@ -1,6 +1,6 @@
 <template>
-  <div>
-    {{ newDiary.postTransports }}
+  <div class="form">
+    <!-- {{ newDiary.postTransports }} -->
     <form @submit.prevent="onSubmit">
       
       <!-- 제목 -->
@@ -16,11 +16,13 @@
             <template #title>
               <p class="option-p">장소</p>
               <div>
-                <el-tag class="option-tag" type=''>{{ select[0] }}</el-tag>
-                <el-tag class="option-tag" type=''>{{ select[1] }}</el-tag>
+                <el-tag class="option-tag" type="dark">{{ select[0] }}</el-tag>
+                <el-tag class="option-tag" type="dark">{{ select[1] }}</el-tag>
               </div>
             </template>
-            <el-cascader :options="locationTable" v-model="select" clearable />
+            <div class="location-div">
+              <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
+            </div>
           </el-collapse-item>
 
           <!-- 옵션 -->
@@ -30,11 +32,11 @@
               <!-- 태그 -->
               <el-scrollbar>
                 <div class="option-tag-div">
-                  <el-tag class="option-tag" type=''>
+                  <el-tag class="option-tag" type="dark">
                     {{ partyTag }}
                   </el-tag>
                   <el-tag v-for="trans in transportationTag" :key="trans" class="option-tag" 
-                  closable :disable-transitions="false" type='' @close="handleClose(trans)">
+                  closable :disable-transitions="false" type="dark" @close="handleClose(trans)">
                     {{ trans.transport.name }}
                   </el-tag>
                 </div>
@@ -98,7 +100,7 @@
               <el-scrollbar>
                 <div class="option-tag-div">
                   <el-tag class="option-tag" v-for="(route, idx) in newDiary.routes" :key="idx"
-                  :disable-route="false" type=''>
+                  :disable-route="false" type="dark">
                     {{ route.routeName }}
                   </el-tag>
                 </div>
@@ -121,7 +123,7 @@
               <div id="map" style="height: 70vw; position: relative; overflow: hidden;"></div>
               <div class="route-tag-group">
                 <el-tag v-for="(route, idx) in newDiary.routes" :key="idx" class="route-tag"
-                closable :disable-route="false" type='' @close="removeRoute(idx)">
+                closable :disable-route="false" type="dark" @close="removeRoute(idx)">
                   {{ route.routeName }}
                 </el-tag>
               </div>
@@ -191,13 +193,13 @@
                 <span class="material-symbols-outlined">delete</span>
               </el-button>
             </div>
-            <hr>
+            <el-divider/>
           </div>
         </div>
       </div>
 
       <div class="submit-btn">
-        <el-button @click="onSubmit">수정하기</el-button>
+        <el-button @click="onSubmit" type="primary">수정하기</el-button>
       </div>
 
     </form>
@@ -207,6 +209,7 @@
 <script>
 /* eslint-disable no-undef */
 import { mapGetters, mapActions } from 'vuex'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 
 export default {
@@ -502,50 +505,75 @@ export default {
         delete each.preview
       })
       this.newDiary.detailLocations = this.newStories
+      this.newDiary.countryName = this.select[0]
+      this.newDiary.cityName = this.select[1]
 
-      if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
-      && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
-        console.log(this.newDiary)
-
-        const diary = new FormData()
-        diary.append("post", new Blob([JSON.stringify(this.newDiary)], {type: "application/json"}))
-        // diary.append("diary", JSON.stringify(this.newDiary))
-        this.images.forEach((image) => {
-          console.log(image)
-          if (image.length === 0) {
-            // 비어있는 경우
-            const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
-            diary.append("images", empty)
-          } else if (typeof(image) === 'string') {
-            // 사진 변경이 안된 경우
-            // empty처럼 인식할 수 있게 하는 방법이 있으려나..?
-            const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
-            diary.append("images", empty)
-            // const blob = fetch(image).blob()
-            // const file = new File([blob], `${image}.jpg`, )
-            // diary.append("images", file)
-            // diary.append("images", image)
-          } else {
-            // 사진이 변경된 경우 혹은 새로 추가한 경우
-            diary.append("images", image)
+      ElMessageBox.confirm(
+        '수정을 완료하시겠어요?',
+        {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'primary',
+        }
+      )
+      .then(() => {
+        if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
+        && this.newDiary.routes.length && this.newDiary.detailLocations.length && this.newDiary.countryName && this.newDiary.cityName) {
+          console.log(this.newDiary)
+  
+          const diary = new FormData()
+          diary.append("post", new Blob([JSON.stringify(this.newDiary)], {type: "application/json"}))
+          // diary.append("diary", JSON.stringify(this.newDiary))
+          this.images.forEach((image) => {
+            console.log(image)
+            if (image.length === 0) {
+              // 비어있는 경우
+              const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
+              diary.append("images", empty)
+            } else if (typeof(image) === 'string') {
+              // 사진 변경이 안된 경우
+              // empty처럼 인식할 수 있게 하는 방법이 있으려나..?
+              const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
+              diary.append("images", empty)
+              // const blob = fetch(image).blob()
+              // const file = new File([blob], `${image}.jpg`, )
+              // diary.append("images", file)
+              // diary.append("images", image)
+            } else {
+              // 사진이 변경된 경우 혹은 새로 추가한 경우
+              diary.append("images", image)
+            }
+          })
+          // diary.append("images", imageList)
+          for (var key of diary.keys()) {
+            console.log(key);
           }
+          for (var value of diary.values()) {
+            console.log(value);
+          }
+  
+          const payload = {
+            id: this.diary.id,
+            content: diary
+          }
+          this.updateDiary(payload)
+          ElMessage({
+            type: 'success',
+            message: '수정이 완료되었어요!',
+          })
+        } else {
+          ElMessage({
+            type: 'warning',
+            message: '빈 칸 없이 모든 필드를 채워주세요!'
+          })
+        }
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '수정이 취소되었어요.'
         })
-        // diary.append("images", imageList)
-        for (var key of diary.keys()) {
-          console.log(key);
-        }
-        for (var value of diary.values()) {
-          console.log(value);
-        }
-
-        const payload = {
-          id: this.diary.id,
-          content: diary
-        }
-        this.updateDiary(payload)
-      } else {
-        alert("빈 칸 없이 모든 필드를 채워주세요!")
-      }
+      })
     }
   },
   mounted() {
@@ -556,7 +584,9 @@ export default {
 </script>
 
 <style scoped>
-
+.form {
+  margin-bottom: 5rem;
+}
 .title-box {
   display: flex;
   justify-content: start;
@@ -573,6 +603,9 @@ export default {
 .title-box .input-box {
   width: 80vw;
   margin-left: 0.5rem;
+}
+.location-div {
+  margin-left: 2.7rem;
 }
 .option-p {
   width: 10vw;
@@ -860,6 +893,13 @@ export default {
 }
 .submit-btn {
   margin-top: 1rem;
+  text-align: center;
 }
-
+.el-button--primary {
+  --el-button-active-bg-color: var(--el-color-primary);
+  /* --el-button-active-color: var(--el-color-primary); */
+  /* --el-button-disabled-bg-color: #EFDFDE;  */
+  --el-button-hover-bg-color: #FFD2C9;
+  --el-button-hover-border-color: #FFD2C9;
+}
 </style>
