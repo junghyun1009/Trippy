@@ -28,6 +28,7 @@ public class PostServiceImpl implements PostService {
     private final LocationRepository locationRepository;
     private final PostCommentRepository postCommentRepository;
     private final RouteRepository routeRepository;
+    private final LikePostRepository likePostRepository;
     private final S3Uploader s3Uploader;
 
     private final Long walkId = 1L;
@@ -130,6 +131,11 @@ public class PostServiceImpl implements PostService {
         for (PostComment postComment : postComments) {
             postCommentRepository.delete(postComment);
         }
+
+        List<LikePost> likePosts = likePostRepository.findLikePostByPostId(id);
+        for (LikePost likePost : likePosts) {
+            likePostRepository.delete(likePost);
+        }
         postRepository.deleteById(id);
     }
 
@@ -174,8 +180,11 @@ public class PostServiceImpl implements PostService {
         // 기존의 detailLocation에 저장되어 있는 image를 amazon s3 서버에서도 마찬가지로 삭제
         for (int i = 0; i < oldDetailLocation.size(); i++) {
             detailLocationRepository.delete(oldDetailLocation.get(i));
-            System.out.println(oldDetailLocation.get(i).toString());
-            s3Uploader.deleteS3(oldDetailLocation.get(i).getFilename());
+            if (oldDetailLocation.get(i).getFilename() != null) {
+                s3Uploader.deleteS3(oldDetailLocation.get(i).getFilename());
+            } else {
+                continue;
+            }
         }
 
         // 기존의 detailLocation을 삭제 후 새로운 detailLocation 추가
@@ -183,8 +192,10 @@ public class PostServiceImpl implements PostService {
             DetailLocation detailLocation = newDetailLocations.get(i);
             // 빈 이미지나 이미지 파일 이름이 db저장명이랑 똑같으면 처리 x
             try {
-                ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i), "static");
-                detailLocation.setFilename(responseImageDto.getFileName());
+                if (newDetailLocations.get(i).getFilename() != null) {
+                    ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i), "static");
+                    detailLocation.setFilename(responseImageDto.getFileName());
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
