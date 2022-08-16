@@ -1,10 +1,9 @@
 <template>
   <div>
-		<div class="follower-profile" props="follower">
-			<span>{{ followerList[0].img_path }}</span>
-			<span class="follower-name">{{ followerList[0].name }}</span>
-			<span>이건 보이냐</span>
-		</div>
+	<div class="follower-profile"  v-for="follower in followerList" :key="follower.id">
+		<span>{{ follower.img_path }}</span>
+		<span class="follower-name">{{ follower.name }}</span>
+	</div>
   </div>
 </template>
 
@@ -13,14 +12,8 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'FollowersListItem',
-	props: {
-		follower: Object,
-	},
 	computed: {
 		...mapGetters(['followerList'])
-	},
-	mounted() {
-		this.test()
 	},
 	method: {
 		test() {
@@ -32,10 +25,10 @@ export default {
 </script>
 
 <style>
-.follower-profile {
+/* .follower-profile {
 	background-color: black;
 	width: 70px;
 	height: 70px;
 	border-radius: 50%;
-}
+} */
 </style>

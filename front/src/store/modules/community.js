@@ -1,10 +1,12 @@
 import router from "@/router"
 import axios from "axios"
+// import VueCookies from 'vue-cookies'
 
 export default ({
   state: {
     posts: [],
     post: {},
+    // isBookmark: false,
 
     // temp: {
     //   title: '가평에서 같이 노실분~',
@@ -26,6 +28,7 @@ export default ({
   getters: {
     posts: state => state.posts,
     post: state => state.post,
+    // isBookmark: state => state.isBookmark,
     isPostAuthor: (state, getters) => {
       return state.post.name === getters.currentUser.name
     }
@@ -34,6 +37,7 @@ export default ({
   mutations: {
     SET_POSTS: (state, posts) => state.posts = posts,
     SET_POST: (state, post) => state.post = post,
+    SET_POST_BOOKMARK: (state, bookmark) => (state.post.bookmark = bookmark)
   },
   actions: {
     // 게시글 CREATE
@@ -107,6 +111,52 @@ export default ({
         router.push({ name: 'community' })
       })
       .catch(err => console.error(err.response))
+    },
+    // 게시글 북마크 가져오기
+    fetchBookmark({ commit, getters }) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/bookmark`,
+        method: 'GET',
+        headers: getters.authHeader
+      })
+      .then(res => {
+        console.log(res.data)
+        commit('SET_POST', res.data)
+      })
+      .catch(err => console.error(err.response))
+    },
+    // 게시글 북마크 설정
+    createBookmark({ commit, getters }, postPk) {
+      // console.log(postPk)
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/bookmark/${postPk}`,
+        method: 'POST',
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        // getters.isBookmark = true
+        console.log(res.data)
+        commit('SET_POST_BOOKMARK', res.data)
+        // router.push({
+        //   name: 'communityDetail',
+        //   params: {postPk: postPk}
+        // })
+      })
+      .catch(err => console.err(err.response))
+    },
+    // 게시글 북마크 해제
+    deleteBookmark({ commit, getters }, postPk) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/bookmark/${postPk}`,
+        method: 'DELETE',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        // getters.isBookmark = false
+        commit('SET_POST_BOOKMARK', {})
+      })
+      .catch(err => console.err(err.response))
     }
   },
 })

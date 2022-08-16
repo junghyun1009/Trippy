@@ -11,6 +11,9 @@ import com.ssafy.trippy.Service.BadgeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BadgeServiceImpl implements BadgeService {
@@ -25,5 +28,15 @@ public class BadgeServiceImpl implements BadgeService {
         Badge badge = badgeRepository.findById(badgeId).orElseThrow();
         memberBadgeRepository.save(new MemberBadge(member,badge));
         return new ResponseBadgeDto(badge.getName());
+    }
+
+    @Override
+    public List<ResponseBadgeDto> getBadgesByMemberId(Long memberId) {
+        List<MemberBadge> memberBadges = memberBadgeRepository.findAllByMemberId(memberId);
+        List<ResponseBadgeDto> responseBadgeDtos = new ArrayList<>();
+        for (MemberBadge memberBadge:memberBadges){
+            responseBadgeDtos.add(new ResponseBadgeDto(memberBadge.getBadge().getName()));
+        }
+        return responseBadgeDtos;
     }
 }

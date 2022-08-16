@@ -22,9 +22,10 @@ public class PostCommentServiceImpl {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
-    public List<ResponsePostCommentDto> findPostCommentByPostId(Long postId){
+    public List<ResponsePostCommentDto> findAllByPostId(Long postId){
         postRepository.findById(postId).orElseThrow(()-> new CommentNotFoundException("해당 게시글의 댓글을 찾을 수가 없습니다."));
-        return convertNestedStructure(postCommentRepository.findPostCommentByPostId(postId));
+        List<PostComment> comments = postCommentRepository.findAllByPostId(postId);
+        return convertNestedStructure(comments);
     }
 
     // 댓글 추가
@@ -70,7 +71,7 @@ public class PostCommentServiceImpl {
         postComments.stream().forEach(c -> {
             ResponsePostCommentDto dto = ResponsePostCommentDto.convertCommentToDto(c);
             map.put(dto.getId(),dto);
-            if(c.getParent() != null) map.get(c.getParent().getId()).getChildren().add(c);
+            if(c.getParent() != null) map.get(c.getParent().getId()).getChildren().add(ResponsePostCommentDto.convertCommentToDto(c));
             else result.add(dto);
         });
         return result;

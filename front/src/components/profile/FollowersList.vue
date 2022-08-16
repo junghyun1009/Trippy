@@ -14,7 +14,7 @@
         <div>
           <el-row>
             <el-col :span="8">
-              <followers-list-item v-for="follower in followers" :key="follower.id" :follower="follower"></followers-list-item>
+              <followers-list-item></followers-list-item>
             </el-col>
           </el-row>
         </div>
