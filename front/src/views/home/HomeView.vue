@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <search-bar></search-bar>
+    <search-bar @click="goSearch"></search-bar>
     <region-list></region-list>
 
     <recommend-list></recommend-list>
@@ -32,6 +32,11 @@ export default {
     RecommendList,
     RegionList,
   },
+  methods: {
+    goSearch() {
+      this.$router.push({ name: 'search' })
+    }
+  },
   mounted() {
     if (localStorage.getItem('reloaded')) {
         localStorage.removeItem('reloaded');
@@ -40,10 +45,7 @@ export default {
         location.reload();
     }
   },
-  methods: {
-
-    }
-  }
+}
 
 </script>
 
