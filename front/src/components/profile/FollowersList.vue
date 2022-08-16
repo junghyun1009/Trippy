@@ -1,28 +1,12 @@
 <template>
   <div>
-    <p @click="visible = true">
-      FOLLOWERS
-    </p>
-
-    <el-dialog class="follower-modal" v-model="visible" :show-close="false">
-      <template #header="{ close, titleId, titleClass }">
-        <div class="my-header">
-            <h4 :id="titleId" :class="titleClass">FOLLOWERS</h4>
-            <el-button type="danger" @click="close">
-            x
-            </el-button>
-        </div>
-        <div>
-          <el-row>
-            <el-col :span="8">
-              <followers-list-item></followers-list-item>
-            </el-col>
-          </el-row>
-        </div>
-      </template>
-    </el-dialog>
-
-      <p>{{ followerCount }}</p>
+    <div>
+      <el-row>
+        <el-col :span="8">
+          <followers-list-item></followers-list-item>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 

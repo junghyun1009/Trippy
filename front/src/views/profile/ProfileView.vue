@@ -31,6 +31,19 @@
     </div>
     
 
+    <!-- 팔로워 / 팔로잉 -->
+    <div class="follow">
+      <div class="user-follow" @click="followerClicked=true">
+        FOLLOWERS
+        {{ followerCount }}
+      </div>
+      <div class="user-follow" @click="followingClicked=true">
+        FOLLOWINGS 
+        {{ followingCount }}
+      </div>
+    </div>
+    
+
     <!-- 자기소개 -->
     <div class="description">
       <p v-if="isMyProfile">{{ profile.description }}</p>
@@ -38,16 +51,26 @@
     </div>
     
 
-    <!-- 팔로워 / 팔로잉 -->
-    <div class="followers">
-      <div class="user-follow">
+    <!-- followers 창 열기-->
+    <el-drawer v-model="followerClicked" direction="btt" size="50%">
+      <template #header>
+        <h2>팔로워</h2>
+      </template>
+      <template #default>
         <followers-list :isMyProfile="isMyProfile"/>
-      </div>
-      <div class="user-follow">
+      </template>
+    </el-drawer>
+
+    <!-- following 창 열기 -->
+    <el-drawer v-model="followingClicked" direction="btt" size="50%">
+      <template #header>
+        <h2>팔로잉하는 사람</h2>
+      </template>
+      <template #default>
         <followings-list :isMyProfile="isMyProfile"/>
-      </div>
-    </div>
-    
+      </template>
+    </el-drawer>
+
 
 
 
@@ -114,6 +137,8 @@ export default {
       followerList: [],
       followingList: [],
       activeName: '',
+      followerClicked: false,
+      followingClicked: false,
     }
   },
   computed: {
@@ -259,6 +284,11 @@ export default {
 
   .description {
     display: flex;
+  }
+
+  .follow {
+    display: flex;
+    margin: 2%;
   }
 
 </style>
