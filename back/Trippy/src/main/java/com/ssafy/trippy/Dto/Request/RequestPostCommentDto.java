@@ -19,6 +19,8 @@ public class RequestPostCommentDto {
     private Long id;
     @NotBlank(message = "본문은 필수 입력 값입니다.")
     private String content;
+    private String name;
+    private String imgPath;
     private Long memberId;
 
     private Long postId;
@@ -38,6 +40,8 @@ public class RequestPostCommentDto {
         return PostComment.builder()
                 .id(id)
                 .content(content)
+                .name(name)
+                .imgPath(imgPath)
                 .member(Member.builder().id(memberId).build())
                 .children(children)
                 .build();

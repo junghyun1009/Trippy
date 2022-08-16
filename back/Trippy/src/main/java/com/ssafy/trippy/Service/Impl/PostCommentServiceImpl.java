@@ -36,7 +36,9 @@ public class PostCommentServiceImpl {
                         postRepository.findById(requestPostCommentDto.getPostId()).get(),
                         memberRepository.findById(requestPostCommentDto.getMemberId()).get(),
                         requestPostCommentDto.getParentId() != null ?
-                        postCommentRepository.findById(requestPostCommentDto.getParentId()).get():null)
+                        postCommentRepository.findById(requestPostCommentDto.getParentId()).get():null,
+                        requestPostCommentDto.getName(),
+                        requestPostCommentDto.getImgPath())
         );
         return ResponsePostCommentDto.convertCommentToDto(comment);
     }
