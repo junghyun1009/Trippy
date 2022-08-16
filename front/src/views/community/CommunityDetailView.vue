@@ -1,26 +1,25 @@
 <template>
   <div class="container">
-    <div class="header">
       <div class="tags">
-        <!-- {{ post }}
-        {{post.bookmark}} -->
-        <!-- {{this.isBookmark}} -->
+        <el-tag class="tag">{{ post.cityName}}</el-tag>
+        <el-tag class="tag">{{ post.category === 1 ? '식사' : post.category === 2 ? '동행' : post.category === 3 ? '파티' : post.category === 4 ? '이동수단 셰어' : '기타' }}</el-tag>
       </div>
-      <div>
-        <span v-if="post.bookmark===false" class="material-symbols-outlined" @click="goBookmark">bookmark_add</span>
-        <span v-else class="material-symbols-outlined filled" @click="cancelBookmark">bookmark</span>
-      </div>
+    <div class="header">
       <router-link class="router" :to="{ name: 'profile' }">
         <div class="profile">
           <el-avatar class="profile-image" :size="40" src="" />
           <span class="username">{{ post.name }}</span>
         </div>
       </router-link>
+      <div v-if="!isPostAuthor" class="bookmark">
+        <span v-if="post.bookmark===false" class="material-symbols-outlined" @click="goBookmark">bookmark_add</span>
+        <span v-else class="material-symbols-outlined filled" @click="cancelBookmark">bookmark</span>
+      </div>
       <div v-if="isPostAuthor">
         <edit-delete-button class="edit-delete"></edit-delete-button>
       </div>
-      <hr>
     </div> 
+    <hr>
     <div class="title">
       <span class="state">{{ recruitState }}</span>
       <h4>{{ post.title }}</h4>
@@ -147,6 +146,10 @@ export default {
   margin: 0;
 }
 
+.container {
+  padding: 1rem;
+}
+
 hr {
   border: 0;
   height: 0;
@@ -154,6 +157,9 @@ hr {
 }
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   position: relative;
   padding: 0.5rem;
 }

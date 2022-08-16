@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <el-form @submit.prevent="onSubmit" method="POST">
       <el-form-item label="제목">
         <el-input v-model="newPost.title" placeholder="제목을 입력하세요." />
