@@ -49,11 +49,11 @@ export default ({
         headers: getters.authHeader,
       })
       .then(res => {
-        console.log(res.data)
+        console.log('create!!!!!!!!!!!!!!', res.data)
         commit('SET_POST', post)
         router.push({
           name: 'communityDetail',
-          params: { postPk: res.data }
+          params: { postPk: res.data.postId}
         })
       })
     },
