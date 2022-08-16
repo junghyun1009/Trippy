@@ -30,16 +30,24 @@
       <el-form-item>
         <el-collapse class="collapse">
           <el-collapse-item title="장소">
-            <div>
-              {{ select[0] }}, {{ select[1] }}
+            <template #title>
+              <div>
+                <span>장소</span>
+                <el-tag type="dark" v-if="!select[0]" class="option-tag"> 대한민국</el-tag>
+                <el-tag type="dark" v-else class="option-tag">{{ select[0] }}</el-tag>
+                <el-tag type="dark" v-if="!select[1]" class="option-tag">서울특별시</el-tag>
+                <el-tag type="dark" v-else class="option-tag">{{ select[1] }}</el-tag>
+              </div>
+            </template>
+            <el-form-item>
                <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
-            </div>
+            </el-form-item>
           </el-collapse-item>
           <el-collapse-item>
             <template #title>
               <div>
                 <span>모집 조건</span>
-                <el-tag class="option-tag" v-for="option in optionTag" :key="option" >{{ option }}</el-tag>
+                <el-tag type="dark" class="option-tag" v-for="option in optionTag" :key="option" >{{ option }}</el-tag>
               </div>
             </template>
             <el-form-item label="성별">
@@ -106,6 +114,7 @@ export default {
         },
       ],
       age: [this.post.startAge, this.post.endAge],
+      select: [this.post.countryName, this.post.cityName],
       newPost: {
         id: this.post.id,
         title: this.post.title,
@@ -118,15 +127,14 @@ export default {
         meetingTime: this.post.meetingTime,
         recruitCurrentVolume: this.post.recruitCurrentVolume,
         recruitVolume: this.post.recruitVolume,
-        countryName: this.post.countryName,
-        cityName: this.post.cityName,
+        // countryName: this.post.countryName,
+        // cityName: this.post.cityName,
         gender: this.post.gender,
         // isLocal: this.post.isLocal,
         local: this.post.local,
         place: this.post.place,
         // locationId: this.post.locationId,
       },
-      select: [this.post.countryName, this.post.cityName],
     }
   },
   computed: {
@@ -193,12 +201,12 @@ export default {
       this.newPost.endAge = this.age[1]
     },
     onSubmit() {
+      this.newPost.countryName = this.select[0]
+      this.newPost.cityName = this.select[1]
       const post = this.newPost
       // if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
       if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.day || post.endDate)) {
         // console.log(this.newPost)
-        post.countryName = this.select[0]
-        post.cityName = this.select[1]
         console.log(post)
         if (this.action === 'create') {
           this.createPost(this.newPost)
