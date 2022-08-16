@@ -41,12 +41,12 @@ public class PostComment extends BaseEntity {
 
     public static PostComment createComment(String content, Post post, Member member, PostComment parent, String name, String imgPath){
         PostComment postComment = new PostComment();
+        postComment.content = content;
         postComment.post = post;
         postComment.member = member;
-        postComment.content = content;
         postComment.parent = parent;
-        postComment.imgPath = imgPath;
         postComment.name = name;
+        postComment.imgPath = imgPath;
         return postComment;
     }
 
