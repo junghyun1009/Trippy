@@ -68,7 +68,7 @@
     >
       <el-tab-pane label="My Diary">
         <!-- 상대방이 쓴 일지 목록 -->
-        <!-- <my-diaries-list></my-diaries-list> -->
+        <my-diaries-list></my-diaries-list>
       </el-tab-pane>
       <el-tab-pane label="My Likes">
         <!-- 상대방이 좋아요 누른 일지 목록 -->
@@ -148,6 +148,7 @@ export default {
     this.myProfile()
     this.myFollowings()
     this.myFollowers()
+    this.fetchMyDiary()
   },
 }
 </script>
