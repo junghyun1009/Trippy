@@ -113,18 +113,18 @@ export default ({
       .catch(err => console.error(err.response))
     },
     // 게시글 북마크 가져오기
-    fetchBookmark({ commit, getters }) {
-      axios({
-        url: `https://i7a506.p.ssafy.io/api/auth/bookmark`,
-        method: 'GET',
-        headers: getters.authHeader
-      })
-      .then(res => {
-        // console.log(res.data)
-        commit('SET_POST', res.data)
-      })
-      .catch(err => console.error(err.response))
-    },
+    // fetchBookmark({ commit, getters }) {
+    //   axios({
+    //     url: `https://i7a506.p.ssafy.io/api/auth/bookmark`,
+    //     method: 'GET',
+    //     headers: getters.authHeader
+    //   })
+    //   .then(res => {
+    //     console.log(res.data)
+    //     commit('SET_POST_BOOKMARK', res.data)
+    //   })
+    //   .catch(err => console.error(err.response))
+    // },
     // 게시글 북마크 설정
     createBookmark({ commit, getters }, postPk) {
       // console.log(postPk)

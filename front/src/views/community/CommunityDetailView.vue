@@ -1,12 +1,10 @@
 <template>
-  <div>
+  <div class="container">
     <div class="header">
       <div class="tags">
-        {{ post }}
-        {{post.bookmark}}
+        <!-- {{ post }}
+        {{post.bookmark}} -->
         <!-- {{this.isBookmark}} -->
-        <el-tag class="tag">{{ convertTag }}</el-tag>
-        <el-tag class="tag">장소</el-tag>
       </div>
       <div>
         <span v-if="post.bookmark===false" class="material-symbols-outlined" @click="goBookmark">bookmark_add</span>
@@ -80,7 +78,7 @@ export default {
   },
   data() {
     return {
-      isBookmark: false,
+      // isBookmark: false,
       postPk: this.$route.params.postPk
     }
   },
@@ -112,16 +110,16 @@ export default {
   methods: {
     ...mapActions(['fetchPost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark', 'deleteBookmark', 'checkBookmark']),
     goBookmark() {
+      this.checkBookmark(this.postPk)
       this.createBookmark(this.postPk)
       // this.switchIsBookmark()
-      this.checkBookmark(this.postPk)
       // this.isBookmark = true
       // console.log(1, this.isBookmark)
     },
     cancelBookmark() {
+      this.checkBookmark(this.postPk)
       this.deleteBookmark(this.postPk)
       // this.switchIsBookmark()
-      this.checkBookmark(this.postPk)
       // console.log(2, this.isBookmark)
     },
     // switchIsBookmark() {
@@ -129,10 +127,10 @@ export default {
     // }
   },
   created() {
-    this.fetchPost(this.postPk)
-    this.fetchCurrentUser()
-    this.fetchBookmark()
     this.checkBookmark(this.postPk)
+    this.fetchCurrentUser()
+    this.fetchPost(this.postPk)
+    // this.fetchBookmark()
   },
   // mounted() {
     
