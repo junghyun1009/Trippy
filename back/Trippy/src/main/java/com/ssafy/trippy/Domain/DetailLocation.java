@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 public class DetailLocation extends BaseEntity{
 
