@@ -297,7 +297,7 @@ export default ({
     // 댓글 삭제
     deleteComment({ getters, commit }, pk) {
       axios({
-        url: `https://i7a506.p.ssafy.io:8080/api/auth/comment/${pk.commentId}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/comment/${pk.commentId}`,
         method: 'delete',
         headers: getters.authHeader,
       })
@@ -321,16 +321,16 @@ export default ({
       commit('HIDE_PARENT')
     },
   
-    showAllDiary({ commit }) {
-      axios({
-        url: 'https://localhost:8000/posts',
-        method: 'get'
-      })
-      .then((res) => {
-        const allDiary = res.data
-        commit('SHOW_ALL_DIARY', allDiary)
-      })
-    },
+    // showAllDiary({ commit }) {
+    //   axios({
+    //     url: 'https://localhost:8000/posts',
+    //     method: 'get'
+    //   })
+    //   .then((res) => {
+    //     const allDiary = res.data
+    //     commit('SHOW_ALL_DIARY', allDiary)
+    //   })
+    // },
 
     likeDiary({ commit, getters }, diaryPk) {
       axios({
