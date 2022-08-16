@@ -16,4 +16,6 @@ public interface CommunityPostService {
     List<ResponseCommunityPostDto> getAllCommunityPost();
     ResponseCommunityPostDto findCommunityPost(Long id);
     Long cntCommunityPostsByMemberId(Long memberId);
+
+    List<ResponseCommunityPostDto> getCommunityPostByMemberId(Long memberId);
 }

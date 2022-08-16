@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <el-form @submit.prevent="onSubmit" method="POST">
       <el-form-item label="제목">
         <el-input v-model="newPost.title" placeholder="제목을 입력하세요." />
@@ -30,16 +30,20 @@
       <el-form-item>
         <el-collapse class="collapse">
           <el-collapse-item title="장소">
-            <div>
-              {{ select[0] }}, {{ select[1] }}
+            <template #title>
+              <span>장소</span>
+                <el-tag v-if="select[0]" type="dark" class="option-tag">{{ select[0] }}</el-tag>
+                <el-tag v-if="select[1]" type="dark" class="option-tag">{{ select[1] }}</el-tag>
+            </template>
+            <el-form-item>
                <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
-            </div>
+            </el-form-item>
           </el-collapse-item>
           <el-collapse-item>
             <template #title>
               <div>
                 <span>모집 조건</span>
-                <el-tag class="option-tag" v-for="option in optionTag" :key="option" >{{ option }}</el-tag>
+                <el-tag type="dark" class="option-tag" v-for="option in optionTag" :key="option" >{{ option }}</el-tag>
               </div>
             </template>
             <el-form-item label="성별">
@@ -63,10 +67,10 @@
         <el-input v-model="newPost.place" placeholder="모임 장소를 입력하세요." />
       </el-form-item>
       <el-form-item v-if="action==='create'">
-        <el-button @click="onSubmit">작성하기</el-button>
+        <el-button type="primary" class="button" @click="onSubmit">작성하기</el-button>
       </el-form-item>
       <el-form-item v-else-if="action==='update'">
-        <el-button @click="onSubmit">수정하기</el-button>
+        <el-button type="primary" class="button" @click="onSubmit">수정하기</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -118,8 +122,8 @@ export default {
         meetingTime: this.post.meetingTime,
         recruitCurrentVolume: this.post.recruitCurrentVolume,
         recruitVolume: this.post.recruitVolume,
-        countryName: this.post.countryName,
-        cityName: this.post.cityName,
+        // countryName: this.post.countryName,
+        // cityName: this.post.cityName,
         gender: this.post.gender,
         // isLocal: this.post.isLocal,
         local: this.post.local,
@@ -133,8 +137,15 @@ export default {
     ...mapGetters(['location']),
     optionTag() {
       const gender = this.newPost.gender
-      const startAge = this.newPost.startAge
-      const endAge = this.newPost.endAge
+      let startAge = 0
+      let endAge = 0
+      if (this.action === 'create') {
+        startAge = this.newPost.startAge
+        endAge = this.newPost.endAge
+      } else {
+        startAge = this.post.startAge
+        endAge = this.post.endAge
+      }
       let age = startAge + '~' + endAge + '살'
       if (startAge === undefined && endAge === undefined || startAge === 19 && endAge === 70) {
         age = '누구나'
@@ -193,12 +204,12 @@ export default {
       this.newPost.endAge = this.age[1]
     },
     onSubmit() {
+      this.newPost.countryName = this.select[0]
+      this.newPost.cityName = this.select[1]
       const post = this.newPost
       // if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
-      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.day || post.endDate)) {
+      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && post.countryName && post.cityName && (post.day || post.endDate)) {
         // console.log(this.newPost)
-        post.countryName = this.select[0]
-        post.cityName = this.select[1]
         console.log(post)
         if (this.action === 'create') {
           this.createPost(this.newPost)
@@ -237,6 +248,9 @@ export default {
       return this.makeRange(1, 59)
     },
   },
+  created() {
+    console.log(this.newPost)
+  },
   mounted() {
     this.fetchLocation()
   }
@@ -244,6 +258,10 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  padding: 1rem;
+}
+
 .switch {
   margin-left: 0.3rem;
 }
@@ -264,5 +282,12 @@ export default {
   position: relative;
   left: 0.5rem;
   width: 90%;
+}
+
+.button {
+  position: fixed;
+  width: 90%;
+  bottom: 5rem;
+  --el-button-active-color: #F16B51;
 }
 </style>

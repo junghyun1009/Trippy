@@ -127,4 +127,15 @@ public class CommunityPostServiceImpl implements CommunityPostService {
     public Long cntCommunityPostsByMemberId(Long memberId) {
         return communityPostRepository.countAllByMemberId(memberId);
     }
+
+    @Override
+    public List<ResponseCommunityPostDto> getCommunityPostByMemberId(Long memberId) {
+        List<CommunityPost> communityPosts = communityPostRepository.findAllByMemberId(memberId);
+        List<ResponseCommunityPostDto> communityPostDtos = new ArrayList<>();
+        for (CommunityPost communityPost : communityPosts) {
+            ResponseCommunityPostDto dto = new ResponseCommunityPostDto(communityPost);
+            communityPostDtos.add(dto);
+        }
+        return communityPostDtos;
+    }
 }
