@@ -4,11 +4,13 @@ import com.ssafy.trippy.Domain.Member;
 import io.swagger.annotations.ApiParam;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class RequestMemberDto {
 
@@ -18,7 +20,7 @@ public class RequestMemberDto {
 
     @ApiParam(value = "비밀번호")
     @NotEmpty(message="비밀번호는 빈값일 수 없습니다.")
-    @Pattern(regexp="(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}",
+    @Pattern(regexp="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,20}",
             message = "비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다.")
     @Size(min = 8,max = 20)
     private String password;
@@ -34,7 +36,7 @@ public class RequestMemberDto {
     @NotNull(message="성별은 빈값일 수 없습니다.")
     private int gender;
     @ApiParam(value = "생일")
-    @NotNull(message="성별은 빈값일 수 없습니다.")
+    @NotNull(message="생일은 빈값일 수 없습니다.")
     private LocalDateTime birth;
     @ApiParam(value = "프로필 이미지 경로")
     private String img_path;

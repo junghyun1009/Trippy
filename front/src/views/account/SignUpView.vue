@@ -17,6 +17,7 @@
     <br>
     <div class="password">
       <p>비밀번호</p>
+      {{ userData.password }}
       <el-input v-model="userData.password" 
         type="password" 
         id="password"
@@ -24,20 +25,22 @@
         autocomplete="off"
         maxlength="20"
         class="input"
-        @blur="checkPasswordValidity"
+        @keyup="checkPasswordValidity"
         show-password
         />
+      <p v-if="userData.password.length>=8 && passwordFormat">비밀번호를 사용해도 좋습니다.</p>
+      <account-error-list :errorMessage="passwordValidityError" v-if="!passwordFormat"></account-error-list>
       <el-input v-model="passwordCheck" 
         type="password" 
         placeholder="비밀번호 확인" 
         autocomplete="off"
         maxlength="20"
-        @blur="checkPasswordMatch"
+        @keyup="checkPasswordMatch"
         />
+      <p v-if="passwordMatch && userData.password.length>=8 && (userData.password.length===passwordCheck.length)">비밀번호가 일치합니다.</p>
+      <account-error-list :errorMessage="passwordMatchError" v-if="!passwordMatch"></account-error-list>
 
       <!-- 비밀번호와 비밀번호 확인되지 않으면 자동으로 매치되는지 확인하는 기능 -->
-      <account-error-list :errorMessage="passwordValidityError" v-if="!passwordFormat"></account-error-list>
-      <account-error-list :errorMessage="passwordMatchError" v-if="!passwordMatch"></account-error-list>
     </div>
 
     <br>
@@ -101,7 +104,7 @@
 <script>
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
 import { userErrorMessage } from '@/common/constant.js'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: { 
@@ -142,7 +145,22 @@ export default {
             passwordCheck: '',
             date: '',
             pass: false,
+            emailpass: false,
+            passwordpass: false,
+            passwordcheckpass: false,
+            phonepass: false,
+            nicknamepass: false
         }
+    },
+    computed: {
+      ...mapGetters(['isDuplicate']),
+      totalPass() {
+        let pass = this.pass
+        pass = this.emailpass && this.passwordpass && this.passwordcheckpass && this.phonepass && this.nicknamepass
+        && (!this.isDuplicate)
+        return pass
+      }
+      // 얘 뒤집어서 써야돼
     },
     methods: {
       ...mapActions(['signupOne', 'checkEmailDuplicate']),
@@ -159,10 +177,10 @@ export default {
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
       if (regEmail.test(inputEmail) === false) {
         this.emailFormat = false,   
-        this.pass = false;                       
+        this.emailpass = false;                       
       } else {
         this.emailFormat = true
-        this.pass = true
+        this.emailpass = true
       }        
       },
 
@@ -170,10 +188,10 @@ export default {
       checkPasswordMatch() {
         if (this.userData.password === this.passwordCheck) {
           this.passwordMatch = true
-          this.pass = true
+          this.passwordcheckpass = true
         } else {
           this.passwordMatch = false,
-          this.pass = false
+          this.passwordcheckpass = false
         }
       },
 
@@ -181,13 +199,14 @@ export default {
       checkPasswordValidity() {
         var inputPassword = document.getElementById('password').value;
         // 문자, 숫자, 그리고 최소 하나의 특수문자
-        var regPassword = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}/;
+        // var regPassword = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}/;
+        var regPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}/;
         if (regPassword.test(inputPassword)) {
           this.passwordFormat = true
-          this.pass = true
+          this.passwordpass = true
         } else {
           this.passwordFormat = false
-          this.pass = false
+          this.passwordpass = false
         }
       },
 
@@ -197,10 +216,10 @@ export default {
         var regPhone = /^01(?:0|1|[6-9])[.-]?(\d{3}|\d{4})[.-]?(\d{4})$/;
         if (regPhone.test(inputPhone)) {
           this.phoneFormat = true
-          this.pass = true
+          this.phonepass = true
         } else {
           this.phoneFormat = false
-          this.pass = false
+          this.phonepass = false
         }
       },
 
@@ -210,12 +229,13 @@ export default {
         var blank = /''/
         if (regNickname.test(this.userData.name)) {
           this.nicknameFormat = true
+          this.nicknamepass = true
         } else if (blank.test(this.userData.name)) {
           this.nicknameFormat = true
-          this.pass = true
+          this.nicknamepass = true
         } else {
           this.nicknameFormat = false
-          this.pass = false
+          this.nicknamepass = false
         }
       },
 
@@ -238,15 +258,15 @@ export default {
       // 비밀번호 두 개가 같아야 함
       // 닉네임이 2글자 이상이어야 함
       youShallNotPass() {
-        if ( this.pass ) { 
-          console.log(this.pass)
+        if ( this.totalPass ) { 
+          console.log(this.totalPass)
           this.$router.push('/signup/option') 
         } else {
-          console.log(this.pass)
+          console.log(this.totalPass)
           alert('형식에 맞는지 확인해주세요!')
         }
       }
-    }
+    },
   }
 
 </script>

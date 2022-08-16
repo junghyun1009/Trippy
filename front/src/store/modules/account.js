@@ -16,6 +16,7 @@ export default {
     fromPasswordFindView: true,
     verificationCode: '',
     emailInfo: '',
+    isDuplicate: true,
   },
   getters: {
     isLoggedIn: () => !!VueCookies.get('accessToken'),
@@ -28,6 +29,7 @@ export default {
     fromPasswordFindView: state => state.fromPasswordFindView,
     verificationCode: state => state.verificationCode,
     emailInfo: state => state.emailInfo,
+    isDuplicate: state => state.isDuplicate,
   },
   mutations: {
     // SET_ACCESS_TOKEN:(state, accessToken) => state.accessToken = accessToken,
@@ -39,6 +41,7 @@ export default {
     FROM_PASSWORD_FIND_VIEW: (state) => state.fromPasswordFindView = true,
     SET_EMAIL_AUTH_CODE: (state, verificationCode) => state.verificationCode = verificationCode,
     SET_EMAIL_INFO: (state, emailInfo) => state.emailInfo = emailInfo,
+    SET_IS_DUPLICATE: (state, isDuplicate) => state.isDuplicate = isDuplicate,
   },
   actions: {
     // saveToken({ commit }, accessToken ) {
@@ -117,6 +120,9 @@ export default {
           url: 'https://i7a506.p.ssafy.io/api/members/join',
           method: 'post',
           data: this.getters.userData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          }
         })
           .then( () => {
             console.log('successfully created an account')
@@ -129,7 +135,7 @@ export default {
     },
 
     // 이메일 중복확인
-    checkEmailDuplicate({ getters }, userData) {
+    checkEmailDuplicate({ commit, getters }, userData) {
       console.log(getters)
       const email = userData.email
       axios({
@@ -139,8 +145,10 @@ export default {
       })
       .then(res => {
         if (res.data === true) {
+          commit('SET_IS_DUPLICATE', res.data)
           alert('이메일이 중복되었습니다')
         } else {
+          commit('SET_IS_DUPLICATE', res.data)
           alert('이메일을 사용하셔도 좋습니다')
         }
       })
