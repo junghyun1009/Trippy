@@ -1,24 +1,25 @@
 <template>
   <div class="container">
       <div class="tags">
-        <el-tag type="dark" class="tag">{{ post.cityName}}</el-tag>
+        <!-- {{ post }} -->
+        <el-tag type="dark" class="tag">{{ post.cityName }}</el-tag>
         <el-tag type="dark" class="tag">{{ post.category === 1 ? '식사' : post.category === 2 ? '동행' : post.category === 3 ? '파티' : post.category === 4 ? '이동수단 셰어' : '기타' }}</el-tag>
       </div>
-    <div class="header">
-      <router-link class="router" :to="{ name: 'profile' }">
-        <div class="profile">
-          <el-avatar class="profile-image" :size="40" src="" />
-          <span class="username">{{ post.name }}</span>
+      <div class="header">
+        <router-link class="router" :to="{ name: 'profile' }">
+          <div class="profile">
+            <el-avatar class="profile-image" :size="40" src="" />
+            <span class="username">{{ post.name }}</span>
+          </div>
+        </router-link>
+        <div v-if="!isPostAuthor" class="bookmark">
+          <span v-if="post.bookmark===false" class="material-symbols-outlined" @click="goBookmark">bookmark_add</span>
+          <span v-else class="material-symbols-outlined filled" @click="cancelBookmark">bookmark</span>
         </div>
-      </router-link>
-      <div v-if="!isPostAuthor" class="bookmark">
-        <span v-if="post.bookmark===false" class="material-symbols-outlined" @click="goBookmark">bookmark_add</span>
-        <span v-else class="material-symbols-outlined filled" @click="cancelBookmark">bookmark</span>
-      </div>
-      <div v-if="isPostAuthor">
-        <edit-delete-button class="edit-delete"></edit-delete-button>
-      </div>
-    </div> 
+        <div v-if="isPostAuthor">
+          <edit-delete-button class="edit-delete"></edit-delete-button>
+        </div>
+      </div> 
     <hr>
     <div class="title">
       <span class="state">{{ post.recruitCurrentVolume < post.recruitVolume ? '모집중' : '모집마감' }}</span>
@@ -61,9 +62,9 @@
           <span>나유저</span>
         </div> -->
       </div>
-    </div>
-    <div class="participation">
-      <el-button class="button">참가하기</el-button>
+      <div class="participation">
+        <el-button type="primary" class="button">참가하기</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -158,14 +159,6 @@ hr {
   border-top: 1px solid #d9d9d9;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  padding: 0.5rem;
-}
-
 .tags {
   text-align: left;
 }
@@ -173,6 +166,19 @@ hr {
 .tag {
   margin-right: 0.3rem;
   margin-bottom: 1rem;
+}
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-items: center;
+    position: relative;
+    padding: 0.5rem;
+  }
+
+.bookmark {
+  color: #F16B51;
 }
 
 .filled {
@@ -285,8 +291,10 @@ hr {
 .button {
   position: fixed;
   width: 90%;
-  bottom: 1rem;
+  bottom: 5rem;
+  --el-button-active-color: #F16B51
 }
+
 
 
 </style>

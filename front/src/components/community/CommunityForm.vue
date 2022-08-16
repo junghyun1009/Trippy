@@ -71,10 +71,10 @@
         <el-input v-model="newPost.place" placeholder="모임 장소를 입력하세요." />
       </el-form-item>
       <el-form-item v-if="action==='create'">
-        <el-button @click="onSubmit">작성하기</el-button>
+        <el-button type="primary" class="button" @click="onSubmit">작성하기</el-button>
       </el-form-item>
       <el-form-item v-else-if="action==='update'">
-        <el-button @click="onSubmit">수정하기</el-button>
+        <el-button type="primary" class="button" @click="onSubmit">수정하기</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -252,6 +252,10 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  padding: 1rem;
+}
+
 .switch {
   margin-left: 0.3rem;
 }
@@ -272,5 +276,12 @@ export default {
   position: relative;
   left: 0.5rem;
   width: 90%;
+}
+
+.button {
+  position: fixed;
+  width: 90%;
+  bottom: 5rem;
+  --el-button-active-color: #F16B51
 }
 </style>
