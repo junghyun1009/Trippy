@@ -47,21 +47,21 @@
     </div>
     <div class="members">
       <p class="member-count">
-        <span>{{ post.recruitCurrentVolume }}</span>
-        / {{ post.recruitVolume }}명 참여
+        <span>{{ post.recruitCurrentVolume + 1}}</span>
+        / {{ post.recruitVolume + 1 }}명 참여
       </p>
       <div class="users">
         <div class="user">
           <el-avatar :size="40" src="" />
-          <span>나유저</span>
+          <span>{{ post.name }}</span>
         </div>
         <!-- <div class="user">
           <el-avatar :size="40" src="" />
           <span>나유저</span>
         </div> -->
       </div>
-      <div class="participation">
-        <el-button type="primary" class="button">참가하기</el-button>
+      <div v-if="!isPostAuthor" class="participation">
+        <el-button type="primary" class="button" @click="goPartIn">참가하기</el-button>
       </div>
     </div>
   </div>
@@ -127,6 +127,10 @@ export default {
     // }
     goProfile() {
       this.$router.push({ name: 'profile' })
+    },
+    goPartIn(e) {
+      this.post.recruitCurrentVolume++
+      e.currentTarget.disabled = true
     }
   },
   created() {
@@ -280,6 +284,7 @@ hr {
 }
 
 .user > span {
+  text-align: center;
   font-size: 0.8rem;
   font-weight: 400;
 }
@@ -293,9 +298,11 @@ hr {
   position: fixed;
   width: 90%;
   bottom: 5rem;
-  --el-button-active-color: #F16B51
 }
-
-
+/* 
+.el-button .el-button--primary {
+  --el-button-active-color: #b9b9b9;
+  --el-button-active-border-color: #b9b9b9;
+} */
 
 </style>
