@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,9 +17,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class RequestCommunityPostDto {
     private Long id;
+
+    @NotBlank(message = "제목은 필수 입력 값입니다.")
     private String title;
+    @NotBlank(message = "본문은 필수 입력 값입니다.")
     private String description;
     private Long member_id;
+    @NotBlank(message = "동행타입은 필수 입력 값입니다.")
     private int category;
     private Long locationId;
     private String countryName;
@@ -32,23 +37,35 @@ public class RequestCommunityPostDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
+
+    @NotBlank(message = "최대인원은 필수 입력 값입니다.")
     private int recruitVolume;
+
+    @NotBlank(message = "현재인원은 필수 입력 값입니다.")
     private int recruitCurrentVolume;
+
+    @NotBlank(message = "최소나이는 필수 입력 값입니다.")
     private int startAge;
+
+    @NotBlank(message = "최대나이는 필수 입력 값입니다.")
     private int endAge;
+
     private String gender;
-    private boolean isLocal;
+
+    private boolean Local;
+
 
     private String place;
-    private boolean isDay;
+
+    private boolean Day;
 
 
     // DTO -> ENTITY
     public CommunityPost toEntity() {
         return CommunityPost.builder()
                 .id(id)
-                .isDAY(isDay)
-                .isLocal(isLocal)
+                .Day(Day)
+                .Local(Local)
                 .category(category)
                 .description(description)
                 .endAge(endAge)

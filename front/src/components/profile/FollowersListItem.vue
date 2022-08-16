@@ -1,27 +1,34 @@
 <template>
-  <div class="container">
-		
-		<div class="profileimage" props="follower">
-			image
-		</div>
+  <div>
+	<div class="follower-profile"  v-for="follower in followerList" :key="follower.id">
+		<span>{{ follower.img_path }}</span>
+		<span class="follower-name">{{ follower.name }}</span>
+	</div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'FollowersListItem',
-	props: {
-		follower: Object,
+	computed: {
+		...mapGetters(['followerList'])
 	},
+	method: {
+		test() {
+			console.log(this.followerList)
+		}
+	}
 
 }
 </script>
 
 <style>
-.profileimage {
+/* .follower-profile {
 	background-color: black;
-	width: 100px;
-	height: 100px;
+	width: 70px;
+	height: 70px;
 	border-radius: 50%;
-}
+} */
 </style>

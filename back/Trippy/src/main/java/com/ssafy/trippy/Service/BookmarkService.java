@@ -6,6 +6,7 @@ import com.ssafy.trippy.Dto.Response.ResponseBookmarkDto;
 import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookmarkService {
 
@@ -14,4 +15,6 @@ public interface BookmarkService {
     List<ResponseCommunityPostDto> getBookmarks(Long memberId);
 
     void deleteBookmark(RequestBookmarkDto requestBookmarkDto);
+
+    boolean findBookMarKByMemberAndCommunityPost(Long memberId, Long communityPostId);
 }

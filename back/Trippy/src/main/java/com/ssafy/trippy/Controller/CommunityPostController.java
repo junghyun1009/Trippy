@@ -1,7 +1,11 @@
 package com.ssafy.trippy.Controller;
 
 import com.ssafy.trippy.Dto.Request.RequestCommunityPostDto;
+import com.ssafy.trippy.Dto.Response.ResponseBadgeDto;
 import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
+import com.ssafy.trippy.Dto.Response.ResponseSavepostDto;
+import com.ssafy.trippy.Service.BadgeService;
+import com.ssafy.trippy.Dto.Update.UpdateCommunityPostDto;
 import com.ssafy.trippy.Service.CommunityPostService;
 import com.ssafy.trippy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,8 @@ public class CommunityPostController {
     private final CommunityPostService communityPostService;
 
     private final MemberService memberService;
+
+    private final BadgeService badgeService;
     private static final String SUCCESS = "OK";
     private static final String FAIL = "ERROR";
 
@@ -29,7 +35,13 @@ public class CommunityPostController {
         requestCommunityPostDto.setMember_id(memberId);
         try {
             Long id = communityPostService.saveCommunityPost(requestCommunityPostDto);
-            return new ResponseEntity<>(id, HttpStatus.OK);
+            ResponseSavepostDto responseSavepostDto = new ResponseSavepostDto(id);
+            Long cnt = communityPostService.cntCommunityPostsByMemberId(memberId);
+            if(cnt==1L){
+                ResponseBadgeDto responseBadgeDto = badgeService.saveBadge(3L,memberId);
+                responseSavepostDto.addBadge(responseBadgeDto);
+            }
+            return new ResponseEntity<>(responseSavepostDto, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,9 +50,15 @@ public class CommunityPostController {
     }
 
     @DeleteMapping("/auth/community/{community_post_id}")
-    public ResponseEntity<?> deleteCommunityPost(@PathVariable("community_post_id") Long community_post_id) {
+    public ResponseEntity<?> deleteCommunityPost(HttpServletRequest request, @PathVariable("community_post_id") Long community_post_id) {
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
+        ResponseCommunityPostDto communityPost = communityPostService.findCommunityPost(community_post_id);
         try {
-            communityPostService.deleteCommunityPost(community_post_id);
+            if (memberId == communityPost.getMemberId()) {
+                communityPostService.deleteCommunityPost(community_post_id);
+            } else {
+                return new ResponseEntity<>("본인이 작성한 글만 삭제가 가능합니다", HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
@@ -49,11 +67,16 @@ public class CommunityPostController {
     }
 
     @PutMapping("/auth/community/{community_post_id}")
-    public ResponseEntity<?> updateCommunityPost(HttpServletRequest request, @PathVariable("community_post_id") Long community_post_id, @RequestBody @Valid RequestCommunityPostDto requestCommunityPostDto) {
+    public ResponseEntity<?> updateCommunityPost(HttpServletRequest request, @PathVariable("community_post_id") Long community_post_id, @RequestBody @Valid UpdateCommunityPostDto updateCommunityPostDto) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        requestCommunityPostDto.setMember_id(memberId);
+        ResponseCommunityPostDto communityPost = communityPostService.findCommunityPost(community_post_id);
+        updateCommunityPostDto.setMemberId(memberId);
         try {
-            communityPostService.updateCommunityPost(community_post_id, requestCommunityPostDto);
+            if (memberId == communityPost.getMemberId()) {
+                communityPostService.updateCommunityPost(community_post_id, updateCommunityPostDto);
+            } else {
+                return new ResponseEntity<>("본인이 작성한 글만 수정이 가능합니다", HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
@@ -65,7 +88,12 @@ public class CommunityPostController {
     public ResponseEntity<?> getAllCommunityPostList() {
         try {
             List<ResponseCommunityPostDto> responsePostDtos = communityPostService.getAllCommunityPost();
-            return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
+            if (responsePostDtos.size() == 0) {
+                return new ResponseEntity<>("게시글이 없습니다.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(responsePostDtos, HttpStatus.OK);
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("게시글이 없습니다", HttpStatus.BAD_REQUEST);

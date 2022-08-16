@@ -2,6 +2,7 @@
   <div>
     <!-- diaryTemp -> diary로 바꿔 -->
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
+    {{ diary }}
     <div class="diary-detail-header">
       <div class="title-icons">
         <h3>{{ diary.title }}</h3>
@@ -34,7 +35,7 @@
                   </li>
                 </ul>
               </div> -->
-              <comment-item :comments="commentsTemp"></comment-item>
+              <comment-item :diaryPk="this.diaryPk"></comment-item>
             </template>
             <template #footer>
               <div class="comment-form">
@@ -42,7 +43,9 @@
                   <p>@{{ parentComment }}님에게 답글 남기는 중</p>
                   <span @click="closeInfo">x</span>
                 </div>
-                <comment-form :diaryPk="this.diaryPk"></comment-form>
+                <!-- 수정할 댓글 comment로 보냄 -->
+                <comment-edit-form v-if="isEditing" :diaryPk="this.diaryPk" :commentToEdit="commentToEdit"></comment-edit-form>
+                <comment-form v-else :diaryPk="this.diaryPk"></comment-form>
               </div>
             </template>
           </el-drawer>
@@ -64,11 +67,11 @@
       <div class="diary-detail-body">
         <div class="profile-div">
           <!-- <el-avatar :size="100" :src="diary.member_id.img_path" /> -->
-          <router-link :to="{ name: 'profile' }">
+          <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
             <el-avatar :size="80" src="" />
           </router-link>
           <!-- <span>{{ diary.member_id.name }}</span> -->
-          <router-link :to="{ name: 'profile' }">
+          <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
             <span class="username">{{ diary.name }}</span>
           </router-link>
         </div>
@@ -88,7 +91,7 @@
             <!-- 여기는 공통 -->
             <!-- <el-tag>{{ diary.countryName }}</el-tag> -->
             <!-- <el-tag>{{ diary.cityName }}</el-tag> -->
-            <el-tag class="tag">{{ diary.startDate }}-{{ diary.endDate }}</el-tag>
+            <el-tag class="tag">{{ diary.startDate.substr(0, 10) }}-{{ diary.endDate.substr(0, 10) }}</el-tag>
             <el-tag class="tag">{{ partyTag }} ({{ diary.count }}명)</el-tag>
             <el-tag class="tag" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.name }}</el-tag>
           </div>
@@ -154,6 +157,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
 import CommentForm from '@/components/diary/CommentForm.vue'
+import CommentEditForm from '@/components/diary/CommentEditForm.vue'
 import CommentItem from '@/components/diary/CommentItem.vue'
 
 export default {
@@ -161,6 +165,7 @@ export default {
   components: {
     EditDeleteButton,
     CommentForm,
+    CommentEditForm,
     CommentItem,
   },
   data() {
@@ -189,7 +194,7 @@ export default {
   },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
-    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser']),
+    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing', 'authorId']),
     partyTag() {
       const party = this.diary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -239,6 +244,7 @@ export default {
   },
   mounted() {
     setTimeout(() => this.addMarkers(), 500)
+    // this.addMarkers()
   }
 }
 </script>

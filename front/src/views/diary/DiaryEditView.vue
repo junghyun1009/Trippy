@@ -2,7 +2,8 @@
   <div class="diary-create-div">
     <!-- <diary-form v-if="isDiary" :diary="diaryTemp" action="update"></diary-form> -->
     <!-- {{ diary }} -->
-    <diary-edit-form :diary="diary" :story="convertStories" :trans="convertTransports" action="update"></diary-edit-form>
+    <!-- {{ convertImg }} -->
+    <diary-edit-form :diary="diary" :story="convertStories" :trans="convertTransports" :editimages="convertImg" action="update"></diary-edit-form>
   </div>
 </template>
 
@@ -71,27 +72,35 @@ export default {
         each.detailLocationName = story.detailLocationName
         each.detailLocationContent = story.detailLocationContent
         each.rating = story.rating
-        // if (story.filename === null) {
-        //   each.preview = ''
-        //   this.images.push([])
-        // } else {
-        //   const url = story.filepath
-        //   const file = async function urltofile () {
-        //     const response = await fetch(url)
-        //     const data = await response.blob()
-        //     const ext = url.split(".").pop()
-        //     const filename = url.split("/").pop()
-        //     const metadata = { type: `image/${ext}`}
-        //     return new File([data], filename, metadata)
-        //   }
-        //   console.log(file())
-        //   each.preview = URL.createObjectURL(file)
-        //   this.images.push(file)
-        // }
+        each.filename = story.filename
         convert.push(each)
       })
       return convert
     },
+    // convertImg() {
+    //   const images = []
+    //   this.diary.detailLocations.forEach((location) => {
+    //     images.push(location.filepath)
+    //   })
+    //   // images.push([])
+    //   return images
+    // },
+    // convertFile() {
+    //   const filenames = []
+    //   this.diary.detailLocations.forEach((location) => {
+    //     filenames.push(location.filename)
+    //   })
+    //   filenames.push('')
+    //   return filenames
+    // }
+    convertImg() {
+      const images = []
+      this.diary.detailLocations.forEach((location) => {
+        console.log(location)
+        images.push([])
+      })
+      return images
+    }
   },
   methods: {
     ...mapActions(['fetchDiary'])

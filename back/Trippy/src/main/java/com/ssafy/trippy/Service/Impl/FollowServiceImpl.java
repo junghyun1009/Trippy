@@ -43,7 +43,7 @@ public class FollowServiceImpl implements FollowService {
         List<Follow> followList = followRepository.findAllByFollowerId(memberId);
         List<ResponseMemberDto> responseMemberDtos = new ArrayList<>();
         for (Follow follow : followList) {
-            Member member = memberRepository.findById(follow.getFollower().getId()).orElseThrow();
+            Member member = memberRepository.findById(follow.getFollowing().getId()).orElseThrow();
             responseMemberDtos.add(new ResponseMemberDto(member));
         }
         return responseMemberDtos;
@@ -55,7 +55,7 @@ public class FollowServiceImpl implements FollowService {
         List<Follow> followList = followRepository.findAllByFollowingId(memberId);
         List<ResponseMemberDto> responseMemberDtos = new ArrayList<>();
         for (Follow follow : followList) {
-            Member member = memberRepository.findById(follow.getFollowing().getId()).orElseThrow();
+            Member member = memberRepository.findById(follow.getFollower().getId()).orElseThrow();
             responseMemberDtos.add(new ResponseMemberDto(member));
         }
         return responseMemberDtos;
@@ -71,6 +71,14 @@ public class FollowServiceImpl implements FollowService {
     @Override
     public Long getFollowingsCnt(Long memberId) {
         return followRepository.countByFollowingId(memberId);
+    }
+
+    @Override
+    public boolean existsByFollowerIdAndFollowingId(Long followerId, Long followingId) {
+        if(followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)){
+            return true;
+        }
+        return false;
     }
 
 }

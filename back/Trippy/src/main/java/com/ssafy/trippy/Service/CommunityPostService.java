@@ -11,9 +11,9 @@ public interface CommunityPostService {
     Long saveCommunityPost(RequestCommunityPostDto requestCommunityPostDto);
     void deleteCommunityPost(Long id);
 
-    void updateCommunityPost(Long id, RequestCommunityPostDto requestCommunityPostDto);
+    void updateCommunityPost(Long id, UpdateCommunityPostDto UpdateCommunityPostDto);
 
     List<ResponseCommunityPostDto> getAllCommunityPost();
     ResponseCommunityPostDto findCommunityPost(Long id);
-
+    Long cntCommunityPostsByMemberId(Long memberId);
 }

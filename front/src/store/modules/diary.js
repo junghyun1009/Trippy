@@ -10,11 +10,13 @@ export default ({
     // images: [],
     // image: {},
 
-    comment: '',
+    comment: {},
     comments: [],
+    commentToEdit: {},
     isChild: false,
-    isUpdating: false,
+    isEditing: false,
     parentComment: '',
+    authorId: null,
   },
   getters: {
     diaries: state => state.diaries,
@@ -23,24 +25,26 @@ export default ({
     // image: state => state.image,
     comment: state => state.comment,
     comments: state => state.comments,
+    commentToEdit: state => state.commentToEdit,
     isChild: state => state.isChild,
-    isUpdating: state => state.isUpdating,
+    isEditing: state => state.isEditing,
     parentComment: state => state.parentComment,
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
       return state.diary?.name === getters.currentUser.name
     },
+    authorId: state => state.authorId,
     // isDiary: state => !_.isEmpty(state.diary)
   },
   mutations: {
 
     SET_DIARY(state, diary) {
-      diary.detailLocations.forEach((location) => {
-        if (location.filename != null) {
-          diary.representativeImg = location.filepath
-          return false
-        }
-      })
+      // diary.detailLocations.forEach((location) => {
+      //   if (location.filename != null) {
+      //     diary.representativeImg = location.filepath
+      //     return false
+      //   }
+      // })
       state.diary = diary
       console.log(state.diary)
     },
@@ -51,17 +55,28 @@ export default ({
     //   console.log(state.images)
     // },
 
-    SET_COMMENT(state, comment) {
-      state.comment = comment
+    SET_COMMENT(state, payload) {
+      state.comment.user = payload.user
+      state.comment.info = payload.info
       console.log(state.comment)
+      state.comments.push(state.comment)
+      state.comment = {}
     },
 
-    SET_STATUS(state) {
-      state.isUpdating = true
+    SWITCH_IS_EDITING(state, comment) {
+      console.log(3, comment)
+      state.commentToEdit = comment
+      console.log(state.commentToEdit)
+      state.isEditing = true
     },
 
-    SET_COMMENTS(state, comments) {
-      state.comments = comments
+    EMPTY_COMMENTS(state) {
+      state.comments = []
+    },
+
+    SET_AUTHOR_ID(state, authorId) { 
+      state.authorId = authorId
+      console.log(state.authorId)
     },
 
     // 홈화면에 추천(일단은 전부 띄우는 것)
@@ -126,6 +141,9 @@ export default ({
       })
       .then(res => {
         commit('SET_DIARY', res.data)
+        console.log('diary set')
+        const authorId = res.data.memberId
+        commit('SET_AUTHOR_ID', authorId)
         // const diary = res.data
         // diary.detailLocations.forEach((location) => {
         //   const imagePk = location.id
@@ -135,7 +153,7 @@ export default ({
       .catch(err => {
         console.error(err.response)
         if (err.response.status === 404) {
-          router.push({ name: 'notFound404' })
+          router.push({ name: 'notFound404' }) 
         }
       })
     },
@@ -164,7 +182,7 @@ export default ({
         console.log(res.data)
         commit('SET_DIARY', diary)
         router.push({
-          name: 'DiaryDetail',
+          name: 'diaryDetail',
           parmas: { diaryPk: res.data }
         })
       })
@@ -186,51 +204,38 @@ export default ({
     },
 
     // 일지 댓글 CREATE
-    // createComment({ getters, commit }, diaryPk, content) {
-    //   const comment = { content }
-    //   axios({
-    //     url: `http://localhost:8000/comments/post/${diaryPk}`,
-    //     method: 'post',
-    //     data: comment,
-    //     headers: getters.authHeader
-    //   })
-    //   .then( res => {
-    //     commit('SET_COMMENTS'),
-    //     res.data
-    //     router.push('DiaryCommentView')
-    //   })
-    //   .catch(err => console.error(err.response))
-    // },
-    createComment({ commit }, content) {
-      commit('SET_COMMENT', content)
-    },
-
-    // updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
-    //   const comment = { content, diaryPk, commentPk }
-    //   axios({
-    //     url:'http://localhost:8000/comments/api/post',
-    //     method: 'put',
-    //     data: comment,
-    //     headers: getters.authHeader,
-    //   })
-    //   .then(res => {
-    //     commit('SET_COMMENTS', res.data)
-    //   })
-    //   .catch(err => console.error(err.response))
-    // },
-    updateComment({ commit }, content) {
-      commit('SET_COMMENT', content)
-      commit('SET_STATUS')
-    },
-
-    fetchComment({ getters, commit}, diaryPk) {
+    createComment({ commit, getters }, payload) {
       axios({
-        url: `http://localhost:8000/comments/post/${diaryPk}`,
+        url: 'http://i7a506.p.ssafy.io:8080/api/auth/comment',
+        method: 'post',
+        data: payload,
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data);
+        commit('SET_COMMENT', payload)
+        router.push({
+          name: 'diaryDetail',
+          parmas: { diaryPk: payload.postId }
+        })
+        location.reload()
+      })
+      .catch((err) => console.error(err.response))
+    },
+
+    // 일지 댓글 목록 조회
+    fetchComment({ getters, commit, dispatch }, diaryPk) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/comment/${diaryPk}`,
         method: 'get',
         headers: getters.authHeader
       })
-      .then( res => {
-        commit('SET_COMMENTS', res.data)
+      .then((res) => {
+        console.log(res.data)
+        commit('EMPTY_COMMENTS')
+        res.data.forEach((comment) => {
+          dispatch('fetchUser', comment)
+        })
       })
       .catch(err => {
         if (err.response.status === 404) {
@@ -238,17 +243,68 @@ export default ({
         }
       })
     },
-  
-    deleteComment({ getters, commit}, diaryPk, commentPk) {
+
+    // 각 댓글 유저 조회
+    fetchUser({ getters, commit }, comment) {
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/members/${comment.memberId}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        const user = res.data.name
+        const payload = {
+          user: user,
+          info: comment
+        }
+        commit('SET_COMMENT', payload)
+      })
+    },
+
+    // 댓글 수정 상태 전환 및 댓글 정보 보내기
+    switchIsEditing({ commit }, comment) {
+      console.log(2, comment)
+      commit('SWITCH_IS_EDITING', comment)
+    },
+
+    // 댓글 수정
+    updateComment({ commit, getters }, comment) {
+      console.log(comment)
+      axios({
+        url: `http://i7a506.p.ssafy.io:8080/api/auth/comment/${comment.id}`,
+        method: 'put',
+        data: comment.data,
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data);
+        commit('SET_COMMENT', comment.data)
+        router.push({
+          name: 'diaryDetail',
+          parmas: { diaryPk: comment.data.postId }
+        })
+        location.reload()
+      })
+      .catch((err) => console.error(err.response))
+    },
+
+    // 댓글 삭제
+    deleteComment({ getters, commit }, pk) {
       if (confirm('정말 삭제하시겠습니까?')) {
         axios({
-          url: `http://localhost:8000/comments/post/`,
+          url: `http://i7a506.p.ssafy.io:8080/api/auth/comment/${pk.commentId}`,
           method: 'delete',
-          data: {diaryPk, commentPk},
           headers: getters.authHeader,
         })
         .then(res => {
-          commit('SET_COMMENTS', res.data)
+          console.log(res.data)
+          commit('SET_COMMENT', {})
+          router.push({
+            name: 'diaryDetail',
+            parmas: { diaryPk: pk.diaryId }
+          })
+          location.reload()
         })
         .catch(err => console.error(err.response))
       }

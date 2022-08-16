@@ -30,6 +30,7 @@ public class ResponsePostDto {
     private LocalDateTime endDate;
     private int representativeImg;
     private String name;
+    private Long memberId;
     private List<ResponseTransport> postTransports;
     private List<ResponseDetailLocationDto> detailLocations;
 
@@ -53,5 +54,6 @@ public class ResponsePostDto {
         this.detailLocations = Converter.convertDetailLocationList(post.getDetailLocations());
         this.comments = Converter.convertPostCommentList(post.getPostComments());
         this.routes = Converter.convertRouteList(post.getRoutes());
+        this.memberId = post.getMember().getId();
     }
 }
