@@ -174,7 +174,7 @@ public class PostServiceImpl implements PostService {
         // 기존의 detailLocation에 저장되어 있는 image를 amazon s3 서버에서도 마찬가지로 삭제
         for (int i = 0; i < oldDetailLocation.size(); i++) {
             detailLocationRepository.delete(oldDetailLocation.get(i));
-            System.out.println(oldDetailLocation.get(i).getFilename());
+            System.out.println(oldDetailLocation.get(i));
             s3Uploader.deleteS3(oldDetailLocation.get(i).getFilename());
         }
 
