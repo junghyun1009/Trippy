@@ -179,7 +179,6 @@ public class PostServiceImpl implements PostService {
             } else {
                 continue;
             }
-            System.out.println(oldDetailLocation.get(i).toString());
         }
 
         // 기존의 detailLocation을 삭제 후 새로운 detailLocation 추가
@@ -190,8 +189,6 @@ public class PostServiceImpl implements PostService {
                 if (newDetailLocations.get(i).getFilename() != null) {
                     ResponseImageDto responseImageDto = s3Uploader.upload(images.get(i), "static");
                     detailLocation.setFilename(responseImageDto.getFileName());
-                }else{
-                    continue;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
