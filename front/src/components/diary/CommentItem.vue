@@ -41,6 +41,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 export default {
   name: 'CommentItem',
@@ -75,12 +76,34 @@ export default {
       // this.updateComment(content)
     },
     removeComment(commentId) {
-      const payload = {
-        commentId: commentId,
-        diaryId: this.diaryPk
-      }
-      this.deleteComment(payload)
+      ElMessageBox.confirm(
+        '정말 삭제하시겠습니까?',
+        'Warning',
+        {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }
+      )
+      .then(() => {
+          const payload = {
+            commentId: commentId,
+            diaryId: this.diaryPk
+          }
+          this.deleteComment(payload)
+          ElMessage({
+            type: 'success',
+            message: '삭제가 완료되었습니다',
+          })
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '삭제가 취소되었습니다',
+        })
+      })
     },
+    // 대댓글을 댓글 형식이랑 맞춰주기
     showUser() {
       console.log(1)
       for (let i=0; i<this.commentsWithUser.length; i++) {
