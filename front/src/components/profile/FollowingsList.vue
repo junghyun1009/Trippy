@@ -13,7 +13,7 @@
               </el-button>
           </div>
         </template>
-        <followings-list-item v-for="following in followings" :key="following.id" :following="following"></followings-list-item>
+        <followings-list-item></followings-list-item>
       </el-dialog>
 			<p>{{ followingCount }}</p>
 
