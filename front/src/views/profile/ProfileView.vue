@@ -176,6 +176,7 @@ export default {
     this.setFollowingStatus(this.$route.params.authorId)
     this.myProfile()
     // this.isFollowed()
+    this.fetchMyDiary()
  },
 }
 </script>
