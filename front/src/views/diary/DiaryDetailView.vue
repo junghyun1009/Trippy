@@ -2,7 +2,7 @@
   <div>
     <!-- diaryTemp -> diary로 바꿔 -->
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
-    {{ diary }}
+    <!-- {{ diary }} -->
     <div class="diary-detail-header">
       <div class="title-icons">
         <div class="title-location">
@@ -135,7 +135,9 @@
             <!-- <el-carousel indicator-position="outside" trigger="click" height="10rem" :autoplay=false arrow="always"> -->
               <!-- <el-carousel-item v-for="(photo, index) in story.photoList" :key="index"> -->
                 <!-- {{ photo }} -->
-            <img v-if="story.filename!=null" :src="story.filepath" :alt="story.filepath"/>
+            <!-- <p v-if="typeof story.filename === 'string'">{{ story.filename.slice(-3) }}</p> -->
+            <img v-if="(story.filename!=null) && (typeof story.filename === 'string' && story.filename.slice(-3) != 'txt')" 
+            :src="story.filepath" :alt="story.filepath"/>
               <!-- </el-carousel-item> -->
             <!-- </el-carousel> -->
           </div>
