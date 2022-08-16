@@ -2,11 +2,11 @@
   <div class="container">
     <div class="background">
       <div class="profile-picture">
-        <!-- {{ profile }} -->
         <el-avatar :size="90">
-          <img :src="profile.img_link" alt="user">
+          <img :src="theirProfile.img_link" alt="user">
         </el-avatar>
       </div>
+      <!-- {{ theirProfile }} -->
     </div>
 
     <!-- 이름 / 팔로우 버튼  -->
@@ -16,7 +16,7 @@
           <!-- 내 프로필 페이지라면 팔로우 버튼 안뜸 -->
           <!-- 만약 fetchCurrentUser의 id와 profile param의 id가 같다면 -->
           <div class="my-page-username" v-if="isMyProfile">
-            <h2>{{ profile.name }}</h2>
+            <h2>{{ theirProfile.name }}</h2>
             <el-button class="button" link @click="goProfileEdit()">
               <span class="material-symbols-outlined icon">edit</span>
             </el-button>
@@ -48,7 +48,7 @@
 
     <!-- 자기소개 -->
     <div class="description">
-      <p v-if="isMyProfile">{{ profile.description }}</p>
+      <p v-if="isMyProfile">{{ theirProfile.description }}</p>
       <p v-else>{{ theirProfile.description }}</p>
     </div>
     
@@ -149,6 +149,9 @@ export default {
       const memberId = this.$route.params.authorId 
       return memberId
     },
+    fetchAuthorId() {
+      return this.$route.params.authorId
+    }
   },
   watch: {
     followingStatus(newVal) {
@@ -161,6 +164,10 @@ export default {
       console.log(this.fetchTheirId)
       this.yourFollowers(this.fetchTheirId)
       this.yourFollowings(this.fetchTheirId)
+    },
+    fetchAuthorId(newVal) {
+      console.log(newVal)
+      this.fetchTheirProfile(this.$route.params.authorId)
     }
   },
   methods: {
@@ -216,7 +223,10 @@ export default {
     this.setFollowingStatus(this.$route.params.authorId)
     this.myProfile()
     this.fetchMyDiary()
- },
+  },
+  updated() {
+      // this.fetchTheirProfile(this.$route.params.authorId)
+  }
 }
 </script>
 

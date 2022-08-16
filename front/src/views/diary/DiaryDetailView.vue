@@ -3,6 +3,7 @@
     <!-- diaryTemp -> diary로 바꿔 -->
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
     <!-- {{ diary }} -->
+    <!-- {{ authorInfo }} -->
     <div class="diary-detail-header">
       <div class="title-icons">
         <div class="title-location">
@@ -71,7 +72,7 @@
         <div class="profile-div">
           <!-- <el-avatar :size="100" :src="diary.member_id.img_path" /> -->
           <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
-            <el-avatar :size="80" src="" />
+            <el-avatar :size="80" :src="authorInfo.img_link" />
           </router-link>
           <!-- <span>{{ diary.member_id.name }}</span> -->
           <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
@@ -199,7 +200,7 @@ export default {
   },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
-    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing', 'authorId']),
+    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing', 'authorId', 'authorInfo']),
     partyTag() {
       const party = this.diary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -211,7 +212,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'unlikeDiary', 'fetchCurrentUser']),
+    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'unlikeDiary', 'fetchCurrentUser', 'fetchDiaryUser']),
     goLike() {
       this.likeDiary(this.diary)
     },
@@ -254,7 +255,8 @@ export default {
     this.fetchCurrentUser()
   },
   mounted() {
-    setTimeout(() => this.addMarkers(), 500)
+    setTimeout(() => this.addMarkers(), 500),
+    this.fetchDiaryUser(this.authorId)
     // this.addMarkers()
   }
 }
