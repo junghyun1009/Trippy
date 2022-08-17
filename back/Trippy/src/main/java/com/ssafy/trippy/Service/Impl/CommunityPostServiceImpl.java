@@ -70,7 +70,8 @@ public class CommunityPostServiceImpl implements CommunityPostService {
                 updateCommunityPostDto.isLocal(),
                 location.get(),
                 updateCommunityPostDto.getPlace(),
-                updateCommunityPostDto.isDay());
+                updateCommunityPostDto.isDay(),
+                updateCommunityPostDto.getOpenKakaoUrl());
     }
 
     @Override

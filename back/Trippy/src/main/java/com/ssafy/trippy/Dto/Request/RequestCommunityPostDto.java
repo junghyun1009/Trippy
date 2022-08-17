@@ -59,7 +59,7 @@ public class RequestCommunityPostDto {
 
     private boolean Day;
 
-
+    private String openKakaoUrl;
     // DTO -> ENTITY
     public CommunityPost toEntity() {
         return CommunityPost.builder()
@@ -80,6 +80,7 @@ public class RequestCommunityPostDto {
                 .recruitCurrentVolume(recruitCurrentVolume)
                 .title(title)
                 .place(place)
+                .openKakaoUrl(openKakaoUrl)
                 .build();
     }
 
