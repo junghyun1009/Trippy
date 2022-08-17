@@ -172,4 +172,9 @@ public class MemberController {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         return new ResponseEntity<>(badgeService.getBadgesByMemberId(memberId),HttpStatus.OK);
     }
+
+    @GetMapping("/members/badges/{member_id}")
+    public ResponseEntity<?> getBadgesByMemberId(@PathVariable("member_id") Long memberId){
+        return new ResponseEntity<>(badgeService.getBadgesByMemberId(memberId),HttpStatus.OK);
+    }
 }
