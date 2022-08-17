@@ -22,7 +22,7 @@
             </el-button>
           </div>
           <!-- 남의 프로필 페이지라면 팔로우 버튼 뜸-->
-          <div class="their-page-username" v-else>
+          <div class="my-page-username" v-else>
             <h2>{{ theirProfile.name }}</h2>
             <div class="follow-button">
               <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
@@ -36,12 +36,15 @@
     <!-- 팔로워 / 팔로잉 -->
     <div class="follow">
       <div class="user-follow" @click="followerClicked=true">
-        FOLLOWERS
-        {{ followerCount }}
+        <span class="follow-title">Followers</span>
+        <span>{{ followerCount }}</span>
+      </div>
+      <div>
+        <span>|</span>
       </div>
       <div class="user-follow" @click="followingClicked=true">
-        FOLLOWINGS 
-        {{ followingCount }}
+        <span class="follow-title">Followings</span>
+        <span>{{ followingCount }}</span>
       </div>
     </div>
     
@@ -146,7 +149,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['profile', 'myDiaries', 'theirProfile', 'followingStatus', 'followerCount', 'followingCount']),
+    ...mapGetters(['currentUser', 'profile', 'myDiaries', 'theirProfile', 'followingStatus', 'followerCount', 'followingCount']),
     // fetchTheirId() {
     //   const memberId = this.$route.params.authorId
     //   return memberId
@@ -174,6 +177,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      'fetchCurrentUser',
       'fetchProfile', 
       'fetchMyDiary', 
       'fetchTheirProfile', 
@@ -196,8 +200,8 @@ export default {
 
     // 내 프로필인지 확인
     myProfile(){
-      console.log(this.profile.id, this.$route.params.authorId)
-      if ( this.profile.id.toString() === this.$route.params.authorId ) { 
+      console.log(this.currentUser.id, this.$route.params.authorId)
+      if ( this.currentUser.id == this.currentProfile ) { 
         this.isMyProfile = true
         this.fetchMyDiary()
       } else {
@@ -238,16 +242,23 @@ export default {
       this.followId.following_id = this.theirProfile.id
     },
   },
+  created() {
+    // 현재 로그인한 유저 정보 저장
+    this.fetchCurrentUser()
+    // 현재 들어간 프로필 유저 정보 저장
+    this.fetchTheirProfile(this.currentProfile)
+  },
   mounted() {
+    // 내 프로필인지 확인 => 정보 저장하는 시간이 필요함
+    setTimeout(() => this.myProfile(), 100)
     this.fetchProfile()
-    this.fetchTheirProfile(this.$route.params.authorId)
+    // this.fetchTheirProfile(this.$route.params.authorId)
     // this.myFollowings()
     // this.myFollowers()
     this.setFollowingStatus(this.$route.params.authorId)
-    this.myProfile()
     this.fetchMyDiary()
     // this.fetchFollow()
-    // setTimeout(() => {this.fetchFollow()}, 500)
+    // setTimeout(() => this.fetchTheirProfile(this.$route.params.authorId), 500)
   },
   updated() {
       // this.fetchTheirProfile(this.$route.params.authorId)
@@ -283,6 +294,7 @@ export default {
 
   .username-follow {
     width: 50vw;
+    height: 2.2rem;
   }
 
   .follow-button {
@@ -309,10 +321,32 @@ export default {
 
   .my-page-username {
     display: flex;
+
   }
 
-  .user-follow:first-child {
-    margin-right: 15px;
+  .my-page-username h2 {
+    font-weight: 500;
+    margin-right: 0.5rem;
+  }
+
+  .material-symbols-outlined {
+    font-size: 1.3rem;
+    color: #F16B51;
+  }
+
+  .user-follow {
+    margin-left: 0;
+    margin-right: 0;
+    width: 4.5rem;
+  }
+
+  .user-follow span {
+    font-size: 0.8rem;
+    font-weight: 400;
+  }
+
+  .follow-title {
+    color: #F16B51;
   }
 
   .blank {
@@ -325,7 +359,8 @@ export default {
 
   .follow {
     display: flex;
-    margin: 2%;
+    margin-left: 7.5rem;
+    margin-top: 0;
   }
 
 </style>
