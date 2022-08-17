@@ -1,5 +1,6 @@
 import router from "@/router"
 import axios from "axios"
+import { ElMessageBox } from "element-plus"
 import VueCookies from 'vue-cookies'
 // import _ from 'lodash'
 
@@ -141,9 +142,29 @@ export default ({
 
   },
   actions: {
+    // 첫번째 일지인가요?
+    checkFirstDiary({getters}) {
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/posts/memberDetail',
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then( res => {
+        const diaryList = res.data
+        if ( diaryList.length === 1 ){
+          ElMessageBox.alert('기록의 시작 뱃지를 획득하셨어요!', 
+          '뱃지 획득을 축하합니다!', {
+            confirmButtonText: 'OK'
+          })
+        }
+        console.log(res.data)
+
+      })
+    },
+
     // 일지 CREATE
     // 일지 저장
-    createDiary({ commit }, diary) {
+    createDiary({ commit, dispatch }, diary) {
       // commit('CREATE_DIARY', diary)
       // console.log(1)
       console.log(diary)
@@ -159,6 +180,7 @@ export default ({
       .then(res => {
         console.log(res.data)
         commit('SET_DIARY', diary)
+        dispatch('checkFirstDiary')
         // console.log(3)
         // console.log(getters.diary)
         router.push({
@@ -416,7 +438,18 @@ export default ({
       })
       .catch(err => console.err(err.response))
     },
-
+    checkLike({ commit, getters }, diaryPk) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost/chk/${diaryPk}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_DIARY_LIKE', res.data)
+      })
+      .catch(err => console.err(err.response))
+    },
     fetchLocation({ commit }) {
       axios({
         url: 'https://i7a506.p.ssafy.io/api/locations',

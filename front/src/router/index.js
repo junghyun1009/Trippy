@@ -118,6 +118,7 @@ const routes = [
     name: 'profile',
     component: ProfileView,
   },
+  
   {
     path: '/profile/edit',
     name: 'profileEdit',

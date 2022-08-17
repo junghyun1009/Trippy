@@ -1,7 +1,10 @@
 <template>
   <div class="container">
       <div class="tags">
-        <!-- {{ post }} -->
+        {{ post }}
+        <!-- {{post.recruitCurrentVolume}}
+        {{counter}} -->
+
         <el-tag type="dark" class="tag">{{ post.cityName }}</el-tag>
         <el-tag type="dark" class="tag">{{ post.category === 1 ? '식사' : post.category === 2 ? '동행' : post.category === 3 ? '파티' : post.category === 4 ? '이동수단 셰어' : '기타' }}</el-tag>
       </div>
@@ -68,8 +71,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters,  mapActions } from 'vuex'
 import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
+// import axios from 'axios'
 
 export default {
   name: 'CommunityDetailView',
@@ -108,6 +112,7 @@ export default {
     // }
   },
   methods: {
+    // ...mapMutations(['ADD_COUNTER']),
     ...mapActions(['fetchPost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark', 'deleteBookmark', 'checkBookmark']),
     goBookmark() {
       this.checkBookmark(this.postPk)
@@ -129,19 +134,21 @@ export default {
       this.$router.push({ name: 'profile' })
     },
     goPartIn(e) {
-      this.post.recruitCurrentVolume++
+      // this.ADD_COUNTER()
       e.currentTarget.disabled = true
     }
   },
   created() {
-    this.checkBookmark(this.postPk)
     this.fetchCurrentUser()
     this.fetchPost(this.postPk)
+    // this.fetchPost(this.postPk)
     // this.fetchBookmark()
   },
-  // mounted() {
-    
-  // },
+  mounted() {
+    setTimeout(() => {
+      this.checkBookmark(this.postPk)
+    }, 25);
+  },
   // updated() {
   //   this.checkBookmark(this.postPk)
   // }

@@ -13,4 +13,5 @@ public interface CommunityPostRepository extends JpaRepository<CommunityPost, Lo
 
     Long countAllByMemberId(Long memberId);
     List<CommunityPost> findAllByMember(Member member);
+    List<CommunityPost> findAllByMemberId(Long memberId);
 }

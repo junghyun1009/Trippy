@@ -212,7 +212,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'unlikeDiary', 'fetchCurrentUser', 'fetchDiaryUser']),
+    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'unlikeDiary', 'checkLike','fetchCurrentUser', 'fetchDiaryUser']),
     goLike() {
       this.likeDiary(this.diary)
     },
@@ -257,6 +257,7 @@ export default {
   mounted() {
     setTimeout(() => this.addMarkers(), 500),
     this.fetchDiaryUser(this.authorId)
+    setTimeout(() => this.checkLike(this.diaryPk), 10)
     // this.addMarkers()
   }
 }
