@@ -57,6 +57,8 @@ export default {
       VueCookies.remove('accessToken')
       VueCookies.remove('refreshToken')
       localStorage.removeItem('email')
+      alert('성공적으로 로그아웃 되었습니다')
+      router.push({ name: 'home' })
     },
 
     reissueToken({ dispatch, }) {
@@ -105,7 +107,9 @@ export default {
           router.push({ name: 'home' })
         })
         .catch(err => {
-          console.error(err)
+          if ( err.response.status === 400) {
+            alert('아이디 혹은 비밀번호를 확인하세요')
+          }
         })
     },
 
@@ -141,35 +145,57 @@ export default {
     },
 
     // 이메일 중복확인
-    checkEmailDuplicate({ commit, getters }, userData) {
-      console.log(getters)
-      const email = userData.email
-      axios({
-        url: `https://i7a506.p.ssafy.io/api/members/duplicate?email=${email}`,
-        method: 'get',
-        param: email
-      })
-      .then(res => {
-        if (res.data === true) {
-          commit('SET_IS_DUPLICATE', res.data)
-          alert('이메일이 중복되었습니다')
-        } else {
-          commit('SET_IS_DUPLICATE', res.data)
-          alert('이메일을 사용하셔도 좋습니다')
-        }
-      })
-      .catch(err => {
-        console.error(err)
-      })
+    checkEmailDuplicate({ commit }, userData) {
+      if ( !userData.email ) { 
+        alert('이메일을 입력해주세요') 
+      } else {
+        const email = userData.email
+        axios({
+          url: `https://i7a506.p.ssafy.io/api/members/duplicate?email=${email}`,
+          method: 'get',
+          param: email
+        })
+        .then(res => {
+          if (res.data === true) {
+            commit('SET_IS_DUPLICATE', res.data)
+            alert('이메일이 중복되었습니다')
+          } else {
+            commit('SET_IS_DUPLICATE', res.data)
+            alert('이메일을 사용하셔도 좋습니다')
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
+      }
     },
 
-    // 인증 코드 요청하기
+    // PasswordFind 이메일 인증 코드 요청하기
     emailCode({commit}, userinfo) {
       console.log(userinfo)
       axios({
         url: 'https://i7a506.p.ssafy.io/api/members/join/authmail',
         method: 'post',
         data: userinfo
+      })
+      .then( res => {
+        console.log(res)
+        commit('SET_EMAIL_AUTH_CODE', res.data)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    },
+
+    // signup이랑 passwordchange랑 형식이 좀 달라서 
+    // SingUpView 이메일 인증 코드 요청하기
+    emailCodeSignUp({commit}, userData) {
+      console.log(userData)
+      const data = { 'email': userData }
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/members/join/authmail',
+        method: 'post',
+        data: data
       })
       .then( res => {
         console.log(res)
@@ -229,13 +255,14 @@ export default {
       .then((res) => {
         dispatch('removeToken')
         localStorage.revmoveItem('email')
-        console.log(getters.isLoggedIn)
-        router.push({ name: 'home' })
-        console.log(res.data)
-        alert('성공적으로 로그아웃 되었습니다')
+        console.log(res)
       })
       .catch( err => {
+        console.error(err)
         console.error(err.response)
+        if (err.response.status === 400) {
+          dispatch('removeToken')
+        }
       })
     },
 

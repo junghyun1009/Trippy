@@ -3,15 +3,34 @@
 
     <form @submit.prevent="signupOne(userData)">
     <div class="email">
-      <p>이메일</p>
-      <el-input  id="email"
-      class="input"
-      v-model="userData.email" 
-      placeholder="username@email.com"
-      @blur="checkEmail()"
-      ></el-input>
-      <el-button type="primary" @click="checkEmailDuplicate(userData)">중복확인</el-button>
-      <account-error-list :errorMessage="emailError" v-if="!emailFormat"></account-error-list>
+      <div class="email-format">
+        <p>이메일</p>
+        <el-input  id="email"
+        class="input"
+        v-model="userData.email" 
+        v-if="!emailAuthorized"
+        placeholder="username@email.com"
+        @blur="checkEmail()"
+        ></el-input>
+        <el-input class="input" v-else v-model="userData.email" disabled></el-input>
+        <div class="email-button">
+          <el-button type="primary" @click="checkEmailDuplicate(userData), checkEmail()">중복확인</el-button>
+          <el-button type="primary" v-if="!this.isDuplicate" v-model="verificationCode" @click="successMessage(), emailCodeSignUp(userData.email)">인증번호 받기</el-button>
+          <el-button type="primary" v-if="this.isDuplicate" disabled>인증번호 받기</el-button>
+        </div>
+          <account-error-list :errorMessage="emailError" v-if="!emailFormat"></account-error-list>
+      </div>
+      <br>
+      <div v-if="!emailAuthorized" class="email-verification-code">
+        <p>인증번호 입력</p>
+        <el-input class="input" v-model="verificationCode" placeholder="발송된 인증번호를 입력하세요"></el-input>
+
+        <div class="email-button">
+          <el-button type="primary" @click="emailAuth(verificationCode)">인증확인</el-button><br>
+          <el-button type="primary" @click="successMessage(), emailCodeSignUp(userData.email)">인증번호 다시받기</el-button>        
+        </div>
+      </div>
+    
     </div>
 
     <br>
@@ -93,11 +112,9 @@
         />
       </div>
     </div>
-
-    <br><br><br><br>
-    <el-button type="primary" @click="checkBlank(), dateParsing(), signupOne(userData), youShallNotPass()">회원가입</el-button>
+    <br>
+    <el-button class="signup-button" type="primary" @click="checkBlank(), dateParsing(), signupOne(userData), youShallNotPass()">회원가입</el-button>
   </form>
-
   </div>
 </template>
 
@@ -105,6 +122,7 @@
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
 import { userErrorMessage } from '@/common/constant.js'
 import { mapActions, mapGetters } from 'vuex'
+import { ElMessage } from 'element-plus'
 
 export default {
   components: { 
@@ -137,6 +155,7 @@ export default {
             nicknameError: userErrorMessage.nicknameError,
             alreadyRegistered: userErrorMessage.alreadyRegistered,
             phoneError: userErrorMessage.phoneError,
+            wrongVerificationCode: userErrorMessage.wrongVerificationCode,
             emailFormat: true,
             passwordFormat: true,
             phoneFormat: true,
@@ -144,12 +163,15 @@ export default {
             nicknameFormat: true,
             passwordCheck: '',
             date: '',
+            verificationCode: '',
+            emailSent: false,
             pass: false,
             emailpass: false,
             passwordpass: false,
             passwordcheckpass: false,
             phonepass: false,
-            nicknamepass: false
+            nicknamepass: false,
+            emailAuthorized: false,
         }
     },
     computed: {
@@ -163,7 +185,7 @@ export default {
       // 얘 뒤집어서 써야돼
     },
     methods: {
-      ...mapActions(['signupOne', 'checkEmailDuplicate']),
+      ...mapActions(['signupOne', 'checkEmailDuplicate', 'emailCodeSignUp']),
 
       // 받아온 날짜를 ISO string 형식으로 변환해주는 함수
       dateParsing() {
@@ -177,12 +199,35 @@ export default {
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
       if (regEmail.test(inputEmail) === false) {
         this.emailFormat = false,   
-        this.emailpass = false;                       
+        this.emailpass = false;                   
       } else {
         this.emailFormat = true
         this.emailpass = true
       }        
       },
+
+    // 받아온 인증번호와, 입력한 인증번호가 동일한지 확인
+    emailAuth() {
+      console.log(this.verificationCode)
+      if ( !this.verificationCode ) {
+        alert('인증번호를 입력하세요') 
+      } else if ( this.$store.getters.verificationCode === this.verificationCode ){
+        alert('인증이 완료되었습니다')
+        this.emailAuthorized = true;
+      } else {
+        alert('인증번호가 일치하지 않습니다')
+      }
+    },
+
+    successMessage() {
+        ElMessage({
+          message: '인증번호가 성공적으로 발송되었습니다',
+          type: 'success',
+      })
+    },
+
+
+
 
       // 비밀번호 , 비밀번호 확인에 넣은 번호가 같은지 확인하는 함수
       checkPasswordMatch() {
@@ -290,7 +335,17 @@ export default {
   }
 
   button {
+    width: 49%;
+  }
+
+  .signup-button {
     width: 100%;
+    margin-top: 5%;
+  }
+
+  .email-button {
+    display: flex;
+    justify-content: space-between;
   }
 
   form {
@@ -313,6 +368,10 @@ export default {
 
   .input {
     margin: 2% 0;
+  }
+
+  .el-button+.el-button {
+    margin-left: 0;
   }
 
 </style>
