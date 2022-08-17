@@ -303,11 +303,15 @@ export default {
       .then( () => {
         VueCookies.remove('accessToken')
         VueCookies.remove('refreshToken')
+        localStorage.removeItem('email')
         console.log('successfully deleted account')
         router.push({ name: 'login' })
       })
       .catch(err => {
         console.error(err)
+        if ( err.response.status === 500 ) {
+          alert('다시 시도해주세요')
+        }
       })
     }
 
