@@ -130,6 +130,8 @@ export default {
   },
   data() {
     return {
+      // 현재 들어온 프로필 주인 아이디(문자열)
+      currentProfile: this.$route.params.authorId,
       followId: {
         follower_id: null,
         following_id: null,
@@ -145,10 +147,10 @@ export default {
   },
   computed: {
     ...mapGetters(['profile', 'myDiaries', 'theirProfile', 'followingStatus', 'followerCount', 'followingCount']),
-    fetchTheirId() {
-      const memberId = this.$route.params.authorId 
-      return memberId
-    },
+    // fetchTheirId() {
+    //   const memberId = this.$route.params.authorId
+    //   return memberId
+    // },
     fetchAuthorId() {
       return this.$route.params.authorId
     }
@@ -157,17 +159,17 @@ export default {
     followingStatus(newVal) {
       this.isFollow = newVal
     },
-    isMyProfile(newVal) {
-      this.isMyProfile = newVal
-      console.log(this.isMyProfile)
-      console.log('it is not my profile')
-      console.log(this.fetchTheirId)
-      this.yourFollowers(this.fetchTheirId)
-      this.yourFollowings(this.fetchTheirId)
-    },
+    // isMyProfile(newVal) {
+    //   console.log('프로필 이동', this.currentProfile)
+    //   this.currentProfile = newVal
+    //   this.myProfile()
+    // },
     fetchAuthorId(newVal) {
       console.log(newVal)
       this.fetchTheirProfile(this.$route.params.authorId)
+      console.log('프로필 이동', this.currentProfile)
+      // this.currentProfile = newVal
+      this.myProfile()
     }
   },
   methods: {
@@ -192,14 +194,35 @@ export default {
       this.$router.push({ name: 'profileEdit' })
     },
 
+    // 내 프로필인지 확인
     myProfile(){
-      if ( this.profile.id === this.theirProfile.id ) { 
+      console.log(this.profile.id, this.$route.params.authorId)
+      if ( this.profile.id.toString() === this.$route.params.authorId ) { 
         this.isMyProfile = true
         this.fetchMyDiary()
       } else {
         this.isMyProfile = false
       }
+      console.log('여기', this.isMyProfile)
+      this.fetchFollow()
     },
+
+    // 팔로워, 팔로잉 불러오기
+    fetchFollow(){
+      // 내 프로필이면
+      if (this.isMyProfile) {
+        console.log('내 프로필')
+        this.myFollowers(this.currentProfile)
+        this.myFollowings(this.currentProfile)
+      }
+      // 내 프로필이 아니면
+      else {
+        console.log('내 프로필 아님')
+        this.yourFollowers(this.currentProfile)
+        this.yourFollowings(this.currentProfile)
+      }
+    },
+
     followNow() {
       this.isFollow = !this.isFollow
       // follower_id - 내가 팔로우 하게 되는 사람의 아이디
@@ -218,11 +241,13 @@ export default {
   mounted() {
     this.fetchProfile()
     this.fetchTheirProfile(this.$route.params.authorId)
-    this.myFollowings()
-    this.myFollowers()
+    // this.myFollowings()
+    // this.myFollowers()
     this.setFollowingStatus(this.$route.params.authorId)
     this.myProfile()
     this.fetchMyDiary()
+    // this.fetchFollow()
+    // setTimeout(() => {this.fetchFollow()}, 500)
   },
   updated() {
       // this.fetchTheirProfile(this.$route.params.authorId)
