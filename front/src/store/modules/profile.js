@@ -284,6 +284,8 @@ export default {
 
     // 배지
     fetchBadges({ commit }, memberId) {
+      // 프로필에 보이는 배지 일때는 url param으로 받아오고
+      // 배지 페이지에서는 fetchProfile해서 id값으로 받아옴
       console.log('member id from url params', memberId)
       axios({
         url: `https://i7a506.p.ssafy.io/api/members/badges/${memberId}`,

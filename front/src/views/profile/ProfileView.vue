@@ -59,10 +59,10 @@
     </div>
     
     <!-- 뱃지 -->
-    <div v-if="isMyProfile" class="badge">
+    <div class="badge">
       <el-row>
-        <el-col v-show="badge.obtained" class="badge" :span="4" v-for="(badge, idx) in badges" :key="idx" @click="goBadge">
-          <img :src=badge.image :alt="badge-image" >
+        <el-col v-show="badge.obtained===true" :span="4" v-for="(badge, idx) in badges" :key="idx" @click="goBadge">
+          <img class="badge-image"  :src=badge.image :alt="badge-image" >
         </el-col>
       </el-row>
     </div>
@@ -91,7 +91,6 @@
     <!-- 내 다이어리 / 내 좋아요 / 내 동행찾기 -->
     <!-- vue warn 나서 일단 이거 뺴놓음  -->
     <!-- @tab-click="handleClick" -->
-    
     <el-tabs
     v-if="isMyProfile"
     v-model="activeName"
@@ -320,6 +319,7 @@ export default {
         }
       })
     },
+
     goBadge() {
       this.$router.push({ name: 'badgeList' })
     },
@@ -358,7 +358,7 @@ export default {
     this.fetchMyDiary()
     setTimeout(() => this.pickRandom(this.myDiaries), 100)
     setTimeout(() => this.pickRandom(this.othersDiary), 100)
-    // this.fetchBadges(this.$route.params.authorId)
+    this.fetchBadges(this.$route.params.authorId)
     // this.fetchFollowingDiaries(this.currentProfile)
     this.fetchOthersDiary(this.currentProfile)
   },
@@ -483,8 +483,8 @@ export default {
     margin-top: 0;
   }
 
-  img {
-    width: 12vw;
+  .badge-image {
+    width: 15vw;
   }
 
   .el-button--primary.is-plain {

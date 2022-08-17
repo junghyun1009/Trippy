@@ -21,8 +21,7 @@
     <div v-if="allDiaries" class="all-diaries">
       <el-row>
         <!-- infinite scroll -->
-        <!-- slice 일단 테스트할때 걸리작대서 지움 -->
-        <!-- 파싱은 나중에 해볼게요 -->
+        <!-- 아니면 더 보기? -->
         <el-col :span="12" v-for="diary in allDiaries.slice(-10).reverse()" :key="diary.id">
           <recommend-list-item :diary="diary"></recommend-list-item>
         </el-col>
