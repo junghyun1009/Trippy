@@ -27,7 +27,7 @@
               <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
               <el-button v-else type="primary" plain @click="unfollowNow(), unfollow(followId)">팔로잉</el-button>
             </div>
-        </div>
+          </div>
       </div>
     </div>
     
