@@ -113,7 +113,7 @@
     >
       <el-tab-pane label="My Diary">
         <!-- 상대방이 쓴 일지 목록 -->
-        <my-diaries-list></my-diaries-list>
+        <others-diaries-list></others-diaries-list>
       </el-tab-pane>
     </el-tabs>
 
@@ -125,6 +125,7 @@
 import FollowersList from '@/components/profile/FollowersList.vue'
 import FollowingsList from '@/components/profile/FollowingsList.vue'
 import MyDiariesList from '@/components/profile/MyDiariesList.vue'
+import OthersDiariesList from '@/components/profile/OthersDiariesList.vue'
 import { mapActions, mapGetters } from 'vuex'
 import { badgeNames } from '@/common/constant.js'
 
@@ -134,6 +135,7 @@ export default {
     FollowersList,
     FollowingsList,
     MyDiariesList,
+    OthersDiariesList
   },
   data() {
     return {
@@ -237,6 +239,7 @@ export default {
       'yourFollowings',
       'yourFollowingsCount',
       'setFollowingStatus',
+      'fetchOthersDiary'
       ]),
 
     goProfileEdit(){
@@ -317,8 +320,9 @@ export default {
     // this.myFollowers()
     this.setFollowingStatus(this.currentProfile)
     this.fetchMyDiary()
-    this.fetchBadges(this.$route.params.authorId)
-    
+    // this.fetchBadges(this.$route.params.authorId)
+    // this.fetchFollowingDiaries(this.currentProfile)
+    this.fetchOthersDiary(this.currentProfile)
   },
   updated() {
       // this.fetchTheirProfile(this.$route.params.authorId)
