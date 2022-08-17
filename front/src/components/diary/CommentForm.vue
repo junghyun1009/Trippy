@@ -39,9 +39,12 @@ export default {
           const payload = {
             content: this.content,
             memberId: this.profile.id,
-            postId: this.diaryPk
+            postId: this.diaryPk,
+            name: this.profile.name,
+            imgPath: this.profile.img_link
           }
           this.createComment(payload)
+          console.log('보낸 거', payload)
           this.content = ''
         } else {
           // 대댓글 생성
@@ -49,7 +52,9 @@ export default {
             parentId: this.parentId,
             content: this.content,
             memberId: this.profile.id,
-            postId: this.diaryPk
+            postId: this.diaryPk,
+            name: this.profile.name,
+            imgPath: this.profile.img_link
           }
           this.createComment(payload)
           this.content = ''
