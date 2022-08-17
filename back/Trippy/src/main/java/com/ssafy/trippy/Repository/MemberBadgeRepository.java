@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface MemberBadgeRepository extends JpaRepository<MemberBadge, Long> {
-    List<MemberBadge> findAllByMember(Member member);
+    List<MemberBadge> findAllByMemberId(Long memberId);
 }

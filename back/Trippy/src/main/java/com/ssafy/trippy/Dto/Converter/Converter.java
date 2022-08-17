@@ -1,11 +1,8 @@
 package com.ssafy.trippy.Dto.Converter;
 
 import com.ssafy.trippy.Domain.*;
-import com.ssafy.trippy.Dto.Response.ResponseDetailLocationDto;
+import com.ssafy.trippy.Dto.Response.*;
 import com.ssafy.trippy.Dto.Request.RequestPostCommentDto;
-import com.ssafy.trippy.Dto.Response.ResponsePostCommentDto;
-import com.ssafy.trippy.Dto.Response.ResponseRouteDto;
-import com.ssafy.trippy.Dto.Response.ResponseTransport;
 import com.ssafy.trippy.Service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,9 +63,7 @@ public class Converter {
     public static List<ResponsePostCommentDto> convertPostCommentList(List<PostComment> postCommentList) {
         List<ResponsePostCommentDto> ResponsepostComments = new ArrayList<>();
         for (PostComment postComment : postCommentList) {
-            ResponsePostCommentDto dto = ResponsePostCommentDto.builder()
-                    .postComment(postComment).build();
-
+            ResponsePostCommentDto dto = new ResponsePostCommentDto(postComment);
             ResponsepostComments.add(dto);
         }
         return ResponsepostComments;
@@ -81,7 +76,6 @@ public class Converter {
         }
         return transports;
     }
-
 
 }
 

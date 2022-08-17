@@ -17,15 +17,15 @@ export default {
       diary: {
         id: null,
         title: '',
-        countryName: '대한민국',
-        cityName: '서울특별시',
+        countryName: '',
+        cityName: '',
         startDate: '',
         endDate: '',
         company: 1,
         count: 1,
         postTransports: [],
         routes: [],
-        detailLocations: []
+        detailLocations: [],
       }
     }
   }

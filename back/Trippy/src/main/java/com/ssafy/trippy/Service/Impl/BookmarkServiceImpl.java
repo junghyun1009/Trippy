@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +47,15 @@ public class BookmarkServiceImpl implements BookmarkService {
             throw new IllegalArgumentException("존재하지 않는 북마크");
         }
         bookmarkRepository.deleteByMemberIdAndCommunityPostId(requestBookmarkDto.getMemberId(),requestBookmarkDto.getCommunityPostId());
+    }
+
+    @Override
+    public boolean findBookMarKByMemberAndCommunityPost(Long memberId, Long communityPostId) {
+        Optional<Bookmark> bookmark = bookmarkRepository.findBookmarkByMemberIdAndCommunityPostId(memberId, communityPostId);
+        if(bookmark.isPresent()){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

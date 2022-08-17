@@ -7,10 +7,23 @@
         </el-col>
       </el-row>
     </div>
-    <div v-if="!regionDiaries" class="all-diaries">
+    <div v-if="searchDiaries" class="search-diaries">
+      <br>
+      <el-row>
+        <el-col :span="8" v-for="diary in searchDiaries" :key="diary.id">
+          <recommend-list-item :diary="diary"></recommend-list-item>
+        </el-col>
+      </el-row>
+    </div>
+    <hr>
+    <h3>전체 게시물</h3>
+    <br>
+    <div v-if="allDiaries" class="all-diaries">
       <el-row>
         <!-- infinite scroll -->
-        <el-col :span="8" v-for="diary in allDiaries.slice(0,10)" :key="diary.id">
+        <!-- slice 일단 테스트할때 걸리작대서 지움 -->
+        <!-- 파싱은 나중에 해볼게요 -->
+        <el-col :span="8" v-for="diary in allDiaries" :key="diary.id">
           <recommend-list-item :diary="diary"></recommend-list-item>
         </el-col>
       </el-row>
@@ -33,7 +46,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['regionDiaries', 'allDiaries']),
+    ...mapGetters(['regionDiaries', 'allDiaries', 'searchDiaries']),
   },
 
   methods: {

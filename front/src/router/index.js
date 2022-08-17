@@ -7,6 +7,7 @@ import SearchView from '@/views/home/SearchView.vue'
 import DiaryCreateView from '../views/diary/DiaryCreateView.vue'
 import DiaryDetailView from '../views/diary/DiaryDetailView.vue'
 import DiaryEditView from '../views/diary/DiaryEditView.vue'
+import DiaryDeleteView from '../views/diary/DiaryDeleteView.vue'
 // import DiaryCommentView from '../components/diary/DiaryCommentView.vue'
 
 import LoginView from '@/views/account/LoginView.vue'
@@ -16,6 +17,7 @@ import SettingView from '@/views/account/SettingView.vue'
 import PasswordFindView from '@/views/account/PasswordFindView.vue'
 import PasswordChangeView from '@/views/account/PasswordChangeView.vue'
 
+// import MyProfileView from '@/views/profile/MyProfileView.vue'
 import ProfileView from '@/views/profile/ProfileView.vue'
 import ProfileEditView from '@/views/profile/ProfileEditView.vue'
 
@@ -90,15 +92,18 @@ const routes = [
   },
   {
     path: '/diary/:diaryPk',
-    // 나중에 pk 추가하기
     name: 'diaryDetail',
     component: DiaryDetailView
   },
   {
     path: '/diary/edit/:diaryPk',
-    // 나중에 pk 추가하기
     name: 'diaryEdit',
     component: DiaryEditView
+  },
+  {
+    path: '/diary/delete',
+    name: 'diaryDelete',
+    component: DiaryDeleteView
   },
   // {
   //   path: '/diary/comment',
@@ -109,53 +114,51 @@ const routes = [
 
 
   {
-    path: '/profile',
-    // 나중에 pk 추가하기
+    path: '/profile/:authorId',
     name: 'profile',
-    component: ProfileView
+    component: ProfileView,
   },
+  
   {
     path: '/profile/edit',
-    // 나중에 pk 추가하기
     name: 'profileEdit',
-    component: ProfileEditView
+    component: ProfileEditView,
   },
 
 
   {
     path: '/community',
     name: 'community',
-    component: CommunityView
+    component: CommunityView,
   },
 
   {
-    path: '/community/detail',
-        // 나중에 pk 추가하기
+    path: '/community/:postPk',
     name: 'communityDetail',
-    component: CommunityDetailView
+    component: CommunityDetailView,
   },
   {
     path: '/community/create',
     name: 'communityCreate',
-    component: CommunityCreateView
+    component: CommunityCreateView,
   },
   {
-    path: '/community/edit',
+    path: '/community/edit/:postPk',
     name: 'communityEdit',
-    component: CommunityEditView
+    component: CommunityEditView,
   },
 
   
   {
     path: '/badge',
     name: 'badgeList',
-    component: BadgeListView
+    component: BadgeListView,
   },
   
   {
     path: '/chat',
     name: 'chatList',
-    component: ChatListView
+    component: ChatListView,
   },
   
 
@@ -175,10 +178,10 @@ router.beforeEach((to, from, next) => {
   const accessToken = VueCookies.get('accessToken')
 
   const authPages = [
-    'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
+    'diaryCreate', 'diaryEdit', 'diaryDetail',
     'profile', 'profileEdit', 
     'community', 'communityEdit', 'communityDetail', 'communityCreate',
-    'badgeList'
+    'badgeList', 'chatList'
   ]
 
   const isAuthRequired = authPages.includes(to.name)
