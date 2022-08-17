@@ -1,7 +1,7 @@
 <template>
   <div class="container">
       <div class="tags">
-        {{ post }}
+        <!-- {{ post }} -->
         <!-- {{post.recruitCurrentVolume}}
         {{counter}} -->
 
@@ -23,7 +23,7 @@
       </div> 
     <hr>
     <div class="title">
-      <span class="state">{{ post.recruitCurrentVolume < post.recruitVolume ? '모집중' : '모집마감' }}</span>
+      <!-- <span class="state">{{ post.recruitCurrentVolume < post.recruitVolume ? '모집중' : '모집마감' }}</span> -->
       <h4>{{ post.title }}</h4>
     </div>
     <div class="options">
@@ -49,20 +49,16 @@
       <hr>
     </div>
     <div class="members">
-      <p class="member-count">
+      <!-- <p class="member-count">
         <span>{{ post.recruitCurrentVolume + 1}}</span>
         / {{ post.recruitVolume + 1 }}명 참여
-      </p>
-      <div class="users">
+      </p> -->
+      <!-- <div class="users">
         <div class="user">
           <el-avatar :size="40" src="" />
           <span>{{ post.name }}</span>
         </div>
-        <!-- <div class="user">
-          <el-avatar :size="40" src="" />
-          <span>나유저</span>
-        </div> -->
-      </div>
+      </div> -->
       <div v-if="!isPostAuthor" class="participation">
         <el-button type="primary" class="button" @click="goPartIn">참가하기</el-button>
       </div>
@@ -71,9 +67,8 @@
 </template>
 
 <script>
-import { mapGetters,  mapActions } from 'vuex'
+import { mapGetters, mapMutations,mapActions } from 'vuex'
 import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
-// import axios from 'axios'
 
 export default {
   name: 'CommunityDetailView',
@@ -112,8 +107,8 @@ export default {
     // }
   },
   methods: {
-    // ...mapMutations(['ADD_COUNTER']),
-    ...mapActions(['fetchPost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark', 'deleteBookmark', 'checkBookmark']),
+    ...mapMutations(['ADD_VOLUME']),
+    ...mapActions(['fetchPost', 'updatePost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark', 'deleteBookmark', 'checkBookmark']),
     goBookmark() {
       this.checkBookmark(this.postPk)
       this.createBookmark(this.postPk)
@@ -133,9 +128,9 @@ export default {
     goProfile() {
       this.$router.push({ name: 'profile' })
     },
-    goPartIn(e) {
-      // this.ADD_COUNTER()
-      e.currentTarget.disabled = true
+    goPartIn() {
+      // this.ADD_VOLUME()
+      window.open(this.post.openKakaoUrl)
     }
   },
   created() {
@@ -306,10 +301,11 @@ hr {
   width: 90%;
   bottom: 5rem;
 }
-/* 
-.el-button .el-button--primary {
-  --el-button-active-color: #b9b9b9;
-  --el-button-active-border-color: #b9b9b9;
+
+/* .el-button .el-button--primary {
+  --el-button-active-color: var(--el-color-white);
+  --el-button-disabled-bg-color: var(--el-color-white);
+  --el-button-disabled-border-color: #b9b9b9;
 } */
 
 </style>
