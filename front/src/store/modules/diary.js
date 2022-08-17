@@ -1,5 +1,6 @@
 import router from "@/router"
 import axios from "axios"
+import { ElMessageBox } from "element-plus"
 import VueCookies from 'vue-cookies'
 // import _ from 'lodash'
 
@@ -17,6 +18,10 @@ export default ({
     isEditing: false,
     parentComment: '',
     authorId: null,
+    parentId: null,
+    location: [],
+    authorInfo: {},
+    childInfo: {}
   },
   getters: {
     diaries: state => state.diaries,
@@ -29,15 +34,19 @@ export default ({
     isChild: state => state.isChild,
     isEditing: state => state.isEditing,
     parentComment: state => state.parentComment,
+    parentId: state => state.parentId,
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
       return state.diary?.name === getters.currentUser.name
     },
     authorId: state => state.authorId,
+    location: state => state.location,
     // isDiary: state => !_.isEmpty(state.diary)
+    authorInfo: state => state.authorInfo,
+    childInfo: state => state.childInfo
   },
   mutations: {
-
+    // 일지 저장
     SET_DIARY(state, diary) {
       // diary.detailLocations.forEach((location) => {
       //   if (location.filename != null) {
@@ -55,14 +64,18 @@ export default ({
     //   console.log(state.images)
     // },
 
+    // 댓글 저장
     SET_COMMENT(state, payload) {
-      state.comment.user = payload.user
-      state.comment.info = payload.info
+      // state.comment.user = payload.user
+      // state.comment.img = payload.img
+      // state.comment.info = payload.info
+      state.comment = payload
       console.log(state.comment)
       state.comments.push(state.comment)
       state.comment = {}
     },
 
+    // 댓글 수정 시, state 변경
     SWITCH_IS_EDITING(state, comment) {
       console.log(3, comment)
       state.commentToEdit = comment
@@ -70,10 +83,12 @@ export default ({
       state.isEditing = true
     },
 
+    // 댓글 목록 초기화
     EMPTY_COMMENTS(state) {
       state.comments = []
     },
 
+    // 일지 작성 유저 아이디 저장
     SET_AUTHOR_ID(state, authorId) { 
       state.authorId = authorId
       console.log(state.authorId)
@@ -94,24 +109,67 @@ export default ({
       state.diaries = diaries
     },
 
-    SHOW_PARENT(state, parentComment) {
+    // 대댓글 작성 시, state 변경
+    SHOW_PARENT(state, parent) {
       state.isChild = true
-      state.parentComment = parentComment
+      state.parentComment = parent.member
+      state.parentId = parent.parentId
     },
 
+    // 대댓글 작성 취소 시, state 변경
     HIDE_PARENT(state) {
       state.isChild = false
+    },
+
+    // 일지 작성, 동행 찾기 게시글 작성 시 DB에 저장되어 있는 장소 목록 불러오기
+    SET_LOCATION(state, location) {
+      state.location = location
+    },
+
+    SET_DIARY_LIKE: (state, like) => (state.diary.like = like),
+
+    // 일지 작성 회원 정보 조회
+    SET_AUTHOR(state, info) {
+      state.authorInfo = info
+    },
+
+    // 대댓글 작성 회원 정보 조회
+    SET_CHILD_AUTHOR(state, info) {
+      // state.childInfo = {}
+      state.childInfo = info
+      console.log('child', state.childInfo)
     }
+
   },
   actions: {
+    // 첫번째 일지인가요?
+    checkFirstDiary({getters}) {
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/posts/memberDetail',
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then( res => {
+        const diaryList = res.data
+        if ( diaryList.length === 1 ){
+          ElMessageBox.alert('기록의 시작 뱃지를 획득하셨어요!', 
+          '뱃지 획득을 축하합니다!', {
+            confirmButtonText: 'OK'
+          })
+        }
+        console.log(res.data)
+
+      })
+    },
+
     // 일지 CREATE
     // 일지 저장
-    createDiary({ commit }, diary) {
+    createDiary({ commit, dispatch }, diary) {
       // commit('CREATE_DIARY', diary)
       // console.log(1)
       console.log(diary)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts',
+        url: 'https://i7a506.p.ssafy.io/api/auth/posts',
         method: 'post',
         data: diary,
         headers: {
@@ -122,11 +180,12 @@ export default ({
       .then(res => {
         console.log(res.data)
         commit('SET_DIARY', diary)
+        dispatch('checkFirstDiary')
         // console.log(3)
         // console.log(getters.diary)
         router.push({
           name: 'diaryDetail',
-          params: { diaryPk: res.data }
+          params: { diaryPk: res.data.postId }
         })
       })
     },
@@ -135,13 +194,14 @@ export default ({
     // 단일 일지
     fetchDiary({ commit, getters }, diaryPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/posts/detail/${diaryPk}`,
+        url: `https://i7a506.p.ssafy.io/api/posts/detail/${diaryPk}`,
         method: 'get',
         headers: getters.authHeader
       })
       .then(res => {
         commit('SET_DIARY', res.data)
         console.log('diary set')
+        console.log(res.data)
         const authorId = res.data.memberId
         commit('SET_AUTHOR_ID', authorId)
         // const diary = res.data
@@ -160,7 +220,7 @@ export default ({
 
     // fetchImage({ commit, getters }, imagePk) {
     //   axios({
-    //     url: `http://i7a506.p.ssafy.io:8080/api/posts/images/${imagePk}`,
+    //     url: `https://i7a506.p.ssafy.io/api/posts/images/${imagePk}`,
     //     method: 'get',
     //     headers: getters.authHeader
     //   })
@@ -171,12 +231,15 @@ export default ({
     // },
 
     // 일지 UPDATE
-    updateDiary({ commit, getters }, diary) {
+    updateDiary({ commit }, diary) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/posts/${diary.id}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/posts/${diary.id}`,
         method: 'put',
         data: diary.content,
-        headers: getters.authHeader
+        headers: {
+          "Content-Type": "multipart/form-data",
+          'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`
+        }
       })
       .then(res => {
         console.log(res.data)
@@ -191,7 +254,7 @@ export default ({
     // 일지 DELETE
     deleteDiary({ commit, getters }, diaryPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/posts/${diaryPk}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/posts/${diaryPk}`,
         method: 'delete',
         headers: getters.authHeader
       })
@@ -205,14 +268,15 @@ export default ({
 
     // 일지 댓글 CREATE
     createComment({ commit, getters }, payload) {
+      console.log(payload)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/comment',
+        url: 'https://i7a506.p.ssafy.io/api/auth/comment',
         method: 'post',
         data: payload,
         headers: getters.authHeader
       })
       .then((res) => {
-        console.log(res.data);
+        console.log('response', res.data);
         commit('SET_COMMENT', payload)
         router.push({
           name: 'diaryDetail',
@@ -224,9 +288,9 @@ export default ({
     },
 
     // 일지 댓글 목록 조회
-    fetchComment({ getters, commit, dispatch }, diaryPk) {
+    fetchComment({ getters, commit }, diaryPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/comment/${diaryPk}`,
+        url: `https://i7a506.p.ssafy.io/api/comment/${diaryPk}`,
         method: 'get',
         headers: getters.authHeader
       })
@@ -234,7 +298,8 @@ export default ({
         console.log(res.data)
         commit('EMPTY_COMMENTS')
         res.data.forEach((comment) => {
-          dispatch('fetchUser', comment)
+          // dispatch('fetchUser', comment)
+          commit('SET_COMMENT', comment)
         })
       })
       .catch(err => {
@@ -244,21 +309,50 @@ export default ({
       })
     },
 
+    // 일지 유저 조회
+    fetchDiaryUser({ getters, commit }, authorId) {
+      console.log(1, authorId)
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/members/${authorId}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        commit('SET_AUTHOR', res.data)
+      })
+    },
+
     // 각 댓글 유저 조회
     fetchUser({ getters, commit }, comment) {
+      console.log(comment)
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/members/${comment.memberId}`,
+        url: `https://i7a506.p.ssafy.io/api/members/${comment.memberId}`,
         method: 'get',
         headers: getters.authHeader
       })
       .then((res) => {
         console.log(res.data)
         const user = res.data.name
+        const img = res.data.img_link
         const payload = {
           user: user,
+          img: img,
           info: comment
         }
         commit('SET_COMMENT', payload)
+      })
+    },
+
+    // 대댓글 유저 조회(일지랑 화면이 같이 띄워져서 다른 변수 사용해야 함)
+    fetchChildUser({ getters, commit }, authorId) {
+      console.log(1, authorId)
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/members/${authorId}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        commit('SET_CHILD_AUTHOR', res.data)
       })
     },
 
@@ -272,7 +366,7 @@ export default ({
     updateComment({ commit, getters }, comment) {
       console.log(comment)
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/comment/${comment.id}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/comment/${comment.id}`,
         method: 'put',
         data: comment.data,
         headers: getters.authHeader
@@ -291,58 +385,78 @@ export default ({
 
     // 댓글 삭제
     deleteComment({ getters, commit }, pk) {
-      if (confirm('정말 삭제하시겠습니까?')) {
-        axios({
-          url: `http://i7a506.p.ssafy.io:8080/api/auth/comment/${pk.commentId}`,
-          method: 'delete',
-          headers: getters.authHeader,
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/comment/${pk.commentId}`,
+        method: 'delete',
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        console.log(res.data)
+        commit('SET_COMMENT', {})
+        router.push({
+          name: 'diaryDetail',
+          parmas: { diaryPk: pk.diaryId }
         })
-        .then(res => {
-          console.log(res.data)
-          commit('SET_COMMENT', {})
-          router.push({
-            name: 'diaryDetail',
-            parmas: { diaryPk: pk.diaryId }
-          })
-          location.reload()
-        })
-        .catch(err => console.error(err.response))
-      }
+        location.reload()
+      })
+      .catch(err => console.error(err.response))
     },
   
-    showParent({ commit }, commentUser) {
-      commit('SHOW_PARENT', commentUser)
+    showParent({ commit }, parent) {
+      commit('SHOW_PARENT', parent)
     },
 
     hideParent({ commit }) {
       commit('HIDE_PARENT')
     },
-  
-    showAllDiary({ commit }) {
+    // 다이어리 좋아요
+    likeDiary({ commit, getters }, diary) {
+      console.log(diary.id)
       axios({
-        url: 'http://localhost:8000/posts',
-        method: 'get'
-      })
-      .then((res) => {
-        const allDiary = res.data
-        commit('SHOW_ALL_DIARY', allDiary)
-      })
-    },
-
-    likeDiary({ commit, getters }, diaryPk) {
-      axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/likepost`,
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost`,
         method: 'post',
-        data: {post_id: diaryPk},
+        data: {post_id: diary.id},
         headers: getters.authHeader
       })
       .then((res) => {
-        commit('SET_DIARY', res.data)
         console.log(res.data)
-        router.push({
-          name: 'DiaryDetail',
-          params: { diaryPk: diaryPk }
-        })
+        commit('SET_DIARY_LIKE', true)
+      })
+      .catch(err => console.err(err.response))
+    },
+    // 좋아요 취소
+    unlikeDiary({ commit, getters }, diary) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost`,
+        method: 'delete',
+        data: {post_id: diary.id},
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_DIARY_LIKE', false)
+      })
+      .catch(err => console.err(err.response))
+    },
+    checkLike({ commit, getters }, diaryPk) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost/chk/${diaryPk}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_DIARY_LIKE', res.data)
+      })
+      .catch(err => console.err(err.response))
+    },
+    fetchLocation({ commit }) {
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/locations',
+        method: 'get'
+      })
+      .then((res) => {
+        commit('SET_LOCATION', res.data)
       })
     }
   },

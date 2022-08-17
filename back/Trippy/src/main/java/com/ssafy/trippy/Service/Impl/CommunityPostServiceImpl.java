@@ -1,11 +1,13 @@
 package com.ssafy.trippy.Service.Impl;
 
+import com.ssafy.trippy.Domain.Bookmark;
 import com.ssafy.trippy.Domain.Location;
 import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestCommunityPostDto;
 import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
 import com.ssafy.trippy.Dto.Update.UpdateCommunityPostDto;
 import com.ssafy.trippy.Domain.CommunityPost;
+import com.ssafy.trippy.Repository.BookmarkRepository;
 import com.ssafy.trippy.Repository.CommunityPostRepository;
 import com.ssafy.trippy.Repository.LocationRepository;
 import com.ssafy.trippy.Repository.MemberRepository;
@@ -24,6 +26,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
 
     private final CommunityPostRepository communityPostRepository;
     private final LocationRepository locationRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final MemberRepository memberRepository;
 
 
@@ -44,6 +47,10 @@ public class CommunityPostServiceImpl implements CommunityPostService {
     @Transactional
     @Override
     public void deleteCommunityPost(Long id) {
+        List<Bookmark> bookmarks = bookmarkRepository.findBookmarkByCommunityPostId(id);
+        for (Bookmark bookmark : bookmarks) {
+            bookmarkRepository.delete(bookmark);
+        }
         communityPostRepository.deleteById(id);
 
     }
@@ -120,5 +127,16 @@ public class CommunityPostServiceImpl implements CommunityPostService {
     @Override
     public Long cntCommunityPostsByMemberId(Long memberId) {
         return communityPostRepository.countAllByMemberId(memberId);
+    }
+
+    @Override
+    public List<ResponseCommunityPostDto> getCommunityPostByMemberId(Long memberId) {
+        List<CommunityPost> communityPosts = communityPostRepository.findAllByMemberId(memberId);
+        List<ResponseCommunityPostDto> communityPostDtos = new ArrayList<>();
+        for (CommunityPost communityPost : communityPosts) {
+            ResponseCommunityPostDto dto = new ResponseCommunityPostDto(communityPost);
+            communityPostDtos.add(dto);
+        }
+        return communityPostDtos;
     }
 }

@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -23,7 +24,7 @@ public class RequestCommunityPostDto {
     @NotBlank(message = "본문은 필수 입력 값입니다.")
     private String description;
     private Long member_id;
-    @NotBlank(message = "동행타입은 필수 입력 값입니다.")
+    @NotNull(message = "동행타입은 필수 입력 값입니다.")
     private int category;
     private Long locationId;
     private String countryName;
@@ -38,16 +39,16 @@ public class RequestCommunityPostDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
 
-    @NotBlank(message = "최대인원은 필수 입력 값입니다.")
+    @NotNull(message = "최대인원은 필수 입력 값입니다.")
     private int recruitVolume;
 
-    @NotBlank(message = "현재인원은 필수 입력 값입니다.")
+    @NotNull(message = "현재인원은 필수 입력 값입니다.")
     private int recruitCurrentVolume;
 
-    @NotBlank(message = "최소나이는 필수 입력 값입니다.")
+    @NotNull(message = "최소나이는 필수 입력 값입니다.")
     private int startAge;
 
-    @NotBlank(message = "최대나이는 필수 입력 값입니다.")
+    @NotNull(message = "최대나이는 필수 입력 값입니다.")
     private int endAge;
 
     private String gender;

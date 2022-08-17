@@ -2,15 +2,19 @@
   <div>
     <!-- diaryTemp -> diary로 바꿔 -->
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
-    {{ diary }}
+    <!-- {{ diary }} -->
+    <!-- {{ authorInfo }} -->
     <div class="diary-detail-header">
       <div class="title-icons">
-        <h3>{{ diary.title }}</h3>
+        <div class="title-location">
+          <h3>{{ diary.title }}</h3>
+          <span>{{ diary.countryName }} | {{ diary.cityName }}</span>
+        </div>
         <div class="icons">
           <!-- 여기부터는 공통 -->
           <div class="icon-cnt">
-            <span v-if="!isLiked" class="material-symbols-outlined" @click="isLiked=1, likeDiary(diary.id)">favorite</span>
-            <span v-else class="material-symbols-outlined filled-heart" @click="isLiked=0">favorite</span>
+            <span v-if="!diary.like" class="material-symbols-outlined" @click="isLiked=1, goLike()">favorite</span>
+            <span v-else class="material-symbols-outlined filled-heart" @click="isLiked=0, goUnlike()">favorite</span>
             <span class="cnt">777</span>
           </div>
           <!-- <router-link :to="{ name: 'diaryComment' }" class="icon-cnt">
@@ -19,7 +23,7 @@
           </router-link> -->
           <div class="icon-cnt" @click="commentClicked=true">
             <span class="material-symbols-outlined">chat_bubble</span>
-            <span class="cnt">7</span>
+            <span class="cnt">{{ diary.comments.length }}</span>
           </div>
           
           <!-- 댓글 창 열림 -->
@@ -68,7 +72,7 @@
         <div class="profile-div">
           <!-- <el-avatar :size="100" :src="diary.member_id.img_path" /> -->
           <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
-            <el-avatar :size="80" src="" />
+            <el-avatar :size="80" :src="authorInfo.img_link" />
           </router-link>
           <!-- <span>{{ diary.member_id.name }}</span> -->
           <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
@@ -91,9 +95,9 @@
             <!-- 여기는 공통 -->
             <!-- <el-tag>{{ diary.countryName }}</el-tag> -->
             <!-- <el-tag>{{ diary.cityName }}</el-tag> -->
-            <el-tag class="tag">{{ diary.startDate.substr(0, 10) }}-{{ diary.endDate.substr(0, 10) }}</el-tag>
-            <el-tag class="tag">{{ partyTag }} ({{ diary.count }}명)</el-tag>
-            <el-tag class="tag" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.name }}</el-tag>
+            <el-tag class="tag" effect="plain">{{ diary.startDate.substr(0, 10) }}-{{ diary.endDate.substr(0, 10) }}</el-tag>
+            <el-tag class="tag" effect="plain">{{ partyTag }} ({{ diary.count }}명)</el-tag>
+            <el-tag class="tag" effect="plain" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.name }}</el-tag>
           </div>
         </div>
       </div>
@@ -102,7 +106,7 @@
 
     <div id="map" style="height: 70vw; position: relative; overflow: hidden;"></div>
     <div class="route-tag">
-      <el-tag class="tag" v-for="(route, idx) in diary.routes" :key="idx">{{ route.index }}. {{ route.routeName }}</el-tag>
+      <el-tag class="tag" effect="dark" v-for="(route, idx) in diary.routes" :key="idx">{{ route.index }}. {{ route.routeName }}</el-tag>
     </div>
 
     <!-- <div>
@@ -132,7 +136,9 @@
             <!-- <el-carousel indicator-position="outside" trigger="click" height="10rem" :autoplay=false arrow="always"> -->
               <!-- <el-carousel-item v-for="(photo, index) in story.photoList" :key="index"> -->
                 <!-- {{ photo }} -->
-            <img v-if="story.filename!=null" :src="story.filepath" :alt="story.filepath"/>
+            <!-- <p v-if="typeof story.filename === 'string'">{{ story.filename.slice(-3) }}</p> -->
+            <img v-if="(story.filename!=null) && (typeof story.filename === 'string' && story.filename.slice(-3) != 'txt')" 
+            :src="story.filepath" :alt="story.filepath"/>
               <!-- </el-carousel-item> -->
             <!-- </el-carousel> -->
           </div>
@@ -194,7 +200,7 @@ export default {
   },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
-    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing', 'authorId']),
+    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing', 'authorId', 'authorInfo']),
     partyTag() {
       const party = this.diary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -206,7 +212,13 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'fetchCurrentUser']),
+    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'unlikeDiary', 'checkLike','fetchCurrentUser', 'fetchDiaryUser']),
+    goLike() {
+      this.likeDiary(this.diary)
+    },
+    goUnlike() {
+      this.unlikeDiary(this.diary)
+    },
     addMarkers() {
       console.log(this.diary.routes)
       const map = new google.maps.Map(document.getElementById("map"), {
@@ -243,7 +255,9 @@ export default {
     this.fetchCurrentUser()
   },
   mounted() {
-    setTimeout(() => this.addMarkers(), 500)
+    setTimeout(() => this.addMarkers(), 500),
+    this.fetchDiaryUser(this.authorId)
+    setTimeout(() => this.checkLike(this.diaryPk), 10)
     // this.addMarkers()
   }
 }
@@ -258,7 +272,7 @@ a {
 .diary-detail-header {
   /* position: relative; */
   width: 100%;
-  background-color: bisque;
+  background-color: #EFDFDE;
   padding: 0 0 1.3rem 0;
 }
 
@@ -269,9 +283,20 @@ a {
   margin-bottom: 1rem;
 }
 
-.title-icons > h3 {
+.title-location {
+  margin-top: 1rem;
+}
+
+.title-location > h3 {
   font-weight: 500;
   margin-left: 1rem;
+}
+
+.title-location > span {
+  margin-left: 1rem;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: #F16B51;
 }
 
 .icons {
@@ -289,6 +314,7 @@ a {
 .icon-cnt {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .filled-heart {
@@ -371,8 +397,17 @@ a {
   margin-top: 0.5rem;
 }
 
+.el-tag {
+  border-color: var(--el-color-white);
+}
+
+.el-tag .el-tag--plain {
+  --el-tag-border-color: var(--el-color-white);
+}
+
 .info-tag .tag {
   margin-left: 0.3rem;
+  margin-top: 0.3rem;
 }
 
 .story-tab {
@@ -400,6 +435,8 @@ a {
 }
 
 .story-title h3 {
+  background-color: #EFDFDE;
+  padding-left: 0.3rem;
   font-weight: 500;
   margin-top: 0.5rem;
   margin-bottom: 0;
@@ -410,17 +447,22 @@ a {
 }
 
 .story-image {
-  margin-top: 1rem;
+  margin: 1rem 0 1rem 0.5rem;
+  display: flex;
+  justify-content: left;
+  width: 16rem;
 }
 
 .story-image img {
-  height: 10rem;
+  width: 17.3rem;
+  /* height: 10rem; */
 }
 
 .story-content {
   text-align: left;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   margin-bottom: 2rem;
+  margin-left: 0.5rem;
 }
 
 .comment-form {

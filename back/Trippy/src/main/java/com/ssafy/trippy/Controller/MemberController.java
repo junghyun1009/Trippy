@@ -15,7 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Map;
@@ -35,8 +37,9 @@ public class MemberController {
     @ApiOperation(value = "회원가입")
     @ApiImplicitParam(name = "userData", value = "유저의 정보를 담은 객체")
     @PostMapping("/members/join")
-    public ResponseEntity<?> join(@RequestBody @Valid RequestMemberDto requestMemberDto) {
-        ResponseMemberDto responseMemberDto = memberService.signup(requestMemberDto);
+    public ResponseEntity<?> join(@RequestPart("member") @Valid RequestMemberDto requestMemberDto,@RequestPart("image") MultipartFile image) {
+        ResponseMemberDto responseMemberDto = memberService.signup(image,requestMemberDto);
+
         if (responseMemberDto.getEmail() == null) {
             return new ResponseEntity<>("이메일 중복", HttpStatus.BAD_REQUEST);
         }

@@ -6,12 +6,16 @@ export default ({
     state: {
 			allDiaries: [],
 			regionDiaries: [],
+			followingDiaries: [],
 			searchDiaries: [],
+			followingId: null,
     },
     getters: {
 			allDiaries: state => state.allDiaries,
 			regionDiaries: state => state.regionDiaries,
+			followingDiaries: state => state.followingDiaries,
 			searchDiaries: state => state.searchDiaries,
+			followingId: state => state.followingId,
     },
     mutations: {
 			// SET_REGION_DIARIES: (state, regionDiaries) => state.regionDiaries = regionDiaries,
@@ -38,6 +42,24 @@ export default ({
 				})
 				state.regionDiaries = regionDiaries
 			},
+
+			
+			SET_FOLLOWING_DIARIES (state, followingDiaries) { 
+				console.log(followingDiaries);
+				state.followingDiaries = followingDiaries;
+			},
+			// SET_FOLLOWING_DIARIES (state, followingDiaries) {
+			// 	followingDiaries.forEach((diary) => {
+			// 		diary.detailLocations.forEach((location) => {
+			// 			if (location.filename != null) {
+			// 				diary.representativeImg = location.filepath
+			// 				return false
+			// 			}
+			// 		})
+			// 	})
+			// 	state.followingDiaries = followingDiaries
+			// },
+
 			SET_SEARCH_DIARIES (state, searchDiaries) {
 				searchDiaries.forEach((diary) => {
 					diary.detailLocations.forEach((location) => {
@@ -48,12 +70,14 @@ export default ({
 					})
 				})
 				state.searchDiaries = searchDiaries
-			}
+			},
+
+			SAVE_FOLLOWING_ID: (state, followingId) => state.followingId = followingId
     },
     actions: {
 			fetchAllDiaries({ commit }) {
 				axios({
-					url: 'http://i7a506.p.ssafy.io:8080/api/posts',
+					url: 'https://i7a506.p.ssafy.io/api/posts',
 					method: 'get',
 				})
 				.then( res => {
@@ -71,7 +95,7 @@ export default ({
 				const country = region.country
 				const city = region.city
 				axios({
-					url: `http://i7a506.p.ssafy.io:8080/api/posts/${country}/${city}`,
+					url: `https://i7a506.p.ssafy.io/api/posts/${country}/${city}`,
 					method: 'get',
 					params: country, city
 				})
@@ -89,7 +113,42 @@ export default ({
 				})
 			},
 
-			searchDiary({commit}, searchInput){
+			saveFollowingId({ commit }, followingId ) {
+				console.log('this is the id of a person I follow', followingId)
+				commit('SAVE_FOLLOWING_ID', followingId)
+			},
+
+			fetchFollowingDiaries({ commit, getters}, followingIdforDiary){
+				console.log(followingIdforDiary)
+				console.log('hellO')
+				axios({
+					url: 'https://i7a506.p.ssafy.io/api/posts',
+					method: 'get',
+					data: followingIdforDiary
+				})
+				.then( res => {
+					console.log(res.data)
+					const AllDiariesList = res.data
+
+					console.log(AllDiariesList)
+					console.log(followingIdforDiary)
+
+					var tempList = []
+					for (let i = 0; i < AllDiariesList.length; i++ ){
+						console.log(AllDiariesList[i].memberId)
+						if ( AllDiariesList[i].memberId === getters.followingId ) {
+							tempList.push(AllDiariesList[i])
+						} 
+					}
+					console.log(tempList)
+					commit('SET_FOLLOWING_DIARIES', tempList)
+				})
+				.catch( err => {
+					console.log(err)
+				})
+			},
+
+			searchDiary({ commit }, searchInput){
 				const title = searchInput.title
 				const company = searchInput.company
 				const transport = searchInput.transportId
@@ -97,9 +156,9 @@ export default ({
 				console.log(company)
 				console.log(transport)
 				axios({
-					url: `http://i7a506.p.ssafy.io:8080/api/search?title=${title}&company=${company}&transportId=${transport}`,
-					// url: `http://i7a506.p.ssafy.io:8080/api/search?title=${title}`,
-					// url: 'http://i7a506.p.ssafy.io:8080/api/search' + '?' + `${title}` + '?' + `${company}` + '?' + `${transport}`,
+					url: `https://i7a506.p.ssafy.io/api/search?title=${title}&company=${company}&transportId=${transport}`,
+					// url: `https://i7a506.p.ssafy.io/api/search?title=${title}`,
+					// url: 'https://i7a506.p.ssafy.io/api/search' + '?' + `${title}` + '?' + `${company}` + '?' + `${transport}`,
 					method: 'get',
 					params: title, company, transport
 				})

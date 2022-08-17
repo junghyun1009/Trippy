@@ -1,8 +1,10 @@
 package com.ssafy.trippy.Controller;
 
+import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.RequestCommunityPostDto;
 import com.ssafy.trippy.Dto.Response.ResponseBadgeDto;
 import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
+import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Dto.Response.ResponseSavepostDto;
 import com.ssafy.trippy.Service.BadgeService;
 import com.ssafy.trippy.Dto.Update.UpdateCommunityPostDto;
@@ -108,6 +110,22 @@ public class CommunityPostController {
         }catch(Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/auth/community/memberDetail")
+    public ResponseEntity<?> getAllMemberCommunityPost(HttpServletRequest request) {
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
+        try {
+            List<ResponseCommunityPostDto> responsePostCommunityDtos = communityPostService.getCommunityPostByMemberId(memberId);
+            if (responsePostCommunityDtos.size() == 0) {
+                return new ResponseEntity<>("작성한 게시글이 없습니다.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(responsePostCommunityDtos, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("게시물이 없습니다.", HttpStatus.BAD_REQUEST);
         }
     }
 }
