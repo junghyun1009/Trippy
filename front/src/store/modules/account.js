@@ -291,7 +291,11 @@ export default {
     },
 
     changePassword({ commit, dispatch }, userinfo) {
-      console.log(userinfo)
+      if ( userinfo.email === null ) {
+        ElMessageBox.alert('잘못된 접근입니다', '알림', {
+          confirmButtonText: 'OK',
+        } )
+      }
       axios({
         url: 'https://i7a506.p.ssafy.io/api/members/change_pw',
         method: 'post',

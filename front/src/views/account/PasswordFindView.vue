@@ -157,7 +157,7 @@ export default {
   .container {
     display: flex;
     justify-content: center;
-    margin: 40% 0;
+    margin: 40% 4%;
     padding: 0;
   }
 
