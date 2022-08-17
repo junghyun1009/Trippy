@@ -122,7 +122,7 @@
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
 import { userErrorMessage } from '@/common/constant.js'
 import { mapActions, mapGetters } from 'vuex'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 export default {
   components: { 
@@ -209,12 +209,18 @@ export default {
     emailAuth() {
       console.log(this.verificationCode)
       if ( !this.verificationCode ) {
-        alert('인증번호를 입력하세요') 
+        ElMessageBox.alert('인증번호를 입력하세요', '알림', {
+          confirmButtonText: 'OK',
+        }) 
       } else if ( this.$store.getters.verificationCode === this.verificationCode ){
-        alert('인증이 완료되었습니다')
+        ElMessageBox.alert('인증이 완료되었습니다', '알림', {
+          confirmButtonText: 'OK',
+        })
         this.emailAuthorized = true;
       } else {
-        alert('인증번호가 일치하지 않습니다')
+        ElMessageBox.alert('인증번호가 일치하지 않습니다', '알림', {
+          confirmButtonText: 'OK',
+        })
       }
     },
 
@@ -292,7 +298,9 @@ export default {
         var genderBlank = document.getElementById('gender').value
         var birthdateBlank = document.getElementById('birthdate').value
         if ( emailBlank == '' | passwordBlank == '' | nicknameBlank == '' | genderBlank == '' | birthdateBlank == '' | phoneBlank == '') {
-          alert("빈 칸 없이 모든 필드를 채워주세요!")
+          ElMessageBox.alert("빈 칸 없이 모든 필드를 채워주세요!", '알림', {
+          confirmButtonText: 'OK',
+        })
           console.log(this.userData)
         } 
       },
@@ -307,7 +315,9 @@ export default {
           this.$router.push('/signup/option') 
         } else {
           console.log(this.totalPass)
-          alert('형식에 맞는지 확인해주세요!')
+          ElMessageBox.alert('형식에 맞는지 확인해주세요!', '알림', {
+          confirmButtonText: 'OK',
+        })
         }
       }
     },

@@ -41,7 +41,7 @@
 <script>
 import { mapActions } from 'vuex'
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { userErrorMessage } from '@/common/constant.js'
 
 export default {
@@ -106,12 +106,16 @@ export default {
       var inputEmail = document.getElementById('email').value;
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
       if ( !this.userinfo.email ) {
-          alert('이메일을 입력해주세요')
+          ElMessageBox.alert('이메일을 입력해주세요', '알림', {
+          confirmButtonText: 'OK',
+        })
           this.emailSent = false
         } else if (regEmail.test(inputEmail) === false) {
         this.emailFormat = false;
         this.emailSent = false
-        alert('이메일 형식을 확인해주세요')
+        ElMessageBox.alert('이메일 형식을 확인해주세요', '알림', {
+          confirmButtonText: 'OK',
+        })
         } else { 
           this.emailFormat = true
           this.emailSent = true
@@ -122,12 +126,18 @@ export default {
     emailAuth() {
       console.log(this.verificationCode)
       if ( !this.verificationCode ) {
-        alert('인증번호를 입력하세요') 
+        ElMessageBox.alert('인증번호를 입력하세요', '알림', {
+          confirmButtonText: 'OK',
+        }) 
       } else if ( this.$store.getters.verificationCode === this.verificationCode ){
-        alert('인증이 완료되었습니다')
+        ElMessageBox.alert('인증이 완료되었습니다', '알림', {
+          confirmButtonText: 'OK',
+        })
         this.fromPasswordFindView()
       } else {
-        alert('인증번호가 일치하지 않습니다')
+        ElMessageBox.alert('인증번호가 일치하지 않습니다', '알림', {
+          confirmButtonText: 'OK',
+        })
       }
     },
 

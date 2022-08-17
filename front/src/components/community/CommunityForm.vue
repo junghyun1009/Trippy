@@ -81,6 +81,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ElMessageBox from 'element-plus'
 
 export default {
   name: 'CommunityForm',
@@ -227,7 +228,9 @@ export default {
           this.updatePost(payload)
         }
       } else {
-        alert('빈 칸 없이 모든 필드를 채워주세요!')
+        ElMessageBox.alert('빈 칸 없이 모든 필드를 채워주세요!', '알림', {
+          confirmButtonText: 'OK',
+        })
       }
     },
     clearEndDate() {

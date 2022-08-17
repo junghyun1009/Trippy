@@ -1,5 +1,6 @@
 import store from '../store'
 import VueCookies from 'vue-cookies'
+import { ElMessageBox } from 'element-plus'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
 import SearchView from '@/views/home/SearchView.vue'
@@ -193,7 +194,9 @@ router.beforeEach( async(to, from, next) => {
     }
     if (isAuthRequired && VueCookies.get('accessToken')===null && VueCookies.get('refreshToken')===null){
       //2개 토큰이 모두 없을 경우 로그인페이지로
-      alert('로그인을 해주세요!')
+      ElMessageBox.alert('로그인을 해주세요!', '알림', {
+        confirmButtonText: 'OK',
+      })
       return next('/login');
     }
     return next();

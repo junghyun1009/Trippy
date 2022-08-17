@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import ElMessageBox from 'element-plus'
 import { mapActions } from 'vuex'
 
 export default {
@@ -94,7 +95,9 @@ export default {
           }
         console.log(this.profilePhoto)
       } else {
-        alert("사진 파일만 추가 가능합니다")
+        ElMessageBox.alert("사진 파일만 추가 가능합니다", "알림", {
+          confirmButtonText: 'OK',
+        })
       }
 
       let fileInput = document.getElementById("file")
