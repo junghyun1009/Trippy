@@ -10,7 +10,7 @@
     <!-- 전체 뱃지 목록 -->
     <div class="badge-list">
       <el-row>
-        <el-col class="badge" :span="8" v-for="(badge, idx) in badgeList" :key="idx">
+        <el-col class="badge" :span="8" v-for="(badge, idx) in badges" :key="idx">
           <img :src=badge.image :alt=badge.image @click="badge.drawer=true" :style="[ badge.obtained ? 'filter: none' : 'filter: grayscale']" >
           <p class="badge-name">{{ badge.name }}</p>
           <el-drawer v-model=badge.drawer direction="btt" size="50%">
@@ -32,37 +32,37 @@ import { badgeNames } from '@/common/constant.js'
 export default {
   name: 'BadgeListView',
   computed: {
-    ...mapGetters(['myBadges'])
+    ...mapGetters(['badgeList', 'profile'])
   },
   watch: {
-    myBadges(newValue) {
+    badgeList(newValue) {
       console.log(newValue)
       this.isBadgeUnlocked()
     }
   },
   methods: {
-    ...mapActions(['fetchMyBadge']),
+    ...mapActions(['fetchBadges']),
     isBadgeUnlocked() {
-      // 왜 getters에서 바로 못가져오는지(this.myBadges) 아직도 의문
-      var unlockedBadgeList = this.$store.getters.myBadges || []
+      // 왜 getters에서 바로 못가져오는지(this.badgeList) 아직도 의문
+      var unlockedBadgeList = this.$store.getters.badgeList || []
         unlockedBadgeList.forEach( myBadge => {
           console.log(myBadge)
           if ( myBadge.name === badgeNames.firstSignUp) {
-            this.badgeList[0].obtained = true
+            this.badges[0].obtained = true
           } if ( myBadge.name === badgeNames.firstDiary) {
-            this.badgeList[1].obtained = true
+            this.badges[1].obtained = true
           } if ( myBadge.name === badgeNames.firstPost) {
-            this.badgeList[2].obtained = true
+            this.badges[2].obtained = true
           }
         })
     }
   },
   mounted() {
-    this.fetchMyBadge()
+    this.fetchBadges(this.profile.id)
   },
   data () {
     return {
-      badgeList: [
+      badges: [
         {
           pk: 1,
           name: '여행의 시작',
@@ -159,38 +159,6 @@ export default {
           drawer: false,
           obtained: false,
         },
-        // {
-        //   pk: 13,
-        //   name: '???',
-        //   description: '다음에는 어떤 뱃지가 있을까요?',
-        //   image: require('@/assets/badge-lock.png'),
-        //   drawer: false,
-        //   obtained: false,
-        // },
-        // {
-        //   pk: 14,
-        //   name: '???',
-        //   description: '다음에는 어떤 뱃지가 있을까요?',
-        //   image: require('@/assets/badge-lock.png'),
-        //   drawer: false,
-        //   obtained: false,
-        // },
-        // {
-        //   pk: 15,
-        //   name: '???',
-        //   description: '다음에는 어떤 뱃지가 있을까요?',
-        //   image: require('@/assets/badge-lock.png'),
-        //   drawer: false,
-        //   obtained: false,
-        // },
-        // {
-        //   pk: 16,
-        //   name: '???',
-        //   description: '다음에는 어떤 뱃지가 있을까요?',
-        //   image: require('@/assets/badge-lock.png'),
-        //   drawer: false,
-        //   obtained: false,
-        // },
       ],
 
     }
