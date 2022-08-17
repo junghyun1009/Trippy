@@ -1,49 +1,53 @@
 <template>
   <div class="container">
-    <div class="background">
-      <div class="profile-picture">
-        <el-avatar :size="90" :src="theirProfile.img_link" alt="user">
-        </el-avatar>
-      </div>
-      <!-- {{ theirProfile }} -->
-    </div>
+    <!-- <div class="background"> -->
+      <!-- {{ randomImage }} -->
+    <img v-if="randomImage&&isMyProfile" class="background" :src="randomImage">
+    <img v-else-if="randomImage&&!isMyProfile" class="background" :src="randomImage">
+    <!-- <img v-else :src="theirProfile.img_link"> -->
+    <div class="profile-title">
+      <el-avatar class="profile-picture" :size="90" :src="theirProfile.img_link" alt="user">
+      </el-avatar>
 
-    <!-- 이름 / 팔로우 버튼  -->
-    <div class="background-info">
-      <div class="blank"></div>
-      <div class="username-follow">
-          <!-- 내 프로필 페이지라면 팔로우 버튼 안뜸 -->
-          <!-- 만약 fetchCurrentUser의 id와 profile param의 id가 같다면 -->
-          <div class="my-page-username" v-if="isMyProfile">
-            <h3>{{ theirProfile.name }}</h3>
-            <el-button class="button" link @click="goProfileEdit()">
-              <span class="material-symbols-outlined icon">edit</span>
-            </el-button>
-          </div>
-          <!-- 남의 프로필 페이지라면 팔로우 버튼 뜸-->
-          <div class="my-page-username" v-else>
-            <h3>{{ theirProfile.name }}</h3>
-            <div class="follow-button">
-              <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
-              <el-button v-else type="primary" plain @click="unfollowNow(), unfollow(followId)">팔로잉</el-button>
-            </div>
-          </div>
-      </div>
+      <!-- 이름 / 팔로우 버튼  -->
+      <!-- <div class="background-info">
+        <div class="blank"></div>
+        <div class="username-follow">
+        </div>
+      </div> -->
     </div>
-    
 
     <!-- 팔로워 / 팔로잉 -->
     <div class="follow">
-      <div class="user-follow" @click="followerClicked=true">
-        <span class="follow-title">Followers</span>
-        <span>{{ followerCount }}</span>
+      <!-- 내 프로필 페이지라면 팔로우 버튼 안뜸 -->
+      <!-- 만약 fetchCurrentUser의 id와 profile param의 id가 같다면 -->
+      <div class="my-page-username" v-if="isMyProfile">
+        <h3>{{ theirProfile.name }}</h3>
+        <el-button class="button" link @click="goProfileEdit()">
+          <span class="material-symbols-outlined icon">edit</span>
+        </el-button>
       </div>
-      <div>
-        <span>|</span>
+      <!-- 남의 프로필 페이지라면 팔로우 버튼 뜸-->
+      <div class="my-page-username" v-else>
+        <h3>{{ theirProfile.name }}</h3>
+        <div class="follow-button">
+          <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
+          <el-button v-else type="primary" plain @click="unfollowNow(), unfollow(followId)">팔로잉</el-button>
+        </div>
       </div>
-      <div class="user-follow" @click="followingClicked=true">
-        <span class="follow-title">Followings</span>
-        <span>{{ followingCount }}</span>
+
+      <div class="follow-info">
+        <div class="user-follow" @click="followerClicked=true">
+          <span class="follow-title">Followers</span>
+          <span>{{ followerCount }}</span>
+        </div>
+        <div>
+          <span>|</span>
+        </div>
+        <div class="user-follow" @click="followingClicked=true">
+          <span class="follow-title">Followings</span>
+          <span>{{ followingCount }}</span>
+        </div>
       </div>
     </div>
     
@@ -111,7 +115,7 @@
     type="card"
     class="demo-tabs"
     >
-      <el-tab-pane label="My Diary">
+      <el-tab-pane label="My Diary" name="1">
         <!-- 상대방이 쓴 일지 목록 -->
         <others-diaries-list></others-diaries-list>
       </el-tab-pane>
@@ -128,6 +132,7 @@ import MyDiariesList from '@/components/profile/MyDiariesList.vue'
 import OthersDiariesList from '@/components/profile/OthersDiariesList.vue'
 import { mapActions, mapGetters } from 'vuex'
 import { badgeNames } from '@/common/constant.js'
+import _ from 'lodash'
 
 export default {
   name: 'ProfileView',
@@ -171,13 +176,14 @@ export default {
       firstSignUp: false,
       firstDiary: false,
       firstPost: false,
+      randomImage: ''
     }
   },
   computed: {
     ...mapGetters([
       'currentUser', 'profile', 'myDiaries', 'theirProfile', 
       'followingStatus', 'followerCount', 'followingCount',
-      'badgeList'
+      'badgeList', 'othersDiary'
     ]),
     // fetchTheirId() {
     //   const memberId = this.$route.params.authorId
@@ -290,6 +296,7 @@ export default {
       this.followId.follower_id = this.profile.id
       this.followId.following_id = this.theirProfile.id
     },
+
     isBadgeUnlocked() {
       var unlockedBadgeList = this.$store.getters.badgeList || []
         unlockedBadgeList.forEach( myBadge => {
@@ -302,6 +309,22 @@ export default {
             this.badges[2].obtained = true
           }
         })
+    },
+
+    // 일지 랜덤함수
+    pickRandom(diaries) {
+      // 일지에 저장되어 있는 사진들만 배열로
+      const images = []
+      for(let i=0; i<diaries.length; i++) {
+        for(let j=0; j<diaries[i].detailLocations.length; j++) {
+          if ((diaries[i].detailLocations[j].filename!=null) && 
+          (typeof diaries[i].detailLocations[j].filename === 'string' && diaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
+           images.push(diaries[i].detailLocations[j].filepath)
+          }
+        }
+      }
+      console.log(images)
+      this.randomImage = _.sample(images)
     }
   },
   created() {
@@ -320,6 +343,8 @@ export default {
     // this.myFollowers()
     this.setFollowingStatus(this.currentProfile)
     this.fetchMyDiary()
+    setTimeout(() => this.pickRandom(this.myDiaries), 100)
+    setTimeout(() => this.pickRandom(this.othersDiary), 100)
     // this.fetchBadges(this.$route.params.authorId)
     // this.fetchFollowingDiaries(this.currentProfile)
     this.fetchOthersDiary(this.currentProfile)
@@ -344,11 +369,17 @@ export default {
   
   .background {
     display: relative;
-    background-color: bisque;
+    /* background-color: bisque; */
     width: 100%;
     height: 15vh;
     padding: 0;
     margin: 0;
+  }
+
+  .profile-title {
+    position: absolute;
+    margin-top: 7rem;
+    /* display: flex; */
   }
 
   .background-info {
@@ -380,7 +411,7 @@ export default {
 
   .profile-picture {
     display: absolute;
-    margin-top: 20%;
+    margin-top: -10%;
     margin-right: 65%;
   }
 
@@ -388,6 +419,8 @@ export default {
     width: 15rem;
     display: flex;
     align-items: center;
+    margin-bottom: 0;
+    margin-left: 0;
   }
 
   .my-page-username h3 {
@@ -398,6 +431,11 @@ export default {
   .material-symbols-outlined {
     font-size: 1.3rem;
     color: #F16B51;
+  }
+
+  .follow-info {
+    display: flex;
+    margin-top: 0;
   }
 
   .user-follow {
@@ -427,6 +465,7 @@ export default {
 
   .follow {
     display: flex;
+    flex-direction: column;
     margin-left: 7.5rem;
     margin-top: 0;
   }

@@ -62,6 +62,16 @@ export default ({
 
     // 다른 사람 일지 전체 저장
     SET_OTHERS_DIARY(state, diaries) {
+      for(let i=0; i<diaries.length; i++) {
+        for(let j=0; j<diaries[i].detailLocations.length; j++) {
+          diaries[i].representativeImg = require('@/assets/Trippy.png')
+          if ((diaries[i].detailLocations[j].filename!=null) && 
+          (typeof diaries[i].detailLocations[j].filename === 'string' && diaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
+            diaries[i].representativeImg = diaries[i].detailLocations[j].filepath
+            break;
+          }
+        }
+      }
       state.othersDiary = diaries
       console.log(state.othersDiary)
     },
