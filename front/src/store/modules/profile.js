@@ -5,7 +5,7 @@ export default {
   state: {
     profile: {},
     myDiaries: [],
-    myBadges: [],
+    badgeList: [],
     isMyProfile: false,
     theirProfile: {},
     followerList: [],
@@ -17,7 +17,7 @@ export default {
   getters: {
     profile: state => state.profile,
     myDiaries: state => state.myDiaries,
-    myBadges: state => state.myBadgeList,
+    badgeList: state => state.badgeList,
     isMyProfile: state => state.isMyProfile,
     theirProfile: state => state.theirProfile,
     followerList: state => state.followerList,
@@ -28,7 +28,7 @@ export default {
   },
   mutations: {
     SET_PROFILE: (state, profile) => state.profile = profile,
-    SET_MY_BADGE: (state, myBadgeList) => state.myBadgeList = myBadgeList,
+    SET_BADGE_LIST: (state, badgeList) => state.badgeList = badgeList,
     IS_MY_PROFILE: (state, isMyProfile) => state.isMyProfile = isMyProfile,
     SET_THEIR_PROFILE: (state, theirProfile) => state.theirProfile = theirProfile,
     FOLLOWER_LIST: (state, followerList) => state.followerList = followerList,
@@ -56,7 +56,7 @@ export default {
         headers: getters.authHeader,
       })
       .then( res => {
-        // console.log(res.data)
+        console.log('when called fetchProfile:',res.data)
         commit('SET_PROFILE', res.data)
       })
     },
@@ -251,15 +251,20 @@ export default {
       })
     },
     
-    fetchMyBadge({ commit, getters }) {
+
+    // 배지
+    fetchBadges({ commit }, memberId) {
+      console.log('member id from url params', memberId)
       axios({
-        url: 'https://i7a506.p.ssafy.io/api/members/badges',
+        url: `https://i7a506.p.ssafy.io/api/members/badges/${memberId}`,
         method: 'get',
-        headers: getters.authHeader,
+        params: memberId,
       })
       .then( res => {
-        const myBadgeList = res.data
-        commit('SET_MY_BADGE', myBadgeList)
+        console.log('successfully fetched badge list')
+        const badgeList = res.data
+        commit('SET_BADGE_LIST', badgeList)
+        console.log('badge list:', badgeList)
       })
       .catch(err => {
         console.log(err)
