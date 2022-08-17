@@ -52,6 +52,14 @@
       <p v-else>{{ theirProfile.description }}</p>
     </div>
     
+    <!-- 뱃지 -->
+    <div v-if="isMyProfile" class="badge">
+      <el-row>
+        <el-col v-show="badge.obtained" class="badge" :span="4" v-for="(badge, idx) in badges" :key="idx">
+          <img :src=badge.image :alt="badge-image" >
+        </el-col>
+      </el-row>
+    </div>
 
     <!-- followers 창 열기-->
     <el-drawer v-model="followerClicked" direction="btt" size="50%">
@@ -120,6 +128,7 @@ import FollowersList from '@/components/profile/FollowersList.vue'
 import FollowingsList from '@/components/profile/FollowingsList.vue'
 import MyDiariesList from '@/components/profile/MyDiariesList.vue'
 import { mapActions, mapGetters } from 'vuex'
+import { badgeNames } from '@/common/constant.js'
 
 export default {
   name: 'ProfileView',
@@ -134,6 +143,22 @@ export default {
         follower_id: null,
         following_id: null,
       },
+      badges: [
+        {
+          name: '여행의 시작',
+          image: require('@/assets/badge-start.png'),
+          obtained: false,
+        },
+        {
+          name: '기록의 시작',
+          image: require('@/assets/badge-diary.png'),
+          obtained: false,
+        },
+        {
+          name: '만남의 시작',
+          image: require('@/assets/badge-chat.png'),
+          obtained: false,
+      }],
       isFollow: false,
       isMyProfile: true,
       followerList: [],
@@ -141,17 +166,24 @@ export default {
       activeName: '',
       followerClicked: false,
       followingClicked: false,
+      firstSignUp: false,
+      firstDiary: false,
+      firstPost: false,
     }
   },
   computed: {
-    ...mapGetters(['profile', 'myDiaries', 'theirProfile', 'followingStatus', 'followerCount', 'followingCount']),
+    ...mapGetters([
+      'profile', 'myDiaries', 'theirProfile', 
+      'followingStatus', 'followerCount', 'followingCount',
+      'badgeList'
+    ]),
     fetchTheirId() {
       const memberId = this.$route.params.authorId 
       return memberId
     },
     fetchAuthorId() {
       return this.$route.params.authorId
-    }
+    },
   },
   watch: {
     followingStatus(newVal) {
@@ -168,12 +200,18 @@ export default {
     fetchAuthorId(newVal) {
       console.log(newVal)
       this.fetchTheirProfile(this.$route.params.authorId)
+    },
+    badgeList(newValue) {
+      console.log('new value:', newValue)
+      this.isBadgeUnlocked()
     }
+
   },
   methods: {
     ...mapActions([
       'fetchProfile', 
       'fetchMyDiary', 
+      'fetchBadges', 
       'fetchTheirProfile', 
       'follow', 
       'unfollow',
@@ -214,6 +252,19 @@ export default {
       this.followId.follower_id = this.profile.id
       this.followId.following_id = this.theirProfile.id
     },
+    isBadgeUnlocked() {
+      var unlockedBadgeList = this.$store.getters.badgeList || []
+        unlockedBadgeList.forEach( myBadge => {
+          console.log(myBadge)
+          if ( myBadge.name === badgeNames.firstSignUp) {
+            this.badges[0].obtained = true
+          } if ( myBadge.name === badgeNames.firstDiary) {
+            this.badges[1].obtained = true
+          } if ( myBadge.name === badgeNames.firstPost) {
+            this.badges[2].obtained = true
+          }
+        })
+    }
   },
   mounted() {
     this.fetchProfile()
@@ -223,6 +274,16 @@ export default {
     this.setFollowingStatus(this.$route.params.authorId)
     this.myProfile()
     this.fetchMyDiary()
+    this.fetchBadges(this.$route.params.authorId)
+
+
+    if (localStorage.getItem('reloaded')) {
+      localStorage.removeItem('reloaded');
+    } else {
+      localStorage.setItem('reloaded', '1');
+      location.reload();
+    }
+    
   },
   updated() {
       // this.fetchTheirProfile(this.$route.params.authorId)
@@ -301,6 +362,10 @@ export default {
   .follow {
     display: flex;
     margin: 2%;
+  }
+
+  img {
+    width: 12vw;
   }
 
 </style>
