@@ -73,7 +73,7 @@
 <script>
 import { mapGetters,  mapActions } from 'vuex'
 import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   name: 'CommunityDetailView',
