@@ -23,7 +23,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<ResponseLocationDto> findAllLocation() {
-        List<Location> locations = locationRepository.findAll();
+        List<Location> locations = locationRepository.findAllOrderByCountryNameAscCityNameAsc();
         List<ResponseLocationDto> locationDtos = new ArrayList<>();
         for (Location location : locations) {
             ResponseLocationDto dto = new ResponseLocationDto(location);
