@@ -41,14 +41,16 @@ export default {
     FOLLOWING_COUNT: (state, followingCount) => state.followingCount = followingCount,
     FOLLOWING_STATUS: (state, followingStatus ) => state.followingStatus = followingStatus,
     FETCH_MY_DIARY: (state, myDiaries) => {
-      myDiaries.forEach((diary) => {
-        diary.detailLocations.forEach((location) => {
-          if (location.filename != null) {
-            diary.representativeImg = location.filepath
-            return false
+      for(let i=0; i<myDiaries.length; i++) {
+        for(let j=0; j<myDiaries[i].detailLocations.length; j++) {
+          myDiaries[i].representativeImg = require('@/assets/Trippy.png')
+          if ((myDiaries[i].detailLocations[j].filename!=null) && 
+          (typeof myDiaries[i].detailLocations[j].filename === 'string' && myDiaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
+            myDiaries[i].representativeImg = myDiaries[i].detailLocations[j].filepath
+            break;
           }
-        })
-      })
+        }
+      }
       state.myDiaries = myDiaries
     },
     // FETCH_MY_DIARY: (state, myDiaries) => {
