@@ -87,19 +87,19 @@
     <!-- 내 다이어리 / 내 좋아요 / 내 동행찾기 -->
     <!-- vue warn 나서 일단 이거 뺴놓음  -->
     <!-- @tab-click="handleClick" -->
+    
     <el-tabs
     v-if="isMyProfile"
     v-model="activeName"
     type="card"
     class="demo-tabs"
-    
     >
-      <el-tab-pane label="My Diary">
+      <el-tab-pane label="My Diary" name="1">
         <my-diaries-list></my-diaries-list>
       </el-tab-pane>
-      <el-tab-pane label="My Likes">
+      <el-tab-pane label="My Likes" name="2">
       </el-tab-pane>
-      <el-tab-pane label="My Companions">
+      <el-tab-pane label="My Companions" name="3">
       </el-tab-pane>
     </el-tabs>
 
@@ -159,11 +159,11 @@ export default {
           image: require('@/assets/badge-chat.png'),
           obtained: false,
       }],
-      isFollow: false,
+      isFollow: this.followingStatus,
       isMyProfile: true,
       followerList: [],
       followingList: [],
-      activeName: '',
+      activeName: '1',
       followerClicked: false,
       followingClicked: false,
       firstSignUp: false,
@@ -309,8 +309,8 @@ export default {
   },
   mounted() {
     // 내 프로필인지 확인 => 정보 저장하는 시간이 필요함
-    this.myProfile()
-    // setTimeout(() => this.myProfile(), 100)
+    // this.myProfile()
+    setTimeout(() => this.myProfile(), 100)
     this.fetchProfile()
     // this.fetchTheirProfile(this.$route.params.authorId)
     // this.myFollowings()
@@ -318,14 +318,6 @@ export default {
     this.setFollowingStatus(this.currentProfile)
     this.fetchMyDiary()
     this.fetchBadges(this.$route.params.authorId)
-
-
-    if (localStorage.getItem('reloaded')) {
-      localStorage.removeItem('reloaded');
-    } else {
-      localStorage.setItem('reloaded', '1');
-      location.reload();
-    }
     
   },
   updated() {
