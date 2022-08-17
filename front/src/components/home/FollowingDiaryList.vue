@@ -2,9 +2,7 @@
   <div class="container">
     <div class="following-diaries">
       <el-row>
-        <!-- slice 일단 테스트할때 걸리작대서 지움 -->
-        <!-- 파싱은 나중에 해볼게요 -->
-        <el-col :span="8" v-for="diary in followingDiaries" :key="diary.id">
+        <el-col :span="8" v-for="diary in followingDiaries.slice().reverse()" :key="diary.id">
           <following-diary-list-item :diary="diary"></following-diary-list-item>
         </el-col>
       </el-row>
