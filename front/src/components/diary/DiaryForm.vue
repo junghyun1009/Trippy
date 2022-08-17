@@ -19,6 +19,7 @@
               </div>
             </template>
             <div class="location-div">
+              <!-- {{ location }} -->
               <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
             </div>
           </el-collapse-item>
@@ -293,7 +294,7 @@ export default {
     locationTable() {
       const options = []
       let countryName = ''
-      let j = 0
+      let j = -1
       for (let i=0 ; i<this.location.length ; i++) {
         const country = {}
         if (countryName != this.location[i].countryName) {
@@ -306,7 +307,8 @@ export default {
           country.children.push(city)
           options.push(country)
           countryName = this.location[i].countryName
-          j = i
+          j = j + 1
+          console.log(i, country)
         } else {
           const citySec = {}
           citySec.value = this.location[i].cityName
