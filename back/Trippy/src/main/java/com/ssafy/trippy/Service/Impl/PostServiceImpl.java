@@ -278,4 +278,15 @@ public class PostServiceImpl implements PostService {
         return postRepository.countAllByMemberId(memberId);
     }
 
+    @Override
+    public List<ResponsePostDto> findByMemberId(Long memberId) {
+        List<Post> posts = postRepository.findAllByMemberId(memberId).orElseThrow();
+        List<ResponsePostDto> responsePostDtos = new ArrayList<>();
+        for (Post post : posts){
+            responsePostDtos.add(new ResponsePostDto(post));
+        }
+        return responsePostDtos;
+    }
+
+
 }

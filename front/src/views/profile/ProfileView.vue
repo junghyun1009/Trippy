@@ -98,8 +98,10 @@
         <my-diaries-list></my-diaries-list>
       </el-tab-pane>
       <el-tab-pane label="My Likes">
+        <my-likes-list></my-likes-list>
       </el-tab-pane>
       <el-tab-pane label="My Companions">
+        <my-bookmark-list></my-bookmark-list>
       </el-tab-pane>
     </el-tabs>
 
@@ -125,6 +127,8 @@
 import FollowersList from '@/components/profile/FollowersList.vue'
 import FollowingsList from '@/components/profile/FollowingsList.vue'
 import MyDiariesList from '@/components/profile/MyDiariesList.vue'
+import MyLikesList from '@/components/profile/MyLikesList.vue'
+import MyBookmarkList from '@/components/profile/MyBookmarkList.vue'
 import { mapActions, mapGetters } from 'vuex'
 import { badgeNames } from '@/common/constant.js'
 
@@ -134,6 +138,8 @@ export default {
     FollowersList,
     FollowingsList,
     MyDiariesList,
+    MyLikesList,
+    MyBookmarkList,
   },
   data() {
     return {
@@ -173,7 +179,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentUser', 'profile', 'myDiaries', 'theirProfile', 
+      'currentUser', 'profile', 'myDiaries', 'myLikes', 'myBookmarks', 'theirProfile', 
       'followingStatus', 'followerCount', 'followingCount',
       'badgeList'
     ]),
@@ -224,6 +230,8 @@ export default {
       'fetchCurrentUser',
       'fetchProfile', 
       'fetchMyDiary', 
+      'fetchMyLikes',
+      'fetchMyBookmark',
       'fetchBadges', 
       'fetchTheirProfile', 
       'follow', 
@@ -249,6 +257,8 @@ export default {
       if ( this.currentUser.id == this.currentProfile ) { 
         this.isMyProfile = true
         this.fetchMyDiary()
+        this.fetchMyLikes()
+        this.fetchMyBookmark()
       } else {
         this.isMyProfile = false
       }
@@ -317,7 +327,18 @@ export default {
     // this.myFollowers()
     this.setFollowingStatus(this.currentProfile)
     this.fetchMyDiary()
+    this.fetchMyLikes()
+    this.fetchMyBookmark()
     this.fetchBadges(this.$route.params.authorId)
+
+
+    // if (localStorage.getItem('reloaded')) {
+    //   localStorage.removeItem('reloaded');
+    // } else {
+    //   localStorage.setItem('reloaded', '1');
+    //   location.reload();
+    // }
+    
   },
   updated() {
       // this.fetchTheirProfile(this.$route.params.authorId)
