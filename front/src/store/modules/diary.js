@@ -1,5 +1,6 @@
 import router from "@/router"
 import axios from "axios"
+import { ElMessageBox } from "element-plus"
 import VueCookies from 'vue-cookies'
 // import _ from 'lodash'
 
@@ -7,103 +8,142 @@ export default ({
   state: {
     diaries: [],
     diary: {},
-    images: [],
+    // images: [],
+    // image: {},
 
-    comment: '',
+    comment: {},
     comments: [],
+    commentToEdit: {},
     isChild: false,
-    isUpdating: false,
+    isEditing: false,
     parentComment: '',
-
-    diaryTemp: {
-      title: '제주도 3박 4일 여행',
-      startDate: '2022-07-01',
-      endDate: '2022-07-04',
-      company: '친구',
-      count: 4,
-      transport: ['뚜벅이', '대중교통'],
-      routes: [
-        {routeNum: 1, routeName: '제주국제공항',lat: 33.51041350000001, lng: 126.4913534},
-        {routeNum: 2, routeName: '한담해변', lat: 33.461609, lng: 126.3105212},
-        {routeNum: 3, routeName: '랜디스도넛 제주애월점', lat: 33.4611909, lng: 126.3116327},
-        {routeNum: 4, routeName: '곽지해수욕장', lat: 33.450902, lng: 126.3057298}
-      ],
-      stories: [
-        {pk: 1, place: "제주 국제 공항", photoList: [ {file: "[object File]", preview: "https://www.okinawa.halekulani.com/lang_module/images/home/img_main-sp.jpg" } ], content: "111", rate: 3 }, 
-        {pk: 2, place: "한담해변", photoList: [ {file: "[object File]", preview: "blob:http://localhost:8080/a3e66b80-2256-4034-bab0-f24ae67c0dfc" } ], content: "222", rate: 5 }
-      ]
-    },
+    authorId: null,
+    parentId: null,
+    location: []
   },
   getters: {
     diaries: state => state.diaries,
     diary: state => state.diary,
-    images: state => state.images,
+    // images: state => state.images,
+    // image: state => state.image,
     comment: state => state.comment,
     comments: state => state.comments,
+    commentToEdit: state => state.commentToEdit,
     isChild: state => state.isChild,
-    isUpdating: state => state.isUpdating,
+    isEditing: state => state.isEditing,
     parentComment: state => state.parentComment,
-    diaryTemp: state => state.diaryTemp,
+    parentId: state => state.parentId,
     // 이 친구 긴가민가
     isAuthor: (state, getters) => {
-      return state.diary?.email === getters.currentUser.email
+      return state.diary?.name === getters.currentUser.name
     },
+    authorId: state => state.authorId,
+    location: state => state.location
     // isDiary: state => !_.isEmpty(state.diary)
   },
   mutations: {
-    // CREATE_DIARY(state, diary) {
-    //   state.diary = diary
-    //   // 얘는 지워도 될 것 같은데 일단 실험해봐야 함
-    //   // state.diaries.push(state.diary)
-    //   console.log(state.diary)
-    //   // console.log(state.diaries)
-    // },
 
     SET_DIARY(state, diary) {
+      // diary.detailLocations.forEach((location) => {
+      //   if (location.filename != null) {
+      //     diary.representativeImg = location.filepath
+      //     return false
+      //   }
+      // })
       state.diary = diary
       console.log(state.diary)
     },
 
-    SET_IMAGES(state, images) {
-      state.images = images
-      console.log(state.images)
-    },
+    // SET_IMAGES(state, image) {
+    //   state.image = image
+    //   state.images.push(image)
+    //   console.log(state.images)
+    // },
 
-    SET_COMMENT(state, comment) {
-      state.comment = comment
+    SET_COMMENT(state, payload) {
+      state.comment.user = payload.user
+      state.comment.info = payload.info
       console.log(state.comment)
+      state.comments.push(state.comment)
+      state.comment = {}
     },
 
-    SET_STATUS(state) {
-      state.isUpdating = true
+    SWITCH_IS_EDITING(state, comment) {
+      console.log(3, comment)
+      state.commentToEdit = comment
+      console.log(state.commentToEdit)
+      state.isEditing = true
     },
 
-    SET_COMMENTS(state, comments) {
-      state.comments = comments
+    EMPTY_COMMENTS(state) {
+      state.comments = []
+    },
+
+    SET_AUTHOR_ID(state, authorId) { 
+      state.authorId = authorId
+      console.log(state.authorId)
     },
 
     // 홈화면에 추천(일단은 전부 띄우는 것)
     // 근데 diaries에 써도 되는건지 잘 모르겠음?
-    GET_ALL_DIARY(state, diaries) {state.diaries = diaries},
+    GET_ALL_DIARY(state, diaries) {
+      diaries.forEach((diary) => {
+        console.log(diary.detailLocations)
+        diary.detailLocations.forEach((location) => {
+          if (location.filepath.substr(-1) != '/') {
+            diary.representativeImg = location.filepath
+            return false
+          }
+        })
+      })
+      state.diaries = diaries
+    },
 
-    SHOW_PARENT(state, parentComment) {
+    SHOW_PARENT(state, parent) {
       state.isChild = true
-      state.parentComment = parentComment
+      state.parentComment = parent.member
+      state.parentId = parent.parentId
     },
 
     HIDE_PARENT(state) {
       state.isChild = false
-    }
+    },
+
+    SET_LOCATION(state, location) {
+      state.location = location
+    },
+
+    SET_DIARY_LIKE: (state, like) => (state.diary.like = like),
   },
   actions: {
+    // 첫번째 일지인가요?
+    checkFirstDiary({getters}) {
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/posts/memberDetail',
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then( res => {
+        const diaryList = res.data
+        if ( diaryList.length === 1 ){
+          ElMessageBox.alert('기록의 시작 뱃지를 획득하셨어요!', 
+          '뱃지 획득을 축하합니다!', {
+            confirmButtonText: 'OK'
+          })
+        }
+        console.log(res.data)
+
+      })
+    },
+
     // 일지 CREATE
     // 일지 저장
-    createDiary({ commit }, diary) {
+    createDiary({ commit, dispatch }, diary) {
       // commit('CREATE_DIARY', diary)
       // console.log(1)
       console.log(diary)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts',
+        url: 'https://i7a506.p.ssafy.io/api/auth/posts',
         method: 'post',
         data: diary,
         headers: {
@@ -114,36 +154,12 @@ export default ({
       .then(res => {
         console.log(res.data)
         commit('SET_DIARY', diary)
+        dispatch('checkFirstDiary')
         // console.log(3)
         // console.log(getters.diary)
         router.push({
           name: 'diaryDetail',
-          params: { diaryPk: res.data }
-        })
-      })
-    },
-
-    saveImage({ commit },imageList) {
-      // commit('CREATE_DIARY', diary)
-      // console.log(1)
-      console.log(imageList)
-      axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts',
-        method: 'post',
-        data: imageList,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`
-        }
-      })
-      .then(res => {
-        console.log(res.data)
-        commit('SET_IMAGES', imageList)
-        // console.log(3)
-        // console.log(getters.diary)
-        router.push({
-          name: 'diaryDetail',
-          params: { diaryPk: res.data }
+          params: { diaryPk: res.data.postId }
         })
       })
     },
@@ -152,32 +168,57 @@ export default ({
     // 단일 일지
     fetchDiary({ commit, getters }, diaryPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/posts/detail/${diaryPk}`,
+        url: `https://i7a506.p.ssafy.io/api/posts/detail/${diaryPk}`,
         method: 'get',
         headers: getters.authHeader
       })
-      .then(res => commit('SET_DIARY', res.data))
+      .then(res => {
+        commit('SET_DIARY', res.data)
+        console.log('diary set')
+        const authorId = res.data.memberId
+        commit('SET_AUTHOR_ID', authorId)
+        // const diary = res.data
+        // diary.detailLocations.forEach((location) => {
+        //   const imagePk = location.id
+        //   dispatch('fetchImage', imagePk)
+        // })
+      })
       .catch(err => {
         console.error(err.response)
         if (err.response.status === 404) {
-          router.push({ name: 'notFound404' })
+          router.push({ name: 'notFound404' }) 
         }
       })
     },
 
+    // fetchImage({ commit, getters }, imagePk) {
+    //   axios({
+    //     url: `https://i7a506.p.ssafy.io/api/posts/images/${imagePk}`,
+    //     method: 'get',
+    //     headers: getters.authHeader
+    //   })
+    //   .then((res) => {
+    //     console.log(res.data)
+    //     commit('SET_IMAGES', res.data)
+    //   })
+    // },
+
     // 일지 UPDATE
-    updateDiary({ commit, getters }, diary) {
+    updateDiary({ commit }, diary) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/posts/${diary.id}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/posts/${diary.id}`,
         method: 'put',
         data: diary.content,
-        headers: getters.authHeader
+        headers: {
+          "Content-Type": "multipart/form-data",
+          'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`
+        }
       })
       .then(res => {
         console.log(res.data)
         commit('SET_DIARY', diary)
         router.push({
-          name: 'DiaryDetail',
+          name: 'diaryDetail',
           parmas: { diaryPk: res.data }
         })
       })
@@ -186,7 +227,7 @@ export default ({
     // 일지 DELETE
     deleteDiary({ commit, getters }, diaryPk) {
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/posts/${diaryPk}`,
+        url: `https://i7a506.p.ssafy.io/api/auth/posts/${diaryPk}`,
         method: 'delete',
         headers: getters.authHeader
       })
@@ -198,53 +239,40 @@ export default ({
       .catch(err => console.error(err.response))
     },
 
-
     // 일지 댓글 CREATE
-    // createComment({ getters, commit }, diaryPk, content) {
-    //   const comment = { content }
-    //   axios({
-    //     url: `http://localhost:8000/comments/post/${diaryPk}`,
-    //     method: 'post',
-    //     data: comment,
-    //     headers: getters.authHeader
-    //   })
-    //   .then( res => {
-    //     commit('SET_COMMENTS'),
-    //     res.data
-    //     router.push('DiaryCommentView')
-    //   })
-    //   .catch(err => console.error(err.response))
-    // },
-    createComment({ commit }, content) {
-      commit('SET_COMMENT', content)
-    },
-
-    // updateComment({ getters, commit}, {diaryPk, commentPk, content}) {
-    //   const comment = { content, diaryPk, commentPk }
-    //   axios({
-    //     url:'http://localhost:8000/comments/api/post',
-    //     method: 'put',
-    //     data: comment,
-    //     headers: getters.authHeader,
-    //   })
-    //   .then(res => {
-    //     commit('SET_COMMENTS', res.data)
-    //   })
-    //   .catch(err => console.error(err.response))
-    // },
-    updateComment({ commit }, content) {
-      commit('SET_COMMENT', content)
-      commit('SET_STATUS')
-    },
-
-    fetchComment({ getters, commit}, diaryPk) {
+    createComment({ commit, getters }, payload) {
+      console.log(payload)
       axios({
-        url: `http://localhost:8000/comments/post/${diaryPk}`,
+        url: 'https://i7a506.p.ssafy.io/api/auth/comment',
+        method: 'post',
+        data: payload,
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data);
+        commit('SET_COMMENT', payload)
+        router.push({
+          name: 'diaryDetail',
+          parmas: { diaryPk: payload.postId }
+        })
+        location.reload()
+      })
+      .catch((err) => console.error(err.response))
+    },
+
+    // 일지 댓글 목록 조회
+    fetchComment({ getters, commit, dispatch }, diaryPk) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/comment/${diaryPk}`,
         method: 'get',
         headers: getters.authHeader
       })
-      .then( res => {
-        commit('SET_COMMENTS', res.data)
+      .then((res) => {
+        console.log(res.data)
+        commit('EMPTY_COMMENTS')
+        res.data.forEach((comment) => {
+          dispatch('fetchUser', comment)
+        })
       })
       .catch(err => {
         if (err.response.status === 404) {
@@ -252,55 +280,127 @@ export default ({
         }
       })
     },
-  
-    deleteComment({ getters, commit}, diaryPk, commentPk) {
-      if (confirm('정말 삭제하시겠습니까?')) {
-        axios({
-          url: `http://localhost:8000/comments/post/`,
-          method: 'delete',
-          data: {diaryPk, commentPk},
-          headers: getters.authHeader,
+
+    // 각 댓글 유저 조회
+    fetchUser({ getters, commit }, comment) {
+      console.log(comment)
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/members/${comment.memberId}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        const user = res.data.name
+        const payload = {
+          user: user,
+          info: comment
+        }
+        commit('SET_COMMENT', payload)
+      })
+    },
+
+    // 댓글 수정 상태 전환 및 댓글 정보 보내기
+    switchIsEditing({ commit }, comment) {
+      console.log(2, comment)
+      commit('SWITCH_IS_EDITING', comment)
+    },
+
+    // 댓글 수정
+    updateComment({ commit, getters }, comment) {
+      console.log(comment)
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/comment/${comment.id}`,
+        method: 'put',
+        data: comment.data,
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data);
+        commit('SET_COMMENT', comment.data)
+        router.push({
+          name: 'diaryDetail',
+          parmas: { diaryPk: comment.data.postId }
         })
-        .then(res => {
-          commit('SET_COMMENTS', res.data)
+        location.reload()
+      })
+      .catch((err) => console.error(err.response))
+    },
+
+    // 댓글 삭제
+    deleteComment({ getters, commit }, pk) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/comment/${pk.commentId}`,
+        method: 'delete',
+        headers: getters.authHeader,
+      })
+      .then(res => {
+        console.log(res.data)
+        commit('SET_COMMENT', {})
+        router.push({
+          name: 'diaryDetail',
+          parmas: { diaryPk: pk.diaryId }
         })
-        .catch(err => console.error(err.response))
-      }
+        location.reload()
+      })
+      .catch(err => console.error(err.response))
     },
   
-    showParent({ commit }, commentUser) {
-      commit('SHOW_PARENT', commentUser)
+    showParent({ commit }, parent) {
+      commit('SHOW_PARENT', parent)
     },
 
     hideParent({ commit }) {
       commit('HIDE_PARENT')
     },
-  
-    showAllDiary({ commit }) {
+    // 다이어리 좋아요
+    likeDiary({ commit, getters }, diary) {
+      console.log(diary.id)
       axios({
-        url: 'http://localhost:8000/posts',
-        method: 'get'
-      })
-      .then((res) => {
-        const allDiary = res.data
-        commit('SHOW_ALL_DIARY', allDiary)
-      })
-    },
-
-    likeDiary({ commit, getters }, diaryPk) {
-      axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/auth/likepost`,
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost`,
         method: 'post',
-        data: {post_id: diaryPk},
+        data: {post_id: diary.id},
         headers: getters.authHeader
       })
       .then((res) => {
-        commit('SET_DIARY', res.data)
         console.log(res.data)
-        router.push({
-          name: 'DiaryDetail',
-          params: { diaryPk: diaryPk }
-        })
+        commit('SET_DIARY_LIKE', true)
+      })
+      .catch(err => console.err(err.response))
+    },
+    // 좋아요 취소
+    unlikeDiary({ commit, getters }, diary) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost`,
+        method: 'delete',
+        data: {post_id: diary.id},
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_DIARY_LIKE', false)
+      })
+      .catch(err => console.err(err.response))
+    },
+    checkLike({ commit, getters }, diaryPk) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost/chk/${diaryPk}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_DIARY_LIKE', res.data)
+      })
+      .catch(err => console.err(err.response))
+    },
+    fetchLocation({ commit }) {
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/locations',
+        method: 'get'
+      })
+      .then((res) => {
+        commit('SET_LOCATION', res.data)
       })
     }
   },

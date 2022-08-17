@@ -1,49 +1,36 @@
 <template>
   <div>
-  <!-- <li class="comment-list-item">
-    <router-link :to="{ name: 'profile', params: { username: comment.user.username } }">
-      <i class="fa-solid fa-circle-user"></i>{{ comment.user.username }}
-    </router-link>
-
-    <span v-if="!isEditing">{{ payload.content }}</span>
-
-    <span v-if="isEditing">
-      <input type="text" v-model="payload.content">
-      <a class="editdelete" @click="onUpdate"><i class="fa-solid fa-pen-clip"></i></a> |
-      <a class="editdelete" @click="switchIsEditing"><i class="fa-solid fa-xmark"></i></a>
-    </span>
-
-    <span v-if="currentUser.username === comment.user.username && !isEditing">
-      <a class="editdelete" @click="switchIsEditing"><i class="fa-solid fa-pen-clip"></i></a> |
-      <a class="editdelete" @click="deleteComment(payload)"><i class="fa-solid fa-trash-can"></i></a>
-    </span>
-  </li> -->
-    <div v-for="(comment, idx) in comments" :key="idx" class="parent-child">
+    <div v-if="comments.length === 0">
+      <p>첫 번째 댓글의 주인공이 되어보세요!</p>
+    </div>
+    <div v-for="(comment, idx) in commentsWithUser" :key="idx" class="parent-child">
       <!-- 댓글 -->
       <div class="parent-comment">
+        <!-- userId 보내줘야 함 -->
         <router-link :to="{ name: 'profile' }">
           <el-avatar :size="40" src="" />
         </router-link>
         <div>
-          <p class="member">{{ comment.member }}</p>
-          <p class="content">{{ comment.content }}</p>
+          <p class="member">{{ comment.user }}</p>
+          <p class="content">{{ comment.info.content }}</p>
           <!-- 나중에는 comment.pk로 바꿔서 보내야할 듯 -->
-          <span class="leave-comment" @click="sendInfo(comment.member)">답글 달기</span>
-          <span class="leave-comment" @click="editComment(comment.content)">수정</span>
-          <span class="leave-comment">삭제</span>
+          <span class="leave-comment" @click="sendInfo(comment.user, comment.info.id)">답글 달기</span>
+          <span v-if="comment.user === currentUser.name" class="leave-comment" @click="editComment(comment)">수정</span>
+          <span v-if="comment.user === currentUser.name" class="leave-comment" @click="removeComment(comment.info.id)">삭제</span>
         </div>
       </div>
       <!-- 대댓글 -->
-      <div v-for="(child, index) in comment.children" :key="index">
+      <!-- {{ comment.info.children }} -->
+      <div v-for="(child, index) in comment.info.children" :key="index">
         <div class="child-comment">
           <router-link :to="{ name: 'profile' }">
             <el-avatar :size="40" src="" />
           </router-link>
           <div>
-            <p class="member">{{ child.member }}</p>
-            <p class="content">{{ child.content }}</p>
-            <span class="leave-comment" @click="editComment(child.content)">수정</span>
-            <span class="leave-comment">삭제</span>
+            <p class="member">{{ child.user }}</p>
+            <p class="content">{{ child.info.content }}</p>
+            <span v-if="child.user === currentUser.name" class="leave-comment" @click="editComment(child)">수정</span>
+            <span v-if="child.user === currentUser.name" class="leave-comment" @click="removeComment(child.info.id)">삭제</span>
           </div>
         </div>
       </div>
@@ -54,43 +41,99 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 export default {
   name: 'CommentItem',
   props: { 
-    comments: Array,
+    // comments: Array,
+    diaryPk: String
   },
   data() {
     return {
-      isEditing: false,
-      // payload: {
-      //   diaryPk: this.comment.diary.pk,
-      //   commentPk: this.comment.pk,
-      //   content: this.comment.content
-      // },
     }
   },
   computed: {
-    ...mapGetters(['currentUser',]),
-  },
-  methods: {
-    ...mapActions(['updateComment', 'deleteComment', 'showParent']),
-    switchIsEditing() {
-      this.isEditing = !this.isEditing
-    },
-    onUpdate() {
-      this.updateComment(this.payload)
-      this.isEditing = false
-    },
-    sendInfo(member) {
-      console.log(member)
-      this.showParent(member)
-    },
-    editComment(content) {
-      console.log(content)
-      this.updateComment(content)
+    ...mapGetters(['currentUser', 'comments', 'profile']),
+    commentsWithUser () {
+      return this.comments
     }
   },
+  methods: {
+    ...mapActions(['updateComment', 'deleteComment', 'showParent', 'fetchComment', 'switchIsEditing', 'fetchProfile']),
+    sendInfo(member, parentId) {
+      console.log(member)
+      const payload = {
+        member: member,
+        parentId: parentId
+      }
+      this.showParent(payload)
+    },
+    editComment(comment) {
+      console.log(1, comment)
+      this.switchIsEditing(comment)
+      // console.log(content)
+      // this.updateComment(content)
+    },
+    removeComment(commentId) {
+      ElMessageBox.confirm(
+        '정말 삭제하시겠습니까?',
+        'Warning',
+        {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }
+      )
+      .then(() => {
+          const payload = {
+            commentId: commentId,
+            diaryId: this.diaryPk
+          }
+          this.deleteComment(payload)
+          ElMessage({
+            type: 'success',
+            message: '삭제가 완료되었습니다',
+          })
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '삭제가 취소되었습니다',
+        })
+      })
+    },
+    // 대댓글을 댓글 형식이랑 맞춰주기
+    showUser() {
+      console.log(1)
+      for (let i=0; i<this.commentsWithUser.length; i++) {
+        console.log(this.commentsWithUser[i])
+        for (let j=0; j<this.commentsWithUser[i].info.children.length; j++) {
+          this.fetchProfile(this.commentsWithUser[i].info.children[j].memberId)
+          this.commentsWithUser[i].info.children[j].user = this.profile.name
+          this.commentsWithUser[i].info.children[j].info = {}
+          this.commentsWithUser[i].info.children[j].info.id = this.commentsWithUser[i].info.children[j].id
+          this.commentsWithUser[i].info.children[j].info.content = this.commentsWithUser[i].info.children[j].content
+          this.commentsWithUser[i].info.children[j].info.postId = this.commentsWithUser[i].info.children[j].postId
+          this.commentsWithUser[i].info.children[j].info.memberId = this.commentsWithUser[i].info.children[j].memberId
+          this.commentsWithUser[i].info.children[j].info.parentId = this.commentsWithUser[i].info.children[j].parentId
+          this.commentsWithUser[i].info.children[j].info.children = this.commentsWithUser[i].info.children[j].children
+          delete this.commentsWithUser[i].info.children[j].id
+          delete this.commentsWithUser[i].info.children[j].content
+          delete this.commentsWithUser[i].info.children[j].postId
+          delete this.commentsWithUser[i].info.children[j].memberId
+          delete this.commentsWithUser[i].info.children[j].parentId
+          delete this.commentsWithUser[i].info.children[j].children
+        }
+      }
+    }
+  },
+  mounted() {
+    this.fetchComment(this.diaryPk),
+    setTimeout(() => {
+      this.showUser()
+    }, 100);
+  }
 }
 </script>
 
@@ -125,7 +168,7 @@ i {
 
 .child-comment {
   display: flex;
-  background-color: bisque;
+  background-color: #EFDFDE;
   border-radius: 1rem;
   margin-left: 3rem;
   margin-bottom: 0.5rem;
@@ -140,6 +183,7 @@ i {
 .member {
   color: black;
   font-size: 0.8rem;
+  font-weight: 400;
 }
 
 .content {

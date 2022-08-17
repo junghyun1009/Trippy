@@ -5,6 +5,7 @@ import com.ssafy.trippy.Domain.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,8 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 public class RequestPostDto {
+    @NotBlank(message = "제목은 필수 입력 값입니다.")
     private String title;
-    private Byte isDelete;
     private String countryName;
     private String cityName;
     private int company;
@@ -26,7 +27,6 @@ public class RequestPostDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
-    private int representativeImg;
     private Long member_id;
     private List<RequestPostTransPortDto> postTransports;
     private List<RequestDetailLocationDto> detailLocations;
@@ -55,8 +55,6 @@ public class RequestPostDto {
                 .startDate(startDate)
                 .detailLocations(detailLocationList)
                 .title(title)
-                .isDelete(isDelete)
-                .representiveImg(representativeImg)
                 .routes(routeList)
                 .location(Location.builder().id(location_id).build())
                 .build();
@@ -66,14 +64,12 @@ public class RequestPostDto {
 
 
     @Builder
-    public RequestPostDto(String title, Byte isDelete, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representativeImg, Long memberId, List<RequestPostTransPortDto> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes) {
+    public RequestPostDto(String title, int company, int count, LocalDateTime startDate, LocalDateTime endDate, List<RequestPostTransPortDto> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes,Long member_id) {
         this.title = title;
-        this.isDelete = isDelete;
         this.company = company;
         this.count = count;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.representativeImg = representativeImg;
         this.member_id = member_id;
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;

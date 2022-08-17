@@ -27,10 +27,11 @@ public class PostCommentController {
     private final String SUCCESS = "OK";
     private final String FAIL = "ERROR";
 
-
-    // 댓글 등록
+    /**
+     * 댓글 등록
+     */
     @PostMapping("/auth/comment")
-    public ResponseEntity<?> createComment(HttpServletRequest request, @RequestBody RequestPostCommentDto requestPostCommentDto) {
+    public ResponseEntity<?> createComment(HttpServletRequest request, @RequestBody @Valid  RequestPostCommentDto requestPostCommentDto) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         requestPostCommentDto.setMemberId(memberId);
         try {
@@ -43,7 +44,9 @@ public class PostCommentController {
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 
-    // 댓글 삭제
+    /**
+     * 댓글 삭제
+     */
     @DeleteMapping("/auth/comment/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable("commentId") Long commentId) {
         try {
@@ -57,11 +60,13 @@ public class PostCommentController {
 
     }
 
-    // 게시판에 달린 모든 댓글 조회
+    /**
+     * 게시판에 달린 댓글 조회
+     */
     @GetMapping("/comment/{postId}")
     public ResponseEntity<?> getAllPostComment(@PathVariable("postId") Long postId) {
         try {
-            List<ResponsePostCommentDto> postCommentList = postCommentService.findPostCommentByPostId(postId);
+            List<ResponsePostCommentDto> postCommentList = postCommentService.findAllByPostId(postId);
             return new ResponseEntity<>(postCommentList, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -72,6 +77,9 @@ public class PostCommentController {
 
     }
 
+    /**
+     * 게시판에 달린 댓글 수정
+     */
     @PutMapping("/auth/comment/{commentId}")
         public ResponseEntity<?> updateComment(@PathVariable("commentId") Long commentId, @RequestBody @Valid RequestPostCommentDto requestPostCommentDto) {
         try {

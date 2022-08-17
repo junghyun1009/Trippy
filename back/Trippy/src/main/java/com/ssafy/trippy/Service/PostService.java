@@ -20,11 +20,11 @@ public interface PostService {
 
     void deletePost(Long id);
 
-    void updatePost(Long id, RequestPostDto requestPostDto);
+    Long updatePost(Long id, RequestPostDto requestPostDto, List<MultipartFile> images);
 
     ResponsePostDto findPostId(Long id);
     List<ResponsePostDto> findByCity(Location location);
 
-
+    Long cntPostsByMemberId(Long memberId);
 
 }

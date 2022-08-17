@@ -1,19 +1,27 @@
 package com.ssafy.trippy.Service.Impl;
 
 import com.ssafy.trippy.Config.JwtProvider;
+import com.ssafy.trippy.Domain.CommunityPost;
 import com.ssafy.trippy.Domain.Member;
+import com.ssafy.trippy.Domain.Post;
 import com.ssafy.trippy.Dto.Request.RequestLoginDto;
 import com.ssafy.trippy.Dto.Request.RequestMemberDto;
+import com.ssafy.trippy.Dto.Response.ResponseImageDto;
 import com.ssafy.trippy.Dto.Response.ResponseLoginDto;
 import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Dto.Update.UpdateMemberDto;
+import com.ssafy.trippy.Repository.CommunityPostRepository;
 import com.ssafy.trippy.Repository.MemberRepository;
+import com.ssafy.trippy.Repository.PostRepository;
 import com.ssafy.trippy.Service.MemberService;
 import com.ssafy.trippy.Service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @Service
@@ -22,6 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
+    private final CommunityPostRepository communityPostRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -29,14 +39,24 @@ public class MemberServiceImpl implements MemberService {
 
     private final S3Uploader s3Uploader;
     @Override
-    public ResponseMemberDto signup(RequestMemberDto requestMemberDto) {
+    public ResponseMemberDto signup( MultipartFile image,RequestMemberDto requestMemberDto) {
         if(chkDuplicate(requestMemberDto.getEmail())){
             return new ResponseMemberDto(Member.builder().build());
         }
-        String rawPassword = requestMemberDto.getPassword();
-        String encodedPassword = passwordEncoder.encode(rawPassword);
-        requestMemberDto.encodePassword(encodedPassword);
-        return new ResponseMemberDto(memberRepository.save(requestMemberDto.toEntity()));
+        try{
+            ResponseImageDto imageDto = s3Uploader.upload(image,"static");
+            requestMemberDto.setImg_path(imageDto.getFileName());
+            String rawPassword = requestMemberDto.getPassword();
+            String encodedPassword = passwordEncoder.encode(rawPassword);
+            requestMemberDto.encodePassword(encodedPassword);
+            return new ResponseMemberDto(memberRepository.save(requestMemberDto.toEntity()));
+        }catch (Exception e){
+            String rawPassword = requestMemberDto.getPassword();
+            String encodedPassword = passwordEncoder.encode(rawPassword);
+            requestMemberDto.encodePassword(encodedPassword);
+            return new ResponseMemberDto(memberRepository.save(requestMemberDto.toEntity()));
+
+        }
     }
 
     @Override
@@ -68,6 +88,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void deleteMember(Long id){
+        List<Post> posts = postRepository.findAllByMember(memberRepository.findById(id).get());
+        for (Post post : posts) {
+            postRepository.delete(post);
+        }
+        List<CommunityPost> communityPosts = communityPostRepository.findAllByMember(memberRepository.findById(id).get());
+        for (CommunityPost communityPost : communityPosts) {
+            communityPostRepository.delete(communityPost);
+        }
         memberRepository.deleteById(id);
     }
 

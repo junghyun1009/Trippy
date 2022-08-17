@@ -19,12 +19,8 @@ public class Location extends BaseEntity {
     @Column(name="LOCATION_ID")
     private Long id;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="국가이름을 입력하세요")
     private String countryName;
 
-    //    @Column(nullable = false)
-//    @NotBlank(message="도시이름을 입력하세요")
     private String cityName;
 
 

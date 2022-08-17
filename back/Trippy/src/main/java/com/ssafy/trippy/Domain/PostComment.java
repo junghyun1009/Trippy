@@ -19,8 +19,8 @@ public class PostComment extends BaseEntity {
     private Long id;
 
     private String content;
-
-    private LocalDateTime regDt;
+    private String name;
+    private String imgPath;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="POST_ID")
@@ -36,18 +36,22 @@ public class PostComment extends BaseEntity {
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<PostComment> children = new ArrayList<>();
 
-    public static PostComment createComment(String content, Post post, Member member, PostComment parent){
+    public static PostComment createComment(String content, Post post, Member member, PostComment parent, String name, String imgPath){
         PostComment postComment = new PostComment();
+        postComment.content = content;
         postComment.post = post;
         postComment.member = member;
-        postComment.content = content;
         postComment.parent = parent;
+        postComment.name = name;
+        postComment.imgPath = imgPath;
         return postComment;
     }
 
     @Builder
-    public PostComment(String content) {
+    public PostComment(String content, String name, String imgPath) {
         this.content = content;
+        this.name = name;
+        this.imgPath = imgPath;
     }
 
     public void update(String content) {

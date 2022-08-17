@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="form">
     <form @submit.prevent="onSubmit">
       <!-- 제목 -->
       <div class="title-box">
@@ -10,9 +10,16 @@
       <div class="demo-collapse">
         <el-collapse>
           <!-- 장소 -->
-          <el-collapse-item class="place-select" title="장소" name="1">
-            <div>
-              {{ newDiary.countryName }}, {{ newDiary.cityName }}
+          <el-collapse-item name="1">
+            <template #title>
+              <p class="option-p">장소</p>
+              <div v-if="select.length===2">
+                <el-tag class="option-tag" type="dark">{{ select[0] }}</el-tag>
+                <el-tag class="option-tag" type="dark">{{ select[1] }}</el-tag>
+              </div>
+            </template>
+            <div class="location-div">
+              <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
             </div>
           </el-collapse-item>
 
@@ -23,11 +30,11 @@
               <!-- 태그 -->
               <el-scrollbar>
                 <div class="option-tag-div">
-                  <el-tag class="option-tag" type=''>
+                  <el-tag class="option-tag" type="dark">
                     {{ partyTag }}
                   </el-tag>
                   <el-tag v-for="trans in transportationTag" :key="trans" class="option-tag" 
-                  closable :disable-transitions="false" type='' @close="handleClose(trans)">
+                  closable :disable-transitions="false" type="dark" @close="handleClose(trans)">
                     {{ trans.transport.name }}
                   </el-tag>
                 </div>
@@ -91,7 +98,7 @@
               <el-scrollbar>
                 <div class="option-tag-div">
                   <el-tag class="option-tag" v-for="(route, idx) in newDiary.routes" :key="idx"
-                  :disable-route="false" type=''>
+                  :disable-route="false" type="dark">
                     {{ route.routeName }}
                   </el-tag>
                 </div>
@@ -114,7 +121,7 @@
               <div id="map" style="height: 70vw; position: relative; overflow: hidden;"></div>
               <div class="route-tag-group">
                 <el-tag v-for="(route, idx) in newDiary.routes" :key="idx" class="route-tag"
-                closable :disable-route="false" type='' @close="removeRoute(idx)">
+                closable :disable-route="false" type="dark" @close="removeRoute(idx)">
                   {{ route.routeName }}
                 </el-tag>
               </div>
@@ -151,46 +158,24 @@
                 <span>(선택)</span>
               </div>
 
-              <div v-if="images[k].length === 0" class="photo-div">
-                <label :for=k>
-                  <span class="material-symbols-outlined">add_photo_alternate</span>
-                </label>
-                <input class="photo-input" type="file" :id=k :ref="`${k}th-file`" accept="image/*" @change="uploadPhoto(k)"/>
-                <div class="photo-des-div">
-                  <span class="photo-description">아이콘을 눌러 사진을 추가해주세요.</span>
-                  <span class="photo-description-sec">(스토리 당 한 개의 사진을 첨부할 수 있어요.)</span>
+                <div v-if="images[k].length === 0" class="photo-div">
+                  <label :for=k>
+                    <span class="material-symbols-outlined">add_photo_alternate</span>
+                  </label>
+                  <input class="photo-input" type="file" :id=k :ref="`${k}th-file`" accept="image/*" @change="uploadPhoto(k)"/>
+                  <div class="photo-des-div">
+                    <span class="photo-description">아이콘을 눌러 사진을 추가해주세요.</span>
+                    <span class="photo-description-sec">(스토리 당 한 개의 사진을 첨부할 수 있어요.)</span>
+                  </div>
                 </div>
-              </div>
 
-              <div v-else class="photo-content-div">
-                <div class="photo-preview-group">
-                  <!-- <span class="material-symbols-outlined">photo_library</span> -->
-                  <img :src="newStory.preview" alt="photo" @click="removePhoto(k)">
-                  <span class="photo-description">사진을 클릭하면 삭제할 수 있어요.</span>
+                <div v-else class="photo-content-div">
+                  <div class="photo-preview-group">
+                    <img :src="newStory.preview" alt="photo" @click="removePhoto(k)">
+                    <span class="photo-description">사진을 클릭하면 삭제할 수 있어요.</span>
+                  </div>
                 </div>
-                <!-- <el-dialog v-model="newStory.dialogVisible" width="80%" :show-close="false">
-                  <template #header="{ titleId, titleClass, closeBtn }">
-                    <div class="my-header">
-                      <div>
-                        <h4 :id="titleId" :class="titleClass">사진 미리보기</h4>
-                        <p>사진을 누르면 삭제가 가능합니다.</p>
-                      </div>
-                      <span :id="closeBtn" class="material-symbols-outlined" @click="newStory.dialogVisible=false">close</span>
-                    </div>
-                  </template>
-                  <div class="photo-preview">
-                    <div v-for="(photo, index) in newStory.images" :key="index" class="photo-preview-group">
-                      <img :src="photo.preview" :alt="photo.preview" @click="removePhoto(k, index)"/>
-                    </div> -->
-                    <!-- <div v-if="newStory.images.length<10">
-                      <label :for=k+10>
-                        <span class="material-symbols-outlined">add_photo_alternate</span>
-                      </label>
-                      <input class="photo-input-add" type="file" :id=k+10 ref="files" accept="image/*" @change="addPhoto(k)" multiple />
-                    </div> -->
-                  <!-- </div>
-                </el-dialog> -->
-              </div>
+
             </div>
             
             <div class="story-btn">
@@ -201,18 +186,16 @@
                 <span class="material-symbols-outlined">delete</span>
               </el-button>
             </div>
-            <hr>
+            <el-divider/>
           </div>
         </div>
 
       </div>
 
-      <div v-if="action==='create'" class="submit-btn">
-        <el-button @click="onSubmit">작성하기</el-button>
+      <div class="submit-btn">
+        <el-button @click="onSubmit" type="primary">작성하기</el-button>
       </div>
-      <div v-else-if="action==='update'" class="submit-btn">
-        <el-button @click="onSubmit">수정하기</el-button>
-      </div>
+
     </form>
   </div>
 </template>
@@ -229,7 +212,6 @@ export default {
   },
   data() {
     return {
-      // datePick: [this.diary.startDate, this.diary.endDate],
       transportList: [
         {
           transport: 
@@ -292,12 +274,13 @@ export default {
         postTransports: this.diary.postTransports,
         routes: this.diary.routes,
         detailLocations: this.diary.detailLocations
-      }
+      },
+      select: [],
     }
   },
   computed: {
     // update할 때 diaryTemp 대신 해당 pk 다이어리 가져와야 함 -> 편집 창으로 들어오면 해당 pk 다이어리 내용 fetch하는 함수
-    ...mapGetters(['diaryTemp']),
+    ...mapGetters(['diaryTemp', 'location', ]),
     partyTag() {
       const party = this.newDiary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -306,10 +289,36 @@ export default {
     transportationTag() {
       const transportation = this.newDiary.postTransports
       return transportation
+    },
+    locationTable() {
+      const options = []
+      let countryName = ''
+      let j = 0
+      for (let i=0 ; i<this.location.length ; i++) {
+        const country = {}
+        if (countryName != this.location[i].countryName) {
+          country.value = this.location[i].countryName
+          country.label = this.location[i].countryName
+          country.children = []
+          const city = {}
+          city.value = this.location[i].cityName
+          city.label = this.location[i].cityName
+          country.children.push(city)
+          options.push(country)
+          countryName = this.location[i].countryName
+          j = i
+        } else {
+          const citySec = {}
+          citySec.value = this.location[i].cityName
+          citySec.label = this.location[i].cityName
+          options[j].children.push(citySec)
+        }
+      }
+      return options  
     }
   },
   methods: {
-    ...mapActions(['createDiary', 'updateDiary', 'saveImage']),
+    ...mapActions(['createDiary', 'updateDiary', 'saveImage', 'fetchLocation', ]),
 
     handleClose(tag) {
       this.newDiary.postTransports.splice(this.newDiary.postTransports.indexOf(tag), 1)
@@ -433,13 +442,6 @@ export default {
       console.log(this.$refs[`${index}th-file`])
       console.log(this.$refs[`${index}th-file`][0].files)
 
-      // let photo = this.$refs.files[index].files[0]
-      // if (photo.type.substr(0, 5) === "image") {
-      //   this.images[index] = this.$refs.files[index].files[0]
-      //   this.newStories[index].preview = URL.createObjectURL(this.$refs.files[index].files[0])
-      // } else {
-      //     alert("사진 파일만 추가 가능합니다")
-      //   }
       for (let i = 0; i < this.$refs[`${index}th-file`][0].files.length; i++) {
         let photo = this.$refs[`${index}th-file`][0].files[i]
         if (photo.type.substr(0, 5) === "image") {
@@ -545,87 +547,73 @@ export default {
     // },
 
     onSubmit() {
-      if (this.action === 'create') {
-        // 날짜 변환해서 저장
-        // this.newDiary.startDate = this.newDiary.startDate + 'T05:29:23.168Z'
-        // this.newDiary.endDate = this.newDiary.endDate + 'T05:29:23.168Z'
-        this.newStories.forEach((each) => {
-          // each.pk = this.newStories.indexOf(each) + 1
-          delete each.preview
-        })
-        this.newDiary.detailLocations = this.newStories
+      this.newStories.forEach((each) => {
+        // each.pk = this.newStories.indexOf(each) + 1
+        delete each.preview
+      })
+      this.newDiary.detailLocations = this.newStories
+      this.newDiary.countryName = this.select[0]
+      this.newDiary.cityName = this.select[1]
 
-        if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
-        && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
-          console.log(this.newDiary)
-          // const imageList = new FormData()
-          const diary = new FormData()
-          // console.log(this.images)
-          // console.log(imageList)
-          // for (let key in this.newDiary) {
-            //   const value = this.newDiary[key]
-          //   diary.append(key, JSON.stringify(value))
-          // }
-          diary.append("post", new Blob([JSON.stringify(this.newDiary)], {type: "application/json"}))
-          // diary.append("diary", JSON.stringify(this.newDiary))
-          this.images.forEach((image) => {
-            if (image.length === 0) {
-              // diary.append("images", this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
-              // console.log(this.images.indexOf(image))
-              // console.log(this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
-              const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
-              diary.append("images", empty)
-            } else {
-              diary.append("images", image)
-            }
-          })
-          // diary.append("images", imageList)
-          for (var key of diary.keys()) {
-            console.log(key);
+      if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
+      && this.newDiary.routes.length && this.newDiary.detailLocations.length && this.newDiary.countryName && this.newDiary.cityName) {
+        console.log(this.newDiary)
+        // const imageList = new FormData()
+        const diary = new FormData()
+        // console.log(this.images)
+        // console.log(imageList)
+        // for (let key in this.newDiary) {
+          //   const value = this.newDiary[key]
+        //   diary.append(key, JSON.stringify(value))
+        // }
+        diary.append("post", new Blob([JSON.stringify(this.newDiary)], {type: "application/json"}))
+        // diary.append("diary", JSON.stringify(this.newDiary))
+        this.images.forEach((image) => {
+          if (image.length === 0) {
+            // diary.append("images", this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
+            // console.log(this.images.indexOf(image))
+            // console.log(this.$refs[`${this.images.indexOf(image)}th-file`][0].files)
+            const empty = new File(["empty"], "empty.txt", {type: "text/plain"})
+            diary.append("images", empty)
+          } else {
+            diary.append("images", image)
           }
-          for (var value of diary.values()) {
-            console.log(value);
-          }
-          // for (var imagekey of imageList.keys()) {
+        })
+        // diary.append("images", imageList)
+        for (var key of diary.keys()) {
+          console.log(key);
+        }
+        for (var value of diary.values()) {
+          console.log(value);
+        }
+        // for (var imagekey of imageList.keys()) {
           //   console.log(imagekey);
-          // }
-          // for (var imagevalue of imageList.values()) {
+        // }
+        // for (var imagevalue of imageList.values()) {
           //   console.log(imagevalue);
-          // }
-          this.createDiary(diary)
-          // this.saveImage(imageList)
-        } else {
-          alert("빈 칸 없이 모든 필드를 채워주세요!")
-        }
-      } else if (this.action === 'update') {
-        this.newStories.forEach((each) => {
-          // each.pk = this.newStories.indexOf(each) + 1
-          delete each.dialogVisible
-        })
-        this.newDiary.detailLocations = this.newStories
-
-        if (this.newDiary.title && this.newDiary.startDate && this.newDiary.endDate && this.newDiary.postTransports.length
-        && this.newDiary.routes.length && this.newDiary.detailLocations.length) {
-          console.log(this.newDiary)
-          const payload = {
-            id: this.diary.id,
-            content: this.newDiary
-          }
-          this.updateDiary(payload)
-        } else {
-          alert("빈 칸 없이 모든 필드를 채워주세요!")
-        }
+        // }
+        this.createDiary(diary)
+        // this.saveImage(imageList)
+      } else {
+        // console.log(this.locationPick)
+        // console.log(this.locationPick[0])
+        // console.log(this.locationPick[1])
+        alert("빈 칸 없이 모든 필드를 채워주세요!")
       }
     }
   },
   
   mounted() {
-    this.initMap()
+    this.initMap(),
+    this.fetchLocation()
   },
 }
 </script>
 
 <style scoped>
+.form {
+  margin-bottom: 5rem;
+}
 .title-box {
   display: flex;
   justify-content: start;
@@ -642,6 +630,9 @@ export default {
 .title-box .input-box {
   width: 80vw;
   margin-left: 0.5rem;
+}
+.location-div {
+  margin-left: 2.7rem;
 }
 .option-p {
   width: 10vw;
@@ -929,6 +920,13 @@ export default {
 }
 .submit-btn {
   margin-top: 1rem;
+  text-align: center;
 }
-
+.el-button--primary {
+  --el-button-active-bg-color: var(--el-color-primary);
+  /* --el-button-active-color: var(--el-color-primary); */
+  /* --el-button-disabled-bg-color: #EFDFDE;  */
+  --el-button-hover-bg-color: #FFD2C9;
+  --el-button-hover-border-color: #FFD2C9;
+}
 </style>

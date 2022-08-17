@@ -1,113 +1,55 @@
 <template>
   <div>
-    <h3>동행 찾기</h3>
     <span class="material-symbols-outlined location" @click="getLocation">my_location</span>
 
     <!-- <region-list></region-list> -->
-    <router-link :to="{ name: 'communityDetail' }">
-      <!-- v-for 추가예정 -->
-      <el-card class="card">
-        <div>
-          <el-tag class="tag">{{ temp.category }}</el-tag>
-          <el-tag class="tag">장소</el-tag>
-        </div>
-        <div class="title">
-          <span class="state">{{ recruitState }}</span>
-          <h4>{{ temp.title }}</h4>
-        </div>
-        <div class="options">
-          <p class="option">
-            <span class="material-symbols-outlined">groups</span>
-            {{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 {{ temp.option.gender }} 참여 가능
-          </p>
-          <p class="option">
-            <span class="material-symbols-outlined">event_note</span>
-            {{ convertDate }}, {{ temp.time }}
-          </p>
-          <p class="option">
-            <span class="material-symbols-outlined">groups</span>
-            {{ recruitCount}} / {{ temp.recruit_volume }}명 참여
-          </p>
-        </div>
-        <div class="content">
-          <p>{{ convertDesc }}</p>
-        </div>
+    <div v-for="post in posts.slice().reverse()" :key="post.id">
+       <router-link :to="{ name: 'communityDetail', params: { postPk: post.id } }">
+        <el-card class="card">
+          <div>
+            <el-tag type="dark" class="tag">{{ post.cityName }}</el-tag>
+            <el-tag type="dark" class="tag">{{ post.place }}</el-tag>
+            <!-- <el-tag class="tag">{{ convertTag }}</el-tag> -->
+            <el-tag type="dark" class="tag">{{ post.category === 1 ? '식사' : post.category === 2 ? '동행' : post.category === 3 ? '파티' : post.category === 4 ? '이동수단 셰어' : '기타' }}</el-tag>
+            <!-- <el-tag class="tag" v-for="(tag, idx) in convertTag" :key="idx">{{ tag }} </el-tag> -->
+          </div>
+          <div class="title">
+            <span class="state">{{ post.recruitCurrentVolume < post.recruitVolume ? '모집중' : '모집마감' }}</span>
+            <h4>{{ post.title }}</h4>
+          </div>
+          <div class="options">
+            <p class="option">
+              <span class="material-symbols-outlined icon">sms</span>
+              <span v-if="post.startAge===19 && post.endAge===70 && post.gender==='누구나'">누구나</span>
+              <span v-else>{{ post.startAge === post.endAge ? `${post.startAge}세` : post.startAge === 19 && post.endAge === 70 ? '누구나' : `${post.startAge}~${post.endAge}세`}} | {{ post.gender }}</span>
+              참여 가능
+            </p>
+            <p class="option">
+              <span class="material-symbols-outlined icon">event_note</span>
+              <!-- {{ convertDate }}, {{ convertTime }} -->
+              <span>{{ post.endDate ? ''+post.startDate.slice(5, 10) + '~' + ''+post.endDate.slice(5,10) : ''+post.startDate.slice(5, 10) }},</span>
+              <span>{{ ''+post.meetingTime.slice(11, 16) }}</span>
+            </p>
+            <p class="option">
+              <span class="material-symbols-outlined icon">groups</span>
+              {{ post.recruitCurrentVolume + 1 }} / {{ post.recruitVolume + 1}}명 참여
+            </p>
+          </div>
+          <div class="content">
+            <!-- <p>{{ convertDesc }}</p> -->
+            <p>{{ post.description.length > 50 ? ''+post.description.slice(0, 45) + '...' : post.description}}</p>
+          </div>
 
-         
-      </el-card>
-    </router-link>
-
-     <router-link :to="{ name: 'communityDetail' }">
-      <!-- v-for 추가예정 -->
-      <el-card class="card">
-        <div>
-          <el-tag class="tag">{{ temp.category }}</el-tag>
-          <el-tag class="tag">장소</el-tag>
-        </div>
-        <div class="title">
-          <span class="state">{{ recruitState }}</span>
-          <h4>{{ temp.title }}</h4>
-        </div>
-        <div class="options">
-          <p class="option">
-            <span class="material-symbols-outlined">groups</span>
-            {{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 {{ temp.option.gender }} 참여 가능
-          </p>
-          <p class="option">
-            <span class="material-symbols-outlined">event_note</span>
-            {{ convertDate }}, {{ temp.time }}
-          </p>
-          <p class="option">
-            <span class="material-symbols-outlined">groups</span>
-            {{ recruitCount}} / {{ temp.recruit_volume }}명 참여
-          </p>
-        </div>
-        <div class="content">
-          <p>{{ convertDesc }}</p>
-        </div>
-
-         
-      </el-card>
-    </router-link>
-
-     <router-link :to="{ name: 'communityDetail' }">
-      <!-- v-for 추가예정 -->
-      <el-card class="card">
-        <div>
-          <el-tag class="tag">{{ temp.category }}</el-tag>
-          <el-tag class="tag">장소</el-tag>
-        </div>
-        <div class="title">
-          <span class="state">{{ recruitState }}</span>
-          <h4>{{ temp.title }}</h4>
-        </div>
-        <div class="options">
-          <p class="option">
-            <span class="material-symbols-outlined">groups</span>
-            {{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 {{ temp.option.gender }} 참여 가능
-          </p>
-          <p class="option">
-            <span class="material-symbols-outlined">event_note</span>
-            {{ convertDate }}, {{ temp.time }}
-          </p>
-          <p class="option">
-            <span class="material-symbols-outlined">groups</span>
-            {{ recruitCount}} / {{ temp.recruit_volume }}명 참여
-          </p>
-        </div>
-        <div class="content">
-          <p>{{ convertDesc }}</p>
-        </div>
-
-         
-      </el-card>
-    </router-link>
+          
+        </el-card>
+      </router-link>
+    </div>
 
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 // import RegionList from '@/components/common/RegionList.vue'
 
 export default {
@@ -121,32 +63,70 @@ export default {
       }
     },
     computed: {
-      ...mapGetters(['temp']),
-      recruitState() {
-        return '모집중'
-      },
-      recruitCount() {
-        return 3
-      },
-      convertDate() {
-        let date = ''
-        if (!this.temp.isDay) {
-          date = this.temp.start_date + '~' + this.temp.end_date
-        } else {
-          date = this.temp.start_date
-        }
-        return date
-      },
-      convertDesc() {
-        let length = 55
-        let desc = ''
-        if (this.temp.desc.length > length) {
-          desc = this.temp.desc.substr(0, length - 2) + '...'
-        }
-        return desc
-      }
+      ...mapGetters(['posts', 'post']),
+      // convertTag() {
+      //   const posts = this.posts
+      //   let cat = ''
+      //   posts.forEach((el) => {
+      //     const category = el.category
+      //     console.log(category)
+      //     const categoryList = ['식사', '동행', '파티', '이동수단 셰어', '기타']
+      //     cat = categoryList[category-1]
+      //   })
+      //   return cat
+        // let cat = ''
+        // for (let values of tag.values()) {
+        //   cat = values
+        // }
+        // return cat
+      // },
+      // recruitState() {
+      //   let state = ''
+      //   if (this.post.recruitCurrentVolume < this.post.recruitVolume) {
+      //     state = '모집중'
+      //   } else {
+      //     state = '모집가능'
+      //   }
+      //   return state
+      // },
+      // convertDate() {
+      //   const posts = this.posts
+      //   const date = posts.forEach((el) => {
+      //     const startDate = ''+el.startDate
+      //     const endDate = ''+el.endDate
+      //     console.log(startDate, endDate)
+      //     console.log(el.day)
+      //     return startDate
+      //     // if (el.day) {
+      //     //   return `${startDate.slice(5,10)}~${endDate.slice(5,10)}`
+      //     // } else {
+      //     //   return startDate
+      //     // }
+      //   })
+      //   return date
+      // },
+      // convertTime() {
+      //   const posts = this.posts
+      //   const time = posts.forEach((el) => {
+      //     const meetingTime = ''+el.meetingTime
+      //     meetingTime.slice(11, 16)
+      //   })
+      //   return time
+      // },
+      // convertDesc() {
+      //   let length = 50
+      //   let desc = ''
+      //   const posts = this.posts
+      //   posts.forEach((el) => {
+      //     if (el.description.length > length) {
+      //       desc = el.description.substr(0, length - 2) + '...'
+      //     }
+      //   })
+      //   return desc
+      // }
     },
     methods: {
+      ...mapActions(['fetchPosts']),
       getLocation() {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.getLocationValue)
@@ -160,6 +140,20 @@ export default {
         this.position.longitude = position.coords.longitude
       },
     },
+    created() {
+      this.fetchPosts()
+      // console.log(this.posts)
+      // // console.log(this.posts[1].category)
+      // this.posts.forEach(i => {
+      //   console.log(i.category)
+      // })
+      // console.log(post)
+      // console.log(this.posts[0]['category'])
+      // this.posts.forEach((el) => {
+      //     const startDate = el.startDate
+      //     console.log(typeof(startDate))
+      // })
+    }
   }
 </script>
 
@@ -212,6 +206,10 @@ export default {
 
 .option > span {
   margin-right: 0.3rem;
+}
+
+.icon {
+  font-size: 1rem;
 }
 
 .content {

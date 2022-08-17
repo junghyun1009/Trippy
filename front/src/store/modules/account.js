@@ -1,6 +1,7 @@
 import router from '@/router/index.js'
 import axios from 'axios'
 import VueCookies from 'vue-cookies'
+import { ElMessageBox } from 'element-plus'
 // import jwt_decode from "jwt-decode"
 
 export default {
@@ -8,7 +9,7 @@ export default {
     // accessToken:  '',
     // refreshToken: '',
     currentUser: {},
-    profile: {},
+    // profile: {},
     userData: {},
     // 임시 email
     email: localStorage.getItem('email') || '',
@@ -16,29 +17,32 @@ export default {
     fromPasswordFindView: true,
     verificationCode: '',
     emailInfo: '',
+    isDuplicate: true,
   },
   getters: {
     isLoggedIn: () => !!VueCookies.get('accessToken'),
     // refreshToken: state => state.refreshToken,
     currentUser: state => state.currentUser,
-    profile: state => state.profile,
+    // profile: state => state.profile,
     userData: state => state.userData,
     authError: state => state.authError,
     authHeader: () => ({ 'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`}),
     fromPasswordFindView: state => state.fromPasswordFindView,
     verificationCode: state => state.verificationCode,
     emailInfo: state => state.emailInfo,
+    isDuplicate: state => state.isDuplicate,
   },
   mutations: {
     // SET_ACCESS_TOKEN:(state, accessToken) => state.accessToken = accessToken,
     // SET_REFRESH_TOKEN: () => VueCookies.set('refreshToken'),
     SET_CURRENT_USER:(state, user) => state.currentUser = user,
-    SET_PROFILE: (state, profile) => state.profile = profile,
+    // SET_PROFILE: (state, profile) => state.profile = profile,
     SET_USER_DATA: (state, userData) => state.userData = userData,
     SET_AUTH_ERROR: (state, error) => state.error = error,
     FROM_PASSWORD_FIND_VIEW: (state) => state.fromPasswordFindView = true,
     SET_EMAIL_AUTH_CODE: (state, verificationCode) => state.verificationCode = verificationCode,
     SET_EMAIL_INFO: (state, emailInfo) => state.emailInfo = emailInfo,
+    SET_IS_DUPLICATE: (state, isDuplicate) => state.isDuplicate = isDuplicate,
   },
   actions: {
     // saveToken({ commit }, accessToken ) {
@@ -61,7 +65,7 @@ export default {
       const email = localStorage.getItem('email')
       const refreshToken = VueCookies.get('refreshToken')
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/members/re-issue?email=${email}&refreshToken=${refreshToken}`,
+        url: `https://i7a506.p.ssafy.io/api/members/re-issue?email=${email}&refreshToken=${refreshToken}`,
         method: 'get',
         params: email
       })
@@ -83,7 +87,7 @@ export default {
 
     login({ dispatch }, userinfo) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/login',
+        url: 'https://i7a506.p.ssafy.io/api/members/login',
         method: 'post',
         data: userinfo,
       })
@@ -114,12 +118,19 @@ export default {
       console.log(this.getters.userData.password)
       console.log(this.getters.userData.description)
         axios({
-          url: 'http://i7a506.p.ssafy.io:8080/api/members/join',
+          url: 'https://i7a506.p.ssafy.io/api/members/join',
           method: 'post',
           data: this.getters.userData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          }
         })
           .then( () => {
             console.log('successfully created an account')
+            ElMessageBox.alert('여행의 시작 뱃지를 획득하셨어요! 로그인 후 획득한 뱃지를 확인하실 수 있어요', 
+            '회원가입을 축하합니다!', {
+              confirmButtonText: 'OK'
+            })
             router.push({ name: 'login' })
           })
           .catch(err => {
@@ -129,18 +140,20 @@ export default {
     },
 
     // 이메일 중복확인
-    checkEmailDuplicate({ getters }, userData) {
+    checkEmailDuplicate({ commit, getters }, userData) {
       console.log(getters)
       const email = userData.email
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/members/duplicate?email=${email}`,
+        url: `https://i7a506.p.ssafy.io/api/members/duplicate?email=${email}`,
         method: 'get',
         param: email
       })
       .then(res => {
         if (res.data === true) {
+          commit('SET_IS_DUPLICATE', res.data)
           alert('이메일이 중복되었습니다')
         } else {
+          commit('SET_IS_DUPLICATE', res.data)
           alert('이메일을 사용하셔도 좋습니다')
         }
       })
@@ -153,7 +166,7 @@ export default {
     emailCode({commit}, userinfo) {
       console.log(userinfo)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/join/authmail',
+        url: 'https://i7a506.p.ssafy.io/api/members/join/authmail',
         method: 'post',
         data: userinfo
       })
@@ -183,7 +196,7 @@ export default {
     fetchCurrentUser({ getters, dispatch, commit }, ) {
       if (getters.isLoggedIn) {
         axios({
-          url: 'http://i7a506.p.ssafy.io:8080/api/auth/members',
+          url: 'https://i7a506.p.ssafy.io/api/auth/members',
           method: 'get',
           headers: getters.authHeader,
         })
@@ -208,7 +221,7 @@ export default {
 
     logout({ getters, dispatch }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/logout',
+        url: 'https://i7a506.p.ssafy.io/api/members/logout',
         method: 'get',
         headers: getters.authHeader,
       })
@@ -235,7 +248,7 @@ export default {
     changePassword({ commit, dispatch }, userinfo) {
       console.log(userinfo)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/change_pw',
+        url: 'https://i7a506.p.ssafy.io/api/members/change_pw',
         method: 'post',
         data: userinfo
       })
@@ -254,7 +267,7 @@ export default {
     deleteAccount({ getters }) {
       console.log(getters.authHeader)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/members/remove',
+        url: 'https://i7a506.p.ssafy.io/api/auth/members/remove',
         method: 'delete',
         headers: getters.authHeader,
       })
