@@ -81,16 +81,11 @@
         </div>
         <div class="btn-tag">
           <!-- 작성자와 로그인 유저가 다른 경우 -->
-          <div v-if="!isAuthor">
-            <el-button class="follow-btn" v-if="!isFollowed" @click="isFollowed=1">
-              <span class="material-symbols-outlined">add</span>
-              <span class="follow">팔로우</span>
-            </el-button>
-            <el-button class="following-btn" v-else @click="isFollowed=0">
-              <span class="material-symbols-outlined">check</span>
-              <span class="following">팔로잉</span>
-            </el-button>
+          <div v-if="!isAuthor" class="follow-button">
+            <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
+            <el-button v-else type="primary" plain @click="unfollowNow(), unfollow(followId)">팔로잉</el-button>
           </div>
+
           <div class="info-tag">
             <!-- 여기는 공통 -->
             <!-- <el-tag>{{ diary.countryName }}</el-tag> -->
@@ -179,28 +174,17 @@ export default {
       isLiked: 0,
       commentClicked: false,
       diaryPk: this.$route.params.diaryPk,
-      isFollowed: 0,
-      commentsTemp: [
-        {
-          member: '유송',
-          content: '이건 댓글',
-          children: [
-            {
-              member: '규민',
-              content: '이건 대댓글'
-            }
-          ]
-        },
-        {
-          member: '정현',
-          content: '나도 댓글 달랭'
-        }
-      ]
+      // isFollow: false,
+      followId: {
+        follower_id: null,
+        following_id: null,
+      },
+      isFollow: this.followingStatus
     }
   },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
-    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing', 'authorId', 'authorInfo']),
+    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing', 'authorId', 'authorInfo', 'followingStatus']),
     partyTag() {
       const party = this.diary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -209,10 +193,21 @@ export default {
     photoUrl(file) {
       const newUrl = URL.createObjectURL(file)
       return newUrl
-    },
+    }
+  },
+  watch: {
+    followingStatus(newVal) {
+      // 팔로우 여부 바뀌면
+      this.isFollow = newVal
+      // 팔로워 숫자 다시 받아오기
+      // this.yourFollowersCount(this.currentProfile)
+      // 팔로워 정보 다시 받아오기
+      // this.yourFollowers(this.currentProfile)
+    }
   },
   methods: {
-    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'unlikeDiary', 'checkLike','fetchCurrentUser', 'fetchDiaryUser']),
+    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'unlikeDiary', 'checkLike','fetchCurrentUser', 'fetchDiaryUser',
+    'follow', 'unfollow', 'setFollowingStatus']),
     goLike() {
       this.likeDiary(this.diary)
     },
@@ -249,6 +244,22 @@ export default {
     closeInfo() {
       this.hideParent()
     },
+
+    followNow() {
+      this.isFollow = !this.isFollow
+      // follower_id - 내 아이디
+      // following_id - 내가 팔로우하는 사람 아이디
+      this.followId.follower_id = this.currentUser.id
+      this.followId.following_id = this.diary.memberId
+    },
+
+    unfollowNow() {
+      this.isFollow = !this.isFollow
+      // follower_id - 내 아이디
+      // following_id - 내가 언팔로우할 사람 아이디
+      this.followId.follower_id = this.currentUser.id
+      this.followId.following_id = this.diary.memberId
+    },
   },
   created() {
     this.fetchDiary(this.diaryPk)
@@ -259,6 +270,7 @@ export default {
     this.fetchDiaryUser(this.authorId)
     setTimeout(() => this.checkLike(this.diaryPk), 10)
     // this.addMarkers()
+    this.setFollowingStatus(this.diary.memberId)
   }
 }
 </script>
@@ -487,6 +499,12 @@ a {
   color: var(--el-text-color-secondary);
   font-size: 1rem;
   font-weight: 100;
+}
+
+.el-button--primary.is-plain {
+  --el-button-text-color: var(--el-color-primary);
+  --el-button-bg-color: white;
+  --el-button-border-color: var(--el-color-primary);
 }
 
 </style>
