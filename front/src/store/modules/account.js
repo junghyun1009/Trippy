@@ -105,7 +105,9 @@ export default {
           router.push({ name: 'home' })
         })
         .catch(err => {
-          console.error(err)
+          if ( err.response.status === 400) {
+            alert('아이디 혹은 비밀번호를 확인하세요')
+          }
         })
     },
 
