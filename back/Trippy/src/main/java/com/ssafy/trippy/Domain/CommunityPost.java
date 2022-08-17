@@ -44,7 +44,6 @@ public class CommunityPost extends BaseEntity {
 
     private String openKakaoUrl;
 
-    @Column( name="IS_LOCAL")
     private boolean Local;
     private String place;
     private boolean Day;
