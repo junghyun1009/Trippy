@@ -2,8 +2,7 @@
   <div class="container">
     <div class="background">
       <div class="profile-picture">
-        <el-avatar :size="90">
-          <img :src="theirProfile.img_link" alt="user">
+        <el-avatar :size="90" :src="theirProfile.img_link" alt="user">
         </el-avatar>
       </div>
       <!-- {{ theirProfile }} -->
@@ -160,7 +159,10 @@ export default {
   },
   watch: {
     followingStatus(newVal) {
+      // 팔로우 여부 바뀌면
       this.isFollow = newVal
+      // 팔로워 숫자 다시 받아오기
+      this.yourFollowersCount(this.currentProfile)
     },
     // isMyProfile(newVal) {
     //   console.log('프로필 이동', this.currentProfile)
@@ -169,7 +171,9 @@ export default {
     // },
     fetchAuthorId(newVal) {
       console.log(newVal)
-      this.fetchTheirProfile(this.$route.params.authorId)
+      this.currentProfile = newVal
+      this.fetchCurrentUser()
+      this.fetchTheirProfile(this.currentProfile)
       console.log('프로필 이동', this.currentProfile)
       // this.currentProfile = newVal
       this.myProfile()
@@ -355,12 +359,20 @@ export default {
 
   .description {
     display: flex;
+    margin-left: 1rem;
+    margin-top: 0;
   }
 
   .follow {
     display: flex;
     margin-left: 7.5rem;
     margin-top: 0;
+  }
+
+  .el-button--primary.is-plain {
+    --el-button-text-color: var(--el-color-primary);
+    --el-button-bg-color: white;
+    --el-button-border-color: var(--el-color-primary);
   }
 
 </style>
