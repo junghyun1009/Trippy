@@ -57,7 +57,7 @@
     <!-- 뱃지 -->
     <div v-if="isMyProfile" class="badge">
       <el-row>
-        <el-col v-show="badge.obtained" class="badge" :span="4" v-for="(badge, idx) in badges" :key="idx">
+        <el-col v-show="badge.obtained" class="badge" :span="4" v-for="(badge, idx) in badges" :key="idx" @click="goBadge">
           <img :src=badge.image :alt="badge-image" >
         </el-col>
       </el-row>
@@ -299,16 +299,19 @@ export default {
     },
     isBadgeUnlocked() {
       var unlockedBadgeList = this.$store.getters.badgeList || []
-        unlockedBadgeList.forEach( myBadge => {
-          console.log(myBadge)
-          if ( myBadge.name === badgeNames.firstSignUp) {
-            this.badges[0].obtained = true
-          } if ( myBadge.name === badgeNames.firstDiary) {
-            this.badges[1].obtained = true
-          } if ( myBadge.name === badgeNames.firstPost) {
-            this.badges[2].obtained = true
-          }
-        })
+      unlockedBadgeList.forEach( myBadge => {
+        console.log(myBadge)
+        if ( myBadge.name === badgeNames.firstSignUp) {
+          this.badges[0].obtained = true
+        } if ( myBadge.name === badgeNames.firstDiary) {
+          this.badges[1].obtained = true
+        } if ( myBadge.name === badgeNames.firstPost) {
+          this.badges[2].obtained = true
+        }
+      })
+    },
+    goBadge() {
+      this.$router.push({ name: 'badgeList' })
     }
   },
   created() {
