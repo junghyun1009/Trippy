@@ -5,14 +5,15 @@
     <div class="email">
       <div class="email-format">
         <p>이메일</p>
-        <el-input  id="email"
+        <el-input 
+        id="email"
         class="input"
         v-model="userData.email" 
         v-if="!emailAuthorized"
         placeholder="username@email.com"
         @blur="checkEmail()"
         ></el-input>
-        <el-input class="input" v-else v-model="userData.email" disabled></el-input>
+        <el-input class="input" id="email2" v-else v-model="userData.email" disabled></el-input>
         <div class="email-button">
           <el-button type="primary" @click="checkEmailDuplicate(userData), checkEmail()">중복확인</el-button>
           <el-button type="primary" v-if="!this.isDuplicate" v-model="verificationCode" @click="successMessage(), emailCodeSignUp(userData.email)">인증번호 받기</el-button>
@@ -36,7 +37,6 @@
     <br>
     <div class="password">
       <p>비밀번호</p>
-      {{ userData.password }}
       <el-input v-model="userData.password" 
         type="password" 
         id="password"
@@ -178,8 +178,7 @@ export default {
       ...mapGetters(['isDuplicate']),
       totalPass() {
         let pass = this.pass
-        pass = this.emailpass && this.passwordpass && this.passwordcheckpass && this.phonepass && this.nicknamepass
-        && (!this.isDuplicate)
+        pass = this.emailpass && this.passwordpass && this.phonepass && this.nicknamepass
         return pass
       }
       // 얘 뒤집어서 써야돼
@@ -286,7 +285,7 @@ export default {
 
       // 빈칸이 있는지 없는지 확인하는 함수
       checkBlank() {
-        var emailBlank = document.getElementById('email').value
+        var emailBlank = document.getElementById('email2').value
         var passwordBlank = document.getElementById('password').value
         var phoneBlank = document.getElementById('phone').value
         var nicknameBlank = document.getElementById('nickname').value

@@ -130,6 +130,7 @@ img {
 
 .description {
   width: 100%;
+  margin: 2%;
 }
 
 .description p {

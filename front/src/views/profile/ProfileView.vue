@@ -309,8 +309,8 @@ export default {
   },
   mounted() {
     // 내 프로필인지 확인 => 정보 저장하는 시간이 필요함
-    this.myProfile()
-    // setTimeout(() => this.myProfile(), 100)
+    // this.myProfile()
+    setTimeout(() => this.myProfile(), 100)
     this.fetchProfile()
     // this.fetchTheirProfile(this.$route.params.authorId)
     // this.myFollowings()
@@ -318,15 +318,6 @@ export default {
     this.setFollowingStatus(this.currentProfile)
     this.fetchMyDiary()
     this.fetchBadges(this.$route.params.authorId)
-
-
-    if (localStorage.getItem('reloaded')) {
-      localStorage.removeItem('reloaded');
-    } else {
-      localStorage.setItem('reloaded', '1');
-      location.reload();
-    }
-    
   },
   updated() {
       // this.fetchTheirProfile(this.$route.params.authorId)

@@ -107,7 +107,7 @@ export default {
           router.push({ name: 'home' })
         })
         .catch(err => {
-          if ( err.response.status === 400) {
+          if ( err.response.status === 400 || err.response.status === 500) {
             alert('아이디 혹은 비밀번호를 확인하세요')
           }
         })
@@ -120,8 +120,6 @@ export default {
     
     signupTwo({commit,}, userData) {
       commit('SET_USER_DATA', userData)
-      console.log(this.getters.userData.password)
-      console.log(this.getters.userData.description)
         axios({
           url: 'https://i7a506.p.ssafy.io/api/members/join',
           method: 'post',
@@ -239,8 +237,11 @@ export default {
           commit('SET_CURRENT_USER', res.data)})
         .catch(err => {
           if (err.response.status === 400) {
+            console.log('failed to fetch current user info')
             dispatch('removeToken')
             router.push({ name: 'login' })
+          } else {
+            console.log('user not logged in')
           }
         })
       }
