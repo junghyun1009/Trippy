@@ -77,7 +77,8 @@ public class CommunityPostServiceImpl implements CommunityPostService {
                 updateCommunityPostDto.isLocal(),
                 location.get(),
                 updateCommunityPostDto.getPlace(),
-                updateCommunityPostDto.isDay());
+                updateCommunityPostDto.isDay(),
+                updateCommunityPostDto.getOpenKakaoUrl());
     }
 
     @Override
@@ -106,6 +107,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
                     .title(communityPost.getTitle())
                     .place(communityPost.getPlace())
                     .Day(communityPost.isDay())
+                    .openKakaoUrl(communityPost.getOpenKakaoUrl())
                     .build();
             communityPostDtos.add(responseCommunityPostDto);
         }

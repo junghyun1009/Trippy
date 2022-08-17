@@ -38,8 +38,9 @@ public class UpdateCommunityPostDto {
     private String place;
     private boolean Day;
     private Long memberId;
+    private String openKakaoUrl;
 
-    public UpdateCommunityPostDto(String title, String description, int category, Long locationId, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, boolean Day, String place, String countryName, String cityName, Long memberId) {
+    public UpdateCommunityPostDto(String title, String description, int category, Long locationId, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, boolean Day, String place, String countryName, String cityName, Long memberId,String openKakaoUrl) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -57,5 +58,6 @@ public class UpdateCommunityPostDto {
         this.Day = Day;
         this.place = place;
         this.memberId= memberId;
+        this.openKakaoUrl = openKakaoUrl;
     }
 }

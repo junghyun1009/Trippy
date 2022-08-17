@@ -8,6 +8,7 @@ export default ({
   state: {
     diaries: [],
     diary: {},
+    othersDiary: [],
     // images: [],
     // image: {},
 
@@ -19,11 +20,14 @@ export default ({
     parentComment: '',
     authorId: null,
     parentId: null,
-    location: []
+    location: [],
+    authorInfo: {},
+    childInfo: {}
   },
   getters: {
     diaries: state => state.diaries,
     diary: state => state.diary,
+    othersDiary: state => state.othersDiary,
     // images: state => state.images,
     // image: state => state.image,
     comment: state => state.comment,
@@ -38,11 +42,13 @@ export default ({
       return state.diary?.name === getters.currentUser.name
     },
     authorId: state => state.authorId,
-    location: state => state.location
+    location: state => state.location,
     // isDiary: state => !_.isEmpty(state.diary)
+    authorInfo: state => state.authorInfo,
+    childInfo: state => state.childInfo
   },
   mutations: {
-
+    // 일지 저장
     SET_DIARY(state, diary) {
       // diary.detailLocations.forEach((location) => {
       //   if (location.filename != null) {
@@ -54,20 +60,40 @@ export default ({
       console.log(state.diary)
     },
 
+    // 다른 사람 일지 전체 저장
+    SET_OTHERS_DIARY(state, diaries) {
+      for(let i=0; i<diaries.length; i++) {
+        for(let j=0; j<diaries[i].detailLocations.length; j++) {
+          diaries[i].representativeImg = require('@/assets/Trippy.png')
+          if ((diaries[i].detailLocations[j].filename!=null) && 
+          (typeof diaries[i].detailLocations[j].filename === 'string' && diaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
+            diaries[i].representativeImg = diaries[i].detailLocations[j].filepath
+            break;
+          }
+        }
+      }
+      state.othersDiary = diaries
+      console.log(state.othersDiary)
+    },
+
     // SET_IMAGES(state, image) {
     //   state.image = image
     //   state.images.push(image)
     //   console.log(state.images)
     // },
 
+    // 댓글 저장
     SET_COMMENT(state, payload) {
-      state.comment.user = payload.user
-      state.comment.info = payload.info
+      // state.comment.user = payload.user
+      // state.comment.img = payload.img
+      // state.comment.info = payload.info
+      state.comment = payload
       console.log(state.comment)
       state.comments.push(state.comment)
       state.comment = {}
     },
 
+    // 댓글 수정 시, state 변경
     SWITCH_IS_EDITING(state, comment) {
       console.log(3, comment)
       state.commentToEdit = comment
@@ -75,10 +101,12 @@ export default ({
       state.isEditing = true
     },
 
+    // 댓글 목록 초기화
     EMPTY_COMMENTS(state) {
       state.comments = []
     },
 
+    // 일지 작성 유저 아이디 저장
     SET_AUTHOR_ID(state, authorId) { 
       state.authorId = authorId
       console.log(state.authorId)
@@ -99,21 +127,37 @@ export default ({
       state.diaries = diaries
     },
 
+    // 대댓글 작성 시, state 변경
     SHOW_PARENT(state, parent) {
       state.isChild = true
       state.parentComment = parent.member
       state.parentId = parent.parentId
     },
 
+    // 대댓글 작성 취소 시, state 변경
     HIDE_PARENT(state) {
       state.isChild = false
     },
 
+    // 일지 작성, 동행 찾기 게시글 작성 시 DB에 저장되어 있는 장소 목록 불러오기
     SET_LOCATION(state, location) {
       state.location = location
     },
 
     SET_DIARY_LIKE: (state, like) => (state.diary.like = like),
+
+    // 일지 작성 회원 정보 조회
+    SET_AUTHOR(state, info) {
+      state.authorInfo = info
+    },
+
+    // 대댓글 작성 회원 정보 조회
+    SET_CHILD_AUTHOR(state, info) {
+      // state.childInfo = {}
+      state.childInfo = info
+      console.log('child', state.childInfo)
+    }
+
   },
   actions: {
     // 첫번째 일지인가요?
@@ -175,6 +219,7 @@ export default ({
       .then(res => {
         commit('SET_DIARY', res.data)
         console.log('diary set')
+        console.log(res.data)
         const authorId = res.data.memberId
         commit('SET_AUTHOR_ID', authorId)
         // const diary = res.data
@@ -188,6 +233,20 @@ export default ({
         if (err.response.status === 404) {
           router.push({ name: 'notFound404' }) 
         }
+      })
+    },
+
+    // 다른 유저 일지 전체 조회
+    fetchOthersDiary({ commit }, userId) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/posts/${userId}`,
+        method: 'get'
+      })
+      .then((res) => {
+        commit('SET_OTHERS_DIARY', res.data)
+      })
+      .catch(err => {
+        console.error(err.response)
       })
     },
 
@@ -249,7 +308,7 @@ export default ({
         headers: getters.authHeader
       })
       .then((res) => {
-        console.log(res.data);
+        console.log('response', res.data);
         commit('SET_COMMENT', payload)
         router.push({
           name: 'diaryDetail',
@@ -261,7 +320,7 @@ export default ({
     },
 
     // 일지 댓글 목록 조회
-    fetchComment({ getters, commit, dispatch }, diaryPk) {
+    fetchComment({ getters, commit }, diaryPk) {
       axios({
         url: `https://i7a506.p.ssafy.io/api/comment/${diaryPk}`,
         method: 'get',
@@ -271,13 +330,27 @@ export default ({
         console.log(res.data)
         commit('EMPTY_COMMENTS')
         res.data.forEach((comment) => {
-          dispatch('fetchUser', comment)
+          // dispatch('fetchUser', comment)
+          commit('SET_COMMENT', comment)
         })
       })
       .catch(err => {
         if (err.response.status === 404) {
           router.push({ name: 'notFound404'})
         }
+      })
+    },
+
+    // 일지 유저 조회
+    fetchDiaryUser({ getters, commit }, authorId) {
+      console.log(1, authorId)
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/members/${authorId}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        commit('SET_AUTHOR', res.data)
       })
     },
 
@@ -292,11 +365,26 @@ export default ({
       .then((res) => {
         console.log(res.data)
         const user = res.data.name
+        const img = res.data.img_link
         const payload = {
           user: user,
+          img: img,
           info: comment
         }
         commit('SET_COMMENT', payload)
+      })
+    },
+
+    // 대댓글 유저 조회(일지랑 화면이 같이 띄워져서 다른 변수 사용해야 함)
+    fetchChildUser({ getters, commit }, authorId) {
+      console.log(1, authorId)
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/members/${authorId}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        commit('SET_CHILD_AUTHOR', res.data)
       })
     },
 
@@ -382,7 +470,18 @@ export default ({
       })
       .catch(err => console.err(err.response))
     },
-
+    checkLike({ commit, getters }, diaryPk) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost/chk/${diaryPk}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_DIARY_LIKE', res.data)
+      })
+      .catch(err => console.err(err.response))
+    },
     fetchLocation({ commit }) {
       axios({
         url: 'https://i7a506.p.ssafy.io/api/locations',

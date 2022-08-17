@@ -23,15 +23,6 @@ export default ({
     //   this.$route.name !== 'signUp'
     // }
   },
-  // mounted() {
-  //   if (localStorage.getItem('reloaded')) {
-  //       localStorage.removeItem('reloaded');
-  //   } else {
-  //       localStorage.setItem('reloaded', '1');
-  //       location.reload();
-  //   }
-  //   this.reissueToken()
-  // },
 })
 </script>
 
@@ -50,6 +41,10 @@ export default ({
 * {
   box-sizing: border-box;
   margin: 0;
+}
+
+body {
+  padding-bottom: 3rem;
 }
 
 #app {

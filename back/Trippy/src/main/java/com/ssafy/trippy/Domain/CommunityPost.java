@@ -42,6 +42,8 @@ public class CommunityPost extends BaseEntity {
 
     private String gender;
 
+    private String openKakaoUrl;
+
     private boolean Local;
     private String place;
     private boolean Day;
@@ -58,7 +60,7 @@ public class CommunityPost extends BaseEntity {
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder
-    public CommunityPost(Long id, String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, Member member, Location location, String place, boolean Day) {
+    public CommunityPost(Long id, String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, Member member, Location location, String place, boolean Day,String openKakaoUrl) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -76,10 +78,11 @@ public class CommunityPost extends BaseEntity {
         this.location = location;
         this.place = place;
         this.Day = Day;
+        this.openKakaoUrl = openKakaoUrl;
     }
 
     // update문
-    public void update(String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, Location location, String place, boolean Day) {
+    public void update(String title, String description, int category, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, Location location, String place, boolean Day,String openKakaoUrl) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -95,6 +98,7 @@ public class CommunityPost extends BaseEntity {
         this.location = location;
         this.place = place;
         this.Day = Day;
+        this.openKakaoUrl = openKakaoUrl;
     }
 
 }

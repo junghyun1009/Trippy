@@ -10,7 +10,7 @@
     <!-- 전체 뱃지 목록 -->
     <div class="badge-list">
       <el-row>
-        <el-col class="badge" :span="6" v-for="(badge, idx) in badgeList" :key="idx">
+        <el-col class="badge" :span="8" v-for="(badge, idx) in badgeList" :key="idx">
           <img :src=badge.image :alt=badge.image @click="badge.drawer=true" :style="[ badge.obtained ? 'filter: none' : 'filter: grayscale']" >
           <p class="badge-name">{{ badge.name }}</p>
           <el-drawer v-model=badge.drawer direction="btt" size="50%">
@@ -159,38 +159,38 @@ export default {
           drawer: false,
           obtained: false,
         },
-        {
-          pk: 13,
-          name: '???',
-          description: '다음에는 어떤 뱃지가 있을까요?',
-          image: require('@/assets/badge-lock.png'),
-          drawer: false,
-          obtained: false,
-        },
-        {
-          pk: 14,
-          name: '???',
-          description: '다음에는 어떤 뱃지가 있을까요?',
-          image: require('@/assets/badge-lock.png'),
-          drawer: false,
-          obtained: false,
-        },
-        {
-          pk: 15,
-          name: '???',
-          description: '다음에는 어떤 뱃지가 있을까요?',
-          image: require('@/assets/badge-lock.png'),
-          drawer: false,
-          obtained: false,
-        },
-        {
-          pk: 16,
-          name: '???',
-          description: '다음에는 어떤 뱃지가 있을까요?',
-          image: require('@/assets/badge-lock.png'),
-          drawer: false,
-          obtained: false,
-        },
+        // {
+        //   pk: 13,
+        //   name: '???',
+        //   description: '다음에는 어떤 뱃지가 있을까요?',
+        //   image: require('@/assets/badge-lock.png'),
+        //   drawer: false,
+        //   obtained: false,
+        // },
+        // {
+        //   pk: 14,
+        //   name: '???',
+        //   description: '다음에는 어떤 뱃지가 있을까요?',
+        //   image: require('@/assets/badge-lock.png'),
+        //   drawer: false,
+        //   obtained: false,
+        // },
+        // {
+        //   pk: 15,
+        //   name: '???',
+        //   description: '다음에는 어떤 뱃지가 있을까요?',
+        //   image: require('@/assets/badge-lock.png'),
+        //   drawer: false,
+        //   obtained: false,
+        // },
+        // {
+        //   pk: 16,
+        //   name: '???',
+        //   description: '다음에는 어떤 뱃지가 있을까요?',
+        //   image: require('@/assets/badge-lock.png'),
+        //   drawer: false,
+        //   obtained: false,
+        // },
       ],
 
     }
@@ -206,8 +206,8 @@ export default {
 
 .description {
   height: 10vh;
-  margin-top: 2%;
-  font-size: 12px;
+  margin: 3% 0;
+  font-size: 0.9rem;
 }
 
 .badge-list {
@@ -219,6 +219,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
   margin-bottom: 5%;
 }
 

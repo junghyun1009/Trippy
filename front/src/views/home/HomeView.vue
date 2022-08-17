@@ -1,10 +1,12 @@
 <template>
   <div class="home">
+
     <div class="diary-list">
-      <search-bar></search-bar>
+      <search-bar @click="goSearch"></search-bar>
       <region-list></region-list>
       <recommend-list></recommend-list>
     </div>
+
 
     <el-divider />
 
@@ -69,6 +71,9 @@ export default {
       this.followingIdforDiary = this.followingName.id
       this.saveFollowingId(this.followingIdforDiary)
     },
+    goSearch() {
+      this.$router.push({ name: 'search' })
+    }
   },
   mounted() {
     if (localStorage.getItem('reloaded')) {
@@ -83,8 +88,7 @@ export default {
       this.randomFunction()
     }, 100);
   },
-  }
-
+}
 </script>
 
 

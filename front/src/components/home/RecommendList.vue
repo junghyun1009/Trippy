@@ -23,7 +23,7 @@
         <!-- infinite scroll -->
         <!-- slice 일단 테스트할때 걸리작대서 지움 -->
         <!-- 파싱은 나중에 해볼게요 -->
-        <el-col :span="8" v-for="diary in allDiaries" :key="diary.id">
+        <el-col :span="12" v-for="diary in allDiaries" :key="diary.id">
           <recommend-list-item :diary="diary"></recommend-list-item>
         </el-col>
       </el-row>

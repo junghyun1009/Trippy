@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { ElMessageBox } from 'element-plus'
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
 import { userErrorMessage } from '@/common/constant.js'
 import { mapActions, mapGetters } from 'vuex'
@@ -79,7 +80,7 @@ export default {
     // PasswordVerification() {
     //   const currentPassword = this.$store.getters.userData.password
     //   if ( currentPassword !== this.currentPassword ) {
-    //     alert('비밀번호를 다시 한 번 확인해주세요')
+    //     ElMessageBox.alert('비밀번호를 다시 한 번 확인해주세요')
     //   }
     // },
 
@@ -88,12 +89,16 @@ export default {
       var inputEmail = document.getElementById('email').value;
       var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
       if ( !this.userinfo.email ) {
-          alert('이메일을 입력해주세요')
+          ElMessageBox.alert('이메일을 입력해주세요', '알림', {
+          confirmButtonText: 'OK',
+        })
           this.emailSent = false
         } else if (regEmail.test(inputEmail) === false) {
         this.emailFormat = false;
         this.emailSent = false
-        alert('이메일 형식을 확인해주세요')
+        ElMessageBox.alert('이메일 형식을 확인해주세요', '알림', {
+          confirmButtonText: 'OK',
+        })
         } else { 
           this.emailFormat = true
           this.emailSent = true
