@@ -1,19 +1,28 @@
 <template>
   <div class="home">
-    <search-bar @click="goSearch"></search-bar>
-    <region-list></region-list>
 
-    <recommend-list></recommend-list>
-  
+    <div class="diary-list">
+      <search-bar @click="goSearch"></search-bar>
+      <region-list></region-list>
+      <recommend-list></recommend-list>
+    </div>
+
 
     <el-divider />
-    <div class="following-diary-description">
-      <p>정유송님이 팔로우 하고 있는</p>
-      <p><span>정무송</span> 님이 추천하는 코스</p>
-    </div>
+
     <div class="following-diary-list">
+      <div v-if="isLoggedIn" class="following-diary-description">
+        <p>{{ currentUser.name }}님이 팔로우 하고 있는</p>
+        <p><span>{{ this.followingName.name }}</span> 님이 추천하는 코스</p>
+        <following-diary-list v-if="this.followingIdforDiary" :followingIdforDiary="followingIdforDiary"></following-diary-list>
+      </div>
+
     </div>
+
     <br>
+    <br>
+    <br>
+
     <br>
 
   </div>
@@ -23,14 +32,45 @@
 // @ is an alias to /src
 import SearchBar from '@/components/common/SearchBar.vue'
 import RecommendList from '@/components/home/RecommendList.vue'
+import FollowingDiaryList from '@/components/home/FollowingDiaryList.vue'
 import RegionList from '@/components/common/RegionList.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'HomeView',
+  data() {
+    return {
+      followingName: {},
+      followingIdforDiary: '',
+    }
+  },
+  // watch: {
+  //   followingName(newVal) {
+  //     console.log(newVal)
+  //     this.followingIdforDiary = newVal.id 
+  //     console.log(this.followingIdforDiary)
+  //   }
+  // },
   components: {
     SearchBar,
     RecommendList,
     RegionList,
+    FollowingDiaryList,
+  },
+  computed: {
+    ...mapGetters(['isLoggedIn', 'followingList', 'currentUser']),
+
+  },
+  methods: {
+    ...mapActions(['myFollowings', 'fetchCurrentUser', 'saveFollowingId']),
+    randomFunction(){
+      const followingList = this.followingList
+      var following = followingList[Math.floor(Math.random()*followingList.length)]
+      this.followingName = following
+      console.log('followingName', this.followingName)
+      this.followingIdforDiary = this.followingName.id
+      this.saveFollowingId(this.followingIdforDiary)
+    },
   },
   methods: {
     goSearch() {
@@ -44,8 +84,17 @@ export default {
         localStorage.setItem('reloaded', '1');
         location.reload();
     }
+    this.fetchCurrentUser()
+    this.myFollowings()
+    setTimeout(() => {
+      this.randomFunction()
+    }, 100);
   },
+<<<<<<< front/src/views/home/HomeView.vue
+  }
+=======
 }
+>>>>>>> front/src/views/home/HomeView.vue
 
 </script>
 
