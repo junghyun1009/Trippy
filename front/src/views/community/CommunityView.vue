@@ -49,6 +49,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { ElMessageBox } from 'element-plus'
 // import RegionList from '@/components/common/RegionList.vue'
 
 export default {
@@ -131,7 +132,9 @@ export default {
           navigator.geolocation.getCurrentPosition(this.getLocationValue)
           console.log(this.position)
         } else {
-          alert('위치 정보를 찾을 수 없습니다.')
+          ElMessageBox.alert('위치 정보를 찾을 수 없습니다.', '알림', {
+          confirmButtonText: 'OK',
+        })
         }
       },
       getLocationValue(position) {

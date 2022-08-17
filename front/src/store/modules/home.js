@@ -1,6 +1,7 @@
 // import router from '@/router/index.js'
 import router from '@/router'
 import axios from 'axios'
+import { ElMessageBox  } from 'element-plus'
 
 export default ({
     state: {
@@ -107,7 +108,9 @@ export default ({
 				.catch( err => {
 					console.error(err)
 					if ( err.response.data === "해당 게시물을 찾을 수 없습니다." ) {
-						alert(' 해당 지역에 대한 게시물을 찾을 수 없습니다. 전체 목록으로 돌아갑니다 ')
+						ElMessageBox.alert(' 해당 지역에 대한 게시물을 찾을 수 없습니다. 전체 목록으로 돌아갑니다 ', '알림', {
+							confirmButtonText: 'OK',
+						})
 						router.push({ name: 'home' })
 					}
 				})

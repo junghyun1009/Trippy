@@ -333,15 +333,6 @@ export default {
     this.fetchMyLikes()
     this.fetchMyBookmark()
     this.fetchBadges(this.$route.params.authorId)
-
-
-    // if (localStorage.getItem('reloaded')) {
-    //   localStorage.removeItem('reloaded');
-    // } else {
-    //   localStorage.setItem('reloaded', '1');
-    //   location.reload();
-    // }
-    
   },
   updated() {
       // this.fetchTheirProfile(this.$route.params.authorId)
