@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { ElMessageBox } from 'element-plus'
 import { mapActions, mapGetters } from 'vuex'
 import AddPhoto from '@/components/icon/AddPhoto.vue'
 
@@ -97,7 +98,9 @@ export default {
 
     addStory() {
       if (this.newStories[this.newStories.length - 1].place === '' || this.newStories[this.newStories.length - 1].content === '') {
-        alert('내용 작성 후 스토리를 추가해주세요!')
+        ElMessageBox.alert('내용 작성 후 스토리를 추가해주세요!', '알림', {
+          confirmButtonText: 'OK',
+        })
       } else {
         this.newStories.push({
           pk: 0,
@@ -131,7 +134,9 @@ export default {
             }
           ]
         } else {
-          alert("사진 파일만 추가 가능합니다")
+          ElMessageBox.alert("사진 파일만 추가 가능합니다", '알림', {
+          confirmButtonText: 'OK',
+        })
         }
       }
       this.newStories[index].photoList = addedPhotoList
@@ -158,7 +163,9 @@ export default {
             }
           ]
         } else {
-          alert("사진 파일만 추가 가능합니다")
+          ElMessageBox.alert("사진 파일만 추가 가능합니다", '알림', {
+          confirmButtonText: 'OK',
+        })
         }
       }
       this.newStories[index].photoList = addedPhotoList

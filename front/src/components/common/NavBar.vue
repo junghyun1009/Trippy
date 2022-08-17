@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { ElMessageBox } from 'element-plus'
 import { mapActions, mapGetters } from 'vuex'
 import VueCookies from 'vue-cookies'
 
@@ -96,7 +97,9 @@ export default {
 		goProfile() {
       this.isClicked = false
       if ( !VueCookies.get('accessToken') && !VueCookies.get('refreshToken') ) {
-        alert('로그인을 해주세요!')
+        ElMessageBox.alert('로그인을 해주세요!', '알림', {
+          confirmButtonText: 'OK',
+        })
         this.$router.push({ name: 'login' })
       } else {
       const userid = this.profile.id

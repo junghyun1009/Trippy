@@ -57,7 +57,9 @@ export default {
       VueCookies.remove('accessToken')
       VueCookies.remove('refreshToken')
       localStorage.removeItem('email')
-      alert('성공적으로 로그아웃 되었습니다')
+      ElMessageBox.alert('성공적으로 로그아웃 되었습니다', '알림', {
+        confirmButtonText: 'OK',
+      })
       router.push({ name: 'home' })
     },
 
@@ -107,8 +109,10 @@ export default {
           router.push({ name: 'home' })
         })
         .catch(err => {
-          if ( err.response.status === 400) {
-            alert('아이디 혹은 비밀번호를 확인하세요')
+          if ( err.response.status === 400 || err.response.status === 500) {
+            ElMessageBox.alert('아이디 혹은 비밀번호를 확인하세요', '알림', {
+              confirmButtonText: 'OK',
+            })
           }
         })
     },
@@ -120,8 +124,6 @@ export default {
     
     signupTwo({commit,}, userData) {
       commit('SET_USER_DATA', userData)
-      console.log(this.getters.userData.password)
-      console.log(this.getters.userData.description)
         axios({
           url: 'https://i7a506.p.ssafy.io/api/members/join',
           method: 'post',
@@ -147,7 +149,9 @@ export default {
     // 이메일 중복확인
     checkEmailDuplicate({ commit }, userData) {
       if ( !userData.email ) { 
-        alert('이메일을 입력해주세요') 
+        ElMessageBox.alert('이메일을 입력해주세요', '알림', {
+          confirmButtonText: 'OK',
+        }) 
       } else {
         const email = userData.email
         axios({
@@ -158,10 +162,14 @@ export default {
         .then(res => {
           if (res.data === true) {
             commit('SET_IS_DUPLICATE', res.data)
-            alert('이메일이 중복되었습니다')
+            ElMessageBox.alert('이메일이 중복되었습니다', '알림', {
+              confirmButtonText: 'OK',
+            })
           } else {
             commit('SET_IS_DUPLICATE', res.data)
-            alert('이메일을 사용하셔도 좋습니다')
+            ElMessageBox.alert('이메일을 사용하셔도 좋습니다', '알림', {
+              confirmButtonText: 'OK',
+            })
           }
         })
         .catch(err => {
@@ -210,13 +218,19 @@ export default {
     emailAuth() {
       console.log(this.verificationCode)
       if ( !this.verificationCode ) {
-        alert('인증번호를 입력하세요') }
+        ElMessageBox.alert('인증번호를 입력하세요', '알림', {
+          confirmButtonText: 'OK',
+        }) }
       else if ( this.$store.getters.verificationCode === this.verificationCode ){
-        alert('인증이 완료되었습니다')
+        ElMessageBox.alert('인증이 완료되었습니다', '알림', {
+          confirmButtonText: 'OK',
+        })
         this.verified = true
         this.fromPasswordFindView()
       } else {
-        alert('인증번호가 일치하지 않습니다')
+        ElMessageBox.alert('인증번호가 일치하지 않습니다', '알림', {
+          confirmButtonText: 'OK',
+        })
       }
     },
 
@@ -239,8 +253,11 @@ export default {
           commit('SET_CURRENT_USER', res.data)})
         .catch(err => {
           if (err.response.status === 400) {
+            console.log('failed to fetch current user info')
             dispatch('removeToken')
             router.push({ name: 'login' })
+          } else {
+            console.log('user not logged in')
           }
         })
       }
@@ -284,7 +301,9 @@ export default {
         console.log(res)
         dispatch('fetchCurrentUser')
         commit('SET_USER_DATA')
-        alert('비밀번호가 변경되었습니다')
+        ElMessageBox.alert('비밀번호가 변경되었습니다', '알림', {
+          confirmButtonText: 'OK',
+        })
         router.push({ name: 'login' })
       })
       .catch( err => {
@@ -302,11 +321,17 @@ export default {
       .then( () => {
         VueCookies.remove('accessToken')
         VueCookies.remove('refreshToken')
+        localStorage.removeItem('email')
         console.log('successfully deleted account')
         router.push({ name: 'login' })
       })
       .catch(err => {
         console.error(err)
+        if ( err.response.status === 500 ) {
+          ElMessageBox.alert('다시 시도해주세요', '알림', {
+            confirmButtonText: 'OK',
+          })
+        }
       })
     }
 
