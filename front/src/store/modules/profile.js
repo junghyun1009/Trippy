@@ -251,6 +251,8 @@ export default {
       })
     },
     
+
+    // 배지
     fetchMyBadge({ commit, getters }) {
       axios({
         url: 'https://i7a506.p.ssafy.io/api/members/badges',
