@@ -15,14 +15,14 @@
           <!-- 내 프로필 페이지라면 팔로우 버튼 안뜸 -->
           <!-- 만약 fetchCurrentUser의 id와 profile param의 id가 같다면 -->
           <div class="my-page-username" v-if="isMyProfile">
-            <h2>{{ theirProfile.name }}</h2>
+            <h3>{{ theirProfile.name }}</h3>
             <el-button class="button" link @click="goProfileEdit()">
               <span class="material-symbols-outlined icon">edit</span>
             </el-button>
           </div>
           <!-- 남의 프로필 페이지라면 팔로우 버튼 뜸-->
           <div class="my-page-username" v-else>
-            <h2>{{ theirProfile.name }}</h2>
+            <h3>{{ theirProfile.name }}</h3>
             <div class="follow-button">
               <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
               <el-button v-else type="primary" plain @click="unfollowNow(), unfollow(followId)">팔로잉</el-button>
@@ -61,7 +61,7 @@
         <h2 class="drawer">Followers</h2>
       </template>
       <template #default>
-        <followers-list v-if="followerCount" :isMyProfile="isMyProfile"/>
+        <followers-list v-if="followerCount" :isMyProfile="isMyProfile" @click="followerClicked=false"/>
       </template>
     </el-drawer>
 
@@ -71,7 +71,7 @@
         <h2 class="drawer">Followings</h2>
       </template>
       <template #default>
-        <followings-list v-if="followingCount" :isMyProfile="isMyProfile"/>
+        <followings-list v-if="followingCount" :isMyProfile="isMyProfile" @click="followingClicked=false"/>
       </template>
     </el-drawer>
 
@@ -159,6 +159,8 @@ export default {
       this.isFollow = newVal
       // 팔로워 숫자 다시 받아오기
       this.yourFollowersCount(this.currentProfile)
+      // 팔로워 정보 다시 받아오기
+      this.yourFollowers(this.currentProfile)
     },
     // isMyProfile(newVal) {
     //   console.log('프로필 이동', this.currentProfile)
@@ -166,13 +168,18 @@ export default {
     //   this.myProfile()
     // },
     fetchAuthorId(newVal) {
+      // 다른 사람 프로필 페이지로 이동하면
       console.log(newVal)
       this.currentProfile = newVal
+      // 현재 유저 확인
       this.fetchCurrentUser()
+      // 프로필 유저 확인
       this.fetchTheirProfile(this.currentProfile)
       console.log('프로필 이동', this.currentProfile)
-      // this.currentProfile = newVal
+      // 내 프로필인지 검증
       this.myProfile()
+      // 팔로우 여부 확인
+      this.setFollowingStatus(this.currentProfile)
     }
   },
   methods: {
@@ -234,6 +241,7 @@ export default {
       this.followId.follower_id = this.profile.id
       this.followId.following_id = this.theirProfile.id
     },
+
     unfollowNow() {
       this.isFollow = !this.isFollow
       // follower_id - 내가 언팔로우 하게 되는 사람의 아이디
@@ -250,12 +258,13 @@ export default {
   },
   mounted() {
     // 내 프로필인지 확인 => 정보 저장하는 시간이 필요함
-    setTimeout(() => this.myProfile(), 100)
+    this.myProfile()
+    // setTimeout(() => this.myProfile(), 100)
     this.fetchProfile()
     // this.fetchTheirProfile(this.$route.params.authorId)
     // this.myFollowings()
     // this.myFollowers()
-    this.setFollowingStatus(this.$route.params.authorId)
+    this.setFollowingStatus(this.currentProfile)
     this.fetchMyDiary()
     // this.fetchFollow()
     // setTimeout(() => this.fetchTheirProfile(this.$route.params.authorId), 500)
@@ -289,6 +298,7 @@ export default {
 
   .background-info {
     display: flex;
+    width: 100%;
     margin: 0;
   }
 
@@ -320,11 +330,12 @@ export default {
   }
 
   .my-page-username {
+    width: 15rem;
     display: flex;
-
+    align-items: center;
   }
 
-  .my-page-username h2 {
+  .my-page-username h3 {
     font-weight: 500;
     margin-right: 0.5rem;
   }

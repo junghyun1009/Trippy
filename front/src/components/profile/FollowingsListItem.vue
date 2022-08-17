@@ -2,7 +2,7 @@
   <div>
 		<div class="following">
 			<router-link :to="{ name: 'profile', params: { authorId: following.id } }">
-				<el-avatar :size="60" :src="following.img_link" />
+				<el-avatar :size="60" :src="following.img_link"/>
 			</router-link>
 				<!-- {{ follower }} -->
 			<span class="following-name">{{ following.name }}</span>
