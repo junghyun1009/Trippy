@@ -37,4 +37,9 @@ export default {
 	flex-direction: column;
 	align-items: center;
  }
+
+ .follower-name {
+	font-size: 0.8rem;
+	font-weight: 400;
+ }
 </style>
