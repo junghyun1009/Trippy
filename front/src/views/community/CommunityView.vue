@@ -32,7 +32,7 @@
             </p>
             <p class="option">
               <span class="material-symbols-outlined icon">groups</span>
-              {{ post.recruitCurrentVolume }} / {{ post.recruitVolume }}명 참여
+              {{ post.recruitCurrentVolume + 1 }} / {{ post.recruitVolume + 1}}명 참여
             </p>
           </div>
           <div class="content">

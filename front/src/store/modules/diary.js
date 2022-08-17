@@ -382,7 +382,18 @@ export default ({
       })
       .catch(err => console.err(err.response))
     },
-
+    checkLike({ commit, getters }, diaryPk) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost/chk/${diaryPk}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_DIARY_LIKE', res.data)
+      })
+      .catch(err => console.err(err.response))
+    },
     fetchLocation({ commit }) {
       axios({
         url: 'https://i7a506.p.ssafy.io/api/locations',

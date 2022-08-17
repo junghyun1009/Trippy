@@ -1,10 +1,12 @@
 <template>
   <div class="home">
+
     <div class="diary-list">
-      <search-bar></search-bar>
+      <search-bar @click="goSearch"></search-bar>
       <region-list></region-list>
       <recommend-list></recommend-list>
     </div>
+
 
     <el-divider />
 
@@ -70,6 +72,11 @@ export default {
       this.saveFollowingId(this.followingIdforDiary)
     },
   },
+  methods: {
+    goSearch() {
+      this.$router.push({ name: 'search' })
+    }
+  },
   mounted() {
     if (localStorage.getItem('reloaded')) {
         localStorage.removeItem('reloaded');
@@ -83,7 +90,11 @@ export default {
       this.randomFunction()
     }, 100);
   },
+<<<<<<< front/src/views/home/HomeView.vue
   }
+=======
+}
+>>>>>>> front/src/views/home/HomeView.vue
 
 </script>
 
