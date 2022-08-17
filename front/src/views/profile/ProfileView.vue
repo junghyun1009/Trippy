@@ -2,8 +2,7 @@
   <div class="container">
     <div class="background">
       <div class="profile-picture">
-        <el-avatar :size="90">
-          <img :src="theirProfile.img_link" alt="user">
+        <el-avatar :size="90" :src="theirProfile.img_link" alt="user">
         </el-avatar>
       </div>
       <!-- {{ theirProfile }} -->
@@ -16,19 +15,19 @@
           <!-- 내 프로필 페이지라면 팔로우 버튼 안뜸 -->
           <!-- 만약 fetchCurrentUser의 id와 profile param의 id가 같다면 -->
           <div class="my-page-username" v-if="isMyProfile">
-            <h2>{{ theirProfile.name }}</h2>
+            <h3>{{ theirProfile.name }}</h3>
             <el-button class="button" link @click="goProfileEdit()">
               <span class="material-symbols-outlined icon">edit</span>
             </el-button>
           </div>
           <!-- 남의 프로필 페이지라면 팔로우 버튼 뜸-->
-          <div class="their-page-username" v-else>
-            <h2>{{ theirProfile.name }}</h2>
+          <div class="my-page-username" v-else>
+            <h3>{{ theirProfile.name }}</h3>
             <div class="follow-button">
               <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
               <el-button v-else type="primary" plain @click="unfollowNow(), unfollow(followId)">팔로잉</el-button>
             </div>
-        </div>
+          </div>
       </div>
     </div>
     
@@ -36,12 +35,15 @@
     <!-- 팔로워 / 팔로잉 -->
     <div class="follow">
       <div class="user-follow" @click="followerClicked=true">
-        FOLLOWERS
-        {{ followerCount }}
+        <span class="follow-title">Followers</span>
+        <span>{{ followerCount }}</span>
+      </div>
+      <div>
+        <span>|</span>
       </div>
       <div class="user-follow" @click="followingClicked=true">
-        FOLLOWINGS 
-        {{ followingCount }}
+        <span class="follow-title">Followings</span>
+        <span>{{ followingCount }}</span>
       </div>
     </div>
     
@@ -64,26 +66,22 @@
     <!-- followers 창 열기-->
     <el-drawer v-model="followerClicked" direction="btt" size="50%">
       <template #header>
-        <h2>팔로워</h2>
+        <h2 class="drawer">Followers</h2>
       </template>
       <template #default>
-        <followers-list :isMyProfile="isMyProfile"/>
+        <followers-list v-if="followerCount" :isMyProfile="isMyProfile" @click="followerClicked=false"/>
       </template>
     </el-drawer>
 
     <!-- following 창 열기 -->
     <el-drawer v-model="followingClicked" direction="btt" size="50%">
       <template #header>
-        <h2>팔로잉하는 사람</h2>
+        <h2 class="drawer">Followings</h2>
       </template>
       <template #default>
-        <followings-list :isMyProfile="isMyProfile"/>
+        <followings-list v-if="followingCount" :isMyProfile="isMyProfile" @click="followingClicked=false"/>
       </template>
     </el-drawer>
-
-
-
-
 
 
     <!-- 내 다이어리 / 내 좋아요 / 내 동행찾기 -->
@@ -139,6 +137,8 @@ export default {
   },
   data() {
     return {
+      // 현재 들어온 프로필 주인 아이디(문자열)
+      currentProfile: this.$route.params.authorId,
       followId: {
         follower_id: null,
         following_id: null,
@@ -173,33 +173,45 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'profile', 'myDiaries', 'theirProfile', 
+      'currentUser', 'profile', 'myDiaries', 'theirProfile', 
       'followingStatus', 'followerCount', 'followingCount',
       'badgeList'
     ]),
-    fetchTheirId() {
-      const memberId = this.$route.params.authorId 
-      return memberId
-    },
+    // fetchTheirId() {
+    //   const memberId = this.$route.params.authorId
+    //   return memberId
+    // },
     fetchAuthorId() {
       return this.$route.params.authorId
     },
   },
   watch: {
     followingStatus(newVal) {
+      // 팔로우 여부 바뀌면
       this.isFollow = newVal
+      // 팔로워 숫자 다시 받아오기
+      this.yourFollowersCount(this.currentProfile)
+      // 팔로워 정보 다시 받아오기
+      this.yourFollowers(this.currentProfile)
     },
-    isMyProfile(newVal) {
-      this.isMyProfile = newVal
-      console.log(this.isMyProfile)
-      console.log('it is not my profile')
-      console.log(this.fetchTheirId)
-      this.yourFollowers(this.fetchTheirId)
-      this.yourFollowings(this.fetchTheirId)
-    },
+    // isMyProfile(newVal) {
+    //   console.log('프로필 이동', this.currentProfile)
+    //   this.currentProfile = newVal
+    //   this.myProfile()
+    // },
     fetchAuthorId(newVal) {
+      // 다른 사람 프로필 페이지로 이동하면
       console.log(newVal)
-      this.fetchTheirProfile(this.$route.params.authorId)
+      this.currentProfile = newVal
+      // 현재 유저 확인
+      this.fetchCurrentUser()
+      // 프로필 유저 확인
+      this.fetchTheirProfile(this.currentProfile)
+      console.log('프로필 이동', this.currentProfile)
+      // 내 프로필인지 검증
+      this.myProfile()
+      // 팔로우 여부 확인
+      this.setFollowingStatus(this.currentProfile)
     },
     badgeList(newValue) {
       console.log('new value:', newValue)
@@ -209,6 +221,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      'fetchCurrentUser',
       'fetchProfile', 
       'fetchMyDiary', 
       'fetchBadges', 
@@ -230,14 +243,35 @@ export default {
       this.$router.push({ name: 'profileEdit' })
     },
 
+    // 내 프로필인지 확인
     myProfile(){
-      if ( this.profile.id === this.theirProfile.id ) { 
+      console.log(this.currentUser.id, this.$route.params.authorId)
+      if ( this.currentUser.id == this.currentProfile ) { 
         this.isMyProfile = true
         this.fetchMyDiary()
       } else {
         this.isMyProfile = false
       }
+      console.log('여기', this.isMyProfile)
+      this.fetchFollow()
     },
+
+    // 팔로워, 팔로잉 불러오기
+    fetchFollow(){
+      // 내 프로필이면
+      if (this.isMyProfile) {
+        console.log('내 프로필')
+        this.myFollowers(this.currentProfile)
+        this.myFollowings(this.currentProfile)
+      }
+      // 내 프로필이 아니면
+      else {
+        console.log('내 프로필 아님')
+        this.yourFollowers(this.currentProfile)
+        this.yourFollowings(this.currentProfile)
+      }
+    },
+
     followNow() {
       this.isFollow = !this.isFollow
       // follower_id - 내가 팔로우 하게 되는 사람의 아이디
@@ -245,6 +279,7 @@ export default {
       this.followId.follower_id = this.profile.id
       this.followId.following_id = this.theirProfile.id
     },
+
     unfollowNow() {
       this.isFollow = !this.isFollow
       // follower_id - 내가 언팔로우 하게 되는 사람의 아이디
@@ -266,13 +301,21 @@ export default {
         })
     }
   },
+  created() {
+    // 현재 로그인한 유저 정보 저장
+    this.fetchCurrentUser()
+    // 현재 들어간 프로필 유저 정보 저장
+    this.fetchTheirProfile(this.currentProfile)
+  },
   mounted() {
-    this.fetchProfile()
-    this.fetchTheirProfile(this.$route.params.authorId)
-    this.myFollowings()
-    this.myFollowers()
-    this.setFollowingStatus(this.$route.params.authorId)
+    // 내 프로필인지 확인 => 정보 저장하는 시간이 필요함
     this.myProfile()
+    // setTimeout(() => this.myProfile(), 100)
+    this.fetchProfile()
+    // this.fetchTheirProfile(this.$route.params.authorId)
+    // this.myFollowings()
+    // this.myFollowers()
+    this.setFollowingStatus(this.currentProfile)
     this.fetchMyDiary()
     this.fetchBadges(this.$route.params.authorId)
 
@@ -314,11 +357,13 @@ export default {
 
   .background-info {
     display: flex;
+    width: 100%;
     margin: 0;
   }
 
   .username-follow {
     width: 50vw;
+    height: 2.2rem;
   }
 
   .follow-button {
@@ -344,11 +389,34 @@ export default {
   }
 
   .my-page-username {
+    width: 15rem;
     display: flex;
+    align-items: center;
   }
 
-  .user-follow:first-child {
-    margin-right: 15px;
+  .my-page-username h3 {
+    font-weight: 500;
+    margin-right: 0.5rem;
+  }
+
+  .material-symbols-outlined {
+    font-size: 1.3rem;
+    color: #F16B51;
+  }
+
+  .user-follow {
+    margin-left: 0;
+    margin-right: 0;
+    width: 4.5rem;
+  }
+
+  .user-follow span {
+    font-size: 0.8rem;
+    font-weight: 400;
+  }
+
+  .follow-title {
+    color: #F16B51;
   }
 
   .blank {
@@ -357,15 +425,29 @@ export default {
 
   .description {
     display: flex;
+    margin-left: 1rem;
+    margin-top: 0;
   }
 
   .follow {
     display: flex;
-    margin: 2%;
+    margin-left: 7.5rem;
+    margin-top: 0;
   }
 
   img {
     width: 12vw;
   }
 
+  .el-button--primary.is-plain {
+    --el-button-text-color: var(--el-color-primary);
+    --el-button-bg-color: white;
+    --el-button-border-color: var(--el-color-primary);
+  }
+
+  .drawer {
+    font-weight: 500;
+    color: #F16B51;
+
+  }
 </style>
