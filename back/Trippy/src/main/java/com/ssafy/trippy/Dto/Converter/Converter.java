@@ -63,9 +63,7 @@ public class Converter {
     public static List<ResponsePostCommentDto> convertPostCommentList(List<PostComment> postCommentList) {
         List<ResponsePostCommentDto> ResponsepostComments = new ArrayList<>();
         for (PostComment postComment : postCommentList) {
-            ResponsePostCommentDto dto = ResponsePostCommentDto.builder()
-                    .postComment(postComment).build();
-
+            ResponsePostCommentDto dto = new ResponsePostCommentDto(postComment);
             ResponsepostComments.add(dto);
         }
         return ResponsepostComments;

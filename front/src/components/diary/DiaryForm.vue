@@ -280,7 +280,7 @@ export default {
   },
   computed: {
     // update할 때 diaryTemp 대신 해당 pk 다이어리 가져와야 함 -> 편집 창으로 들어오면 해당 pk 다이어리 내용 fetch하는 함수
-    ...mapGetters(['diaryTemp', 'location']),
+    ...mapGetters(['diaryTemp', 'location', ]),
     partyTag() {
       const party = this.newDiary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -318,7 +318,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['createDiary', 'updateDiary', 'saveImage', 'fetchLocation']),
+    ...mapActions(['createDiary', 'updateDiary', 'saveImage', 'fetchLocation', ]),
 
     handleClose(tag) {
       this.newDiary.postTransports.splice(this.newDiary.postTransports.indexOf(tag), 1)
