@@ -62,6 +62,7 @@ export default {
     reissueToken({ dispatch, }) {
       // const data = { "email": localStorage.getItem('email') , "refreshToken": VueCookies.get('refreshToken') }
       // console.log(data)
+      console.log('coming?')
       const email = localStorage.getItem('email')
       const refreshToken = VueCookies.get('refreshToken')
       axios({
