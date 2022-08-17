@@ -71,8 +71,6 @@ export default {
       this.followingIdforDiary = this.followingName.id
       this.saveFollowingId(this.followingIdforDiary)
     },
-  },
-  methods: {
     goSearch() {
       this.$router.push({ name: 'search' })
     }
@@ -90,12 +88,7 @@ export default {
       this.randomFunction()
     }, 100);
   },
-<<<<<<< front/src/views/home/HomeView.vue
-  }
-=======
 }
->>>>>>> front/src/views/home/HomeView.vue
-
 </script>
 
 
