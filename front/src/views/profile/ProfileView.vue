@@ -55,7 +55,7 @@
     <!-- 뱃지 -->
     <div v-if="isMyProfile" class="badge">
       <el-row>
-        <el-col v-show="badge.obtained" class="badge" :span="4" v-for="(badge, idx) in badgeList" :key="idx">
+        <el-col v-show="badge.obtained" class="badge" :span="4" v-for="(badge, idx) in badges" :key="idx">
           <img :src=badge.image :alt="badge-image" >
         </el-col>
       </el-row>
@@ -143,7 +143,7 @@ export default {
         follower_id: null,
         following_id: null,
       },
-      badgeList: [
+      badges: [
         {
           name: '여행의 시작',
           image: require('@/assets/badge-start.png'),
@@ -175,7 +175,7 @@ export default {
     ...mapGetters([
       'profile', 'myDiaries', 'theirProfile', 
       'followingStatus', 'followerCount', 'followingCount',
-      'myBadges'
+      'badgeList'
     ]),
     fetchTheirId() {
       const memberId = this.$route.params.authorId 
@@ -201,8 +201,8 @@ export default {
       console.log(newVal)
       this.fetchTheirProfile(this.$route.params.authorId)
     },
-    myBadges(newValue) {
-      console.log(newValue)
+    badgeList(newValue) {
+      console.log('new value:', newValue)
       this.isBadgeUnlocked()
     }
 
@@ -211,7 +211,7 @@ export default {
     ...mapActions([
       'fetchProfile', 
       'fetchMyDiary', 
-      'fetchMyBadge', 
+      'fetchBadges', 
       'fetchTheirProfile', 
       'follow', 
       'unfollow',
@@ -253,15 +253,15 @@ export default {
       this.followId.following_id = this.theirProfile.id
     },
     isBadgeUnlocked() {
-      var unlockedBadgeList = this.$store.getters.myBadges || []
+      var unlockedBadgeList = this.$store.getters.badgeList || []
         unlockedBadgeList.forEach( myBadge => {
           console.log(myBadge)
           if ( myBadge.name === badgeNames.firstSignUp) {
-            this.badgeList[0].obtained = true
+            this.badges[0].obtained = true
           } if ( myBadge.name === badgeNames.firstDiary) {
-            this.badgeList[1].obtained = true
+            this.badges[1].obtained = true
           } if ( myBadge.name === badgeNames.firstPost) {
-            this.badgeList[2].obtained = true
+            this.badges[2].obtained = true
           }
         })
     }
@@ -274,7 +274,7 @@ export default {
     this.setFollowingStatus(this.$route.params.authorId)
     this.myProfile()
     this.fetchMyDiary()
-    this.fetchMyBadge()
+    this.fetchBadges(this.$route.params.authorId)
 
 
     if (localStorage.getItem('reloaded')) {
