@@ -2,8 +2,8 @@
   <div>
     <div>
       <el-row>
-        <el-col :span="8">
-          <followers-list-item></followers-list-item>
+        <el-col :span="8" v-for="follower in followerList" :key="follower.id">
+          <followers-list-item :follower="follower"></followers-list-item>
         </el-col>
       </el-row>
     </div>

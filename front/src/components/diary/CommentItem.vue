@@ -5,32 +5,37 @@
     </div>
     <div v-for="(comment, idx) in commentsWithUser" :key="idx" class="parent-child">
       <!-- 댓글 -->
+      <!-- {{ comment }} -->
       <div class="parent-comment">
         <!-- userId 보내줘야 함 -->
-        <router-link :to="{ name: 'profile' }">
-          <el-avatar :size="40" src="" />
+        <!-- {{ comment }} -->
+        <router-link :to="{ name: 'profile', params: { authorId: comment.memberId } }">
+          <el-avatar :size="40" :src="comment.imgPath" />
         </router-link>
         <div>
-          <p class="member">{{ comment.user }}</p>
-          <p class="content">{{ comment.info.content }}</p>
+          <p class="member">{{ comment.name }}</p>
+          <p class="content">{{ comment.content }}</p>
           <!-- 나중에는 comment.pk로 바꿔서 보내야할 듯 -->
-          <span class="leave-comment" @click="sendInfo(comment.user, comment.info.id)">답글 달기</span>
-          <span v-if="comment.user === currentUser.name" class="leave-comment" @click="editComment(comment)">수정</span>
-          <span v-if="comment.user === currentUser.name" class="leave-comment" @click="removeComment(comment.info.id)">삭제</span>
+          <span class="leave-comment" @click="sendInfo(comment.name, comment.id)">답글 달기</span>
+          <span v-if="comment.name === currentUser.name" class="leave-comment" @click="editComment(comment)">수정</span>
+          <span v-if="comment.name === currentUser.name" class="leave-comment" @click="removeComment(comment.id)">삭제</span>
         </div>
       </div>
       <!-- 대댓글 -->
       <!-- {{ comment.info.children }} -->
-      <div v-for="(child, index) in comment.info.children" :key="index">
-        <div class="child-comment">
-          <router-link :to="{ name: 'profile' }">
-            <el-avatar :size="40" src="" />
-          </router-link>
-          <div>
-            <p class="member">{{ child.user }}</p>
-            <p class="content">{{ child.info.content }}</p>
-            <span v-if="child.user === currentUser.name" class="leave-comment" @click="editComment(child)">수정</span>
-            <span v-if="child.user === currentUser.name" class="leave-comment" @click="removeComment(child.info.id)">삭제</span>
+      <div v-if="comment.children.length > 0">
+        <div v-for="(child, index) in comment.children" :key="index">
+          <!-- {{ child }} -->
+          <div class="child-comment">
+            <router-link :to="{ name: 'profile', params: { authorId: child.memberId } }">
+              <el-avatar :size="40" :src="child.imgPath" />
+            </router-link>
+            <div>
+              <p class="member">{{ child.name }}</p>
+              <p class="content">{{ child.content }}</p>
+              <span v-if="child.name === currentUser.name" class="leave-comment" @click="editComment(child)">수정</span>
+              <span v-if="child.name === currentUser.name" class="leave-comment" @click="removeComment(child.id)">삭제</span>
+            </div>
           </div>
         </div>
       </div>
@@ -54,13 +59,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentUser', 'comments', 'profile']),
+    ...mapGetters(['currentUser', 'comments', 'childInfo', 'authorId']),
     commentsWithUser () {
       return this.comments
     }
   },
   methods: {
-    ...mapActions(['updateComment', 'deleteComment', 'showParent', 'fetchComment', 'switchIsEditing', 'fetchProfile']),
+    ...mapActions(['updateComment', 'deleteComment', 'showParent', 'fetchComment', 'switchIsEditing', 'fetchChildUser']),
     sendInfo(member, parentId) {
       console.log(member)
       const payload = {
@@ -109,30 +114,34 @@ export default {
       for (let i=0; i<this.commentsWithUser.length; i++) {
         console.log(this.commentsWithUser[i])
         for (let j=0; j<this.commentsWithUser[i].info.children.length; j++) {
-          this.fetchProfile(this.commentsWithUser[i].info.children[j].memberId)
-          this.commentsWithUser[i].info.children[j].user = this.profile.name
-          this.commentsWithUser[i].info.children[j].info = {}
-          this.commentsWithUser[i].info.children[j].info.id = this.commentsWithUser[i].info.children[j].id
-          this.commentsWithUser[i].info.children[j].info.content = this.commentsWithUser[i].info.children[j].content
-          this.commentsWithUser[i].info.children[j].info.postId = this.commentsWithUser[i].info.children[j].postId
-          this.commentsWithUser[i].info.children[j].info.memberId = this.commentsWithUser[i].info.children[j].memberId
-          this.commentsWithUser[i].info.children[j].info.parentId = this.commentsWithUser[i].info.children[j].parentId
-          this.commentsWithUser[i].info.children[j].info.children = this.commentsWithUser[i].info.children[j].children
-          delete this.commentsWithUser[i].info.children[j].id
-          delete this.commentsWithUser[i].info.children[j].content
-          delete this.commentsWithUser[i].info.children[j].postId
-          delete this.commentsWithUser[i].info.children[j].memberId
-          delete this.commentsWithUser[i].info.children[j].parentId
-          delete this.commentsWithUser[i].info.children[j].children
+          this.fetchChildUser(this.commentsWithUser[i].info.children[j].memberId)
+          setTimeout(() => {
+            console.log('여기', this.childInfo)
+            this.commentsWithUser[i].info.children[j].user = this.childInfo.name
+            this.commentsWithUser[i].info.children[j].img = this.childInfo.img_link
+            this.commentsWithUser[i].info.children[j].info = {}
+            this.commentsWithUser[i].info.children[j].info.id = this.commentsWithUser[i].info.children[j].id
+            this.commentsWithUser[i].info.children[j].info.content = this.commentsWithUser[i].info.children[j].content
+            this.commentsWithUser[i].info.children[j].info.postId = this.commentsWithUser[i].info.children[j].postId
+            this.commentsWithUser[i].info.children[j].info.memberId = this.commentsWithUser[i].info.children[j].memberId
+            this.commentsWithUser[i].info.children[j].info.parentId = this.commentsWithUser[i].info.children[j].parentId
+            this.commentsWithUser[i].info.children[j].info.children = this.commentsWithUser[i].info.children[j].children
+            delete this.commentsWithUser[i].info.children[j].id
+            delete this.commentsWithUser[i].info.children[j].content
+            delete this.commentsWithUser[i].info.children[j].postId
+            delete this.commentsWithUser[i].info.children[j].memberId
+            delete this.commentsWithUser[i].info.children[j].parentId
+            delete this.commentsWithUser[i].info.children[j].children
+          }, 100)
         }
       }
     }
   },
   mounted() {
-    this.fetchComment(this.diaryPk),
-    setTimeout(() => {
-      this.showUser()
-    }, 100);
+    this.fetchComment(this.diaryPk)
+    // setTimeout(() => {
+    //   this.showUser()
+    // }, 100);
   }
 }
 </script>
