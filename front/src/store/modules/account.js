@@ -57,6 +57,8 @@ export default {
       VueCookies.remove('accessToken')
       VueCookies.remove('refreshToken')
       localStorage.removeItem('email')
+      alert('성공적으로 로그아웃 되었습니다')
+      router.push({ name: 'home' })
     },
 
     reissueToken({ dispatch, }) {
@@ -253,13 +255,14 @@ export default {
       .then((res) => {
         dispatch('removeToken')
         localStorage.revmoveItem('email')
-        console.log(getters.isLoggedIn)
-        router.push({ name: 'home' })
-        console.log(res.data)
-        alert('성공적으로 로그아웃 되었습니다')
+        console.log(res)
       })
       .catch( err => {
+        console.error(err)
         console.error(err.response)
+        if (err.response.status === 400) {
+          dispatch('removeToken')
+        }
       })
     },
 
