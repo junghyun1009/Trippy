@@ -4,17 +4,18 @@
       <div v-if="this.$route.name === 'home'" class="logo">Trippy</div>
       <div v-else class="view-name-group">
         <div class="menu-icon" @click="goBack()">
-          <span class="material-symbols-outlined">arrow_back_ios</span>
+          <span v-if="this.$route.name === 'diaryCreate' || this.$route.name === 'diaryEdit' || this.$route.name === 'communityCreate' || this.$route.name === 'communityEdit'" class="material-symbols-outlined icon">close</span>
+          <span v-else class="material-symbols-outlined icon">arrow_back_ios</span>
         </div>
         <div class="view-name">{{ viewName }}</div>
       </div>
     </div>
     <div v-if="this.$route.name !== 'login'" class="menu">
-      <div class="menu-icon search" @click="goSearch">
-        <span class="material-symbols-outlined">search</span>
+      <div v-if="this.$route.name === 'diaryDetail'" class="menu-icon search" @click="goSearch">
+        <span class="material-symbols-outlined icon">search</span>
       </div>
-      <div @click="visible=true" class="menu-icon">
-        <span class="material-symbols-outlined">menu</span>
+      <div v-if="this.$route.name === 'profile'"  @click="goSetting" class="menu-icon">
+        <span class="material-symbols-outlined icon">settings</span>
       </div>
     </div>
     <!-- <el-menu
@@ -42,8 +43,8 @@
         </div>
       </el-menu-item>
     </el-menu> -->
-    <el-drawer v-model="visible" size="80%">
-      <!-- 로그인한 유저 -->
+    <!-- <el-drawer v-model="visible" size="80%">
+   
       <div class="drawer">
         <div v-if="isLoggedIn">
           <div class="profile" @click="goProfile(), visible=false">
@@ -55,7 +56,7 @@
           <hr>
 
         </div>
-      <!-- 로그인 안 한 유저 -->
+   
         <div v-if="!isLoggedIn">
           <div class="loggedin">
             <p @click="goLogin(), visible=false">로그인</p>
@@ -64,14 +65,14 @@
           </div>
         </div>
 
-      <!-- 공통 -->
+  
         <div>
           <div class="my-activity">
             <p @click="goMyDiary(), visible=false">
               <span class="material-symbols-outlined icon">note_alt</span>
               내 일지
             </p>
-            <p @click="goMyLikes(), visible=false">
+            <p @click="goMyLikes(e), visible=false">
               <span class="material-symbols-outlined icon">favorite</span>
               내 좋아요
             </p>
@@ -100,7 +101,7 @@
           </div>
         </div>
       </div>
-    </el-drawer>
+    </el-drawer> -->
   </header>
 </template>
 
@@ -168,27 +169,27 @@ export default {
       const userid = this.profile.id
       this.$router.push({ name: 'profile', params: { authorId: userid} })
     },
-    goMyDiary() {
-      this.$router.push({ name: 'profile'})
-    },
-    goMyLikes() {
-      this.$router.push({ name: 'profile' })
-    },
+    // goMyDiary() {
+    //   this.$router.push({ name: 'profile'})
+    // },
+    // goMyLikes() {
+    //   this.$router.push({ name: 'profile' })
+    // },
     goCommunity() {
       this.$router.push({ name: 'community' })
     },
-    goBadge() {
-      this.$router.push({ name: 'badgeList' })
-    },
+    // goBadge() {
+    //   this.$router.push({ name: 'badgeList' })
+    // },
     goSetting() {
       this.$router.push({ name: 'setting' })
     },
-    goLogin() {
-      this.$router.push({ name: 'login' })
-    },
-    goSignup() {
-      this.$router.push({ name: 'signUp' })
-    },
+    // goLogin() {
+    //   this.$router.push({ name: 'login' })
+    // },
+    // goSignup() {
+    //   this.$router.push({ name: 'signUp' })
+    // },
     // showSearchBar() {
     //   this.flag = 1
     // },
@@ -264,7 +265,7 @@ header {
 }
 
 .icon {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   margin-right: 0.3rem;
 }
 
