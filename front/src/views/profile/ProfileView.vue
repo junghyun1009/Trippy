@@ -61,7 +61,7 @@
     <!-- 뱃지 -->
     <div v-if="isMyProfile" class="badge">
       <el-row>
-        <el-col v-show="badge.obtained" class="badge" :span="4" v-for="(badge, idx) in badges" :key="idx">
+        <el-col v-show="badge.obtained" class="badge" :span="4" v-for="(badge, idx) in badges" :key="idx" @click="goBadge">
           <img :src=badge.image :alt="badge-image" >
         </el-col>
       </el-row>
@@ -102,8 +102,10 @@
         <my-diaries-list></my-diaries-list>
       </el-tab-pane>
       <el-tab-pane label="My Likes" name="2">
+        <my-likes-list></my-likes-list>
       </el-tab-pane>
       <el-tab-pane label="My Companions" name="3">
+        <my-bookmark-list></my-bookmark-list>
       </el-tab-pane>
     </el-tabs>
 
@@ -129,6 +131,8 @@
 import FollowersList from '@/components/profile/FollowersList.vue'
 import FollowingsList from '@/components/profile/FollowingsList.vue'
 import MyDiariesList from '@/components/profile/MyDiariesList.vue'
+import MyLikesList from '@/components/profile/MyLikesList.vue'
+import MyBookmarkList from '@/components/profile/MyBookmarkList.vue'
 import OthersDiariesList from '@/components/profile/OthersDiariesList.vue'
 import { mapActions, mapGetters } from 'vuex'
 import { badgeNames } from '@/common/constant.js'
@@ -140,6 +144,8 @@ export default {
     FollowersList,
     FollowingsList,
     MyDiariesList,
+    MyLikesList,
+    MyBookmarkList,
     OthersDiariesList
   },
   data() {
@@ -181,7 +187,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentUser', 'profile', 'myDiaries', 'theirProfile', 
+      'currentUser', 'profile', 'myDiaries', 'myLikes', 'myBookmarks', 'theirProfile', 
       'followingStatus', 'followerCount', 'followingCount',
       'badgeList', 'othersDiary'
     ]),
@@ -232,6 +238,8 @@ export default {
       'fetchCurrentUser',
       'fetchProfile', 
       'fetchMyDiary', 
+      'fetchMyLikes',
+      'fetchMyBookmark',
       'fetchBadges', 
       'fetchTheirProfile', 
       'follow', 
@@ -258,6 +266,8 @@ export default {
       if ( this.currentUser.id == this.currentProfile ) { 
         this.isMyProfile = true
         this.fetchMyDiary()
+        this.fetchMyLikes()
+        this.fetchMyBookmark()
       } else {
         this.isMyProfile = false
       }
@@ -299,16 +309,19 @@ export default {
 
     isBadgeUnlocked() {
       var unlockedBadgeList = this.$store.getters.badgeList || []
-        unlockedBadgeList.forEach( myBadge => {
-          console.log(myBadge)
-          if ( myBadge.name === badgeNames.firstSignUp) {
-            this.badges[0].obtained = true
-          } if ( myBadge.name === badgeNames.firstDiary) {
-            this.badges[1].obtained = true
-          } if ( myBadge.name === badgeNames.firstPost) {
-            this.badges[2].obtained = true
-          }
-        })
+      unlockedBadgeList.forEach( myBadge => {
+        console.log(myBadge)
+        if ( myBadge.name === badgeNames.firstSignUp) {
+          this.badges[0].obtained = true
+        } if ( myBadge.name === badgeNames.firstDiary) {
+          this.badges[1].obtained = true
+        } if ( myBadge.name === badgeNames.firstPost) {
+          this.badges[2].obtained = true
+        }
+      })
+    },
+    goBadge() {
+      this.$router.push({ name: 'badgeList' })
     },
 
     // 일지 랜덤함수

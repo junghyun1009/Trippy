@@ -5,6 +5,8 @@ export default {
   state: {
     profile: {},
     myDiaries: [],
+    myLikes: [],
+    myBookmarks: [],
     badgeList: [],
     isMyProfile: false,
     theirProfile: {},
@@ -17,6 +19,8 @@ export default {
   getters: {
     profile: state => state.profile,
     myDiaries: state => state.myDiaries,
+    myLikes: state => state.myLikes,
+    myBookmarks: state => state.myBookmarks,
     badgeList: state => state.badgeList,
     isMyProfile: state => state.isMyProfile,
     theirProfile: state => state.theirProfile,
@@ -48,7 +52,31 @@ export default {
         }
       }
       state.myDiaries = myDiaries
-    }
+    },
+    // FETCH_MY_DIARY: (state, myDiaries) => {
+    //   for(let i=0; i<myDiaries.length; i++) {
+    //     for(let j=0; j<myDiaries[i].detailLocations.length; j++) {
+    //         myDiaries[i].representativeImg = require('@/assets/Trippy.png')
+    //         if ((myDiaries[i].detailLocations[j].filename!=null) && 
+    //         (typeof myDiaries[i].detailLocations[j].filename === 'string' && myDiaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
+    //             myDiaries[i].representativeImg = myDiaries[i].detailLocations[j].filepath
+    //             break;
+    //         }
+    //       }
+    //   }
+    // },
+    FETCH_MY_LIKES: (state, myLikes) => {
+      myLikes.forEach((like) => {
+        like.detailLocations.forEach((location) => {
+          if (location.filename != null) {
+            like.representativeImg = location.filepath
+            return false
+          }
+        })
+      })
+      state.myLikes = myLikes
+    },
+    FETCH_MY_BOOKMARK: (state, myBookmarks) => state.myBookmarks = myBookmarks
   },
   actions: {
     fetchProfile({ commit, getters }) {
@@ -271,8 +299,35 @@ export default {
       .catch(err => {
         console.log(err)
       })
-    }
+    },
 
+    // 좋아요 가져오기
+    fetchMyLikes({ commit, getters }) {
+      // console.log(memberId)
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/likepost',
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('FETCH_MY_LIKES', res.data)
+      })
+      .catch(err => console.err(err.response))
+    },
+    fetchMyBookmark({ commit, getters }) {
+      // console.log(memberId)
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/bookmark',
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('FETCH_MY_BOOKMARK', res.data)
+      })
+      .catch(err => console.err(err.response))
+    },
 
   }
 }
