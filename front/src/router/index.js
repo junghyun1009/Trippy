@@ -172,35 +172,62 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
-  // const { isLoggedIn } = store.getters
-  const refreshToken = VueCookies.get('refreshToken')
-  const accessToken = VueCookies.get('accessToken')
+router.beforeEach( async(to, from, next) => {
 
-  const authPages = [
-    'diaryCreate', 'diaryEdit', 'diaryDetail',
-    'profile', 'profileEdit', 
-    'community', 'communityEdit', 'communityDetail', 'communityCreate',
-    'badgeList', 'chatList'
-  ]
-
-  const isAuthRequired = authPages.includes(to.name)
+      const authPages = [
+      'diaryCreate', 'diaryEdit', 'diaryDetail',
+      'profile', 'profileEdit', 
+      'community', 'communityEdit', 'communityDetail', 'communityCreate',
+      'badgeList', 'chatList'
+    ]
+    const isAuthRequired = authPages.includes(to.name)
   
-    if (isAuthRequired && !accessToken && refreshToken){
+    if (VueCookies.get('accessToken')===null && VueCookies.get('refreshToken') !== null){
       //refreshToken은 있고 accessToken이 없을 경우 토큰 재발급 요청
-      store.dispatch('reissueToken');
+      console.log('passed')
+      await store.dispatch('reissueToken')
     }
-    if (isAuthRequired && accessToken){
+    if (VueCookies.get('accessToken')!==null){
       //accessToken이 있을 경우 진행
       return next();
     }
-    if (isAuthRequired && !accessToken && !refreshToken){
-      console.log(store)
+    if (isAuthRequired && VueCookies.get('accessToken')===null && VueCookies.get('refreshToken')===null){
       //2개 토큰이 모두 없을 경우 로그인페이지로
       alert('로그인을 해주세요!')
-      return next({name: 'login'});
+      return next('/login');
     }
     return next();
 })
+
+// router.beforeEach( async(to, from, next) => {
+//   // const refreshToken = VueCookies.get('refreshToken')
+//   // const accessToken = VueCookies.get('accessToken')
+
+//   const authPages = [
+//     'diaryCreate', 'diaryEdit', 'diaryDetail',
+//     'profile', 'profileEdit', 
+//     'community', 'communityEdit', 'communityDetail', 'communityCreate',
+//     'badgeList', 'chatList'
+//   ]
+
+//   const isAuthRequired = authPages.includes(to.name)
+  
+//     if (isAuthRequired && VueCookies.get('accessToken')===null && VueCookies.get('refreshToken') !== null){
+//       //refreshToken은 있고 accessToken이 없을 경우 토큰 재발급 요청
+//       console.log('passed')
+//       await store.dispatch('reissueToken')
+//     }
+//     if (isAuthRequired && VueCookies.get('accessToken')!==null){
+//       //accessToken이 있을 경우 진행
+//       return next();
+//     }
+//     if (isAuthRequired && VueCookies.get('accessToken')===null && VueCookies.get('refreshToken')===null){
+//       console.log(store)
+//       //2개 토큰이 모두 없을 경우 로그인페이지로
+//       alert('로그인을 해주세요!')
+//       return next({name: 'login'});
+//     }
+//     return next();
+// })
 
 export default router
