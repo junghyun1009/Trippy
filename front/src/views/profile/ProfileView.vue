@@ -58,26 +58,22 @@
     <!-- followers 창 열기-->
     <el-drawer v-model="followerClicked" direction="btt" size="50%">
       <template #header>
-        <h2>팔로워</h2>
+        <h2 class="drawer">Followers</h2>
       </template>
       <template #default>
-        <followers-list :isMyProfile="isMyProfile"/>
+        <followers-list v-if="followerCount" :isMyProfile="isMyProfile"/>
       </template>
     </el-drawer>
 
     <!-- following 창 열기 -->
     <el-drawer v-model="followingClicked" direction="btt" size="50%">
       <template #header>
-        <h2>팔로잉하는 사람</h2>
+        <h2 class="drawer">Followings</h2>
       </template>
       <template #default>
-        <followings-list :isMyProfile="isMyProfile"/>
+        <followings-list v-if="followingCount" :isMyProfile="isMyProfile"/>
       </template>
     </el-drawer>
-
-
-
-
 
 
     <!-- 내 다이어리 / 내 좋아요 / 내 동행찾기 -->
@@ -375,4 +371,9 @@ export default {
     --el-button-border-color: var(--el-color-primary);
   }
 
+  .drawer {
+    font-weight: 500;
+    color: #F16B51;
+
+  }
 </style>
