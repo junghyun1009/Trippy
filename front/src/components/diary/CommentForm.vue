@@ -6,6 +6,8 @@
 				<el-button class="btn" link @click="onSubmit">
           <span class="material-symbols-outlined">send</span>
         </el-button>
+        <!-- {{ isChild }}
+        {{ parentId }} -->
 			</div>
 
     </form>
@@ -26,20 +28,38 @@ export default {
       }
     },
     computed: {
-      ...mapGetters(['profile']),
+      ...mapGetters(['profile', 'isChild', 'parentId']),
     },
 		methods: {
 			...mapActions(['createComment', 'fetchProfile']),
 			onSubmit() {
         // diary.pk diarydetail에서 props로 받아와서 같이 넘겨주기
-        const payload = {
-          content: this.content,
-          memberId: this.profile.id,
-          postId: this.diaryPk
+        // 댓글 생성
+        if (!this.isChild) {
+          const payload = {
+            content: this.content,
+            memberId: this.profile.id,
+            postId: this.diaryPk,
+            name: this.profile.name,
+            imgPath: this.profile.img_link
+          }
+          this.createComment(payload)
+          console.log('보낸 거', payload)
+          this.content = ''
+        } else {
+          // 대댓글 생성
+          const payload = {
+            parentId: this.parentId,
+            content: this.content,
+            memberId: this.profile.id,
+            postId: this.diaryPk,
+            name: this.profile.name,
+            imgPath: this.profile.img_link
+          }
+          this.createComment(payload)
+          this.content = ''
         }
-				this.createComment(payload),
-				this.content = ''
-			}
+      }
 		},
     mounted() {
       this.fetchProfile()

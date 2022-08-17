@@ -5,33 +5,37 @@ export default {
   state: {
     profile: {},
     myDiaries: [],
+    myBadges: [],
     isMyProfile: false,
     theirProfile: {},
     followerList: [],
     followingList: {},
     followerCount: null,
     followingCount: null,
+    followingStatus: null,
   },
   getters: {
     profile: state => state.profile,
     myDiaries: state => state.myDiaries,
-    myBadge: state => state.myBadge,
+    myBadges: state => state.myBadgeList,
     isMyProfile: state => state.isMyProfile,
     theirProfile: state => state.theirProfile,
     followerList: state => state.followerList,
     followingList: state => state.followingList,
     followerCount: state => state.followerCount,
     followingCount: state => state.followingCount,
+    followingStatus: state => state.followingStatus,
   },
   mutations: {
     SET_PROFILE: (state, profile) => state.profile = profile,
-    SET_MY_BADGE: (state, badge) => state.badge = badge,
+    SET_MY_BADGE: (state, myBadgeList) => state.myBadgeList = myBadgeList,
     IS_MY_PROFILE: (state, isMyProfile) => state.isMyProfile = isMyProfile,
     SET_THEIR_PROFILE: (state, theirProfile) => state.theirProfile = theirProfile,
     FOLLOWER_LIST: (state, followerList) => state.followerList = followerList,
     FOLLOWING_LIST: (state, followingList) => state.followingList = followingList,
     FOLLOWER_COUNT: (state, followerCount) => state.followerCount = followerCount,
     FOLLOWING_COUNT: (state, followingCount) => state.followingCount = followingCount,
+    FOLLOWING_STATUS: (state, followingStatus ) => state.followingStatus = followingStatus,
     FETCH_MY_DIARY: (state, myDiaries) => {
       myDiaries.forEach((diary) => {
         diary.detailLocations.forEach((location) => {
@@ -47,7 +51,7 @@ export default {
   actions: {
     fetchProfile({ commit, getters }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/members',
+        url: 'https://i7a506.p.ssafy.io/api/auth/members',
         method: 'get',
         headers: getters.authHeader,
       })
@@ -59,7 +63,7 @@ export default {
 
     fetchMyDiary({ commit, getters }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/posts/memberDetail',
+        url: 'https://i7a506.p.ssafy.io/api/auth/posts/memberDetail',
         method: 'get',
         headers: getters.authHeader,
       })
@@ -73,10 +77,10 @@ export default {
       })
     },
 
-    fetchTheirProfile({commit}, memberId) {
+    fetchTheirProfile({commit, }, memberId) {
       console.log(memberId)
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/members/${memberId}`,
+        url: `https://i7a506.p.ssafy.io/api/members/${memberId}`,
         method: 'get',
         params: memberId
       })
@@ -88,11 +92,12 @@ export default {
         console.log(err))
     },
 
+
     // 팔로잉 기능
     // 내 follower/following
-    myFollowers({dispatch, getters, commit}) {
+    myFollowers({dispatch, getters, commit }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/follower',
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow/follower',
         method: 'get',
         headers: getters.authHeader
       })
@@ -103,9 +108,9 @@ export default {
       })
     },
 
-    myFollowersCount({getters, commit}) {
+    myFollowersCount({getters, commit }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/follower/cnt',
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow/follower/cnt',
         method: 'get',
         headers: getters.authHeader
       })
@@ -115,9 +120,9 @@ export default {
       })
     },
 
-    myFollowings({dispatch, getters, commit}) {
+    myFollowings({dispatch, getters, commit }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/following',
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow/following',
         method: 'get',
         headers: getters.authHeader
       })
@@ -128,9 +133,9 @@ export default {
       })
     },
 
-    myFollowingsCount({getters, commit}) {
+    myFollowingsCount({getters, commit }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/following/cnt',
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow/following/cnt',
         method: 'get',
         headers: getters.authHeader
       })
@@ -141,26 +146,125 @@ export default {
     },
 
 
-    // 팔로우 언팔로우
-    follow({ getters }, followId) {
+    // 다른 사람의 follower/following
+    yourFollowers({dispatch, commit }, memberId) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow',
-        headers: getters.authHeader,
-        data: followId
+        url: `https://i7a506.p.ssafy.io/api/auth/follow/follower/${memberId}`,
+        method: 'get',
+        // headers: getters.authHeader,
+        params: memberId
+      })
+      .then( res => {
+        console.log('their follower list:', res.data)
+        commit('FOLLOWER_LIST', res.data)
+        dispatch('yourFollowersCount', memberId)
       })
     },
 
-    unfollow({ getters }, followId) {
+    yourFollowersCount({ commit }, memberId) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/follow/undo',
+        url: `https://i7a506.p.ssafy.io/api/auth/follow/follower/cnt/${memberId}`,
+        method: 'get',
+        // headers: getters.authHeader,
+        params: memberId
+      })
+      .then( res => {
+        console.log('number of their followers:', res.data)
+        commit('FOLLOWER_COUNT', res.data)
+      })
+    },
+
+    yourFollowings({dispatch, commit }, memberId) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/follow/following/${memberId}`,
+        method: 'get',
+        // headers: getters.authHeader,
+        params: memberId
+      })
+      .then( res => {
+        console.log('their following list:', res.data)
+        commit('FOLLOWING_LIST', res.data)
+        dispatch('yourFollowingsCount', memberId)
+      })
+    },
+
+    yourFollowingsCount({ commit }, memberId) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/follow/following/cnt/${memberId}`,
+        method: 'get',
+        // headers: getters.authHeader,
+        params: memberId
+      })
+      .then( res => {
+        console.log('number of people they follow:', res.data)
+        commit('FOLLOWING_COUNT', res.data)
+      })
+    },
+
+    // 팔로우 언팔로우
+    follow({ getters, commit }, followId) {
+      console.log(followId)
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow',
+        method: 'post',
         headers: getters.authHeader,
         data: followId
       })
-    }
+      .then( res => {
+        console.log('followed!', res.data)
+        commit('FOLLOWING_STATUS', true)
+        console.log('setgetters')
+        console.log(getters.followingStatus)
+      })
+    },
+
+    unfollow({ getters, commit }, followId) {
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/follow/undo',
+        method: 'post',
+        headers: getters.authHeader,
+        data: followId
+      })
+      .then( res => {
+        console.log('unfollowed!', res.data)
+        commit('FOLLOWING_STATUS', false)
+        console.log('setgetters')
+        console.log(getters.followingStatus)
+      })
+    },
+
+    setFollowingStatus({ getters, commit }, following_id) {
+      console.log(following_id)
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/follow/chk/${following_id}`,
+        method: 'get',
+        headers: getters.authHeader,
+        params: following_id
+      })
+      .then( res => {
+        console.log(res.data)
+          commit('FOLLOWING_STATUS', res.data)
+          console.log(getters.followingStatus)
+      })
+      .catch( err => {
+        console.log(err)
+      })
+    },
     
-    // fetchMyBadge({ commit }) {
-    //   commit('SET_MY_BADGE')
-    // }
+    fetchMyBadge({ commit, getters }) {
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/members/badges',
+        method: 'get',
+        headers: getters.authHeader,
+      })
+      .then( res => {
+        const myBadgeList = res.data
+        commit('SET_MY_BADGE', myBadgeList)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
 
 
   }

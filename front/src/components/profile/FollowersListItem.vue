@@ -1,9 +1,12 @@
 <template>
   <div>
-		<div class="follower-profile" props="follower">
-			<span>{{ followerList[0].img_path }}</span>
-			<span class="follower-name">{{ followerList[0].name }}</span>
-			<span>이건 보이냐</span>
+		<div class="follower">
+			<router-link :to="{ name: 'profile', params: { authorId: follower.id } }">
+				<el-avatar :size="60" :src="follower.img_link" />
+			</router-link>
+				<!-- {{ follower }} -->
+			<span class="follower-name">{{ follower.name }}</span>
+			<!-- <span>{{ follower.img_link }}</span> -->
 		</div>
   </div>
 </template>
@@ -14,13 +17,10 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'FollowersListItem',
 	props: {
-		follower: Object,
+		follower: Object
 	},
 	computed: {
 		...mapGetters(['followerList'])
-	},
-	mounted() {
-		this.test()
 	},
 	method: {
 		test() {
@@ -31,11 +31,10 @@ export default {
 }
 </script>
 
-<style>
-.follower-profile {
-	background-color: black;
-	width: 70px;
-	height: 70px;
-	border-radius: 50%;
-}
+<style scoped>
+ .follower {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+ }
 </style>

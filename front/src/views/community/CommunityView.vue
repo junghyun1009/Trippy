@@ -7,29 +7,32 @@
        <router-link :to="{ name: 'communityDetail', params: { postPk: post.id } }">
         <el-card class="card">
           <div>
-            <el-tag class="tag">{{ post.cityName }}</el-tag>
+            <el-tag type="dark" class="tag">{{ post.cityName }}</el-tag>
+            <el-tag type="dark" class="tag">{{ post.place }}</el-tag>
             <!-- <el-tag class="tag">{{ convertTag }}</el-tag> -->
-            <el-tag class="tag">{{ post.category === 1 ? '식사' : post.category === 2 ? '동행' : post.category === 3 ? '파티' : post.category === 4 ? '이동수단 셰어' : '기타' }}</el-tag>
+            <el-tag type="dark" class="tag">{{ post.category === 1 ? '식사' : post.category === 2 ? '동행' : post.category === 3 ? '파티' : post.category === 4 ? '이동수단 셰어' : '기타' }}</el-tag>
             <!-- <el-tag class="tag" v-for="(tag, idx) in convertTag" :key="idx">{{ tag }} </el-tag> -->
           </div>
           <div class="title">
-            <span class="state">{{ recruitState }}</span>
+            <span class="state">{{ post.recruitCurrentVolume < post.recruitVolume ? '모집중' : '모집마감' }}</span>
             <h4>{{ post.title }}</h4>
           </div>
           <div class="options">
             <p class="option">
-              <span class="material-symbols-outlined">groups</span>
-              {{ post.startAge === post.endAge ? post.startAge : `${post.startAge}~${post.endAge}`}}세 | {{ post.gender }} 참여 가능
+              <span class="material-symbols-outlined icon">sms</span>
+              <span v-if="post.startAge===19 && post.endAge===70 && post.gender==='누구나'">누구나</span>
+              <span v-else>{{ post.startAge === post.endAge ? `${post.startAge}세` : post.startAge === 19 && post.endAge === 70 ? '누구나' : `${post.startAge}~${post.endAge}세`}} | {{ post.gender }}</span>
+              참여 가능
             </p>
             <p class="option">
-              <span class="material-symbols-outlined">event_note</span>
+              <span class="material-symbols-outlined icon">event_note</span>
               <!-- {{ convertDate }}, {{ convertTime }} -->
               <span>{{ post.endDate ? ''+post.startDate.slice(5, 10) + '~' + ''+post.endDate.slice(5,10) : ''+post.startDate.slice(5, 10) }},</span>
               <span>{{ ''+post.meetingTime.slice(11, 16) }}</span>
             </p>
             <p class="option">
-              <span class="material-symbols-outlined">groups</span>
-              {{ post.recruitCurrentVolume }} / {{ post.recruitVolume }}명 참여
+              <span class="material-symbols-outlined icon">groups</span>
+              {{ post.recruitCurrentVolume + 1 }} / {{ post.recruitVolume + 1}}명 참여
             </p>
           </div>
           <div class="content">
@@ -77,9 +80,15 @@ export default {
         // }
         // return cat
       // },
-      recruitState() {
-        return '모집중'
-      },
+      // recruitState() {
+      //   let state = ''
+      //   if (this.post.recruitCurrentVolume < this.post.recruitVolume) {
+      //     state = '모집중'
+      //   } else {
+      //     state = '모집가능'
+      //   }
+      //   return state
+      // },
       // convertDate() {
       //   const posts = this.posts
       //   const date = posts.forEach((el) => {
@@ -197,6 +206,10 @@ export default {
 
 .option > span {
   margin-right: 0.3rem;
+}
+
+.icon {
+  font-size: 1rem;
 }
 
 .content {
