@@ -2,8 +2,10 @@
   <div class="container">
     <!-- <div class="background"> -->
       <!-- {{ randomImage }} -->
-    <img v-if="randomImage&&isMyProfile" class="background" :src="randomImage">
-    <img v-else-if="randomImage&&!isMyProfile" class="background" :src="randomImage">
+    <div class="background">
+      <img v-if="randomImage&&isMyProfile" class="background-image" :src="randomImage">
+      <img v-else-if="randomImage&&!isMyProfile" class="background-image" :src="randomImage">
+    </div>
     <!-- <img v-else :src="theirProfile.img_link"> -->
     <div class="profile-title">
       <el-avatar class="profile-picture" :size="90" :src="theirProfile.img_link" alt="user">
@@ -380,14 +382,27 @@ export default {
     margin: 0;
   }
   
-  .background {
-    display: relative;
+  .background { 
+    margin: 0;
+    padding: 0;
+    /* width: 100%; */
+    height: 18vh;
+    overflow: hidden;
+    object-fit: cover;
+  }
+  .background-image {
     /* background-color: bisque; */
     width: 100%;
-    height: 15vh;
+    height: 18vh;
     padding: 0;
     margin: 0;
+    object-fit: cover;
+    object-position: 60% 40%;
   }
+  
+  /* img {
+    object-fit: cover;
+  } */
 
   .profile-title {
     position: absolute;
@@ -424,7 +439,7 @@ export default {
 
   .profile-picture {
     display: absolute;
-    margin-top: -10%;
+    margin-top: 8%;
     margin-right: 65%;
   }
 
