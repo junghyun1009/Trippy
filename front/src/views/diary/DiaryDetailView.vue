@@ -2,7 +2,7 @@
   <div>
     <!-- diaryTemp -> diary로 바꿔 -->
     <!-- 사진 어떻게 넘어오나 확인해야돼 -->
-    <!-- {{ diary }} -->
+    {{ diary}}
     <div class="diary-detail-header">
       <div class="title-icons">
         <div class="title-location">
@@ -211,7 +211,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'unlikeDiary', 'fetchCurrentUser']),
+    ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'unlikeDiary', 'checkLike','fetchCurrentUser']),
     goLike() {
       this.likeDiary(this.diary)
     },
@@ -255,6 +255,7 @@ export default {
   },
   mounted() {
     setTimeout(() => this.addMarkers(), 500)
+    setTimeout(() => this.checkLike(this.diaryPk), 10)
     // this.addMarkers()
   }
 }
