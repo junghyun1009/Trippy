@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="region">
-				<div class="image" id="tokyo"><span @click="diaryFilter(this)">도쿄</span></div>
+				<div class="image" id="tokyo"><span @click="diaryFilter(this)">오키나와</span></div>
 			</div>
     </div>
 
@@ -56,20 +56,20 @@ export default {
       else if ( event.currentTarget.innerText == '제주') {
         console.log('jeju')
 				this.region.country = '대한민국'
-        this.region.city = '제주'
+        this.region.city = '제주도'
 				console.log(this.region)
         this.fetchRegionDiaries(this.region)
       }
       else if ( event.currentTarget.innerText == '부산') {
         console.log('busan')
 				this.region.country = '대한민국'
-        this.region.city = '부산'
+        this.region.city = '부산광역시'
         this.fetchRegionDiaries(this.region)
       }
-      else if ( event.currentTarget.innerText == '도쿄') {
-        console.log('tokyo')
-				this.region.country = '대한민국'
-        this.region.city = '도쿄'
+      else if ( event.currentTarget.innerText == '오키나와') {
+        console.log('okinawa')
+				this.region.country = '일본'
+        this.region.city = '오키나와'
         this.fetchRegionDiaries(this.region)
       }
     }
@@ -127,7 +127,7 @@ export default {
   }
   
   .region:hover {
-    opacity: 0.4;
+    opacity: 0.5;
   }
   
   
@@ -135,7 +135,7 @@ export default {
     display: block;
     text-align: center;
     line-height: 60px;
-    font-size: 20px;
+    font-size: 15px;
     color: white;
     text-shadow: 2px 2px 4px #000000;
   }
