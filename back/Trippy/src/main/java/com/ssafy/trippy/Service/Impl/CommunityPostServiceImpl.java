@@ -107,6 +107,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
                     .title(communityPost.getTitle())
                     .place(communityPost.getPlace())
                     .Day(communityPost.isDay())
+                    .openKakaoUrl(communityPost.getOpenKakaoUrl())
                     .build();
             communityPostDtos.add(responseCommunityPostDto);
         }
