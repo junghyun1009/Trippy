@@ -70,4 +70,14 @@ public class LikePostController {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         return new ResponseEntity<>(likePostService.existsByMemberIdAndPostId(memberId,postId),HttpStatus.OK);
     }
+
+    @GetMapping("/posts/Like/{postId}")
+    public ResponseEntity<?> getLikePostCnt(@PathVariable("postId") Long postId){
+        try {
+            int cnt = likePostService.getLikeCount(postId);
+            return new ResponseEntity<>(cnt, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
