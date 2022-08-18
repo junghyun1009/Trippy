@@ -39,7 +39,7 @@
           <span class="menu-desc">CHAT</span>
         </div>
       </el-button> -->
-      <el-button class="button" link @click="goProfile">
+      <el-button class="button" link @click="goProfile()">
         <div class="menu">
           <span class="material-symbols-outlined menu-icon profile">person</span>
           <span class="menu-desc">내 트리피</span>
@@ -64,9 +64,8 @@ export default {
   computed: {
     ...mapGetters(['profile', 'isLoggedIn'])
   },
-  mounted() {
+  created() {
     this.fetchProfile()
-    console.log(this.profile.id)
   },
 	methods: {
     ...mapActions(['fetchProfile']),
@@ -95,14 +94,17 @@ export default {
       this.$router.push({ name: 'chatList' })
     },
 		goProfile() {
-      this.isClicked = false
+      // this.isClicked = false
+      console.log(this.profile.id)
       if ( !VueCookies.get('accessToken') && !VueCookies.get('refreshToken') ) {
         ElMessageBox.alert('로그인을 해주세요!', '알림', {
           confirmButtonText: 'OK',
         })
         this.$router.push({ name: 'login' })
       } else {
+      console.log('hello')
       const userid = this.profile.id
+      console.log(userid)
 			// this.$router.push({ name: 'profile', params: { username }})
 			// this.$router.push({ name: 'profile', params: { authorId: `${username}` }})
 			this.$router.push({ name: 'profile', params: { authorId: userid }})

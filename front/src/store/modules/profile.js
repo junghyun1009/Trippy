@@ -79,7 +79,7 @@ export default {
         headers: getters.authHeader,
       })
       .then( res => {
-        console.log('when called fetchProfile:',res.data)
+        console.log('when called fetchProfile:', res.data)
         commit('SET_PROFILE', res.data)
       })
     },
