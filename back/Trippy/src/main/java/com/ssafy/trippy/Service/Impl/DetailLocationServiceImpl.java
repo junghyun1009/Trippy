@@ -20,7 +20,7 @@ public class DetailLocationServiceImpl implements DetailLocationService {
 
     @Override
     public ResponseDetailLocationDto findDetailLocation(Long id) {
-        DetailLocation detailLocation = detailLocationRepository.findById(id).get();
+        DetailLocation detailLocation = detailLocationRepository.findById(id).orElseThrow();
         ResponseDetailLocationDto responseDetailLocationDto = new ResponseDetailLocationDto(detailLocation);
         return responseDetailLocationDto;
     }

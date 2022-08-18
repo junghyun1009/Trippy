@@ -87,7 +87,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
         List<CommunityPost> communityPosts = communityPostRepository.findAll();
         List<ResponseCommunityPostDto> communityPostDtos = new ArrayList<>();
         for (CommunityPost communityPost : communityPosts) {
-            Location location = locationRepository.findById(communityPost.getLocation().getId()).get();
+            Location location = locationRepository.findById(communityPost.getLocation().getId()).orElseThrow();
             System.out.println("location.getId() = " + location.getId());
             ResponseCommunityPostDto responseCommunityPostDto = ResponseCommunityPostDto.builder()
                     .id(communityPost.getId())
@@ -118,7 +118,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
     @Transactional(readOnly = true)
     public ResponseCommunityPostDto findCommunityPost(Long id) {
         Optional<CommunityPost> communityPost = communityPostRepository.findById(id);
-        Member member = memberRepository.findByEmail(communityPost.get().getMember().getEmail()).get();
+        Member member = memberRepository.findByEmail(communityPost.orElseThrow().getMember().getEmail()).orElseThrow();
         ResponseCommunityPostDto responseCommunityPostDto = new ResponseCommunityPostDto(communityPost.get());
         responseCommunityPostDto.builder().memberId(member.getId()).name(member.getName()).build();
         return responseCommunityPostDto;
