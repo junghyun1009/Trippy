@@ -1,5 +1,7 @@
-// import router from "@/router"
+import router from "@/router"
 import axios from "axios"
+import VueCookies from 'vue-cookies'
+
 
 export default {
   state: {
@@ -15,6 +17,7 @@ export default {
     followerCount: null,
     followingCount: null,
     followingStatus: null,
+    profileImg: {}
   },
   getters: {
     profile: state => state.profile,
@@ -29,6 +32,7 @@ export default {
     followerCount: state => state.followerCount,
     followingCount: state => state.followingCount,
     followingStatus: state => state.followingStatus,
+    profileImg: state => state.profileImg
   },
   mutations: {
     SET_PROFILE: (state, profile) => state.profile = profile,
@@ -67,7 +71,8 @@ export default {
       state.myLikes = myLikes
     },
     FETCH_MY_BOOKMARK: (state, myBookmarks) => {
-      state.myBookmarks = myBookmarks
+      state.myBookmarks = myBookmarks,
+    SET_PROFILE_IMG: (state, profileImg) =>state.profileImg = profileImg 
       console.log('눈치챙겨')
     },
   },
@@ -324,6 +329,43 @@ export default {
       })
       .catch(err => console.err(err.response))
     },
+
+    // 프로필 사진 바꾸기
+    changeProfileImg({ commit }, profileImg) {
+      console.log(profileImg)
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/image/upload/member',
+        method: 'post',
+        data: profileImg,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`
+        }
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_PROFILE_IMG', res.data)
+      })
+    },
+    
+    // 프로필 내용 바꾸기
+    changeProfile({ commit, getters }, payload) {
+      console.log(payload)
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/members/modify',
+        method: 'put',
+        data: payload.info,
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log('여기', res.data)
+        commit('SET_PROFILE', payload.info)
+        router.push({
+          name: 'profile',
+          params: { authorId: payload.userId }
+        })
+      })
+    }
 
   }
 }
