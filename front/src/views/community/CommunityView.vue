@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <span class="material-symbols-outlined location" @click="getLocation">my_location</span>
+  <div class="container">
+    <!-- <span class="material-symbols-outlined location" @click="getLocation">my_location</span> -->
     <!-- <region-list></region-list> -->
     <div v-for="post in posts.slice().reverse()" :key="post.id">
        <router-link :to="{ name: 'communityDetail', params: { postPk: post.id } }">
@@ -49,7 +49,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { ElMessageBox } from 'element-plus'
+// import { ElMessageBox } from 'element-plus'
 // import RegionList from '@/components/common/RegionList.vue'
 
 export default {
@@ -127,20 +127,20 @@ export default {
     },
     methods: {
       ...mapActions(['fetchPosts']),
-      getLocation() {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(this.getLocationValue)
-          console.log(this.position)
-        } else {
-          ElMessageBox.alert('위치 정보를 찾을 수 없습니다.', '알림', {
-          confirmButtonText: 'OK',
-        })
-        }
-      },
-      getLocationValue(position) {
-        this.position.latitude = position.coords.latitude
-        this.position.longitude = position.coords.longitude
-      },
+      // getLocation() {
+      //   if (navigator.geolocation) {
+      //     navigator.geolocation.getCurrentPosition(this.getLocationValue)
+      //     console.log(this.position)
+      //   } else {
+      //     ElMessageBox.alert('위치 정보를 찾을 수 없습니다.', '알림', {
+      //     confirmButtonText: 'OK',
+      //   })
+      //   }
+      // },
+      // getLocationValue(position) {
+      //   this.position.latitude = position.coords.latitude
+      //   this.position.longitude = position.coords.longitude
+      // },
     },
     created() {
       this.fetchPosts()
@@ -164,6 +164,10 @@ export default {
   box-sizing: border-box;
   margin: 0;
   text-decoration: none;
+}
+
+.container {
+  padding: 1rem 0;
 }
 
 .location {

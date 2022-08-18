@@ -1,5 +1,7 @@
-// import router from "@/router"
+import router from "@/router"
 import axios from "axios"
+import VueCookies from 'vue-cookies'
+
 
 export default {
   state: {
@@ -15,6 +17,7 @@ export default {
     followerCount: null,
     followingCount: null,
     followingStatus: null,
+    profileImg: {}
   },
   getters: {
     profile: state => state.profile,
@@ -29,6 +32,7 @@ export default {
     followerCount: state => state.followerCount,
     followingCount: state => state.followingCount,
     followingStatus: state => state.followingStatus,
+    profileImg: state => state.profileImg
   },
   mutations: {
     SET_PROFILE: (state, profile) => state.profile = profile,
@@ -53,30 +57,24 @@ export default {
       }
       state.myDiaries = myDiaries
     },
-    // FETCH_MY_DIARY: (state, myDiaries) => {
-    //   for(let i=0; i<myDiaries.length; i++) {
-    //     for(let j=0; j<myDiaries[i].detailLocations.length; j++) {
-    //         myDiaries[i].representativeImg = require('@/assets/Trippy.png')
-    //         if ((myDiaries[i].detailLocations[j].filename!=null) && 
-    //         (typeof myDiaries[i].detailLocations[j].filename === 'string' && myDiaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
-    //             myDiaries[i].representativeImg = myDiaries[i].detailLocations[j].filepath
-    //             break;
-    //         }
-    //       }
-    //   }
-    // },
     FETCH_MY_LIKES: (state, myLikes) => {
-      myLikes.forEach((like) => {
-        like.detailLocations.forEach((location) => {
-          if (location.filename != null) {
-            like.representativeImg = location.filepath
-            return false
+      for(let i=0; i<myLikes.length; i++) {
+        for(let j=0; j<myLikes[i].detailLocations.length; j++) {
+          myLikes[i].representativeImg = require('@/assets/Trippy.png')
+          if ((myLikes[i].detailLocations[j].filename!=null) && 
+          (typeof myLikes[i].detailLocations[j].filename === 'string' && myLikes[i].detailLocations[j].filename.slice(-3) != 'txt')){
+            myLikes[i].representativeImg = myLikes[i].detailLocations[j].filepath
+            break;
           }
-        })
-      })
+        }
+      }
       state.myLikes = myLikes
     },
-    FETCH_MY_BOOKMARK: (state, myBookmarks) => state.myBookmarks = myBookmarks
+    FETCH_MY_BOOKMARK: (state, myBookmarks) => {
+      state.myBookmarks = myBookmarks,
+      console.log('눈치챙겨')
+    },
+    SET_PROFILE_IMG: (state, profileImg) =>state.profileImg = profileImg
   },
   actions: {
     fetchProfile({ commit, getters }) {
@@ -86,7 +84,7 @@ export default {
         headers: getters.authHeader,
       })
       .then( res => {
-        console.log('when called fetchProfile:',res.data)
+        console.log('when called fetchProfile:', res.data)
         commit('SET_PROFILE', res.data)
       })
     },
@@ -317,6 +315,7 @@ export default {
       })
       .catch(err => console.err(err.response))
     },
+    // 북마크 가져오기
     fetchMyBookmark({ commit, getters }) {
       // console.log(memberId)
       axios({
@@ -330,6 +329,43 @@ export default {
       })
       .catch(err => console.err(err.response))
     },
+
+    // 프로필 사진 바꾸기
+    changeProfileImg({ commit }, profileImg) {
+      console.log(profileImg)
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/image/upload/member',
+        method: 'post',
+        data: profileImg,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`
+        }
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('SET_PROFILE_IMG', res.data)
+      })
+    },
+    
+    // 프로필 내용 바꾸기
+    changeProfile({ commit, getters }, payload) {
+      console.log(payload)
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/members/modify',
+        method: 'put',
+        data: payload.info,
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log('여기', res.data)
+        commit('SET_PROFILE', payload.info)
+        router.push({
+          name: 'profile',
+          params: { authorId: payload.userId }
+        })
+      })
+    }
 
   }
 }
