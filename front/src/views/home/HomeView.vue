@@ -45,7 +45,7 @@ export default {
     }
   },
   watch: {
-    followingName: {
+    followingList: {
       deep: true,
       handler: 'randomFunction'
     }
@@ -73,13 +73,16 @@ export default {
       this.$router.push({ name: 'search' })
     }
   },
-  mounted() {
+  created() {
     if (localStorage.getItem('reloaded')) {
         localStorage.removeItem('reloaded');
     } else {
         localStorage.setItem('reloaded', '1');
         location.reload();
     }
+
+  },
+  mounted() {
     this.fetchCurrentUser()
     this.myFollowings()
     // setTimeout(() => {

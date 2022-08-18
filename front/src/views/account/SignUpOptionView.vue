@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import ElMessageBox from 'element-plus'
+import { ElMessageBox } from 'element-plus'
 import { mapActions } from 'vuex'
 
 export default {
