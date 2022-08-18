@@ -1,7 +1,6 @@
 <template>
   <div>
     <span class="material-symbols-outlined location" @click="getLocation">my_location</span>
-
     <!-- <region-list></region-list> -->
     <div v-for="post in posts.slice().reverse()" :key="post.id">
        <router-link :to="{ name: 'communityDetail', params: { postPk: post.id } }">
@@ -14,7 +13,7 @@
             <!-- <el-tag class="tag" v-for="(tag, idx) in convertTag" :key="idx">{{ tag }} </el-tag> -->
           </div>
           <div class="title">
-            <span class="state">{{ post.recruitCurrentVolume < post.recruitVolume ? '모집중' : '모집마감' }}</span>
+            <!-- <span class="state">{{ post.recruitCurrentVolume < post.recruitVolume ? '모집중' : '모집마감' }}</span> -->
             <h4>{{ post.title }}</h4>
           </div>
           <div class="options">
@@ -30,10 +29,10 @@
               <span>{{ post.endDate ? ''+post.startDate.slice(5, 10) + '~' + ''+post.endDate.slice(5,10) : ''+post.startDate.slice(5, 10) }},</span>
               <span>{{ ''+post.meetingTime.slice(11, 16) }}</span>
             </p>
-            <p class="option">
+            <!-- <p class="option">
               <span class="material-symbols-outlined icon">groups</span>
               {{ post.recruitCurrentVolume + 1 }} / {{ post.recruitVolume + 1}}명 참여
-            </p>
+            </p> -->
           </div>
           <div class="content">
             <!-- <p>{{ convertDesc }}</p> -->
@@ -50,6 +49,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { ElMessageBox } from 'element-plus'
 // import RegionList from '@/components/common/RegionList.vue'
 
 export default {
@@ -132,7 +132,9 @@ export default {
           navigator.geolocation.getCurrentPosition(this.getLocationValue)
           console.log(this.position)
         } else {
-          alert('위치 정보를 찾을 수 없습니다.')
+          ElMessageBox.alert('위치 정보를 찾을 수 없습니다.', '알림', {
+          confirmButtonText: 'OK',
+        })
         }
       },
       getLocationValue(position) {

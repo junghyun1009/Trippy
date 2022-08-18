@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <el-row>
+      <el-row >
         <el-col :span="8" v-for="follower in followerList" :key="follower.id">
           <followers-list-item :follower="follower"></followers-list-item>
         </el-col>
@@ -55,7 +55,7 @@ export default {
       'myFollowersCount',
       'yourFollowers',
       'yourFollowersCount',
-      ]),
+      ])
   }
 }
 </script>
