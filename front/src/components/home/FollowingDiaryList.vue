@@ -2,7 +2,7 @@
   <div class="container">
     <div class="following-diaries">
       <el-row>
-        <el-col :span="8" v-for="diary in followingDiaries.slice().reverse()" :key="diary.id">
+        <el-col :span="12" v-for="diary in followingDiaries.slice().reverse()" :key="diary.id">
           <following-diary-list-item :diary="diary"></following-diary-list-item>
         </el-col>
       </el-row>
@@ -58,8 +58,9 @@ export default {
 .container {
   display: flex;
   justify-content: center;
-  margin: 0 3%;
+  margin-top: 0.5rem;
 }
+
 .el-row {
   margin-bottom: 20px;
 }

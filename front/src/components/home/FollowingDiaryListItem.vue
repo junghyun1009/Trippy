@@ -3,7 +3,13 @@
     <router-link :to="{ name: 'diaryDetail', params: { diaryPk: diary.id } }">
       <el-card class="grid-content" :body-style="{ padding: 0 }" shadow="hover">
         <img :src="diary.representativeImg" class="image"/>
-        <span class="title-span">{{ diary.title }}</span>
+        <el-tag type="dark" size="small" class="tag">{{ diary.countryName}}</el-tag>
+        <el-tag type="dark" size="small" class="tag">{{ diary.cityName}}</el-tag>
+        <div style="padding: 0.3rem">
+          <p class="title">{{ diary.title.length > 13 ? ''+diary.title.slice(0, 11) + '...' : diary.title }}</p>
+            <!-- <img> -->
+            <p class="name">{{ diary.name }}</p>
+        </div>
       </el-card>
     </router-link>
     <br>
@@ -13,7 +19,7 @@
 <script>
 
 export default {
-  name: "RecommendListItem",
+  name: 'FollowingDiaryListItem',
   props: {
     diary: Object,
   },
@@ -21,16 +27,37 @@ export default {
 </script>
 
 <style scoped>
-.image {
-  width: 100%;
-  height: 100px;
-  display: block;
-  border-radius: 5%;
+.container {
+  margin: 0 3%;
 }
 
-.title-span {
-  font-size: 1em;
+.image {
+  /* position: absolute; */
+  width: 100%;
+  overflow: hidden;
+  height: 150px;
+  display: block;
+  border-radius: 0.25rem 0.25rem 0 0;
+}
+
+.tag {
+  position: relative;
+  bottom: 1.8rem;
+  margin:0 0.1rem;
+}
+
+.title {
+  position: relative;
+  bottom: 1.45rem;
+  font-size: 0.9rem;
   margin-left: 0%;
+  font-weight: 400;
+}
+
+.name {
+  position: relative;
+  bottom: 1.3rem;
+  font-size: 0.7rem;
 }
 
 a {
@@ -54,8 +81,9 @@ a {
 }
 
 .grid-content {
-  border-radius: 4px;
-  min-height: 10vh;
+  height: 28vh;
+  width: 100%;
+  /* padding-bottom: 75%; */
 }
 
 .el-card__body:hover {
