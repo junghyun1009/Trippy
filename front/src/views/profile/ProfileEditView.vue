@@ -11,7 +11,7 @@
         </div>
       </div> -->
       <!-- 원래 등록되어 있는 이미지 -->
-      <div>
+      <div class="profile-img">
         <el-avatar v-if="!isChange" :size="150" :src="currentUser.img_link" />
 
         <div v-else-if="isChange&& profilePhoto && Object.keys(profilePhoto).length === 0 && profilePhoto.constructor === Object" class="add-photo">
@@ -204,11 +204,11 @@ export default {
     //   this.profilePhoto = {}
     // },
     onSubmit() {
-      if (this.userinfo.gender==='여자') {
-        this.userinfo.gender = 0
-      } else {
-        this.userinfo.gender = 1
-      }
+      // if (this.userinfo.gender==='여자') {
+      //   this.userinfo.gender = 0
+      // } else {
+      //   this.userinfo.gender = 1
+      // }
       // 프로필 사진 정보 저장
       // 프로필 사진 변경 안 함
       if (this.isChange===false) {
@@ -255,11 +255,19 @@ export default {
 
   .photo-input {
     visibility: hidden;
+    height: 0;
+  }
+
+  .profile-img {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .add-photo {
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   }
