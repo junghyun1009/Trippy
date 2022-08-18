@@ -9,7 +9,7 @@ export default {
     // accessToken:  '',
     // refreshToken: '',
     currentUser: {},
-    // profile: {},
+    profile: {},
     userData: {},
     // 임시 email
     email: localStorage.getItem('email') || '',
@@ -23,7 +23,7 @@ export default {
     isLoggedIn: () => !!VueCookies.get('accessToken'),
     // refreshToken: state => state.refreshToken,
     currentUser: state => state.currentUser,
-    // profile: state => state.profile,
+    profile: state => state.profile,
     userData: state => state.userData,
     authError: state => state.authError,
     authHeader: () => ({ 'X-AUTH-TOKEN': `${VueCookies.get('accessToken')}`}),

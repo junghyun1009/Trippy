@@ -2,9 +2,9 @@
   <div>
     <div class="regions"
 			data-flickity='{ "pageDots": false, "cellAlign": "left" }'>
-			<div class="region">
-				<div class="image" id="all" ><span @click="diaryFilter(this.target)">전체</span></div>
-			</div>
+			<!-- <div class="region">
+				<div class="image" id="all" ><span @click="diaryFilter(this)">전체</span></div>
+			</div> -->
 
 			<div class="region">
 				<div class="image" id="seoul" ><span @click="diaryFilter(this)">서울</span></div>
@@ -19,7 +19,19 @@
 			</div>
 
 			<div class="region">
-				<div class="image" id="tokyo"><span @click="diaryFilter(this)">오키나와</span></div>
+				<div class="image" id="okinawa"><span @click="diaryFilter(this)">오키나와</span></div>
+			</div>
+
+			<div class="region">
+				<div class="image" id="barcelona"><span @click="diaryFilter(this)">바르셀로나</span></div>
+			</div>
+
+			<div class="region">
+				<div class="image" id="madrid"><span @click="diaryFilter(this)">마드리드</span></div>
+			</div>
+
+			<div class="region">
+				<div class="image" id="paris"><span @click="diaryFilter(this)">파리</span></div>
 			</div>
     </div>
 
@@ -70,6 +82,24 @@ export default {
         console.log('okinawa')
 				this.region.country = '일본'
         this.region.city = '오키나와'
+        this.fetchRegionDiaries(this.region)
+      }
+      else if ( event.currentTarget.innerText == '바르셀로나') {
+        console.log('barcelona')
+				this.region.country = '스페인'
+        this.region.city = '바르셀로나'
+        this.fetchRegionDiaries(this.region)
+      }
+      else if ( event.currentTarget.innerText == '마드리드') {
+        console.log('madrid')
+				this.region.country = '스페인'
+        this.region.city = '마드리드'
+        this.fetchRegionDiaries(this.region)
+      }
+      else if ( event.currentTarget.innerText == '파리') {
+        console.log('paris')
+        this.region.country = '프랑스'
+        this.region.city = '파리'
         this.fetchRegionDiaries(this.region)
       }
     }
@@ -141,7 +171,7 @@ export default {
   }
   
   
-  .region:nth-child(1) .image{
+  .region:nth-child(0) .image{
       background-image: url("@/assets/seoul.jpg");
       background-size: 100px 100px;
     }
@@ -150,7 +180,7 @@ export default {
       background-size: 100px 100px;
     }
     .region:nth-child(2) .image{
-      background-image: url("@/assets/seoul.jpg");
+      background-image: url("@/assets/jeju.jpg");
       background-size: 100px 100px;
     }
     .region:nth-child(3) .image{
@@ -158,11 +188,19 @@ export default {
       background-size: 100px 100px;
     }
     .region:nth-child(4) .image{
-      background-image: url("@/assets/jeju.jpg");
+      background-image: url("@/assets/tokyo.jpg");
       background-size: 100px 60px;
     }
     .region:nth-child(5) .image{
-      background-image: url("@/assets/tokyo.jpg");
+      background-image: url("@/assets/barcelona.jpg");
+      background-size: 100px 60px;
+    }
+    .region:nth-child(6) .image{
+      background-image: url("@/assets/madrid.png");
+      background-size: 100px 60px;
+    }
+    .region:nth-child(7) .image{
+      background-image: url("@/assets/paris.jpg");
       background-size: 100px 60px;
     }
 
