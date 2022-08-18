@@ -55,10 +55,4 @@ public class LikePostServiceImpl implements LikePostService {
         }
         return false;
     }
-
-    @Override
-    public int getLikeCount(Long postId) {
-        int cnt = likePostRepository.countByPostId(postId);
-        return cnt;
-    }
 }
