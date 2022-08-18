@@ -254,7 +254,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(id).orElseThrow();
         Member member = memberRepository.findByEmail(post.getMember().getEmail()).orElseThrow();
         ResponsePostDto responsePostDto = new ResponsePostDto(post);
-        responsePostDto.setMemberImg(member.getImg_path());
+        responsePostDto.setMemberImg(s3Uploader.getS3(member.getImg_path()));
         responsePostDto.setMemberId(member.getId());
         return responsePostDto;
     }
