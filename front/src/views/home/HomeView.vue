@@ -45,12 +45,11 @@ export default {
     }
   },
   watch: {
-    followingName(newVal) {
-      console.log(newVal)
-      this.followingIdforDiary = newVal.id 
-      console.log(this.followingIdforDiary)
+    followingName: {
+      deep: true,
+      handler: 'randomFunction'
     }
-  }, 
+  },
   components: {
     SearchBar,
     RecommendList,
@@ -84,9 +83,9 @@ export default {
     }
     this.fetchCurrentUser()
     this.myFollowings()
-    setTimeout(() => {
-      this.randomFunction()
-    }, 100);
+    // setTimeout(() => {
+    //   this.randomFunction()
+    // }, 100);
   },
 }
 </script>
