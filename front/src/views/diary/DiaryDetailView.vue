@@ -74,7 +74,6 @@
           <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
             <el-avatar :size="80" :src="authorInfo.img_link" />
           </router-link>
-          <img :src="authorInfo.img_link" alt="">
           <!-- <span>{{ diary.member_id.name }}</span> -->
           <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
             <span class="username">{{ diary.name }}</span>
@@ -99,6 +98,7 @@
       </div>
     </div>
 
+    <img :src="authorInfo.img_link" alt="">
 
     <div id="map" style="height: 70vw; position: relative; overflow: hidden;"></div>
     <div class="route-tag">
