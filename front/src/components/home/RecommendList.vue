@@ -2,7 +2,7 @@
   <div class="container">
     <div v-if="regionDiaries" class="region-diaries">
       <el-row>
-        <el-col :span="8" v-for="diary in regionDiaries.slice().reverse()" :key="diary.id">
+        <el-col :span="12" v-for="diary in regionDiaries.slice().reverse()" :key="diary.id">
           <recommend-list-item :diary="diary"></recommend-list-item>
         </el-col>
       </el-row>
@@ -10,7 +10,7 @@
     <div v-if="searchDiaries" class="search-diaries">
       <br>
       <el-row>
-        <el-col :span="8" v-for="diary in searchDiaries.slice().reverse()" :key="diary.id">
+        <el-col :span="12" v-for="diary in searchDiaries.slice().reverse()" :key="diary.id">
           <recommend-list-item :diary="diary"></recommend-list-item>
         </el-col>
       </el-row>

@@ -7,7 +7,7 @@
       <img v-else-if="randomImage&&!isMyProfile" class="background-image" :src="randomImage">
     </div>
     <!-- <img v-else :src="theirProfile.img_link"> -->
-    <div class="profile-title">
+    <div class="profile-title" >
       <el-avatar class="profile-picture" :size="90" :src="theirProfile.img_link" alt="user">
       </el-avatar>
 
@@ -44,7 +44,7 @@
           <span>{{ followerCount }}</span>
         </div>
         <div>
-          <span>|</span>
+          <span></span>
         </div>
         <div class="user-follow" @click="followingClicked=true">
           <span class="follow-title">Followings</span>
@@ -63,7 +63,7 @@
     <!-- 뱃지 -->
     <div class="badge">
       <el-row>
-        <el-col v-show="badge.obtained===true" :span="4" v-for="(badge, idx) in badges" :key="idx" @click="goBadge">
+        <el-col v-show="badge.obtained===true" :span="2" v-for="(badge, idx) in badges" :key="idx" @click="goBadge">
           <img class="badge-image"  :src=badge.image :alt="badge-image" >
         </el-col>
       </el-row>
@@ -186,20 +186,6 @@ export default {
       randomImage: ''
     }
   },
-  computed: {
-    ...mapGetters([
-      'currentUser', 'profile', 'myDiaries', 'myLikes', 'myBookmarks', 'theirProfile', 
-      'followingStatus', 'followerCount', 'followingCount',
-      'badgeList', 'othersDiary'
-    ]),
-    // fetchTheirId() {
-    //   const memberId = this.$route.params.authorId
-    //   return memberId
-    // },
-    fetchAuthorId() {
-      return this.$route.params.authorId
-    },
-  },
   watch: {
     followingStatus(newVal) {
       // 팔로우 여부 바뀌면
@@ -231,8 +217,34 @@ export default {
     badgeList(newValue) {
       console.log('new value:', newValue)
       this.isBadgeUnlocked()
+    },
+    profile: {
+      deep: true,
+      handler: 'myProfile'
+    },
+    diaries: {
+      deep: true,
+      handler: 'executeRandom'
+    },
+    othersDiary: {
+      deep: true,
+      handler: 'executeRandom'
     }
 
+  },
+  computed: {
+    ...mapGetters([
+      'currentUser', 'profile', 'myDiaries', 'myLikes', 'myBookmarks', 'theirProfile', 
+      'followingStatus', 'followerCount', 'followingCount',
+      'badgeList', 'othersDiary'
+    ]),
+    // fetchTheirId() {
+    //   const memberId = this.$route.params.authorId
+    //   return memberId
+    // },
+    fetchAuthorId() {
+      return this.$route.params.authorId
+    },
   },
   methods: {
     ...mapActions([
@@ -269,6 +281,8 @@ export default {
         this.fetchMyDiary()
         this.fetchMyLikes()
         this.fetchMyBookmark()
+        console.log('좋아요요요요요ㅛㅇ', this.myLikes)
+        console.log('북마크크크크크크', this.myBookmarks)
       } else {
         this.isMyProfile = false
       }
@@ -326,6 +340,14 @@ export default {
       this.$router.push({ name: 'badgeList' })
     },
 
+    executeRandom() {
+      if ( this.isMyProfile ) {
+        this.pickRandom(this.myDiaries)
+      } else {
+        this.pickRandom(this.othersDiary)
+      }
+    },
+
     // 일지 랜덤함수
     pickRandom(diaries) {
       // 일지에 저장되어 있는 사진들만 배열로
@@ -342,22 +364,22 @@ export default {
       this.randomImage = _.sample(images)
     }
   },
-  created() {
+  mounted() {
     // 현재 로그인한 유저 정보 저장
     this.fetchCurrentUser()
     // 현재 들어간 프로필 유저 정보 저장
     this.fetchTheirProfile(this.currentProfile)
-  },
-  mounted() {
     // 내 프로필인지 확인 => 정보 저장하는 시간이 필요함
     // this.myProfile()
-    setTimeout(() => this.myProfile(), 100)
+    // setTimeout(() => this.myProfile(), 100)
     this.fetchProfile()
     // this.fetchTheirProfile(this.$route.params.authorId)
     // this.myFollowings()
     // this.myFollowers()
     this.setFollowingStatus(this.currentProfile)
     this.fetchMyDiary()
+    this.fetchMyLikes()
+    this.fetchMyBookmark()
     setTimeout(() => this.pickRandom(this.myDiaries), 100)
     setTimeout(() => this.pickRandom(this.othersDiary), 100)
     this.fetchBadges(this.$route.params.authorId)
@@ -389,6 +411,8 @@ export default {
     height: 18vh;
     overflow: hidden;
     object-fit: cover;
+    background-color: #F16B51;
+    /* border-bottom: 1px solid #F16B51; */
   }
   .background-image {
     /* background-color: bisque; */
@@ -406,7 +430,8 @@ export default {
 
   .profile-title {
     position: absolute;
-    margin-top: 7rem;
+    margin-top: 6.2rem;
+    padding: 0.5rem;
     /* display: flex; */
   }
 
@@ -499,7 +524,8 @@ export default {
   }
 
   .badge-image {
-    width: 15vw;
+    width: 2rem;
+    height: 2rem;
   }
 
   .el-button--primary.is-plain {

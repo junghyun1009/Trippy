@@ -1,9 +1,9 @@
 <template>
   <div>
-    {{myBookmarks}}
     <el-row>
+      <!-- {{myBookmarks}} -->
       <el-col :span="8" v-for="bookmark in myBookmarks" :key="bookmark.id">
-        <my-bookmark-list-item></my-bookmark-list-item>
+        <my-bookmark-list-item :bookmark="bookmark"></my-bookmark-list-item>
       </el-col>
     </el-row>
   </div>

@@ -1,5 +1,6 @@
 package com.ssafy.trippy.Service;
 
+import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -16,7 +19,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return memberRepository.findByEmail(username).get();
+        return memberRepository.findByEmail(username).orElseThrow();
 //                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
 }

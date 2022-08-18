@@ -2,10 +2,10 @@
   <div class="container">
     <el-form @submit.prevent="onSubmit" method="POST">
       <el-form-item label="제목">
-        <el-input v-model="newPost.title" placeholder="제목을 입력하세요." />
+        <el-input v-model="newPost.title" placeholder="제목을 입력해주세요." />
       </el-form-item>
       <el-form-item label="카테고리">
-        <el-select v-model="newPost.category" placeholder="어떤 활동을 같이 하고 싶나요?">
+        <el-select v-model="newPost.category">
           <el-option v-for="(cat, idx) in categories" :key="idx" :label="cat.label" :value="cat.value" />
         </el-select>
       </el-form-item>
@@ -56,19 +56,30 @@
             <el-form-item label="나이">
               <el-slider class="slider" v-model="age" range :min="19" :max="70" @input="onInput"/>
             </el-form-item>
-            <el-form-item label="지역 제한">
-              <!-- <el-switch v-model="newPost.isLocal" /> -->
+            <!-- <el-form-item label="지역 제한">
               <el-switch v-model="newPost.local" />
-            </el-form-item>
+            </el-form-item> -->
           </el-collapse-item>
         </el-collapse>
       </el-form-item>
       <el-form-item label="모임 장소">
-        <el-input v-model="newPost.place" placeholder="모임 장소를 입력하세요." />
+        <el-input v-model="newPost.place" placeholder="모임 장소를 입력해주세요." />
       </el-form-item>
-      <el-form-item label="오픈채팅">
-        <el-input v-model="newPost.openKakaoUrl" placeholder="오픈채팅 주소를 입력하세요." />
+      <el-form-item label="오픈채팅" class="openchat">
+        <el-input v-model="newPost.openKakaoUrl" placeholder="오픈채팅 주소를 입력해주세요." />
       </el-form-item>
+      <el-popover width="245px" placement="right" show-arrow="false">
+        <template #reference>
+          <span class="material-symbols-outlined info">info</span>
+        </template>
+        <template #default>
+          <p>카카오톡 오픈채팅을 개설하고 <br> 
+          오픈채팅 링크를 입력해주세요 <br> 
+          참가자가 바로 오픈채팅에 입장하게 <br>
+          됩니다.</p>
+          <p>예 https://open.kakao.com/o/trippy</p>
+        </template>
+      </el-popover>
       <el-form-item v-if="action==='create'">
         <el-button type="primary" class="button" @click="onSubmit">작성하기</el-button>
       </el-form-item>
@@ -81,7 +92,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import ElMessageBox from 'element-plus'
+import { ElMessageBox } from 'element-plus'
 
 export default {
   name: 'CommunityForm',
@@ -166,14 +177,14 @@ export default {
       //   local = '같은 지역만'
       // }
       // return [gender, age, local]
-      const local = this.newPost.local
-      let isLocal = ''
-      if (local === false) {
-        isLocal = '어디서나'
-      } else {
-        isLocal = '같은 지역만'
-      }
-      return [gender, age, isLocal]
+      // const local = this.newPost.local
+      // let isLocal = ''
+      // if (local === false) {
+      //   isLocal = '어디서나'
+      // } else {
+      //   isLocal = '같은 지역만'
+      // }
+      return [gender, age]
     },
     locationTable() {
       const options = []
@@ -212,10 +223,9 @@ export default {
       this.newPost.countryName = this.select[0]
       this.newPost.cityName = this.select[1]
       const post = this.newPost
-      // if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
       if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && post.countryName && post.cityName && post.openKakaoUrl && (post.day || post.endDate)) {
         // console.log(this.newPost)
-        console.log(post)
+        // console.log(post)
         if (this.action === 'create') {
           this.createPost(this.newPost)
         } else if (this.action === 'update') {
@@ -223,8 +233,7 @@ export default {
             id: this.post.id,
             content: this.newPost
           }
-          // console.log(1)
-          console.log(payload.content)
+          // console.log(payload.content)
           this.updatePost(payload)
         }
       } else {
@@ -291,10 +300,23 @@ export default {
   width: 90%;
 }
 
+.info {
+  position: relative;
+  left: 2.6rem;
+  bottom: 3.7rem;
+  font-size: 1rem;
+  color: #FFD2C9;
+}
+
 .button {
   position: fixed;
   width: 90%;
   bottom: 5rem;
-  --el-button-active-color: #F16B51;
+}
+
+.el-button--primary {
+  --el-button-active-bg-color: var(--el-color-primary);
+  --el-button-hover-bg-color: #FFD2C9;
+  --el-button-hover-border-color: #FFD2C9;
 }
 </style>

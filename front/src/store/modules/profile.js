@@ -57,31 +57,24 @@ export default {
       }
       state.myDiaries = myDiaries
     },
-    // FETCH_MY_DIARY: (state, myDiaries) => {
-    //   for(let i=0; i<myDiaries.length; i++) {
-    //     for(let j=0; j<myDiaries[i].detailLocations.length; j++) {
-    //         myDiaries[i].representativeImg = require('@/assets/Trippy.png')
-    //         if ((myDiaries[i].detailLocations[j].filename!=null) && 
-    //         (typeof myDiaries[i].detailLocations[j].filename === 'string' && myDiaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
-    //             myDiaries[i].representativeImg = myDiaries[i].detailLocations[j].filepath
-    //             break;
-    //         }
-    //       }
-    //   }
-    // },
     FETCH_MY_LIKES: (state, myLikes) => {
-      myLikes.forEach((like) => {
-        like.detailLocations.forEach((location) => {
-          if (location.filename != null) {
-            like.representativeImg = location.filepath
-            return false
+      for(let i=0; i<myLikes.length; i++) {
+        for(let j=0; j<myLikes[i].detailLocations.length; j++) {
+          myLikes[i].representativeImg = require('@/assets/Trippy.png')
+          if ((myLikes[i].detailLocations[j].filename!=null) && 
+          (typeof myLikes[i].detailLocations[j].filename === 'string' && myLikes[i].detailLocations[j].filename.slice(-3) != 'txt')){
+            myLikes[i].representativeImg = myLikes[i].detailLocations[j].filepath
+            break;
           }
-        })
-      })
+        }
+      }
       state.myLikes = myLikes
     },
-    FETCH_MY_BOOKMARK: (state, myBookmarks) => state.myBookmarks = myBookmarks,
+    FETCH_MY_BOOKMARK: (state, myBookmarks) => {
+      state.myBookmarks = myBookmarks,
     SET_PROFILE_IMG: (state, profileImg) =>state.profileImg = profileImg 
+      console.log('눈치챙겨')
+    },
   },
   actions: {
     fetchProfile({ commit, getters }) {
@@ -91,7 +84,7 @@ export default {
         headers: getters.authHeader,
       })
       .then( res => {
-        console.log('when called fetchProfile:',res.data)
+        console.log('when called fetchProfile:', res.data)
         commit('SET_PROFILE', res.data)
       })
     },
@@ -322,6 +315,7 @@ export default {
       })
       .catch(err => console.err(err.response))
     },
+    // 북마크 가져오기
     fetchMyBookmark({ commit, getters }) {
       // console.log(memberId)
       axios({
