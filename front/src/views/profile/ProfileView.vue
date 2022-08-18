@@ -269,6 +269,8 @@ export default {
         this.fetchMyDiary()
         this.fetchMyLikes()
         this.fetchMyBookmark()
+        console.log('좋아요요요요요ㅛㅇ', this.myLikes)
+        console.log('북마크크크크크크', this.myBookmarks)
       } else {
         this.isMyProfile = false
       }
@@ -358,6 +360,8 @@ export default {
     // this.myFollowers()
     this.setFollowingStatus(this.currentProfile)
     this.fetchMyDiary()
+    this.fetchMyLikes()
+    this.fetchMyBookmark()
     setTimeout(() => this.pickRandom(this.myDiaries), 100)
     setTimeout(() => this.pickRandom(this.othersDiary), 100)
     this.fetchBadges(this.$route.params.authorId)
