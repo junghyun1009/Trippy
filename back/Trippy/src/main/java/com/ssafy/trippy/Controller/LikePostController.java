@@ -71,7 +71,7 @@ public class LikePostController {
         return new ResponseEntity<>(likePostService.existsByMemberIdAndPostId(memberId,postId),HttpStatus.OK);
     }
 
-    @GetMapping("/posts/Like/{postId}")
+    @GetMapping("/cnt/{postId}")
     public ResponseEntity<?> getLikePostCnt(@PathVariable("postId") Long postId){
         try {
             int cnt = likePostService.getLikeCount(postId);
