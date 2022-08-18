@@ -1,7 +1,9 @@
 <template>
   <div>
-		<input class="search-bar-input" v-model="searchInput.title" type="text" placeholder="어디로 떠날까요?" @click="isClicked=true" @keyup.enter="showInput()"/>
-		<div v-show="isClicked">
+		<div class="input">
+			<input class="search-bar-input" v-model="searchInput.title" type="text" placeholder="어디로 떠날까요?" @click="isClicked=true" @keyup.enter="showInput()"/>
+		</div>
+		<div class="search-detail" v-show="isClicked">
 			<div class="switch-close-div">
 				<el-switch v-model="isDetail" active-text="상세검색" inactive-text="전체검색"/>
 					<icon-base viewBox="0 0 1024 1024" width="12" height="12" iconColor="#F16B51" icon-name="closeicon" @click="isClicked=false">
@@ -10,19 +12,21 @@
 			</div>
 			<div v-if="isDetail">
 				<div class="checkbox-div">
-					<span>어떻게 이동하나요?</span>
-					<el-checkbox-group v-model="selectTrans" size="small">
-						<el-checkbox-button v-for="trans in checkTrans" :key="trans" :label="trans">{{ trans }}</el-checkbox-button>
-					</el-checkbox-group>
+				<el-divider />
+					<p>어떻게 이동하나요?</p>
+					<el-radio-group v-model="selectTrans" size="small">
+						<el-radio v-for="trans in checkTrans" :key="trans" :label="trans">{{ trans }}</el-radio>
+					</el-radio-group>
 				</div>
+				<el-divider />
 				<div class="checkbox-div">
-					<span>누구와 함께 가나요?</span>
-					<el-checkbox-group v-model="selectCompany" size="small">
-						<el-checkbox-button v-for="company in checkCompany" :key="company" :label="company">{{ company }}</el-checkbox-button>
-					</el-checkbox-group>
+					<p>누구와 함께 가나요?</p>
+					<el-radio-group  v-model="selectCompany" size="small">
+						<el-radio v-for="company in checkCompany" :key="company" :label="company">{{ company }}</el-radio>
+					</el-radio-group>
 				</div>
+				<el-button type="primary" size="small" @click="showInput(), isClicked=false">검색하기</el-button>
 				<hr>
-				<el-button size="small" @click="showInput, isClicked=false">적용하기</el-button>
 			</div>
 		</div>
   </div>
@@ -71,39 +75,63 @@ export default {
 		},
 
 		// 지금은 두 개 한꺼번에 보내는게 안됨 - 그래서 일단 하나로 함
-		// 여러개 하고싶으면 transportId 를 배열로 만들고, array.push('추가할 value')
+		
 		transParsing() {
 			let transportation = this.selectTrans
-			for ( var key in this.selectTrans ) {
-				console.log(transportation[key])
-				if (transportation[key] === "뚜벅이" ) {
-					this.searchInput.transportId = 1
-				} if (transportation[key] === "대중교통") { 
-					this.searchInput.transportId = 2
-				} if (transportation[key] === "따릉이") { 
-					this.searchInput.transportId = 3
-				} if (transportation[key] === "택시") { 
-					this.searchInput.transportId = 4
-				} if (transportation[key] === "자차") { 
-					this.searchInput.transportId = 5
-				}
-			}
+			console.log(this.selectTrans)
+			if ( transportation === "뚜벅이" ) {
+				this.searchInput.transportId = 1
+			} else if ( transportation === "대중교통" ) {
+				this.searchInput.transportId = 2
+			} else if ( transportation === "따릉이" ) {
+				this.searchInput.transportId = 3
+			} else if ( transportation === "택시" ) {
+				this.searchInput.transportId = 4
+			} else if ( transportation === "자차" ) {
+				this.searchInput.transportId = 5
+			} 
+
+			// checkbox인 경우 
+			// for ( var key in this.selectTrans ) {
+			// 	console.log(transportation[key])
+			// 	if (transportation[key] === "뚜벅이" ) {
+			// 		this.searchInput.transportId = 1
+			// 	} if (transportation[key] === "대중교통") { 
+			// 		this.searchInput.transportId = 2
+			// 	} if (transportation[key] === "따릉이") { 
+			// 		this.searchInput.transportId = 3
+			// 	} if (transportation[key] === "택시") { 
+			// 		this.searchInput.transportId = 4
+			// 	} if (transportation[key] === "자차") { 
+			// 		this.searchInput.transportId = 5
+			// 	}
+			// }
 		},
 
 		companyParsing() {
 			let companyNumber = this.selectCompany
-			for ( var key in this.selectCompany ) {
-				console.log(companyNumber[key])
-				if (companyNumber[key] === "가족" ) {
-					this.searchInput.company = 1
-				} if (companyNumber[key] === "커플") { 
-					this.searchInput.company = 2
-				} if (companyNumber[key] === "친구") { 
-					this.searchInput.company = 3
-				} if (companyNumber[key] === "개인") { 
-					this.searchInput.company = 4
-				} 
-			}
+			console.log(this.selectCompnay)
+			if ( companyNumber === "가족" ) {
+				this.searchInput.company = 1
+			} else if ( companyNumber === "커플" ) {
+				this.searchInput.company = 2
+			} else if ( companyNumber === "친구" ) {
+				this.searchInput.company = 3
+			} else if ( companyNumber === "개인" ) {
+				this.searchInput.company = 4
+			} 
+			// for ( var key in this.selectCompany ) {
+			// 	console.log(companyNumber[key])
+			// 	if (companyNumber[key] === "가족" ) {
+			// 		this.searchInput.company = 1
+			// 	} if (companyNumber[key] === "커플") { 
+			// 		this.searchInput.company = 2
+			// 	} if (companyNumber[key] === "친구") { 
+			// 		this.searchInput.company = 3
+			// 	} if (companyNumber[key] === "개인") { 
+			// 		this.searchInput.company = 4
+			// 	} 
+			// }
 		},
 
 
@@ -122,7 +150,10 @@ export default {
 		border: none;
 		outline: 1;
 		outline-color: #F16B51;
-		
+	}
+
+	.el-divider {
+		margin: 2%;
 	}
 
 	.switch-close-div {
@@ -132,11 +163,27 @@ export default {
 
 	.checkbox-div {
 		display: flex;
+		flex-direction: column;
+
 		align-items: center;
 		margin-bottom: 5px;
 	}
 
 	.checkbox-div > span {
 		font-size: 10px;
+	}
+
+	.el-button--small {
+		width: 100%;
+		margin-top: 3%;
+	}
+
+	.el-radio-group {
+		display: flex;
+		justify-content: center;
+	}
+
+	.search-detail {
+		padding: 5%;
 	}
 </style>
