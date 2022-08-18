@@ -22,7 +22,7 @@
 				<div class="image" id="okinawa"><span @click="diaryFilter(this)">오키나와</span></div>
 			</div>
 
-			<div class="region">
+			<!-- <div class="region">
 				<div class="image" id="barcelona"><span @click="diaryFilter(this)">바르셀로나</span></div>
 			</div>
 
@@ -32,7 +32,7 @@
 
 			<div class="region">
 				<div class="image" id="paris"><span @click="diaryFilter(this)">파리</span></div>
-			</div>
+			</div> -->
     </div>
 
   </div>

@@ -939,7 +939,7 @@ export default {
   text-align: center;
 }
 .button {
-  width: 90%;
+  width: 100%;
 }
 
 .el-button--primary {

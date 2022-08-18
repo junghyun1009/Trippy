@@ -15,8 +15,6 @@
         </el-col>
       </el-row>
     </div>
-    <hr>
-    <h3>전체 게시물</h3>
     <br>
     <div v-if="allDiaries" class="all-diaries">
       <el-row>
