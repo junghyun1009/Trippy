@@ -17,7 +17,9 @@ public class UpdateMemberDto {
     private String img_path;
     private String description;
 
-    public UpdateMemberDto(String name,String email,String phone,int gender,LocalDateTime birth,String img_path,String description){
+    private String img_link;
+
+    public UpdateMemberDto(String name,String email,String phone,int gender,LocalDateTime birth,String img_path,String description,String img_link){
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -25,5 +27,6 @@ public class UpdateMemberDto {
         this.birth = birth;
         this.img_path = img_path;
         this.description = description;
+        this.img_link = img_link;
     }
 }
