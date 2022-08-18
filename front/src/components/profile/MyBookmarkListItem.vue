@@ -3,7 +3,9 @@
     <!-- {{bookmark}} -->
     <router-link :to="{ name: 'communityDetail', params: { postPk: bookmark.id } }">
       <el-card class="grid-content" :body-style="{ padding: 0 }" shadow="hover">
-        <span class="title-span">{{ bookmark.title }}</span>
+        <h5 class="title">{{ bookmark.place }}</h5>
+        <p class="detail">{{ bookmark.cityName }}</p>
+        <p class="detail">{{ bookmark.endDate ? `${bookmark.startDate.slice(5, 10)}~${bookmark.endDate.slice(5,10)}` : ''+bookmark.startDate.slice(5, 10) }}</p>
       </el-card>
     </router-link>
   </div>
@@ -19,16 +21,26 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 0.5rem;
+}
+
 .image {
   width: 100%;
-  height: 100px;
+  /* height: 100px; */
   display: block;
   border-radius: 5%;
 }
-
-.title-span {
-  font-size: 1em;
+.title {
+  font-size: 0.9em;
+  font-weight: 400;
   margin-left: 0%;
+}
+
+.detail {
+  font-size: 0.8rem;
 }
 
 a {
@@ -52,8 +64,11 @@ a {
 }
 
 .grid-content {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
   border-radius: 4px;
-  min-height: 10vh;
+  min-height: 100px;
 }
 
 .el-card__body:hover {
