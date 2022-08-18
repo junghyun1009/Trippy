@@ -10,6 +10,7 @@ COPY . .
 RUN npm run build
 
 # nginx 의 default.conf 를 삭제
+RUN pwd
 RUN rm -rf /etc/nginx/conf.d
 COPY conf /etc/nginx
 
