@@ -2,11 +2,11 @@
   <div class="login">
     <!-- 없는 회원정보 -->
     <div class="input-box">
-      <h1>TRIPPY<span>.</span></h1>
+      <h1>TRIPPY</h1>
       <form @submin.prevent="login()">
           <el-input class="input" v-model="userinfo.email" placeholder="이메일" id="email" ></el-input>
           <el-input class="input" v-model="userinfo.password" type="password" placeholder="비밀번호" show-password></el-input>
-          <el-button class="input" type="primary" @click="checkEmail()">로그인</el-button>
+          <el-button class="login-button" type="primary" @click="checkEmail()">로그인</el-button>
         <br><br>
         <router-link :to="{ name: 'signUp' }">회원가입</router-link>
         <span>|</span>
@@ -95,6 +95,13 @@ export default {
   button {
     width: 100%;
     margin: 0;
+  }
+
+  .login-button {
+    background-color:#ffd3cb;
+    box-shadow: 1px 2px 1px #a74a38;
+    color:#F16B51;
+    margin-top: 2%;
   }
 
   a {

@@ -2,7 +2,7 @@
   <div class="container">
     <div v-if="regionDiaries" class="region-diaries">
       <el-row>
-        <el-col :span="8" v-for="diary in regionDiaries" :key="diary.id">
+        <el-col :span="8" v-for="diary in regionDiaries.slice().reverse()" :key="diary.id">
           <recommend-list-item :diary="diary"></recommend-list-item>
         </el-col>
       </el-row>
@@ -10,7 +10,7 @@
     <div v-if="searchDiaries" class="search-diaries">
       <br>
       <el-row>
-        <el-col :span="8" v-for="diary in searchDiaries" :key="diary.id">
+        <el-col :span="8" v-for="diary in searchDiaries.slice().reverse()" :key="diary.id">
           <recommend-list-item :diary="diary"></recommend-list-item>
         </el-col>
       </el-row>
@@ -21,7 +21,8 @@
     <div v-if="allDiaries" class="all-diaries">
       <el-row>
         <!-- infinite scroll -->
-        <el-col :span="8" v-for="diary in allDiaries.slice(0,10)" :key="diary.id">
+        <!-- 아니면 더 보기? -->
+        <el-col :span="12" v-for="diary in allDiaries.slice(-10).reverse()" :key="diary.id">
           <recommend-list-item :diary="diary"></recommend-list-item>
         </el-col>
       </el-row>

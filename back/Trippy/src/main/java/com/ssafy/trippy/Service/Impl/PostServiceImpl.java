@@ -71,7 +71,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public Long savePost(RequestPostDto requestPostDto, List<MultipartFile> images) {
-        Member member = memberRepository.findById(requestPostDto.getMember_id()).get();
+        Member member = memberRepository.findById(requestPostDto.getMember_id()).orElseThrow();
         requestPostDto.setMember_id(member.getId());
 
         // 요청들어온 post 내의 countryName, cityName으로 location 저장
@@ -172,7 +172,7 @@ public class PostServiceImpl implements PostService {
         }
 
 
-        List<DetailLocation> oldDetailLocation = detailLocationRepository.findAllByPostId(post.getId()).get();
+        List<DetailLocation> oldDetailLocation = detailLocationRepository.findAllByPostId(post.getId()).orElseThrow();
         List<DetailLocation> newDetailLocations = requestPostDto.toEntity().getDetailLocations().stream().collect(Collectors.toList());
         List<DetailLocation> detailLocationsTmp = new ArrayList<>();
 
@@ -251,8 +251,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public ResponsePostDto findPostId(Long id) {
-        Post post = postRepository.findById(id).get();
-        Member member = memberRepository.findByEmail(post.getMember().getEmail()).get();
+        Post post = postRepository.findById(id).orElseThrow();
+        Member member = memberRepository.findByEmail(post.getMember().getEmail()).orElseThrow();
         ResponsePostDto responsePostDto = new ResponsePostDto(post);
         responsePostDto.setMemberId(member.getId());
         return responsePostDto;
@@ -277,5 +277,16 @@ public class PostServiceImpl implements PostService {
     public Long cntPostsByMemberId(Long memberId) {
         return postRepository.countAllByMemberId(memberId);
     }
+
+    @Override
+    public List<ResponsePostDto> findByMemberId(Long memberId) {
+        List<Post> posts = postRepository.findAllByMemberId(memberId).orElseThrow();
+        List<ResponsePostDto> responsePostDtos = new ArrayList<>();
+        for (Post post : posts){
+            responsePostDtos.add(new ResponsePostDto(post));
+        }
+        return responsePostDtos;
+    }
+
 
 }

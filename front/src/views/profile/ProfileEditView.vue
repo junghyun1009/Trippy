@@ -71,6 +71,7 @@
 <script>
 import { userErrorMessage } from '@/common/constant.js'
 import AccountErrorList from '@/components/account/AccountErrorList.vue'
+import { ElMessageBox } from 'element-plus'
 import { mapActions, } from 'vuex'
 
 export default {
@@ -134,7 +135,9 @@ export default {
           preview: URL.createObjectURL(this.$refs.files.files[0]),
         }
       } else {
-        alert("사진 파일만 추가 가능합니다")
+        ElMessageBox.alert("사진 파일만 추가 가능합니다", '알림', {
+          confirmButtonText: 'OK',
+        })
       }
 
       let fileInput = document.getElementById("file")

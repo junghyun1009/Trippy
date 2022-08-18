@@ -164,4 +164,17 @@ public class MemberController {
         return new ResponseEntity<>(confirm, HttpStatus.OK);
     }
 
+    /**
+     * 멤버의 뱃지 가져오기
+     */
+    @GetMapping("/members/badges")
+    public ResponseEntity<?> getBadges(HttpServletRequest request){
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
+        return new ResponseEntity<>(badgeService.getBadgesByMemberId(memberId),HttpStatus.OK);
+    }
+
+    @GetMapping("/members/badges/{member_id}")
+    public ResponseEntity<?> getBadgesByMemberId(@PathVariable("member_id") Long memberId){
+        return new ResponseEntity<>(badgeService.getBadgesByMemberId(memberId),HttpStatus.OK);
+    }
 }

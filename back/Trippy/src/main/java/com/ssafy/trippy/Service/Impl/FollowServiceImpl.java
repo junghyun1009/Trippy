@@ -9,6 +9,7 @@ import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Repository.FollowRepository;
 import com.ssafy.trippy.Repository.MemberRepository;
 import com.ssafy.trippy.Service.FollowService;
+import com.ssafy.trippy.Service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,8 @@ public class FollowServiceImpl implements FollowService {
     private final FollowRepository followRepository;
 
     private final MemberRepository memberRepository;
+
+    private final S3Uploader s3Uploader;
 
     @Override
     public ResponseFollowDto follow(RequestFollowDto requestFollowDto) {
@@ -43,8 +46,12 @@ public class FollowServiceImpl implements FollowService {
         List<Follow> followList = followRepository.findAllByFollowerId(memberId);
         List<ResponseMemberDto> responseMemberDtos = new ArrayList<>();
         for (Follow follow : followList) {
-            Member member = memberRepository.findById(follow.getFollower().getId()).orElseThrow();
-            responseMemberDtos.add(new ResponseMemberDto(member));
+            Member member = memberRepository.findById(follow.getFollowing().getId()).orElseThrow();
+            ResponseMemberDto responseMemberDto = new ResponseMemberDto(member);
+            if(member.getImg_path()!=null)
+                responseMemberDto.setImg_link(s3Uploader.getS3(member.getImg_path()));
+            responseMemberDtos.add(responseMemberDto);
+
         }
         return responseMemberDtos;
     }
@@ -55,8 +62,11 @@ public class FollowServiceImpl implements FollowService {
         List<Follow> followList = followRepository.findAllByFollowingId(memberId);
         List<ResponseMemberDto> responseMemberDtos = new ArrayList<>();
         for (Follow follow : followList) {
-            Member member = memberRepository.findById(follow.getFollowing().getId()).orElseThrow();
-            responseMemberDtos.add(new ResponseMemberDto(member));
+            Member member = memberRepository.findById(follow.getFollower().getId()).orElseThrow();
+            ResponseMemberDto responseMemberDto = new ResponseMemberDto(member);
+            if(member.getImg_path()!=null)
+                responseMemberDto.setImg_link(s3Uploader.getS3(member.getImg_path()));
+            responseMemberDtos.add(responseMemberDto);
         }
         return responseMemberDtos;
     }

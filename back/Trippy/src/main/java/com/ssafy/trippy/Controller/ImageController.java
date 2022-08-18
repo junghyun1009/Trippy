@@ -56,14 +56,30 @@ public class ImageController {
             return new ResponseEntity<>("cannot upload image",HttpStatus.BAD_REQUEST);
         }
         ResponseMemberDto responseMemberDto = memberService.selectMember(memberId);
-        s3Uploader.deleteS3(responseMemberDto.getImg_path());
+
         UpdateMemberDto updateMemberDto = new UpdateMemberDto(responseMemberDto.getName(), responseMemberDto.getEmail(),
-                responseMemberDto.getPhone(), responseMemberDto.getGender(),responseMemberDto.getBirth(),responseImageDto.getFileName(),responseMemberDto.getDescription());
+                responseMemberDto.getPhone(), responseMemberDto.getGender(),responseMemberDto.getBirth(),responseImageDto.getFileName(),responseMemberDto.getDescription(),responseImageDto.getFileUrl());
         memberService.updateMember(memberId, updateMemberDto);
-        s3Uploader.deleteS3(responseMemberDto.getImg_path());
+        if(responseMemberDto.getImg_path() != null)
+            s3Uploader.deleteS3(responseMemberDto.getImg_path());
         return new ResponseEntity<>(responseImageDto,HttpStatus.OK);
     }
 
+    @DeleteMapping("/delete/member")
+    public ResponseEntity<?> deleteUserProfile(HttpServletRequest request){
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
+        ResponseMemberDto responseMemberDto = memberService.selectMember(memberId);
+        String path = responseMemberDto.getImg_path();
+        if(path != null) {
+            s3Uploader.deleteS3(path);
+            UpdateMemberDto updateMemberDto = new UpdateMemberDto(responseMemberDto.getName(), responseMemberDto.getEmail(),
+                    responseMemberDto.getPhone(), responseMemberDto.getGender(), responseMemberDto.getBirth(), null, responseMemberDto.getDescription(), null);
+            memberService.updateMember(memberId, updateMemberDto);
+            return new ResponseEntity<>("삭제완료",HttpStatus.OK);
+        } else{
+            return new ResponseEntity<>("이미 이미지가 없습니다.",HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
     @PostMapping("/upload/post")
     public ResponseEntity<?> updatePostProfile(@RequestPart(value = "file") MultipartFile file){
         ResponseImageDto responseImageDto = null;

@@ -27,4 +27,5 @@ public interface PostService {
 
     Long cntPostsByMemberId(Long memberId);
 
+    List<ResponsePostDto> findByMemberId(Long memberId);
 }

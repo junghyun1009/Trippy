@@ -4,13 +4,13 @@
       <el-button class="button" link @click="goHome">
         <div class="menu">
           <span class="material-symbols-outlined menu-icon">home</span>
-          <span class="menu-desc">HOME</span>
+          <span class="menu-desc">홈</span>
         </div>
       </el-button>
-      <el-button class="button" link @click="goFeed">
+      <el-button class="button" link @click="goCommunity">
         <div class="menu">
           <span class="material-symbols-outlined menu-icon">explore</span>
-          <span class="menu-desc">FEED</span>
+          <span class="menu-desc">동행찾기</span>
         </div>
       </el-button>
       <el-popover v-model:visible="isClicked" placement="top" :width="150" trigger="click">
@@ -28,21 +28,21 @@
           <el-button class="button" link ref="create">
             <div class="menu">
               <span class="material-symbols-outlined menu-icon">edit</span>
-              <span class="menu-desc">WRITE</span>
+              <span class="menu-desc">글쓰기</span>
             </div>
           </el-button>
         </template>
       </el-popover>
-      <el-button class="button" link @click="goChat">
+      <!-- <el-button class="button" link @click="goChat">
         <div class="menu">
           <span class="material-symbols-outlined menu-icon">forum</span>
           <span class="menu-desc">CHAT</span>
         </div>
-      </el-button>
+      </el-button> -->
       <el-button class="button" link @click="goProfile">
         <div class="menu">
           <span class="material-symbols-outlined menu-icon profile">person</span>
-          <span class="menu-desc">MY</span>
+          <span class="menu-desc">내 트리피</span>
         </div>
       </el-button>
     </div>
@@ -50,6 +50,10 @@
 </template>
 
 <script>
+import { ElMessageBox } from 'element-plus'
+import { mapActions, mapGetters } from 'vuex'
+import VueCookies from 'vue-cookies'
+
 export default {
 	name: 'NavBar',
 	data() {
@@ -57,7 +61,16 @@ export default {
 			isClicked: false,
 		}
 	},
+  computed: {
+    ...mapGetters(['profile', 'isLoggedIn'])
+  },
+  mounted() {
+    this.fetchProfile()
+    console.log(this.profile.id)
+  },
 	methods: {
+    ...mapActions(['fetchProfile']),
+
 		toggle() {
 			this.isClicked = !this.isClicked
 		},	
@@ -65,8 +78,9 @@ export default {
       this.isClicked = false
 			this.$router.push({ name: 'home' })
 		},
-		goFeed() {
+		goCommunity() {
       this.isClicked = false
+      this.$router.push({ name: 'community' })
 		},
 		goDiaryForm() {
       this.toggle()
@@ -82,8 +96,20 @@ export default {
     },
 		goProfile() {
       this.isClicked = false
-			this.$router.push({ name: 'profile' })
-		}
+      if ( !VueCookies.get('accessToken') && !VueCookies.get('refreshToken') ) {
+        ElMessageBox.alert('로그인을 해주세요!', '알림', {
+          confirmButtonText: 'OK',
+        })
+        this.$router.push({ name: 'login' })
+      } else {
+      const userid = this.profile.id
+			// this.$router.push({ name: 'profile', params: { username }})
+			// this.$router.push({ name: 'profile', params: { authorId: `${username}` }})
+			this.$router.push({ name: 'profile', params: { authorId: userid }})
+			// this.$router.push({ path: `/profile/${username}` })
+      }
+		},
+    
 	},
 }
 </script>
@@ -97,6 +123,7 @@ export default {
   border-top: 1px solid #d9d9d9;
   background-color: #fff;
   padding: 0.3rem;
+
 }
 
 .forms {
@@ -113,7 +140,8 @@ export default {
 }
 
 .form-desc {
-  margin-right: 0.5rem;
+  font-size: 1rem;
+  margin-right: 0.6rem;
 }
 
 .community {
@@ -137,11 +165,11 @@ export default {
 
 .menu-icon {
   font-size: 1.5rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
 }
 
 .menu-desc {
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   /* font-weight: bold; */
 }
 

@@ -28,13 +28,16 @@
     <div class="description">
       <p>소개</p>
       <el-input v-model="userinfo.description" placeholder="자신을 소개해주세요! 최대 50자 (선택)" maxlength="50"></el-input>
+      <el-button type="primary" @click="mergeObjects()">완료</el-button>
     </div>
     <!-- 완료하면 로그인 페이지로 이동 -->
-    <el-button type="primary" @click="finishSignUp(), mergeObjects(), signupTwo(userData)">완료</el-button>
+  
+
   </div>
 </template>
 
 <script>
+import ElMessageBox from 'element-plus'
 import { mapActions } from 'vuex'
 
 export default {
@@ -48,19 +51,37 @@ export default {
         },
         profilePhoto: {},
         userData: {},
+        badgePopup: false,
     }
   },
 
   methods: {
-    ...mapActions(['signupTwo']),
+    ...mapActions(['signupTwo', 'sendPhoto']),
 
     mergeObjects(){
       // 첫번째 signup 페이지에서의 data(객체)와 
       // 두번째 signup 페이지에서의 data(객체)를 merge해서
       // 새로운 userData 객체로 만듦
       // 이 객체를 axios 해서 보낼 것
+      // 사진도 formdata로 변환해서 데이터랑 묶어서 보낼 것
       const dataOne = this.$store.getters.userData
+      // this.userinfo.img_path = file
+      const profileData = new FormData()
+      // 얘가 사진 뺀 내용 -> Blob으로 바꿔서 보내기
       this.userData = Object.assign(dataOne, this.userinfo)
+      profileData.append("member", new Blob([JSON.stringify(this.userData)], {type: "application/json"}))
+      // 얘가 사진
+      profileData.append("image", this.profilePhoto.file)
+
+      console.log(this.userData)
+      for (var key of profileData.keys()) {
+        console.log(key);
+      }
+      for (var value of profileData.values()) {
+        console.log(value);
+      }
+
+      this.signupTwo(profileData)
     },
 
     uploadPhoto() {
@@ -72,8 +93,11 @@ export default {
             file: this.$refs.files.files[0],
             preview: URL.createObjectURL(this.$refs.files.files[0]),
           }
+        console.log(this.profilePhoto)
       } else {
-        alert("사진 파일만 추가 가능합니다")
+        ElMessageBox.alert("사진 파일만 추가 가능합니다", "알림", {
+          confirmButtonText: 'OK',
+        })
       }
 
       let fileInput = document.getElementById("file")
@@ -83,12 +107,6 @@ export default {
     removePhoto() {
       this.profilePhoto = {}
     },
-    
-    finishSignUp() {
-      this.$router.push('/login')
-      alert('회원가입을 축하합니다!')
-    },
-    
   }
 }
 </script>
@@ -114,6 +132,7 @@ img {
 
 .description {
   width: 100%;
+  margin-left: 10%;
 }
 
 .description p {
