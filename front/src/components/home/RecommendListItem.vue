@@ -3,8 +3,12 @@
     <router-link :to="{ name: 'diaryDetail', params: { diaryPk: diary.id } }">
       <el-card class="grid-content" :body-style="{ padding: 0 }" shadow="hover">
         <img :src="diary.representativeImg" class="image"/>
-        <div style="padding: 1rem">
-          <span class="title-span">{{ diary.title }}</span>
+        <el-tag type="dark" size="small" class="tag">{{ diary.countryName}}</el-tag>
+        <el-tag type="dark" size="small" class="tag">{{ diary.cityName}}</el-tag>
+        <div style="padding: 0.3rem">
+          <p class="title">{{ diary.title.length > 13 ? ''+diary.title.slice(0, 11) + '...' : diary.title }}</p>
+            <!-- <img> -->
+            <p class="name">{{ diary.name }}</p>
         </div>
       </el-card>
     </router-link>
@@ -24,16 +28,32 @@ export default {
 
 <style scoped>
 .image {
+  /* position: absolute; */
   width: 100%;
   overflow: hidden;
-  /* height: 10rem; */
+  height: 150px;
   display: block;
   border-radius: 0.25rem 0.25rem 0 0;
 }
 
-.title-span {
-  font-size: 1em;
+.tag {
+  position: relative;
+  bottom: 1.8rem;
+  margin:0 0.1rem;
+}
+
+.title {
+  position: relative;
+  bottom: 1.45rem;
+  font-size: 0.9rem;
   margin-left: 0%;
+  font-weight: 400;
+}
+
+.name {
+  position: relative;
+  bottom: 1.3rem;
+  font-size: 0.7rem;
 }
 
 a {
@@ -57,10 +77,8 @@ a {
 }
 
 .grid-content {
-  display: flex;
-  border-radius: 0.25rem;
-  height: 15rem;
-  /* width: 100%; */
+  height: 28vh;
+  width: 100%;
   /* padding-bottom: 75%; */
 }
 
