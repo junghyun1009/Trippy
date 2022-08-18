@@ -9,7 +9,7 @@ export default {
     // accessToken:  '',
     // refreshToken: '',
     currentUser: {},
-    // profile: {},
+    profile: {},
     userData: {},
     // 임시 email
     email: localStorage.getItem('email') || '',
@@ -337,7 +337,8 @@ export default {
           })
         }
       })
-    }
+    },
+    
 
   },
   modules: {
