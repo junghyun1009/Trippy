@@ -224,11 +224,11 @@ export default {
     },
     diaries: {
       deep: true,
-      handler: this.pickRandom(this.myDiaries)
+      handler: 'executeRandom'
     },
     othersDiary: {
       deep: true,
-      handler: this.pickRandom(this.othersDiary)
+      handler: 'executeRandom'
     }
 
   },
@@ -336,6 +336,14 @@ export default {
 
     goBadge() {
       this.$router.push({ name: 'badgeList' })
+    },
+
+    executeRandom() {
+      if ( this.isMyProfile ) {
+        this.pickRandom(this.myDiaries)
+      } else {
+        this.pickRandom(this.othersDiary)
+      }
     },
 
     // 일지 랜덤함수
