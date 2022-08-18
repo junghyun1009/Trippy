@@ -72,7 +72,7 @@
         <div class="profile-div">
           <!-- <el-avatar :size="100" :src="diary.member_id.img_path" /> -->
           <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
-            <el-avatar :size="80" :src="authorInfo.img_link" />
+            <el-avatar :size="80" :src="diary.memberImg" />
           </router-link>
           <!-- <span>{{ diary.member_id.name }}</span> -->
           <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
@@ -98,7 +98,7 @@
       </div>
     </div>
 
-    <img :src="authorInfo.img_link" alt="">
+    <!-- <img :src="authorInfo.img_link" alt=""> -->
 
     <div id="map" style="height: 70vw; position: relative; overflow: hidden;"></div>
     <div class="route-tag">

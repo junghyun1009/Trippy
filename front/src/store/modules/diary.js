@@ -321,7 +321,7 @@ export default ({
           name: 'diaryDetail',
           parmas: { diaryPk: payload.postId }
         })
-        // location.reload()
+        location.reload()
       })
       .catch((err) => console.error(err.response))
     },
@@ -448,6 +448,7 @@ export default ({
     hideParent({ commit }) {
       commit('HIDE_PARENT')
     },
+
     // 다이어리 좋아요
     likeDiary({ commit, getters }, diary) {
       console.log(diary.id)
