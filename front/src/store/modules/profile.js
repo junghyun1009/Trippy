@@ -72,9 +72,9 @@ export default {
     },
     FETCH_MY_BOOKMARK: (state, myBookmarks) => {
       state.myBookmarks = myBookmarks,
-    SET_PROFILE_IMG: (state, profileImg) =>state.profileImg = profileImg 
       console.log('눈치챙겨')
     },
+    SET_PROFILE_IMG: (state, profileImg) =>state.profileImg = profileImg
   },
   actions: {
     fetchProfile({ commit, getters }) {
