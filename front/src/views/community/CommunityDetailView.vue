@@ -84,7 +84,7 @@ export default {
   watch: {
     post: {
       deep: true,
-      handler: this.checkBookmark(this.postPk)
+      handler: 'executeBookmark'
     }
   },
   
@@ -116,6 +116,10 @@ export default {
   methods: {
     // ...mapMutations(['ADD_VOLUME']),
     ...mapActions(['fetchPost', 'updatePost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark', 'deleteBookmark', 'checkBookmark']),
+    executeBookmark() {
+      this.checkBookmark(this.postPk)
+    },
+    
     goBookmark() {
       this.checkBookmark(this.postPk)
       this.createBookmark(this.postPk)

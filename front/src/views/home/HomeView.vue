@@ -58,7 +58,6 @@ export default {
   },
   computed: {
     ...mapGetters(['isLoggedIn', 'followingList', 'currentUser']),
-
   },
   methods: {
     ...mapActions(['myFollowings', 'fetchCurrentUser', 'saveFollowingId']),

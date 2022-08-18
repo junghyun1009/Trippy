@@ -59,7 +59,7 @@ public class PostController {
         ResponsePostDto post = postService.findPostId(post_id);
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         try {
-            if (memberId == post.getMemberId()) {
+            if (memberId != null && memberId.equals(post.getMemberId())) {
                 postService.deletePost(post_id);
                 return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
             } else {
@@ -79,7 +79,7 @@ public class PostController {
         ResponsePostDto post = postService.findPostId(post_id);
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         try {
-            if (memberId == post.getMemberId()) {
+            if (memberId != null && memberId.equals(post.getMemberId())) {
                 Long id = postService.updatePost(post_id, requestPostDto, images);
                 return new ResponseEntity<>(id, HttpStatus.OK);
             } else {
