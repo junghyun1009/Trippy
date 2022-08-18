@@ -1,9 +1,14 @@
 <template>
   <div class="home">
-
     <div class="diary-list">
       <search-bar @click="goSearch"></search-bar>
+      <div class="regional-menu">
+        <h3>지금 <span class="logo">Trippy</span>에서 핫한 여행코스</h3>
+      </div>
       <region-list></region-list>
+      <div class="recommend-menu">
+        <h3><span class="logo">Trippy</span>여행자들의 생생한 여행 후기</h3>
+      </div>
       <recommend-list></recommend-list>
     </div>
 
@@ -12,8 +17,8 @@
 
     <div class="following-diary-list">
       <div v-if="isLoggedIn" class="following-diary-description">
-        <p>{{ currentUser.name }}님이 팔로우 하고 있는</p>
-        <p><span>{{ this.followingName.name }}</span> 님이 추천하는 코스</p>
+        <h3>{{ currentUser.name }}님이 팔로우 하고 있는</h3>
+        <h3><span>{{ this.followingName.name }}</span>님이 추천하는 코스</h3>
         <following-diary-list v-if="this.followingIdforDiary" :followingIdforDiary="followingIdforDiary"></following-diary-list>
       </div>
 
@@ -94,6 +99,8 @@ export default {
 
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+
 * {
   padding:0;
   margin:0;
@@ -105,6 +112,44 @@ body{
 	background-color:#CCC;
 }
 
+.logo {
+  font-family: 'Alfa Slab One', cursive;
+  font-size: 1.3rem;
+  margin-right: 0.1rem;
+}
+
+.regional-menu {
+  padding: 1rem;
+}
+
+.regional-menu h3 {
+	font-size: 2.5vh;
+	font-weight: bold;
+}
+
+.regional-menu span {
+	color: #F16B51;
+	font-size: 2.5vh;
+	font-weight: bold;
+}
+
+.recommend-menu {
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.recommend-menu h3 {
+	font-size: 2.5vh;
+	font-weight: bold;
+}
+
+.recommend-menu span {
+	color: #F16B51;
+	font-size: 2.5vh;
+	font-weight: bold;
+}
+
+
 .following-diary-description {
   display: flex;
   flex-direction: column;
@@ -113,15 +158,15 @@ body{
   margin-bottom: 3%;;
 }
 
-.following-diary-description p {
+.following-diary-description h3 {
 	font-size: 2.5vh;
-	font-weight: 500;
+	font-weight: bold;
 }
 
 .following-diary-description span {
   color: #F16B51;
 	font-size: 2.5vh;
-	font-weight: 500;
+	font-weight: bold;
 }
 
 .following-diary-list {
@@ -142,9 +187,7 @@ body{
 	box-shadow: 2px 2px 3px #999;
 }
 
-.image {
 
-}
 
 .my-float{
 	margin-top:22px;

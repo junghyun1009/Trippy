@@ -904,7 +904,7 @@ export default {
   text-align: center;
 }
 .button {
-  width: 90%;
+  width: 100%;
 }
 .el-button--primary {
   --el-button-active-bg-color: var(--el-color-primary);

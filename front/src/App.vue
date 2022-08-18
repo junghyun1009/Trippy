@@ -37,10 +37,10 @@ export default ({
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;500&display=swap');
 
-  * { 
-      font-family: 'IBM Plex Sans KR', sans-serif;
-      font-weight: 100;
-    } 
+* { 
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-weight: 400;
+} 
 
 :root {
   --el-color-primary: #F16B51 !important;
