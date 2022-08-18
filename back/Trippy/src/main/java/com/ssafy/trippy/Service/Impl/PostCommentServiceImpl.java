@@ -33,10 +33,10 @@ public class PostCommentServiceImpl {
     public ResponsePostCommentDto createComment(RequestPostCommentDto requestPostCommentDto){
         PostComment comment = postCommentRepository.save(
                 PostComment.createComment(requestPostCommentDto.getContent(),
-                        postRepository.findById(requestPostCommentDto.getPostId()).get(),
-                        memberRepository.findById(requestPostCommentDto.getMemberId()).get(),
+                        postRepository.findById(requestPostCommentDto.getPostId()).orElseThrow(),
+                        memberRepository.findById(requestPostCommentDto.getMemberId()).orElseThrow(),
                         requestPostCommentDto.getParentId() != null ?
-                        postCommentRepository.findById(requestPostCommentDto.getParentId()).get():null,
+                        postCommentRepository.findById(requestPostCommentDto.getParentId()).orElseThrow():null,
                         requestPostCommentDto.getName(),
                         requestPostCommentDto.getImgPath())
         );
