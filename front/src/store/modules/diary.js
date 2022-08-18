@@ -22,7 +22,8 @@ export default ({
     parentId: null,
     location: [],
     authorInfo: {},
-    childInfo: {}
+    childInfo: {},
+    likeCount: 0
   },
   getters: {
     diaries: state => state.diaries,
@@ -45,7 +46,8 @@ export default ({
     location: state => state.location,
     // isDiary: state => !_.isEmpty(state.diary)
     authorInfo: state => state.authorInfo,
-    childInfo: state => state.childInfo
+    childInfo: state => state.childInfo,
+    likeCount: state => state.likeCount
   },
   mutations: {
     // 일지 저장
@@ -156,6 +158,11 @@ export default ({
       // state.childInfo = {}
       state.childInfo = info
       console.log('child', state.childInfo)
+    },
+
+    // 일지 좋아요 개수
+    SET_LIKE_COUNT(state, cnt) {
+      state.likeCount = cnt
     }
 
   },
@@ -314,7 +321,7 @@ export default ({
           name: 'diaryDetail',
           parmas: { diaryPk: payload.postId }
         })
-        location.reload()
+        // location.reload()
       })
       .catch((err) => console.error(err.response))
     },
@@ -482,6 +489,21 @@ export default ({
       })
       .catch(err => console.err(err.response))
     },
+
+    // 좋아요 개수
+    fetchLikeCount({ commit, getters }, diaryPk) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/likepost/cnt/${diaryPk}`,
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(111, res.data)
+        commit('SET_LIKE_COUNT', res.data)
+      })
+      .catch(err => console.err(err.response))
+    },
+
     fetchLocation({ commit }) {
       axios({
         url: 'https://i7a506.p.ssafy.io/api/locations',
