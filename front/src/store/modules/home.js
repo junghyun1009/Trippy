@@ -1,6 +1,7 @@
 // import router from '@/router/index.js'
 import router from '@/router'
 import axios from 'axios'
+import { ElMessageBox  } from 'element-plus'
 
 export default ({
     state: {
@@ -21,14 +22,25 @@ export default ({
 			// SET_REGION_DIARIES: (state, regionDiaries) => state.regionDiaries = regionDiaries,
 			// SET_SEARCH_DIARIES: (state, searchDiaries) => state.searchDiaries = searchDiaries,
 			GET_ALL_DIARIES (state, allDiaries) {
-				allDiaries.forEach((diary) => {
-					diary.detailLocations.forEach((location) => {
-						if (location.filename != null) {
-							diary.representativeImg = location.filepath
-							return false
+				// allDiaries.forEach((diary) => {
+				// 	diary.detailLocations.forEach((location) => {
+				// 		if (location.filename != null) {
+				// 			diary.representativeImg = location.filepath
+				// 			return false
+				// 		}
+				// 	})
+				// })
+				// 로고를 기본 썸네일로 저장하고 사진이 있다면 첫번째 사진을 썸네일로 등록
+				for(let i=0; i<allDiaries.length; i++) {
+					for(let j=0; j<allDiaries[i].detailLocations.length; j++) {
+						allDiaries[i].representativeImg = require('@/assets/Trippy.png')
+						if ((allDiaries[i].detailLocations[j].filename!=null) && 
+						(typeof allDiaries[i].detailLocations[j].filename === 'string' && allDiaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
+							allDiaries[i].representativeImg = allDiaries[i].detailLocations[j].filepath
+							break;
 						}
-					})
-				})
+					}
+				}
 				state.allDiaries = allDiaries
 			},
 			SET_REGION_DIARIES (state, regionDiaries) {
@@ -46,6 +58,16 @@ export default ({
 			
 			SET_FOLLOWING_DIARIES (state, followingDiaries) { 
 				console.log(followingDiaries);
+				for(let i=0; i<followingDiaries.length; i++) {
+					for(let j=0; j<followingDiaries[i].detailLocations.length; j++) {
+						followingDiaries[i].representativeImg = require('@/assets/Trippy.png')
+						if ((followingDiaries[i].detailLocations[j].filename!=null) && 
+						(typeof followingDiaries[i].detailLocations[j].filename === 'string' && followingDiaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
+							followingDiaries[i].representativeImg = followingDiaries[i].detailLocations[j].filepath
+							break;
+						}
+					}
+				}
 				state.followingDiaries = followingDiaries;
 			},
 			// SET_FOLLOWING_DIARIES (state, followingDiaries) {
@@ -107,7 +129,9 @@ export default ({
 				.catch( err => {
 					console.error(err)
 					if ( err.response.data === "해당 게시물을 찾을 수 없습니다." ) {
-						alert(' 해당 지역에 대한 게시물을 찾을 수 없습니다. 전체 목록으로 돌아갑니다 ')
+						ElMessageBox.alert(' 해당 지역에 대한 게시물을 찾을 수 없습니다. 전체 목록으로 돌아갑니다 ', '알림', {
+							confirmButtonText: 'OK',
+						})
 						router.push({ name: 'home' })
 					}
 				})

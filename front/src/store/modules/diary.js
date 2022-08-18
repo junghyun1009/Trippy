@@ -8,6 +8,7 @@ export default ({
   state: {
     diaries: [],
     diary: {},
+    othersDiary: [],
     // images: [],
     // image: {},
 
@@ -26,6 +27,7 @@ export default ({
   getters: {
     diaries: state => state.diaries,
     diary: state => state.diary,
+    othersDiary: state => state.othersDiary,
     // images: state => state.images,
     // image: state => state.image,
     comment: state => state.comment,
@@ -56,6 +58,22 @@ export default ({
       // })
       state.diary = diary
       console.log(state.diary)
+    },
+
+    // 다른 사람 일지 전체 저장
+    SET_OTHERS_DIARY(state, diaries) {
+      for(let i=0; i<diaries.length; i++) {
+        for(let j=0; j<diaries[i].detailLocations.length; j++) {
+          diaries[i].representativeImg = require('@/assets/Trippy.png')
+          if ((diaries[i].detailLocations[j].filename!=null) && 
+          (typeof diaries[i].detailLocations[j].filename === 'string' && diaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
+            diaries[i].representativeImg = diaries[i].detailLocations[j].filepath
+            break;
+          }
+        }
+      }
+      state.othersDiary = diaries
+      console.log(state.othersDiary)
     },
 
     // SET_IMAGES(state, image) {
@@ -215,6 +233,20 @@ export default ({
         if (err.response.status === 404) {
           router.push({ name: 'notFound404' }) 
         }
+      })
+    },
+
+    // 다른 유저 일지 전체 조회
+    fetchOthersDiary({ commit }, userId) {
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/posts/${userId}`,
+        method: 'get'
+      })
+      .then((res) => {
+        commit('SET_OTHERS_DIARY', res.data)
+      })
+      .catch(err => {
+        console.error(err.response)
       })
     },
 

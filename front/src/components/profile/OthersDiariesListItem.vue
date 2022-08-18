@@ -3,9 +3,7 @@
     <router-link :to="{ name: 'diaryDetail', params: { diaryPk: diary.id } }">
       <el-card class="grid-content" :body-style="{ padding: 0 }" shadow="hover">
         <img :src="diary.representativeImg" class="image"/>
-        <div style="padding: 1rem">
-          <span class="title-span">{{ diary.title }}</span>
-        </div>
+        <span class="title-span">{{ diary.title }}</span>
       </el-card>
     </router-link>
     <br>
@@ -13,22 +11,20 @@
 </template>
 
 <script>
-
 export default {
-  name: "RecommendListItem",
+  name: 'OthersDiariesListItem',
   props: {
-    diary: Object,
-  },
+    diary: Object
+  }
 }
 </script>
 
 <style scoped>
 .image {
   width: 100%;
-  overflow: hidden;
-  /* height: 10rem; */
+  height: 100px;
   display: block;
-  border-radius: 0.25rem 0.25rem 0 0;
+  border-radius: 5%;
 }
 
 .title-span {
@@ -57,11 +53,8 @@ a {
 }
 
 .grid-content {
-  display: flex;
-  border-radius: 0.25rem;
-  height: 15rem;
-  /* width: 100%; */
-  /* padding-bottom: 75%; */
+  border-radius: 4px;
+  min-height: 10vh;
 }
 
 .el-card__body:hover {
