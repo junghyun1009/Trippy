@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface PostCommentRepository extends JpaRepository<PostComment, Long>, CustomPostCommentRepository{
-    @Query("select c from PostComment c left join fetch c.parent where c.id=:id")
+    @Query("select c from PostComment c left join fetch c.parent where c.id= :id")
     Optional<PostComment> findPostCommentByIdWithParent(@Param("id") Long id);
 
     List<PostComment> findAllByPostId (Long postId);

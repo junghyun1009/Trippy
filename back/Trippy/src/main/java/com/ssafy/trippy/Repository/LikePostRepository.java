@@ -13,5 +13,6 @@ public interface LikePostRepository extends JpaRepository<LikePost, Long> {
     boolean existsByMemberIdAndPostId(Long memberId, Long postId);
 
     List<LikePost> findLikePostByPostId(Long postId);
+    int countByPostId(Long PostId);
 
 }
