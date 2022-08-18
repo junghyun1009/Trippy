@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations,mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
 
 export default {
@@ -81,6 +81,13 @@ export default {
       postPk: this.$route.params.postPk
     }
   },
+  watch: {
+    post: {
+      deep: true,
+      handler: this.checkBookmark(this.postPk)
+    }
+  },
+  
   computed: {
     ...mapGetters(['post', 'isPostAuthor']),
     // recruitState() {
@@ -107,7 +114,7 @@ export default {
     // }
   },
   methods: {
-    ...mapMutations(['ADD_VOLUME']),
+    // ...mapMutations(['ADD_VOLUME']),
     ...mapActions(['fetchPost', 'updatePost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark', 'deleteBookmark', 'checkBookmark']),
     goBookmark() {
       this.checkBookmark(this.postPk)
@@ -140,9 +147,9 @@ export default {
     // this.fetchBookmark()
   },
   mounted() {
-    setTimeout(() => {
-      this.checkBookmark(this.postPk)
-    }, 25);
+    // setTimeout(() => {
+    //   this.checkBookmark(this.postPk)
+    // }, 25);
   },
   // updated() {
   //   this.checkBookmark(this.postPk)
