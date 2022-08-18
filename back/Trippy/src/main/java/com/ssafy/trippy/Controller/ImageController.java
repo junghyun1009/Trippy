@@ -62,7 +62,7 @@ public class ImageController {
         memberService.updateMember(memberId, updateMemberDto);
         if(responseMemberDto.getImg_path() != null)
             s3Uploader.deleteS3(responseMemberDto.getImg_path());
-        return new ResponseEntity<>(responseImageDto,HttpStatus.OK);
+        return new ResponseEntity<>(updateMemberDto,HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/member")
