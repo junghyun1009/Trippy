@@ -13,10 +13,13 @@
         </div>
         <div class="icons">
           <!-- 여기부터는 공통 -->
-          <div class="icon-cnt">
-            <span v-if="!diary.like" class="material-symbols-outlined" @click="isLiked=1, goLike()">favorite</span>
-            <span v-else class="material-symbols-outlined filled-heart" @click="isLiked=0, goUnlike()">favorite</span>
+          <div v-if="!diary.like" class="icon-cnt">
+            <span class="material-symbols-outlined" @click="isLiked=1, goLike()">favorite</span>
             <span class="cnt">{{ likeCount }}</span>
+          </div>
+          <div v-else class="icon-cnt">
+            <span class="material-symbols-outlined filled-heart" @click="isLiked=0, goUnlike()">favorite</span>
+            <span class="cnt">{{ likeCount+1 }}</span>
           </div>
           <!-- <router-link :to="{ name: 'diaryComment' }" class="icon-cnt">
             <span class="material-symbols-outlined">chat_bubble</span>
@@ -209,7 +212,7 @@ export default {
     },
     likeStatus(newVal) {
       this.isLiked = newVal
-      this.fetchLikeCount(this.diaryPk)
+      // this.fetchLikeCount(this.diaryPk)
     }
   },
   methods: {
@@ -217,11 +220,11 @@ export default {
     'follow', 'unfollow', 'setFollowingStatus', 'fetchLikeCount']),
     goLike() {
       this.likeDiary(this.diary)
-      this.fetchLikeCount(this.diaryPk)
+      // this.fetchLikeCount(this.diaryPk)
     },
     goUnlike() {
       this.unlikeDiary(this.diary)
-      this.fetchLikeCount(this.diaryPk)
+      // this.fetchLikeCount(this.diaryPk)
     },
     addMarkers() {
       console.log(this.diary.routes)

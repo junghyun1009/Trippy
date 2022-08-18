@@ -2,7 +2,7 @@
   <div>
     <form @submit.prevent="onSubmit">
       <div class="comment-form">
-        {{ commentToEdit }}
+        <!-- {{ commentToEdit }} -->
         <!-- {{ originalContent }} -->
 				<el-input class="comment-input" type="text" id="comment" v-model="originalContent" required/>
 				<el-button class="btn" link @click="onSubmit">
@@ -26,7 +26,7 @@ export default {
 
     data() {
       return {
-        originalContent: this.commentToEdit.info.content
+        originalContent: this.commentToEdit.content
       }
     },
 
@@ -36,10 +36,10 @@ export default {
         // diary.pk diarydetail에서 props로 받아와서 같이 넘겨주기
         // console.log(this.commentToEdit)
         const payload = {
-          id: this.commentToEdit.info.id,
+          id: this.commentToEdit.id,
           data: {
             content: this.originalContent,
-            memberId: this.commentToEdit.info.memberId,
+            memberId: this.commentToEdit.memberId,
             postId: this.diaryPk
           }
         }
