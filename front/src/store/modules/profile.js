@@ -5,7 +5,9 @@ export default {
   state: {
     profile: {},
     myDiaries: [],
-    myBadges: [],
+    myLikes: [],
+    myBookmarks: [],
+    badgeList: [],
     isMyProfile: false,
     theirProfile: {},
     followerList: [],
@@ -17,7 +19,9 @@ export default {
   getters: {
     profile: state => state.profile,
     myDiaries: state => state.myDiaries,
-    myBadges: state => state.myBadgeList,
+    myLikes: state => state.myLikes,
+    myBookmarks: state => state.myBookmarks,
+    badgeList: state => state.badgeList,
     isMyProfile: state => state.isMyProfile,
     theirProfile: state => state.theirProfile,
     followerList: state => state.followerList,
@@ -28,7 +32,7 @@ export default {
   },
   mutations: {
     SET_PROFILE: (state, profile) => state.profile = profile,
-    SET_MY_BADGE: (state, myBadgeList) => state.myBadgeList = myBadgeList,
+    SET_BADGE_LIST: (state, badgeList) => state.badgeList = badgeList,
     IS_MY_PROFILE: (state, isMyProfile) => state.isMyProfile = isMyProfile,
     SET_THEIR_PROFILE: (state, theirProfile) => state.theirProfile = theirProfile,
     FOLLOWER_LIST: (state, followerList) => state.followerList = followerList,
@@ -37,16 +41,42 @@ export default {
     FOLLOWING_COUNT: (state, followingCount) => state.followingCount = followingCount,
     FOLLOWING_STATUS: (state, followingStatus ) => state.followingStatus = followingStatus,
     FETCH_MY_DIARY: (state, myDiaries) => {
-      myDiaries.forEach((diary) => {
-        diary.detailLocations.forEach((location) => {
+      for(let i=0; i<myDiaries.length; i++) {
+        for(let j=0; j<myDiaries[i].detailLocations.length; j++) {
+          myDiaries[i].representativeImg = require('@/assets/Trippy.png')
+          if ((myDiaries[i].detailLocations[j].filename!=null) && 
+          (typeof myDiaries[i].detailLocations[j].filename === 'string' && myDiaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
+            myDiaries[i].representativeImg = myDiaries[i].detailLocations[j].filepath
+            break;
+          }
+        }
+      }
+      state.myDiaries = myDiaries
+    },
+    // FETCH_MY_DIARY: (state, myDiaries) => {
+    //   for(let i=0; i<myDiaries.length; i++) {
+    //     for(let j=0; j<myDiaries[i].detailLocations.length; j++) {
+    //         myDiaries[i].representativeImg = require('@/assets/Trippy.png')
+    //         if ((myDiaries[i].detailLocations[j].filename!=null) && 
+    //         (typeof myDiaries[i].detailLocations[j].filename === 'string' && myDiaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
+    //             myDiaries[i].representativeImg = myDiaries[i].detailLocations[j].filepath
+    //             break;
+    //         }
+    //       }
+    //   }
+    // },
+    FETCH_MY_LIKES: (state, myLikes) => {
+      myLikes.forEach((like) => {
+        like.detailLocations.forEach((location) => {
           if (location.filename != null) {
-            diary.representativeImg = location.filepath
+            like.representativeImg = location.filepath
             return false
           }
         })
       })
-      state.myDiaries = myDiaries
-    }
+      state.myLikes = myLikes
+    },
+    FETCH_MY_BOOKMARK: (state, myBookmarks) => state.myBookmarks = myBookmarks
   },
   actions: {
     fetchProfile({ commit, getters }) {
@@ -56,7 +86,7 @@ export default {
         headers: getters.authHeader,
       })
       .then( res => {
-        // console.log(res.data)
+        console.log('when called fetchProfile:',res.data)
         commit('SET_PROFILE', res.data)
       })
     },
@@ -251,21 +281,55 @@ export default {
       })
     },
     
-    fetchMyBadge({ commit, getters }) {
+
+    // 배지
+    fetchBadges({ commit }, memberId) {
+      // 프로필에 보이는 배지 일때는 url param으로 받아오고
+      // 배지 페이지에서는 fetchProfile해서 id값으로 받아옴
+      console.log('member id from url params', memberId)
       axios({
-        url: 'https://i7a506.p.ssafy.io/api/members/badges',
+        url: `https://i7a506.p.ssafy.io/api/members/badges/${memberId}`,
         method: 'get',
-        headers: getters.authHeader,
+        params: memberId,
       })
       .then( res => {
-        const myBadgeList = res.data
-        commit('SET_MY_BADGE', myBadgeList)
+        console.log('successfully fetched badge list')
+        const badgeList = res.data
+        commit('SET_BADGE_LIST', badgeList)
+        console.log('badge list:', badgeList)
       })
       .catch(err => {
         console.log(err)
       })
-    }
+    },
 
+    // 좋아요 가져오기
+    fetchMyLikes({ commit, getters }) {
+      // console.log(memberId)
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/likepost',
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('FETCH_MY_LIKES', res.data)
+      })
+      .catch(err => console.err(err.response))
+    },
+    fetchMyBookmark({ commit, getters }) {
+      // console.log(memberId)
+      axios({
+        url: 'https://i7a506.p.ssafy.io/api/auth/bookmark',
+        method: 'get',
+        headers: getters.authHeader
+      })
+      .then((res) => {
+        console.log(res.data)
+        commit('FETCH_MY_BOOKMARK', res.data)
+      })
+      .catch(err => console.err(err.response))
+    },
 
   }
 }

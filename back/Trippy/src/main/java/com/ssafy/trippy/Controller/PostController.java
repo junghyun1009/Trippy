@@ -151,4 +151,10 @@ public class PostController {
             return new ResponseEntity<>("해당 게시물을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/posts/{memberId}")
+    public ResponseEntity<?> getAllPostsByMemberId(@PathVariable Long memberId){
+        List<ResponsePostDto> responsePostDtos = postService.findByMemberId(memberId);
+        return new ResponseEntity<>(responsePostDtos,HttpStatus.OK);
+    }
 }

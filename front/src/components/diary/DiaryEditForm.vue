@@ -457,7 +457,9 @@ export default {
           this.newStories[index].preview = URL.createObjectURL(this.$refs[`${index}th-file`][0].files[i])
           this.newStories[index].filename = this.$refs[`${index}th-file`][0].files[i].name
         } else {
-          alert("사진 파일만 추가 가능합니다")
+          ElMessageBox.alert("사진 파일만 추가 가능합니다", '알림', {
+          confirmButtonText: 'OK',
+        })
         }
       }
       console.log(this.images[index])
@@ -478,7 +480,9 @@ export default {
 
     addStory() {
       if (this.newStories[this.newStories.length - 1].detailLocationName === '' || this.newStories[this.newStories.length - 1].detailLocationContent === '') {
-        alert('내용 작성 후 스토리를 추가해주세요!')
+        ElMessageBox.alert('내용 작성 후 스토리를 추가해주세요!', '알림', {
+          confirmButtonText: 'OK',
+        })
       } else {
         this.newStories.push({
           // pk: 0,

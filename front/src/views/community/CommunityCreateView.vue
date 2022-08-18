@@ -33,6 +33,7 @@ export default {
         // isLocal: true,
         local: true,
         place: '',
+        openKakaoUrl: '',
       }
     }
   }

@@ -50,7 +50,9 @@
 </template>
 
 <script>
+import { ElMessageBox } from 'element-plus'
 import { mapActions, mapGetters } from 'vuex'
+import VueCookies from 'vue-cookies'
 
 export default {
 	name: 'NavBar',
@@ -60,7 +62,7 @@ export default {
 		}
 	},
   computed: {
-    ...mapGetters(['profile'])
+    ...mapGetters(['profile', 'isLoggedIn'])
   },
   mounted() {
     this.fetchProfile()
@@ -94,11 +96,18 @@ export default {
     },
 		goProfile() {
       this.isClicked = false
+      if ( !VueCookies.get('accessToken') && !VueCookies.get('refreshToken') ) {
+        ElMessageBox.alert('로그인을 해주세요!', '알림', {
+          confirmButtonText: 'OK',
+        })
+        this.$router.push({ name: 'login' })
+      } else {
       const userid = this.profile.id
 			// this.$router.push({ name: 'profile', params: { username }})
 			// this.$router.push({ name: 'profile', params: { authorId: `${username}` }})
 			this.$router.push({ name: 'profile', params: { authorId: userid }})
 			// this.$router.push({ path: `/profile/${username}` })
+      }
 		},
     
 	},

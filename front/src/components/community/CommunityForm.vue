@@ -24,9 +24,9 @@
       <el-form-item label="시간">
         <el-time-picker v-model="newPost.meetingTime" value-format="YYYY-MM-DD HH:mm:ss" :disabled-seconds="disabledSeconds"/>
       </el-form-item>
-      <el-form-item label="인원">
+      <!-- <el-form-item label="인원">
         <el-input-number v-model="newPost.recruitVolume" :min="1" :max="10"/>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-collapse class="collapse">
           <el-collapse-item title="장소">
@@ -66,6 +66,9 @@
       <el-form-item label="모임 장소">
         <el-input v-model="newPost.place" placeholder="모임 장소를 입력하세요." />
       </el-form-item>
+      <el-form-item label="오픈채팅">
+        <el-input v-model="newPost.openKakaoUrl" placeholder="오픈채팅 주소를 입력하세요." />
+      </el-form-item>
       <el-form-item v-if="action==='create'">
         <el-button type="primary" class="button" @click="onSubmit">작성하기</el-button>
       </el-form-item>
@@ -78,6 +81,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ElMessageBox from 'element-plus'
 
 export default {
   name: 'CommunityForm',
@@ -128,6 +132,7 @@ export default {
         // isLocal: this.post.isLocal,
         local: this.post.local,
         place: this.post.place,
+        openKakaoUrl: this.post.openKakaoUrl,
         // locationId: this.post.locationId,
       },
       select: [this.post.countryName, this.post.cityName],
@@ -208,7 +213,7 @@ export default {
       this.newPost.cityName = this.select[1]
       const post = this.newPost
       // if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
-      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && post.countryName && post.cityName && (post.day || post.endDate)) {
+      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && post.countryName && post.cityName && post.openKakaoUrl && (post.day || post.endDate)) {
         // console.log(this.newPost)
         console.log(post)
         if (this.action === 'create') {
@@ -223,7 +228,9 @@ export default {
           this.updatePost(payload)
         }
       } else {
-        alert('빈 칸 없이 모든 필드를 채워주세요!')
+        ElMessageBox.alert('빈 칸 없이 모든 필드를 채워주세요!', '알림', {
+          confirmButtonText: 'OK',
+        })
       }
     },
     clearEndDate() {
