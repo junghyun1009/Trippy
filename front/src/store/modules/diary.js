@@ -21,7 +21,7 @@ export default ({
     authorId: null,
     parentId: null,
     location: [],
-    authorInfo: null,
+    authorInfo: {},
     childInfo: {}
   },
   getters: {
