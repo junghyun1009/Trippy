@@ -72,7 +72,7 @@
         <div class="profile-div">
           <!-- <el-avatar :size="100" :src="diary.member_id.img_path" /> -->
           <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
-            <el-avatar v-if="authorInfo" :size="80" :src="authorInfo.img_link" />
+            <el-avatar v-if="authorInfo !== null" :size="80" :src="authorInfo.img_link" />
           </router-link>
           <!-- <span>{{ diary.member_id.name }}</span> -->
           <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
