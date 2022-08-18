@@ -7,7 +7,7 @@
       <img v-else-if="randomImage&&!isMyProfile" class="background-image" :src="randomImage">
     </div>
     <!-- <img v-else :src="theirProfile.img_link"> -->
-    <div class="profile-title">
+    <div class="profile-title" >
       <el-avatar class="profile-picture" :size="90" :src="theirProfile.img_link" alt="user">
       </el-avatar>
 
@@ -186,20 +186,6 @@ export default {
       randomImage: ''
     }
   },
-  computed: {
-    ...mapGetters([
-      'currentUser', 'profile', 'myDiaries', 'myLikes', 'myBookmarks', 'theirProfile', 
-      'followingStatus', 'followerCount', 'followingCount',
-      'badgeList', 'othersDiary'
-    ]),
-    // fetchTheirId() {
-    //   const memberId = this.$route.params.authorId
-    //   return memberId
-    // },
-    fetchAuthorId() {
-      return this.$route.params.authorId
-    },
-  },
   watch: {
     followingStatus(newVal) {
       // 팔로우 여부 바뀌면
@@ -231,8 +217,34 @@ export default {
     badgeList(newValue) {
       console.log('new value:', newValue)
       this.isBadgeUnlocked()
+    },
+    profile: {
+      deep: true,
+      handler: 'myProfile'
+    },
+    diaries: {
+      deep: true,
+      handler: 'executeRandom'
+    },
+    othersDiary: {
+      deep: true,
+      handler: 'executeRandom'
     }
 
+  },
+  computed: {
+    ...mapGetters([
+      'currentUser', 'profile', 'myDiaries', 'myLikes', 'myBookmarks', 'theirProfile', 
+      'followingStatus', 'followerCount', 'followingCount',
+      'badgeList', 'othersDiary'
+    ]),
+    // fetchTheirId() {
+    //   const memberId = this.$route.params.authorId
+    //   return memberId
+    // },
+    fetchAuthorId() {
+      return this.$route.params.authorId
+    },
   },
   methods: {
     ...mapActions([
@@ -328,6 +340,14 @@ export default {
       this.$router.push({ name: 'badgeList' })
     },
 
+    executeRandom() {
+      if ( this.isMyProfile ) {
+        this.pickRandom(this.myDiaries)
+      } else {
+        this.pickRandom(this.othersDiary)
+      }
+    },
+
     // 일지 랜덤함수
     pickRandom(diaries) {
       // 일지에 저장되어 있는 사진들만 배열로
@@ -344,16 +364,14 @@ export default {
       this.randomImage = _.sample(images)
     }
   },
-  created() {
+  mounted() {
     // 현재 로그인한 유저 정보 저장
     this.fetchCurrentUser()
     // 현재 들어간 프로필 유저 정보 저장
     this.fetchTheirProfile(this.currentProfile)
-  },
-  mounted() {
     // 내 프로필인지 확인 => 정보 저장하는 시간이 필요함
     // this.myProfile()
-    setTimeout(() => this.myProfile(), 100)
+    // setTimeout(() => this.myProfile(), 100)
     this.fetchProfile()
     // this.fetchTheirProfile(this.$route.params.authorId)
     // this.myFollowings()
