@@ -2,7 +2,7 @@
   <div>
     <form @submit.prevent="onSubmit">
       <div class="comment-form">
-        <!-- {{ commentToEdit }} -->
+        {{ commentToEdit }}
         <!-- {{ originalContent }} -->
 				<el-input class="comment-input" type="text" id="comment" v-model="originalContent" required/>
 				<el-button class="btn" link @click="onSubmit">
