@@ -15,7 +15,7 @@
           <div class="icon-cnt">
             <span v-if="!diary.like" class="material-symbols-outlined" @click="isLiked=1, goLike()">favorite</span>
             <span v-else class="material-symbols-outlined filled-heart" @click="isLiked=0, goUnlike()">favorite</span>
-            <span class="cnt">777</span>
+            <span class="cnt">{{ likeCount }}</span>
           </div>
           <!-- <router-link :to="{ name: 'diaryComment' }" class="icon-cnt">
             <span class="material-symbols-outlined">chat_bubble</span>
@@ -184,7 +184,8 @@ export default {
   },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
-    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing', 'authorId', 'authorInfo', 'followingStatus']),
+    ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing', 'authorId', 
+    'authorInfo', 'followingStatus', 'likeCount']),
     partyTag() {
       const party = this.diary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -203,16 +204,22 @@ export default {
       // this.yourFollowersCount(this.currentProfile)
       // 팔로워 정보 다시 받아오기
       // this.yourFollowers(this.currentProfile)
+    },
+    likeStatus(newVal) {
+      this.isLiked = newVal
+      this.fetchLikeCount(this.diaryPk)
     }
   },
   methods: {
     ...mapActions(['fetchDiary', 'deleteDiary', 'hideParent', 'likeDiary', 'unlikeDiary', 'checkLike','fetchCurrentUser', 'fetchDiaryUser',
-    'follow', 'unfollow', 'setFollowingStatus']),
+    'follow', 'unfollow', 'setFollowingStatus', 'fetchLikeCount']),
     goLike() {
       this.likeDiary(this.diary)
+      this.fetchLikeCount(this.diaryPk)
     },
     goUnlike() {
       this.unlikeDiary(this.diary)
+      this.fetchLikeCount(this.diaryPk)
     },
     addMarkers() {
       console.log(this.diary.routes)
@@ -264,6 +271,7 @@ export default {
   created() {
     this.fetchDiary(this.diaryPk)
     this.fetchCurrentUser()
+    this.fetchLikeCount(this.diaryPk)
   },
   mounted() {
     setTimeout(() => this.addMarkers(), 500),
