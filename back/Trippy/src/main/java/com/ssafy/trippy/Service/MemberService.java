@@ -6,10 +6,11 @@ import com.ssafy.trippy.Dto.Request.RequestMemberDto;
 import com.ssafy.trippy.Dto.Response.ResponseLoginDto;
 import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Dto.Update.UpdateMemberDto;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
 
-    ResponseMemberDto signup(RequestMemberDto requestMemberDto);
+    ResponseMemberDto signup(MultipartFile image,RequestMemberDto requestMemberDto);
 
     ResponseLoginDto login(String email, String password);
 
@@ -26,4 +27,6 @@ public interface MemberService {
     void logout(Long id, String accessToken);
 
     void changePw(RequestLoginDto requestLoginDto);
+
+    Long getIdByToken(String token);
 }

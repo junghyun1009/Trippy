@@ -1,11 +1,15 @@
 package com.ssafy.trippy.Service.Impl;
 
 import com.ssafy.trippy.Domain.Follow;
+import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Exception.CustomApiException;
 import com.ssafy.trippy.Dto.Request.RequestFollowDto;
 import com.ssafy.trippy.Dto.Response.ResponseFollowDto;
+import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Repository.FollowRepository;
+import com.ssafy.trippy.Repository.MemberRepository;
 import com.ssafy.trippy.Service.FollowService;
+import com.ssafy.trippy.Service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +22,10 @@ import java.util.List;
 @Transactional
 public class FollowServiceImpl implements FollowService {
     private final FollowRepository followRepository;
+
+    private final MemberRepository memberRepository;
+
+    private final S3Uploader s3Uploader;
 
     @Override
     public ResponseFollowDto follow(RequestFollowDto requestFollowDto) {
@@ -34,24 +42,33 @@ public class FollowServiceImpl implements FollowService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResponseFollowDto> getFollowers(Long memberId) {
+    public List<ResponseMemberDto> getFollowers(Long memberId) {
         List<Follow> followList = followRepository.findAllByFollowerId(memberId);
-        List<ResponseFollowDto> responseFollowDtoList = new ArrayList<>();
+        List<ResponseMemberDto> responseMemberDtos = new ArrayList<>();
         for (Follow follow : followList) {
-            responseFollowDtoList.add(new ResponseFollowDto(follow));
+            Member member = memberRepository.findById(follow.getFollowing().getId()).orElseThrow();
+            ResponseMemberDto responseMemberDto = new ResponseMemberDto(member);
+            if(member.getImg_path()!=null)
+                responseMemberDto.setImg_link(s3Uploader.getS3(member.getImg_path()));
+            responseMemberDtos.add(responseMemberDto);
+
         }
-        return responseFollowDtoList;
+        return responseMemberDtos;
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResponseFollowDto> getFollowings(Long memberId) {
+    public List<ResponseMemberDto> getFollowings(Long memberId) {
         List<Follow> followList = followRepository.findAllByFollowingId(memberId);
-        List<ResponseFollowDto> responseFollowDtoList = new ArrayList<>();
+        List<ResponseMemberDto> responseMemberDtos = new ArrayList<>();
         for (Follow follow : followList) {
-            responseFollowDtoList.add(new ResponseFollowDto(follow));
+            Member member = memberRepository.findById(follow.getFollower().getId()).orElseThrow();
+            ResponseMemberDto responseMemberDto = new ResponseMemberDto(member);
+            if(member.getImg_path()!=null)
+                responseMemberDto.setImg_link(s3Uploader.getS3(member.getImg_path()));
+            responseMemberDtos.add(responseMemberDto);
         }
-        return responseFollowDtoList;
+        return responseMemberDtos;
     }
 
     @Transactional(readOnly = true)
@@ -64,6 +81,14 @@ public class FollowServiceImpl implements FollowService {
     @Override
     public Long getFollowingsCnt(Long memberId) {
         return followRepository.countByFollowingId(memberId);
+    }
+
+    @Override
+    public boolean existsByFollowerIdAndFollowingId(Long followerId, Long followingId) {
+        if(followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)){
+            return true;
+        }
+        return false;
     }
 
 }

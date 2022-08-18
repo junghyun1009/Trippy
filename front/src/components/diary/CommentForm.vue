@@ -1,64 +1,82 @@
 <template>
   <div>
-    <form @submit.prevent="onSubmit" class="comment-list-form">
-      <el-container>
-				<label for="comment">Username: </label>
-				<input type="text" id="comment" v-model="content" required/>
-				<el-button class="btn">댓글달기</el-button>
-			</el-container>
+    <form @submit.prevent="onSubmit">
+      <div class="comment-form">
+				<el-input class="comment-input" type="text" id="comment" v-model="content" required/>
+				<el-button class="btn" link @click="onSubmit">
+          <span class="material-symbols-outlined">send</span>
+        </el-button>
+        <!-- {{ isChild }}
+        {{ parentId }} -->
+			</div>
+
     </form>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: 'CommentForm',
+    props: {
+      diaryPk: String,
+    },
     data() {
-			return {
-				content: '',
-			}
-		},
+      return {
+        content: '',
+      }
+    },
+    computed: {
+      ...mapGetters(['profile', 'isChild', 'parentId']),
+    },
 		methods: {
-			...mapActions(['createComment']),
+			...mapActions(['createComment', 'fetchProfile']),
 			onSubmit() {
-				this.createComment(),
-				this.content = ''
-			}
-		}
+        // diary.pk diarydetail에서 props로 받아와서 같이 넘겨주기
+        // 댓글 생성
+        if (!this.isChild) {
+          const payload = {
+            content: this.content,
+            memberId: this.profile.id,
+            postId: this.diaryPk,
+            name: this.profile.name,
+            imgPath: this.profile.img_link
+          }
+          this.createComment(payload)
+          console.log('보낸 거', payload)
+          this.content = ''
+        } else {
+          // 대댓글 생성
+          const payload = {
+            parentId: this.parentId,
+            content: this.content,
+            memberId: this.profile.id,
+            postId: this.diaryPk,
+            name: this.profile.name,
+            imgPath: this.profile.img_link
+          }
+          this.createComment(payload)
+          this.content = ''
+        }
+      }
+		},
+    mounted() {
+      this.fetchProfile()
+    }
 }
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;500&display=swap');
+<style scoped>
 
-  * { 
-      font-family: 'IBM Plex Sans KR', sans-serif;
-    } 
-.comment-list-form {
-  display: flex;
-}
-.container {
-  display: flex;
-  padding: 0;
-}
-.commentbox {
-  display: flex;
-  width: 500px;
-  margin-left: 3px;
-}
 button {
-  border-radius: 20px;
   margin-left: 12px;
 }
-button:hover {
-  background-color: rgb(255, 129, 129)
+.material-symbols-outlined {
+  color: #F16B51;
 }
-.userinfo {
-  font-style: bold;
-  margin-left: 3px;
-  margin-bottom: 8px;
-  font-size: 18px;
+.comment-form {
+  display: flex;
+  width: 90vw;
 }
 </style>

@@ -1,8 +1,7 @@
 package com.ssafy.trippy.Domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -24,6 +23,7 @@ public class PostTransport extends BaseEntity{
     @JoinColumn(name="TRANSPORT_ID")
     private Transport transport;
 
+    @Builder
     public PostTransport(Post post, Transport transport) {
         this.post = post;
         this.transport = transport;
@@ -31,6 +31,11 @@ public class PostTransport extends BaseEntity{
     public void setPost(Post post){
         this.post = post;
         post.getPostTransports().add(this);
+    }
+
+    public void setTransport(Transport transport){
+        this.transport = transport;
+
     }
 
     public void update(Transport transport){

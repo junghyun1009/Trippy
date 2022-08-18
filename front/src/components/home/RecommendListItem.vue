@@ -1,40 +1,71 @@
 <template>
-  <div>
-    <el-row>
-      <el-col :span="8">
-        <router-link :to="{ name: 'diaryDetail' }">
-          <el-card :body-style="{ padding: '0px' }" shadow="never">
-            <img :src="diaryTemp.stories[0].photoList[0].preview" class="image" :alt="diaryTemp.stories[0].photoList[0].preview"/>
-            <div style="padding: 3px">
-              <span class="title-span">{{ diaryTemp.title }}</span>
-            </div>
-          </el-card>
-        </router-link>
-      </el-col>
-    </el-row>
+  <div class="container">
+    <router-link :to="{ name: 'diaryDetail', params: { diaryPk: diary.id } }">
+      <el-card class="grid-content" :body-style="{ padding: 0 }" shadow="hover">
+        <img :src="diary.representativeImg" class="image"/>
+        <div style="padding: 1rem">
+          <span class="title-span">{{ diary.title }}</span>
+        </div>
+      </el-card>
+    </router-link>
+    <br>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 
 export default {
   name: "RecommendListItem",
-  computed: {
-    ...mapGetters(['diaryTemp'])
-  }
+  props: {
+    diary: Object,
+  },
 }
 </script>
 
-<style>
+<style scoped>
 .image {
   width: 100%;
-  height: 150px;
+  overflow: hidden;
+  /* height: 10rem; */
   display: block;
+  border-radius: 0.25rem 0.25rem 0 0;
 }
 
 .title-span {
-  font-size: 12px;
+  font-size: 1em;
+  margin-left: 0%;
+}
+
+a {
+  text-decoration: none;
+}
+
+.diary-card {
+  position: relative;
+  width: 100%;
+}
+
+.diary-card-desc {
+  position: absolute;
+  margin-top: -30%;
+}
+
+.diary-card-desc span {
+  font-weight: 500;
+  text-decoration: none;
+  color: black;
+}
+
+.grid-content {
+  display: flex;
+  border-radius: 0.25rem;
+  height: 15rem;
+  /* width: 100%; */
+  /* padding-bottom: 75%; */
+}
+
+.el-card__body:hover {
+  opacity: 0.2;
 }
 
 </style>

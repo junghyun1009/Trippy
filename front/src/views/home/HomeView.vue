@@ -1,27 +1,29 @@
 <template>
   <div class="home">
-    <search-bar></search-bar>
-    <region-list></region-list>
-    <recommend-list v-for="diary in diaries" :key="diary.id" :diary="diary"></recommend-list>
 
-    <p>팔로우 하고 있는</p>
-    <p>ㅇㅇㅇ 님이 추천하는 코스</p>
-    <recommend-list></recommend-list>
-    
+    <div class="diary-list">
+      <search-bar @click="goSearch"></search-bar>
+      <region-list></region-list>
+      <recommend-list></recommend-list>
+    </div>
+
+
+    <el-divider />
+
+    <div class="following-diary-list">
+      <div v-if="isLoggedIn" class="following-diary-description">
+        <p>{{ currentUser.name }}님이 팔로우 하고 있는</p>
+        <p><span>{{ this.followingName.name }}</span> 님이 추천하는 코스</p>
+        <following-diary-list v-if="this.followingIdforDiary" :followingIdforDiary="followingIdforDiary"></following-diary-list>
+      </div>
+
+    </div>
+
     <br>
     <br>
+    <br>
 
-    <router-link :to="{ name: 'diaryCreate' }">Create Diary</router-link><br>
-    <router-link :to="{ name: 'login' }">로그인</router-link><br>
-    <router-link :to="{ name: 'passwordChange' }">비밀번호변경</router-link>
-    <!-- <router-link :to="{ name: 'profile' }">Profile</router-link> -->
-
-    <br><br><br>
-
-    <router-link :to="{ name: 'diaryCreate' }" class="float">
-      <i class='bx bxs-pencil my-float'></i>
-    </router-link>
-
+    <br>
 
   </div>
 </template>
@@ -30,39 +32,100 @@
 // @ is an alias to /src
 import SearchBar from '@/components/common/SearchBar.vue'
 import RecommendList from '@/components/home/RecommendList.vue'
+import FollowingDiaryList from '@/components/home/FollowingDiaryList.vue'
 import RegionList from '@/components/common/RegionList.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'HomeView',
+  data() {
+    return {
+      followingName: {},
+      followingIdforDiary: '',
+    }
+  },
+  watch: {
+    followingName(newVal) {
+      console.log(newVal)
+      this.followingIdforDiary = newVal.id 
+      console.log(this.followingIdforDiary)
+    }
+  }, 
   components: {
     SearchBar,
     RecommendList,
     RegionList,
-  },
-  created() {
-    this.showAllDiary()
+    FollowingDiaryList,
   },
   computed: {
-    ...mapGetters(['GET_ALL_DIARY']),
-    diaries() {
-      return this.$store.state.diaries
-    }
+    ...mapGetters(['isLoggedIn', 'followingList', 'currentUser']),
+
   },
   methods: {
-    ...mapActions(['showAllDiary'])
+    ...mapActions(['myFollowings', 'fetchCurrentUser', 'saveFollowingId']),
+    randomFunction(){
+      const followingList = this.followingList
+      var following = followingList[Math.floor(Math.random()*followingList.length)]
+      this.followingName = following
+      console.log('followingName', this.followingName)
+      this.followingIdforDiary = this.followingName.id
+      this.saveFollowingId(this.followingIdforDiary)
+    },
+    goSearch() {
+      this.$router.push({ name: 'search' })
     }
-  }
-
+  },
+  mounted() {
+    if (localStorage.getItem('reloaded')) {
+        localStorage.removeItem('reloaded');
+    } else {
+        localStorage.setItem('reloaded', '1');
+        location.reload();
+    }
+    this.fetchCurrentUser()
+    this.myFollowings()
+    setTimeout(() => {
+      this.randomFunction()
+    }, 100);
+  },
+}
 </script>
 
+
 <style scoped>
-*{padding:0;margin:0;}
+* {
+  padding:0;
+  margin:0;
+  }
 
 body{
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:18px;
 	background-color:#CCC;
+}
+
+.following-diary-description {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0 2%;
+  margin-bottom: 3%;;
+}
+
+.following-diary-description p {
+	font-size: 2.5vh;
+	font-weight: 500;
+}
+
+.following-diary-description span {
+  color: #F16B51;
+	font-size: 2.5vh;
+	font-weight: 500;
+}
+
+.following-diary-list {
+  /* display: flex; */
+  margin: 0 2%;
 }
 
 .float{
@@ -78,7 +141,12 @@ body{
 	box-shadow: 2px 2px 3px #999;
 }
 
+.image {
+
+}
+
 .my-float{
 	margin-top:22px;
 }
+
 </style>

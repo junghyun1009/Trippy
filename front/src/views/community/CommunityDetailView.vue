@@ -1,162 +1,311 @@
 <template>
-  <div>
-    <div class="detail-header">
-      <div>
-        <el-tag class="tag">{{ temp.category }}</el-tag>
-        <el-tag class="tag">장소</el-tag>
-      </div>
-      <router-link :to="{ name: 'profile' }">
-        <div class="profile">
-          <el-avatar :size="50" src="" />
-          <span>나유저</span>
-        </div>
-      </router-link>
-      <hr>
-    <div class="title">
-      <span>{{ recruitState }}</span>
-      <h4>{{ temp.title }}</h4>
-    </div>
-     <div class="title-icons">
-        <div class="icons">
-          <!-- 로그인한 유저와 글 쓴 유저가 같다면 -->
-          <router-link :to="{ name: 'communityEdit' }">
-            <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#F16B51" icon-name="editicon">
-              <edit-icon/>
-            </icon-base>
-          </router-link>
-          <icon-base viewBox="0 0 1024 1024" width="24" height="24" iconColor="#F16B51" icon-name="deleteicon">
-            <delete-icon/>
-          </icon-base>
-          <!-- 여기부터는 공통 -->
-          <icon-base v-if="!isBookmark" viewBox="0 0 512 512" width="24" height="24" iconColor="#F16B51" icon-name="emptyheart" @click="isBookmark=true">
-            <empty-heart/>
-          </icon-base>
-          <icon-base v-else viewBox="0 0 512 512" width="24" height="24" iconColor="#F16B51" icon-name="filledheart" @click="isBookmark=false">
-            <filled-heart/>
-          </icon-base>
-        </div>
-    </div>
+  <div class="container">
+      <div class="tags">
+        <!-- {{ post }} -->
+        <!-- {{post.recruitCurrentVolume}}
+        {{counter}} -->
 
-      <div class="option">
-        <p>{{ temp.option.age[0] }}~{{ temp.option.age[1] }}세 | {{ temp.option.gender }}</p>
-        <p>{{ convertDate[0] }} ~ {{ convertDate[1] }}, {{ convertTime }}</p>
-        <p>{{ temp.place }}</p>
+        <el-tag type="dark" class="tag">{{ post.cityName }}</el-tag>
+        <el-tag type="dark" class="tag">{{ post.category === 1 ? '식사' : post.category === 2 ? '동행' : post.category === 3 ? '파티' : post.category === 4 ? '이동수단 셰어' : '기타' }}</el-tag>
+      </div>
+      <div class="header">
+        <div class="profile" @click="goProfile">
+          <el-avatar class="profile-image" :size="40" src="" />
+          <span class="username">{{ post.name }}</span>
+        </div>
+        <div v-if="!isPostAuthor" class="bookmark">
+          <span v-if="post.bookmark===false" class="material-symbols-outlined" @click="goBookmark">bookmark_add</span>
+          <span v-else class="material-symbols-outlined filled" @click="cancelBookmark">bookmark</span>
+        </div>
+        <div v-if="isPostAuthor">
+          <edit-delete-button class="edit-delete"></edit-delete-button>
+        </div>
+      </div> 
+    <hr>
+    <div class="title">
+      <!-- <span class="state">{{ post.recruitCurrentVolume < post.recruitVolume ? '모집중' : '모집마감' }}</span> -->
+      <h4>{{ post.title }}</h4>
+    </div>
+    <div class="options">
+      <p class="option">
+        <span class="material-symbols-outlined icon">groups</span>
+        <span v-if="post.startAge===19 && post.endAge===70 && post.gender==='누구나'">누구나</span>
+        <span v-else>{{ post.startAge === post.endAge ? `${post.startAge}세` : post.startAge === 19 && post.endAge === 70 ? '누구나' : `${post.startAge}~${post.endAge}세`}} | {{ post.gender }}</span>
+        참여 가능
+      </p>
+      <p class="option">
+        <span class="material-symbols-outlined icon">event_note</span>
+        <span>{{ post.endDate ? `${post.startDate.slice(5, 10)}~${post.endDate.slice(5,10)}` : ''+post.startDate.slice(5, 10) }},</span>
+        <span>{{ ''+post.meetingTime.slice(11, 16) }}</span>
+      </p>
+      <p class="option">
+        <span class="material-symbols-outlined icon">location_on</span>
+        {{ post.place }}
+      </p>
+    </div>
+    
+    <div class="content">
+      <p class="description">{{ post.description }}</p>
+      <hr>
+    </div>
+    <div class="members">
+      <!-- <p class="member-count">
+        <span>{{ post.recruitCurrentVolume + 1}}</span>
+        / {{ post.recruitVolume + 1 }}명 참여
+      </p> -->
+      <!-- <div class="users">
+        <div class="user">
+          <el-avatar :size="40" src="" />
+          <span>{{ post.name }}</span>
+        </div>
+      </div> -->
+      <div v-if="!isPostAuthor" class="participation">
+        <el-button type="primary" class="button" @click="goPartIn">참가하기</el-button>
       </div>
     </div>
-    <p>{{ this.temp.desc }}</p>
-    <hr>
-    <div>
-      <p>{{ recruitCount}} / {{ temp.recruit_volume }}명 참여</p>
-      <el-avatar :size="50" src="" />
-    </div>
-    <el-button>참가하기</el-button>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import EditIcon from '@/components/icon/EditIcon.vue'
-import DeleteIcon from '@/components/icon/DeleteIcon.vue'
-import EmptyHeart from '@/components/icon/EmptyHeart.vue'
-import FilledHeart from '@/components/icon/FilledHeart.vue'
+import { mapGetters, mapMutations,mapActions } from 'vuex'
+import EditDeleteButton from '@/components/common/EditDeleteButton.vue'
 
 export default {
-    name: 'CommunityDetailView',
-    components: {
-      EditIcon,
-      DeleteIcon,
-      EmptyHeart,
-      FilledHeart,
+  name: 'CommunityDetailView',
+  components: {
+    EditDeleteButton
+  },
+  data() {
+    return {
+      // isBookmark: false,
+      postPk: this.$route.params.postPk
+    }
+  },
+  computed: {
+    ...mapGetters(['post', 'isPostAuthor']),
+    // recruitState() {
+    //   return '모집중'
+    // },
+    convertTag() {
+      const category = this.post.category
+      const categoryList = ['식사', '동행', '파티', '이동수단 셰어', '기타']
+      return categoryList[category-1]
     },
-    data() {
-      return {
-        isBookmark: true
-      }
+    // convertDate() {
+    //   let date = ''
+    //   if (!this.post.isDay) {
+    //     date = this.post.startDate.substr(5,5) + '~' + this.post.endDate.substr(5,5)
+    //   } else {
+    //     date = this.post.startDate.substr(5,5)
+    //   }
+    //   return date
+    // },
+    // convertTime() {
+    //   let time = ''
+    //   time = this.post.meetingTime.substr(11,5)
+    //   return time
+    // }
+  },
+  methods: {
+    ...mapMutations(['ADD_VOLUME']),
+    ...mapActions(['fetchPost', 'updatePost', 'fetchCurrentUser', 'fetchBookmark', 'createBookmark', 'deleteBookmark', 'checkBookmark']),
+    goBookmark() {
+      this.checkBookmark(this.postPk)
+      this.createBookmark(this.postPk)
+      // this.switchIsBookmark()
+      // this.isBookmark = true
+      // console.log(1, this.isBookmark)
     },
-    computed: {
-      ...mapGetters(['temp']),
-      recruitState() {
-        return '모집 중'
-      },
-      recruitCount() {
-        return 3
-      },
-      optionTag() {
-        const gender = this.temp.option.gender
-        const start_age = this.temp.option.age[0]
-        const end_age = this.temp.option.age[1]
-        let age = start_age + '~' + end_age + '살'
-        if (start_age === undefined && end_age === undefined || start_age === 19 && end_age === 50) {
-          age = '누구나'
-        }
-        const isLocal = this.temp.option.isLocal
-        let local = ''
-        if (isLocal === false) {
-          local = '어디서나'
-        } else {
-          local = '같은 지역만'
-        }
-        return [gender, age, local]
-      },
-      convertDate() {
-        const months = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}
-        const start_year = this.temp.date[0].substr(11, 4)
-        let start_month = this.temp.date[0].substr(4,3)
-        const start_day = this.temp.date[0].substr(8,2)
-        const end_year = this.temp.date[1].substr(11, 4)
-        let end_month = this.temp.date[1].substr(4,3)
-        const end_day = this.temp.date[1].substr(8,2)
-        if (start_month in months || end_month in months) {
-          start_month = months[start_month]
-          end_month = months[end_month]
-        }
-        
-        const start_date = start_year + '-' + start_month.toString().padStart(2, '0') + '-' + start_day
-        const end_date = end_year + '-' + end_month.toString().padStart(2, '0') + '-' + end_day
-        return [start_date, end_date]
-      }
+    cancelBookmark() {
+      this.checkBookmark(this.postPk)
+      this.deleteBookmark(this.postPk)
+      // this.switchIsBookmark()
+      // console.log(2, this.isBookmark)
     },
+    // switchIsBookmark() {
+    //   this.isBookmark = !this.isBookmark
+    // }
+    goProfile() {
+      this.$router.push({ name: 'profile' })
+    },
+    goPartIn() {
+      // this.ADD_VOLUME()
+      window.open(this.post.openKakaoUrl)
+    }
+  },
+  created() {
+    this.fetchCurrentUser()
+    this.fetchPost(this.postPk)
+    // this.fetchPost(this.postPk)
+    // this.fetchBookmark()
+  },
+  mounted() {
+    setTimeout(() => {
+      this.checkBookmark(this.postPk)
+    }, 25);
+  },
+  // updated() {
+  //   this.checkBookmark(this.postPk)
+  // }
 }
 </script>
 
 <style scoped>
 * {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.container {
+  padding: 1rem;
+}
+
+hr {
+  border: 0;
+  height: 0;
+  border-top: 1px solid #d9d9d9;
+}
+
+.tags {
   text-align: left;
 }
 
-.detail-header {
-  width: 100%;
-  background-color: bisque;
-  padding: 0 0 20px 0;
-}
-
 .tag {
-  margin:10px 10px 10px 0;
+  margin-right: 0.3rem;
+  margin-bottom: 1rem;
 }
 
-.tag:first-child {
-  margin-left: 10px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-items: center;
+  position: relative;
+  padding: 0.5rem;
+}
+
+.bookmark {
+  color: #F16B51;
+}
+
+.filled {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
 }
 
 .profile {
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-bottom: 1rem;
 }
 
-.diary-detail-header > h3 {
-  margin-bottom: 10px;
+.profile-image {
+  margin-right: 0.3rem;
 }
 
-.title-icons {
+.username {
+  font-weight: 400;
+}
+
+.edit-delete {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.title {
   display: flex;
-  justify-content: space-around;
+  align-items: center;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.state {
+  font-weight: bold;
+  color: #F16B51;
+  margin-right: 0.3rem;
+}
+
+.options {
+  padding: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.option > span {
+  margin-right: 0.3rem;
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+.content {
+  padding: 0.5rem;
+}
+
+.description {
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.members {
+  padding: 0.5rem;
+}
+
+.member-count {
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+}
+
+.member-count > span {
+  color: #F16B51;
+  font-weight: 400;
+}
+
+.users {
+  display: flex;
   align-items: center;
 }
 
-.icons {
-  width: 120px;
+.user {
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 0.3rem;
 }
+
+.user > span {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.participation {
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  position: fixed;
+  width: 90%;
+  bottom: 5rem;
+}
+
+/* .el-button .el-button--primary {
+  --el-button-active-color: var(--el-color-white);
+  --el-button-disabled-bg-color: var(--el-color-white);
+  --el-button-disabled-border-color: #b9b9b9;
+} */
+
 </style>
