@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    {{myLikes}}
+    <!-- {{myLikes}} -->
     <el-row>
       <el-col :span="8" v-for="like in myLikes" :key="like.id">
         <my-likes-list-item :like="like"></my-likes-list-item>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import MyLikesListItem from '@/components/profile/MyLikesList.vue'
+import MyLikesListItem from '@/components/profile/MyLikesListItem.vue'
 import { mapGetters } from 'vuex'
 
 export default {
