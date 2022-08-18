@@ -295,6 +295,13 @@ export default {
   position: fixed;
   width: 90%;
   bottom: 5rem;
-  --el-button-active-color: #F16B51;
+}
+
+.el-button--primary {
+  --el-button-active-bg-color: var(--el-color-primary);
+  /* --el-button-active-color: var(--el-color-primary); */
+  /* --el-button-disabled-bg-color: #EFDFDE;  */
+  --el-button-hover-bg-color: #FFD2C9;
+  --el-button-hover-border-color: #FFD2C9;
 }
 </style>
