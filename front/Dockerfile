@@ -1,6 +1,7 @@
 # build stage
 FROM node:lts-alpine as build-stage
 
+RUN mkdir /app
 WORKDIR /app
 
 COPY package*.json ./
@@ -9,9 +10,6 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# nginx 의 default.conf 를 삭제
-RUN rm -rf /etc/nginx/conf.d
-COPY conf /etc/nginx
 
 # production stage
 FROM nginx:stable-alpine as production-stage
