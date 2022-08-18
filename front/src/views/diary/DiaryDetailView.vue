@@ -7,8 +7,9 @@
     <div class="diary-detail-header">
       <div class="title-icons">
         <div class="title-location">
+          <el-tag type="dark" class="tag">{{ diary.countryName }}</el-tag>
+          <el-tag type="dark" class="tag">{{ diary.cityName }}</el-tag>
           <h3>{{ diary.title }}</h3>
-          <span>{{ diary.countryName }} | {{ diary.cityName }}</span>
         </div>
         <div class="icons">
           <!-- 여기부터는 공통 -->
@@ -55,52 +56,52 @@
           </el-drawer>
 
           <!-- 로그인한 유저와 글 쓴 유저가 같다면 -->
-          <!-- {{ currentUser }} -->
-          <!-- {{ diary.email }} -->
           <div v-if="isAuthor">
             <edit-delete-button class="edit-delete"></edit-delete-button>
+          </div>
+          <!-- {{ currentUser }} -->
+          <!-- {{ diary.email }} -->
             <!-- <router-link :to="{ name: 'diaryEdit' }">
               <span class="material-symbols-outlined">edit_square</span>
             </router-link> -->
             <!-- deleteDiary에 pk 넘겨주기 -->
             <!-- <span class="material-symbols-outlined">delete</span> -->
-          </div>
         </div>
       </div>
 
       <div class="diary-detail-body">
-        <div class="profile-div">
-          <!-- <el-avatar :size="100" :src="diary.member_id.img_path" /> -->
-          <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
-            <el-avatar :size="80" :src="diary.memberImg" />
-          </router-link>
-          <!-- <span>{{ diary.member_id.name }}</span> -->
-          <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
-            <span class="username">{{ diary.name }}</span>
-          </router-link>
-        </div>
-        <div class="btn-tag">
-          <!-- 작성자와 로그인 유저가 다른 경우 -->
+        <div class="profile-follow">
+          <div class="profile-div">
+            <!-- <el-avatar :size="100" :src="diary.member_id.img_path" /> -->
+            <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
+              <el-avatar :size="50" :src="diary.memberImg" />
+            </router-link>
+            <!-- <span>{{ diary.member_id.name }}</span> -->
+            <router-link :to="{ name: 'profile', params: { authorId: this.authorId } }">
+              <span class="username">{{ diary.name }}</span>
+            </router-link>
+          </div>
+            <!-- 작성자와 로그인 유저가 다른 경우 -->
           <div v-if="!isAuthor" class="follow-button">
             <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
             <el-button v-else type="primary" plain @click="unfollowNow(), unfollow(followId)">팔로잉</el-button>
           </div>
+        </div>
 
-          <div class="info-tag">
-            <!-- 여기는 공통 -->
-            <!-- <el-tag>{{ diary.countryName }}</el-tag> -->
-            <!-- <el-tag>{{ diary.cityName }}</el-tag> -->
-            <el-tag class="tag" effect="plain">{{ diary.startDate.substr(0, 10) }}-{{ diary.endDate.substr(0, 10) }}</el-tag>
-            <el-tag class="tag" effect="plain">{{ partyTag }} ({{ diary.count }}명)</el-tag>
-            <el-tag class="tag" effect="plain" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.name }}</el-tag>
-          </div>
+        <div class="info-tag">
+          <!-- 여기는 공통 -->
+          <!-- <el-tag>{{ diary.countryName }}</el-tag> -->
+          <!-- <el-tag>{{ diary.cityName }}</el-tag> -->
+          <el-tag class="tag" effect="plain">{{ diary.startDate.substr(0, 10) }}~{{ diary.endDate.substr(0, 10) }}</el-tag>
+          <el-tag class="tag" effect="plain">{{ partyTag }} ({{ diary.count }}명)</el-tag>
+          <el-tag class="tag" effect="plain" v-for="(trans, idx) in diary.postTransports" :key="idx">{{ trans.name }}</el-tag>
         </div>
       </div>
     </div>
 
     <!-- <img :src="authorInfo.img_link" alt=""> -->
 
-    <div id="map" style="height: 70vw; position: relative; overflow: hidden;"></div>
+    <div id="map" style="height: 25vh; position: relative; overflow: hidden;"></div>
     <div class="route-tag">
       <el-tag class="tag" effect="dark" v-for="(route, idx) in diary.routes" :key="idx">{{ route.index }}. {{ route.routeName }}</el-tag>
     </div>
@@ -123,7 +124,7 @@
 
     <div>
       <el-tabs tab-position="left" :stretch="true" class="story-tab">
-        <el-tab-pane v-for="(story, idx) in diary.detailLocations" :key="idx" :label="(idx+1).toString()">
+        <el-tab-pane v-for="(story, idx) in diary.detailLocations" :key="idx" :label="(idx+1).toString()" class="story-tab-pane">
           <div class="story-title">
             <h3>{{ story.detailLocationName }}</h3>
             <el-rate disabled v-model=story.rating></el-rate>
@@ -294,37 +295,39 @@ a {
   /* position: relative; */
   width: 100%;
   background-color: #EFDFDE;
-  padding: 0 0 1.3rem 0;
+  padding: 1rem;
 }
 
 .title-icons {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
-
+/* 
 .title-location {
   margin-top: 1rem;
-}
+} */
 
 .title-location > h3 {
   font-weight: 500;
-  margin-left: 1rem;
+  padding-top: 0.5rem;
+  /* margin-left: 1rem; */
 }
 
-.title-location > span {
+/* .title-location > span {
   margin-left: 1rem;
   font-weight: 400;
   font-size: 0.8rem;
   color: #F16B51;
-}
+} */
 
 .icons {
-  margin-top: 1rem;
-  width: 8rem;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  /* width: 8rem; */
   color: #F16B51;
 }
 
@@ -336,6 +339,10 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.icon-cnt:first-child {
+  margin-right: 0.3rem;
 }
 
 .filled-heart {
@@ -354,26 +361,24 @@ a {
   text-align: left;
   font-weight: 500;
 }
-/* .edit-delete {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-} */
+.edit-delete {
+  position: relative;
+}
 
-.diary-detail-body {
+.profile-follow {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
 
 .profile-div {
   display: flex;
   align-items: center;
-  margin-left: 0.8rem;
+  margin: 0.5rem 0;
 }
 
 .username {
-  margin-left: 0.8rem;
+  margin-left: 0.3rem;
   font-size: 1rem;
   font-weight: 400;
   color: black;
@@ -383,13 +388,13 @@ a {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  margin-right: 1rem;
+  /* margin-right: 1rem; */
 }
 
 .follow-btn {
   background-color: #F16B51;
   width: 5rem;
-  padding-right: 1.3rem;
+  /* padding-right: 1.3rem; */
 }
 
 .follow-btn span {
@@ -401,7 +406,7 @@ a {
 .following-btn {
   background-color: white;
   width: 5rem;
-  padding-right: 1.3rem;
+  /* padding-right: 1.3rem; */
 }
 
 .following-btn span {
@@ -410,13 +415,13 @@ a {
   font-size: 0.9rem;
 }
 
-.btn-tag .info-tag {
+/* .btn-tag .info-tag {
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
   width: 11rem;
   margin-top: 0.5rem;
-}
+} */
 
 .el-tag {
   border-color: var(--el-color-white);
@@ -427,13 +432,11 @@ a {
 }
 
 .info-tag .tag {
-  margin-left: 0.3rem;
-  margin-top: 0.3rem;
+  margin: 0 0.3rem 0.3rem 0;
 }
 
 .story-tab {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 1rem;
 }
 
 .route-tag {
@@ -483,7 +486,8 @@ a {
   text-align: left;
   /* margin-top: 1rem; */
   margin-bottom: 2rem;
-  margin-left: 0.5rem;
+  /* margin-left: 0.5rem; */
+  padding:0 1.1rem 0 0.5rem;
 }
 
 .comment-form {

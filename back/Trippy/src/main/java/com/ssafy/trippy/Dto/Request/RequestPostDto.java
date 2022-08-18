@@ -21,6 +21,7 @@ public class RequestPostDto {
     private String cityName;
     private int company;
     private int count;
+    private String memberImg;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
@@ -57,6 +58,7 @@ public class RequestPostDto {
                 .title(title)
                 .routes(routeList)
                 .location(Location.builder().id(location_id).build())
+                .memberImg(memberImg)
                 .build();
     }
 
@@ -64,7 +66,7 @@ public class RequestPostDto {
 
 
     @Builder
-    public RequestPostDto(String title, int company, int count, LocalDateTime startDate, LocalDateTime endDate, List<RequestPostTransPortDto> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes,Long member_id) {
+    public RequestPostDto(String title, String memberImg, int company, int count, LocalDateTime startDate, LocalDateTime endDate, List<RequestPostTransPortDto> postTransports, List<RequestDetailLocationDto> detailLocations, List<RequestRouteDto> routes,Long member_id) {
         this.title = title;
         this.company = company;
         this.count = count;
@@ -74,5 +76,6 @@ public class RequestPostDto {
         this.postTransports = postTransports;
         this.detailLocations = detailLocations;
         this.routes = routes;
+        this.memberImg = memberImg;
     }
 }
