@@ -17,7 +17,7 @@
           </el-col>
         </el-row>
       </div>
-      <div v-else class="search-dairy">
+      <div v-else-if="searchDiaries.length === 0 && this.$route.path === '/search'" class="search-dairy">
         <p>검색결과가 없습니다</p>
         <el-divider></el-divider>
         <p> 전체글보기</p>
