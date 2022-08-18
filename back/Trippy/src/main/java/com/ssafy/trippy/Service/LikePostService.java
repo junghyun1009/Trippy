@@ -14,4 +14,6 @@ public interface LikePostService {
 
     void deleteLikePost(RequestLikePostDto requestLikePostDto);
     boolean existsByMemberIdAndPostId(Long memberId, Long postId);
+
+    int getLikeCount(Long postId);
 }
