@@ -56,7 +56,7 @@ public class CommunityPostController {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         ResponseCommunityPostDto communityPost = communityPostService.findCommunityPost(community_post_id);
         try {
-            if (memberId.equals(communityPost.getMemberId())) {
+            if (memberId != null && memberId.equals(communityPost.getMemberId())) {
                 communityPostService.deleteCommunityPost(community_post_id);
             } else {
                 return new ResponseEntity<>("본인이 작성한 글만 삭제가 가능합니다", HttpStatus.BAD_REQUEST);
@@ -74,7 +74,7 @@ public class CommunityPostController {
         ResponseCommunityPostDto communityPost = communityPostService.findCommunityPost(community_post_id);
         updateCommunityPostDto.setMemberId(memberId);
         try {
-            if (memberId.equals(communityPost.getMemberId())) {
+            if (memberId != null && memberId.equals(communityPost.getMemberId())) {
                 communityPostService.updateCommunityPost(community_post_id, updateCommunityPostDto);
             } else {
                 return new ResponseEntity<>("본인이 작성한 글만 수정이 가능합니다", HttpStatus.BAD_REQUEST);
