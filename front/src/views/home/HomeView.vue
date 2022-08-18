@@ -44,13 +44,13 @@ export default {
       followingIdforDiary: '',
     }
   },
-  // watch: {
-  //   followingName(newVal) {
-  //     console.log(newVal)
-  //     this.followingIdforDiary = newVal.id 
-  //     console.log(this.followingIdforDiary)
-  //   }
-  // },
+  watch: {
+    followingName(newVal) {
+      console.log(newVal)
+      this.followingIdforDiary = newVal.id 
+      console.log(this.followingIdforDiary)
+    }
+  }, 
   components: {
     SearchBar,
     RecommendList,
