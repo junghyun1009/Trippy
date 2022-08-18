@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <!-- {{ profile }} -->
     <!-- <div class="background"> -->
       <!-- {{ randomImage }} -->
     <div class="background">

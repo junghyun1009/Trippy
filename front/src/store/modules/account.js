@@ -337,7 +337,8 @@ export default {
           })
         }
       })
-    }
+    },
+    
 
   },
   modules: {
