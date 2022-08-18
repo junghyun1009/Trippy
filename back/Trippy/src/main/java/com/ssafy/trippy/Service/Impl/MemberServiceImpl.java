@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ResponseLoginDto login(String email, String password) {
-        Member member = memberRepository.findByEmail(email).get();
+        Member member = memberRepository.findByEmail(email).orElseThrow();
         if(member == null){
             throw new IllegalArgumentException("email을 확인하세요.");
         }
@@ -88,11 +88,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void deleteMember(Long id){
-        List<Post> posts = postRepository.findAllByMember(memberRepository.findById(id).get());
+        List<Post> posts = postRepository.findAllByMember(memberRepository.findById(id).orElseThrow());
         for (Post post : posts) {
             postRepository.delete(post);
         }
-        List<CommunityPost> communityPosts = communityPostRepository.findAllByMember(memberRepository.findById(id).get());
+        List<CommunityPost> communityPosts = communityPostRepository.findAllByMember(memberRepository.findById(id).orElseThrow());
         for (CommunityPost communityPost : communityPosts) {
             communityPostRepository.delete(communityPost);
         }
@@ -118,13 +118,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void logout(Long id, String accessToken) {
-        Member member = memberRepository.findById(id).get();
+        Member member = memberRepository.findById(id).orElseThrow();
         jwtProvider.logout(member.getEmail(), accessToken);
     }
 
     @Override
     public void changePw(RequestLoginDto requestLoginDto) {
-        Member member = memberRepository.findByEmail(requestLoginDto.getEmail()).get();
+        Member member = memberRepository.findByEmail(requestLoginDto.getEmail()).orElseThrow();
         String rawPassword = requestLoginDto.getPassword();
         String encodedPassword = passwordEncoder.encode(rawPassword);
         member.updatePw(encodedPassword);
