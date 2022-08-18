@@ -4,7 +4,7 @@
       <!-- 제목 -->
       <div class="title-box">
         <p>제목</p>
-        <el-input v-model="newDiary.title" class="input-box" placeholder="제목을 입력하세요." />
+        <el-input v-model="newDiary.title" class="input-box" placeholder="제목을 입력해주세요." />
       </div>
 
       <div class="demo-collapse">
@@ -109,8 +109,8 @@
             <!-- 지도 -->
             <div>
               <div class="route-div">
-                <input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0 && newDiary.routes.length < 10">
-                <el-button-group>
+                <el-input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0 && newDiary.routes.length < 10" />
+                <el-button-group class="route-btn-group">
                   <el-button type="primary" class="route-btn" @click="addMarkers" :disabled="newDiary.routes.length === 0">
                     <span class="material-symbols-outlined">push_pin</span>
                   </el-button>
@@ -138,7 +138,7 @@
           <div v-for="(newStory, k) in newStories" :key="k">
             <div class="story-title">
               <span>상세 장소</span>
-              <el-input v-model="newStory.detailLocationName" class="input-box" id="title-input-box" placeholder="상세 장소를 입력하세요." />
+              <el-input v-model="newStory.detailLocationName" class="input-box" id="title-input-box" placeholder="상세 장소를 입력해주세요." />
             </div>
 
             <div class="story-rate">
@@ -194,7 +194,7 @@
       </div>
 
       <div class="submit-btn">
-        <el-button @click="onSubmit" type="primary">작성하기</el-button>
+        <el-button @click="onSubmit" type="primary" class="button">작성하기</el-button>
       </div>
 
     </form>
@@ -204,6 +204,7 @@
 <script>
 /* eslint-disable no-undef */
 import { mapActions, mapGetters } from 'vuex'
+import { ElMessageBox } from 'element-plus'
 
 export default {
   name: 'DiaryForm',
@@ -420,7 +421,9 @@ export default {
 
     addStory() {
       if (this.newStories[this.newStories.length - 1].detailLocationName === '' || this.newStories[this.newStories.length - 1].detailLocationContent === '') {
-        alert('내용 작성 후 스토리를 추가해주세요!')
+        ElMessageBox.alert('내용 작성 후 스토리를 추가해주세요!', '알림', {
+          confirmButtonText: 'OK',
+        })
       } else {
         this.newStories.push({
           // pk: 0,
@@ -451,7 +454,9 @@ export default {
           console.log(this.images[index])
           this.newStories[index].preview = URL.createObjectURL(this.$refs[`${index}th-file`][0].files[i])
         } else {
-          alert("사진 파일만 추가 가능합니다")
+          ElMessageBox.alert("사진 파일만 추가 가능합니다", '알림', {
+          confirmButtonText: 'OK',
+        })
         }
       }
       console.log(this.images[index])
@@ -600,7 +605,9 @@ export default {
         // console.log(this.locationPick)
         // console.log(this.locationPick[0])
         // console.log(this.locationPick[1])
-        alert("빈 칸 없이 모든 필드를 채워주세요!")
+        ElMessageBox.alert('빈 칸 없이 모든 필드를 채워주세요!', '알림', {
+          confirmButtonText: 'OK',
+        })
       }
     }
   },
@@ -714,6 +721,12 @@ export default {
   width: 5.2rem;
   margin-right: 1.5rem;
 }
+.route-btn-group{
+  display: flex;
+}
+.route-input {
+  height: 30px;
+}
 .route-p {
   width: 10vw;
   text-align: left;
@@ -738,6 +751,7 @@ export default {
 }
 .route-btn {
   width: 2rem;
+  margin: 0 0.3rem;
 }
 .route-tag-group {
   text-align: left;
@@ -924,6 +938,10 @@ export default {
   margin-top: 1rem;
   text-align: center;
 }
+.button {
+  width: 90%;
+}
+
 .el-button--primary {
   --el-button-active-bg-color: var(--el-color-primary);
   /* --el-button-active-color: var(--el-color-primary); */
