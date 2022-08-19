@@ -9,7 +9,6 @@
     </div>
 
     <div v-if="searchDiaries" class="search-diaries">
-      <br>
       <div v-if="searchDiaries.length > 0" class="search-diary">
         <el-row>
           <el-col :span="12" v-for="diary in searchDiaries.slice().reverse()" :key="diary.id">
