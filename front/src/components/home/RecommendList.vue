@@ -6,6 +6,7 @@
           <recommend-list-item :diary="diary"></recommend-list-item>
         </el-col>
       </el-row>
+      <el-divider v-if="regionDiaries.length > 0"></el-divider>
     </div>
 
     <div v-if="searchDiaries" class="search-diaries">
