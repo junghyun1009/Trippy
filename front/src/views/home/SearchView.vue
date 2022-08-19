@@ -2,7 +2,7 @@
   <div class="container">
     <search-bar></search-bar>
     
-    <h3 class="search-result">검색 결과</h3>
+    <!-- <h3 class="search-result">검색 결과</h3> -->
     <div class="search-list">
       <recommend-list></recommend-list> 
     </div>
