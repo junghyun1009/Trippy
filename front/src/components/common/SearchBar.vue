@@ -72,6 +72,7 @@ export default {
 			console.log(this.searchInput.title)
 			this.searchDiary(this.searchInput)
 			this.searchInput.title = ''
+      this.isClicked=false
 		},
 
 		// 지금은 두 개 한꺼번에 보내는게 안됨 - 그래서 일단 하나로 함
