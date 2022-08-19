@@ -1,19 +1,21 @@
 <template>
-  <div class="login">
-    <!-- 없는 회원정보 -->
-    <div class="input-box">
-      <h1>TRIPPY</h1>
-      <form @submin.prevent="login()">
-          <el-input class="input" v-model="userinfo.email" placeholder="이메일" id="email" ></el-input>
-          <el-input class="input" v-model="userinfo.password" type="password" placeholder="비밀번호" show-password></el-input>
-          <el-button class="login-button" type="primary" @click="checkEmail()">로그인</el-button>
-        <br><br>
-        <router-link :to="{ name: 'signUp' }">회원가입</router-link>
-        <span>|</span>
-        <router-link :to="{ name: 'passwordFind' }">비밀번호 찾기</router-link>
-        <account-error-list :errorMessage="emailError" v-show="!emailFormat"></account-error-list>
-        <account-error-list :errorMessage="loginError" v-show="authentication == false"></account-error-list>
-      </form>
+  <div class="container">
+    <div class="login">
+      <!-- 없는 회원정보 -->
+      <div class="input-box">
+        <h1>TRIPPY</h1>
+        <form @submin.prevent="login()">
+            <el-input class="input" v-model="userinfo.email" placeholder="이메일" id="email" ></el-input>
+            <el-input class="input" v-model="userinfo.password" type="password" placeholder="비밀번호" show-password></el-input>
+            <el-button class="login-button" type="primary" @click="checkEmail()">로그인</el-button>
+          <br><br>
+          <router-link :to="{ name: 'signUp' }">회원가입</router-link>
+          <span>|</span>
+          <router-link :to="{ name: 'passwordFind' }">비밀번호 찾기</router-link>
+          <account-error-list :errorMessage="emailError" v-show="!emailFormat"></account-error-list>
+          <account-error-list :errorMessage="loginError" v-show="authentication == false"></account-error-list>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -75,9 +77,13 @@ export default {
     margin: 0;
     }
 
+  .container {
+    height: 100vh;
+  }
+  
   .login {
     text-align: center;
-    height: 92vh;
+    height: 100%;
     background-color: #F16B51;
     overflow: hidden;
   }

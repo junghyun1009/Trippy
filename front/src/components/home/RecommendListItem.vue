@@ -82,6 +82,8 @@ a {
   /* padding-bottom: 75%; */
 }
 
+.grid-content
+
 .el-card__body:hover {
   opacity: 0.2;
 }
