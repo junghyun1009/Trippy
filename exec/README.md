@@ -1,4 +1,4 @@
-![image-20220818222916311](C:\Users\SSAFY\AppData\Roaming\Typora\typora-user-images\image-20220818222916311.png)
+![image-20220819115508105](README.assets/image-20220819115508105.png)
 
 [TOC]
 
