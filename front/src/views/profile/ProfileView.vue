@@ -213,6 +213,8 @@ export default {
       this.myProfile()
       // 팔로우 여부 확인
       this.setFollowingStatus(this.currentProfile)
+      setTimeout(() => this.pickRandom(this.myDiaries), 100)
+      setTimeout(() => this.pickRandom(this.othersDiary), 100)
     },
     badgeList(newValue) {
       console.log('new value:', newValue)
@@ -371,7 +373,7 @@ export default {
     this.fetchTheirProfile(this.currentProfile)
     // 내 프로필인지 확인 => 정보 저장하는 시간이 필요함
     // this.myProfile()
-    // setTimeout(() => this.myProfile(), 100)
+    setTimeout(() => this.myProfile(), 100)
     this.fetchProfile()
     // this.fetchTheirProfile(this.$route.params.authorId)
     // this.myFollowings()

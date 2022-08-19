@@ -25,12 +25,13 @@
       <!-- {{ comment.info.children }} -->
       <div v-if="comment.children.length > 0">
         <div v-for="(child, index) in comment.children" :key="index">
-          <!-- {{ child }} -->
+          <!-- {{ child.imgPath }} -->
           <div class="child-comment">
             <router-link :to="{ name: 'profile', params: { authorId: child.memberId } }">
               <el-avatar :size="40" :src="child.imgPath" />
             </router-link>
             <div>
+              <!-- <img :src="child.imgPath" alt=""> -->
               <p class="member">{{ child.name }}</p>
               <p class="content">{{ child.content }}</p>
               <span v-if="child.name === currentUser.name" class="leave-comment" @click="editComment(child)">수정</span>

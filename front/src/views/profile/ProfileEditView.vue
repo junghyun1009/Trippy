@@ -204,11 +204,11 @@ export default {
     //   this.profilePhoto = {}
     // },
     onSubmit() {
-      // if (this.userinfo.gender==='여자') {
-      //   this.userinfo.gender = 0
-      // } else {
-      //   this.userinfo.gender = 1
-      // }
+      if (this.userinfo.gender==='여자') {
+        this.userinfo.gender = 0
+      } else {
+        this.userinfo.gender = 1
+      }
       // 프로필 사진 정보 저장
       // 프로필 사진 변경 안 함
       if (this.isChange===false) {

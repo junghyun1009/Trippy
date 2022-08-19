@@ -6,7 +6,7 @@
       <!-- 제목 -->
       <div class="title-box">
         <p>제목</p>
-        <el-input v-model="newDiary.title" class="input-box" placeholder="제목을 입력하세요." />
+        <el-input v-model="newDiary.title" class="input-box" placeholder="제목을 입력해주세요." />
       </div>
 
       <div class="demo-collapse">
@@ -110,8 +110,8 @@
             <!-- 지도 -->
             <div>
               <div class="route-div">
-                <input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0 && newDiary.routes.length < 10">
-                <el-button-group>
+                <el-input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0 && newDiary.routes.length < 10" />
+                <el-button-group class="route-btn-group">
                   <el-button type="primary" class="route-btn" @click="addMarkers" :disabled="newDiary.routes.length === 0">
                     <span class="material-symbols-outlined">push_pin</span>
                   </el-button>
@@ -138,7 +138,7 @@
           <div v-for="(newStory, k) in newStories" :key="k">
             <div class="story-title">
               <span>상세 장소</span>
-              <el-input v-model="newStory.detailLocationName" class="input-box" id="title-input-box" placeholder="상세 장소를 입력하세요." />
+              <el-input v-model="newStory.detailLocationName" class="input-box" id="title-input-box" placeholder="상세 장소를 입력해주세요." />
             </div>
 
             <div class="story-rate">
@@ -199,7 +199,7 @@
       </div>
 
       <div class="submit-btn">
-        <el-button @click="onSubmit" type="primary">수정하기</el-button>
+        <el-button @click="onSubmit" type="primary" class="button">수정하기</el-button>
       </div>
 
     </form>
@@ -714,6 +714,10 @@ export default {
 .route-btn {
   width: 2rem;
 }
+.route-btn .is-disabled {
+  --el-button-disabled-bg-color: #EFDFDE; 
+  --el-button-disabled-border-color: #EFDFDE; 
+}
 .route-tag-group {
   text-align: left;
 }
@@ -899,10 +903,12 @@ export default {
   margin-top: 1rem;
   text-align: center;
 }
+.button {
+  width: 100%;
+}
 .el-button--primary {
   --el-button-active-bg-color: var(--el-color-primary);
-  /* --el-button-active-color: var(--el-color-primary); */
-  /* --el-button-disabled-bg-color: #EFDFDE;  */
+  --el-button-active-color: var(--el-color-primary);
   --el-button-hover-bg-color: #FFD2C9;
   --el-button-hover-border-color: #FFD2C9;
 }
