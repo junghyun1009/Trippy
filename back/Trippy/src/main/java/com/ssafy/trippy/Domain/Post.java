@@ -31,6 +31,8 @@ public class Post extends BaseEntity{
 
     private LocalDateTime endDate;
 
+    private String memberImg;
+
     @Column(name="REPRESENTIVE_IMG")
     private int representiveImg;
 
@@ -56,7 +58,7 @@ public class Post extends BaseEntity{
 
 
     @Builder
-    public Post(Long id, String title, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations, List<PostComment> postComments, List<Route> routes,Location location) {
+    public Post(Long id, String title, int company, int count, LocalDateTime startDate, LocalDateTime endDate, int representiveImg, Member member, List<PostTransport> postTransports, List<DetailLocation> detailLocations, List<PostComment> postComments, List<Route> routes,Location location, String memberImg) {
         this.id = id;
         this.title = title;
         this.company = company;
@@ -70,6 +72,7 @@ public class Post extends BaseEntity{
         this.postComments = postComments;
         this.routes = routes;
         this.location = location;
+        this.memberImg = memberImg;
     }
 
     public void update(String title, int company, int count, LocalDateTime startDate, LocalDateTime endDate, List<PostTransport> postTransports, List<DetailLocation> detailLocations,List<Route> routes, Location location){

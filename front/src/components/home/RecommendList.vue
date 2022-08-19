@@ -7,18 +7,27 @@
         </el-col>
       </el-row>
     </div>
+
     <div v-if="searchDiaries" class="search-diaries">
-      <br>
-      <el-row>
-        <el-col :span="12" v-for="diary in searchDiaries.slice().reverse()" :key="diary.id">
-          <recommend-list-item :diary="diary"></recommend-list-item>
-        </el-col>
-      </el-row>
+      <div v-if="searchDiaries.length > 0" class="search-diary">
+        <h3>검색 결과</h3>
+        <br>
+        <el-row>
+          <el-col :span="12" v-for="diary in searchDiaries.slice().reverse()" :key="diary.id">
+            <recommend-list-item :diary="diary"></recommend-list-item>
+          </el-col>
+        </el-row>
+      </div>
+      <div v-else-if="searchDiaries.length === 0 && this.$route.path === '/search'" class="search-dairy">
+        <br>
+        <!-- <p>검색결과가 없습니다</p> -->
+        <el-divider></el-divider>
+        <p>전체글보기</p>
+        <br>
+      </div>
     </div>
-    <hr>
-    <h3>전체 게시물</h3>
-    <br>
-    <div v-if="allDiaries" class="all-diaries">
+
+    <div v-if="allDiaries.length > 0 && searchDiaries.length === 0" class="all-diaries">
       <el-row>
         <!-- infinite scroll -->
         <!-- 아니면 더 보기? -->
@@ -59,6 +68,8 @@ export default {
   display: flex;
   justify-content: center;
   margin: 0 3%;
+  position: relative;
+  /* bottom: 1rem; */
 }
 .el-row {
   margin-bottom: 20px;

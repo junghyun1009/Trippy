@@ -43,7 +43,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeRequests()
 //                .antMatchers("/**/login", "/**/join/**", "/**/logout/**").permitAll()
-//                .antMatchers("/**/api/**").authenticated()
+//                .antMatchers("/**/auth/**").authenticated()
                 .antMatchers("/**").permitAll()
                 .anyRequest().hasRole("USER")
                 .and()

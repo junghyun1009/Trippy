@@ -22,6 +22,8 @@ public class ResponsePostDto {
     private int count;
     private String countryName;
     private String cityName;
+
+    private String memberImg;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
@@ -55,5 +57,6 @@ public class ResponsePostDto {
         this.comments = Converter.convertPostCommentList(post.getPostComments());
         this.routes = Converter.convertRouteList(post.getRoutes());
         this.memberId = post.getMember().getId();
+        this.memberImg = post.getMemberImg();
     }
 }
