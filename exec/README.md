@@ -1,5 +1,7 @@
 ![image-20220819115508105](README.assets/image-20220819115508105.png)
 
+
+
 [TOC]
 
 
@@ -29,7 +31,7 @@ COVID 19로 억눌렸던 여행욕구, 이제는 분출할 때! 오랜 기간 �
 
 Trippy를 통해 다른 사람들이 어떤 곳을 어떻게 다녀왔는지 알아보세요! 
 
-Trippy는 타 SNS와는 달리 다른 사람이 일정 지역을 여행다닌 코스를 한 눈에 지도에서 볼 수 있어 일정 파악이 용이하고, 누구와 어떤 이동수단을 언제 갔는지를 쉽게 파악할 수 있어요.
+Trippy는 타 SNS와는 달리 다른 사람이 일정 지역을 여행다닌 코스를 한 눈에 지도에서 볼 수 있어 일정 파악이 용이하고, 누구와 어떤 이동수단을 가지고 언제 갔는지를 쉽게 파악할 수 있어요.
 
 
 
@@ -77,7 +79,7 @@ Trippy는 타 SNS와는 달리 다른 사람이 일정 지역을 여행다닌 �
 
 * [와이어프레임&스토리보드](https://www.figma.com/file/C4MfolSqITjGiE1KPomrWQ/TRIPPY?node-id=0%3A1)
 * [ERD](https://www.erdcloud.com/d/22AbgKH3sYpS7jBBA) 
-* [API: Swagger](https://github.com/hotsix-turtles/TUPLI/blob/dev/docs/API.md)
+* [API: Swagger](http://i7a506.p.ssafy.io:8080/api/swagger-ui/index.html)
 * [컴포넌트구조도](https://app.diagrams.net/#G1oONA1JfoRr81LHM7TBCpef-x8Y00cLUI)
 * [시퀀스 다이어그램](https://app.diagrams.net/#G1L46-cLTsR_ATDxsFkVIE9gHPdRXvaWOI)
 
@@ -86,11 +88,13 @@ Trippy는 타 SNS와는 달리 다른 사람이 일정 지역을 여행다닌 �
 
 
 
+
+
 # 🧡 협업
 
 ### 🔸무송합니다 팀을 소개합니다!
 
-* PPT 끝나면 거기서 가져올 예정
+![image-20220820231014938](README.assets/image-20220820231014938.png)
 
 
 
@@ -101,6 +105,8 @@ Trippy는 타 SNS와는 달리 다른 사람이 일정 지역을 여행다닌 �
 - [Notion](https://second-joke-d45.notion.site/TRIPPY-a183e6390df6452cbe07e5d137987aab)
 - Mattermost
 - Webex
+
+
 
 
 
@@ -135,6 +141,8 @@ Trippy는 타 SNS와는 달리 다른 사람이 일정 지역을 여행다닌 �
 * Jenkins
 * NGINX
 * SSL
+
+
 
 
 
