@@ -9,8 +9,10 @@ import 'element-plus/dist/index.css'
 // import * as VueGoogleMaps from "vue3-google-map"
 import IconBase from '@/components/IconBase.vue'
 import Vue3Geolocation from 'vue3-geolocation'
+import { Quasar } from 'quasar'
+import quasarUserOptions from './quasar-user-options'
 
-createApp(App).use(router).use(store).use(router).use(useCookies)
+createApp(App).use(Quasar, quasarUserOptions).use(router).use(store).use(router).use(useCookies)
 .use(store).use(ElementPlus).component('icon-base', IconBase).use(Vue3Geolocation)
 // .use(VueGoogleMaps, {
 //   load: {
