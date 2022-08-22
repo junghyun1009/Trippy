@@ -53,9 +53,12 @@ export default ({
 
 body {
   padding-bottom: 3rem;
+  margin: 0;
 }
 
 #app {
+  max-width: 500px;
+  max-height: 740px;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
