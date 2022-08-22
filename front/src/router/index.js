@@ -1,6 +1,5 @@
 import store from '../store'
 import VueCookies from 'vue-cookies'
-import { ElMessageBox } from 'element-plus'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
 import SearchView from '@/views/home/SearchView.vue'
@@ -35,7 +34,7 @@ import NotFound404View from '@/views/handler/NotFound404View.vue'
 const routes = [
   // 모두가 접근 가능한 route
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: HomeView
   },
@@ -45,7 +44,7 @@ const routes = [
     component: SearchView
   },
   {
-    path: '/login',
+    path: '/',
     name: 'login',
     component: LoginView
   },
@@ -173,64 +172,35 @@ const router = createRouter({
 })
 
 
-router.beforeEach( async(to, from, next) => {
+router.beforeEach( (to, from, next) => {
+  const refreshToken = VueCookies.get('refreshToken')
+  const accessToken = VueCookies.get('accessToken')
 
-      const authPages = [
-      'diaryCreate', 'diaryEdit', 'diaryDetail',
-      'profile', 'profileEdit', 
-      'community', 'communityEdit', 'communityDetail', 'communityCreate',
-      'badgeList', 'chatList'
-    ]
-    const isAuthRequired = authPages.includes(to.name)
+  const authPages = [
+    'diaryCreate', 'diaryEdit', 'diaryDetail',
+    'profile', 'profileEdit', 
+    'community', 'communityEdit', 'communityDetail', 'communityCreate',
+    'badgeList', 'chatList'
+  ]
+
+  const isAuthRequired = authPages.includes(to.name)
   
-    if (VueCookies.get('accessToken')===null && VueCookies.get('refreshToken') !== null){
+    if (isAuthRequired && accessToken===null && refreshToken !== null){
       //refreshToken은 있고 accessToken이 없을 경우 토큰 재발급 요청
       console.log('passed')
-      await store.dispatch('reissueToken')
+      store.dispatch('reissueToken')
     }
-    if (VueCookies.get('accessToken')!==null){
+    if (isAuthRequired && accessToken){
       //accessToken이 있을 경우 진행
       return next();
     }
-    if (isAuthRequired && VueCookies.get('accessToken')===null && VueCookies.get('refreshToken')===null){
+    if (isAuthRequired && !accessToken && !refreshToken){
+      console.log(store)
       //2개 토큰이 모두 없을 경우 로그인페이지로
-      ElMessageBox.alert('로그인을 해주세요!', '알림', {
-        confirmButtonText: 'OK',
-      })
-      return next('/login');
+      alert('로그인을 해주세요!')
+      return next({name: 'login'});
     }
     return next();
 })
-
-// router.beforeEach( async(to, from, next) => {
-//   // const refreshToken = VueCookies.get('refreshToken')
-//   // const accessToken = VueCookies.get('accessToken')
-
-//   const authPages = [
-//     'diaryCreate', 'diaryEdit', 'diaryDetail',
-//     'profile', 'profileEdit', 
-//     'community', 'communityEdit', 'communityDetail', 'communityCreate',
-//     'badgeList', 'chatList'
-//   ]
-
-//   const isAuthRequired = authPages.includes(to.name)
-  
-//     if (isAuthRequired && VueCookies.get('accessToken')===null && VueCookies.get('refreshToken') !== null){
-//       //refreshToken은 있고 accessToken이 없을 경우 토큰 재발급 요청
-//       console.log('passed')
-//       await store.dispatch('reissueToken')
-//     }
-//     if (isAuthRequired && VueCookies.get('accessToken')!==null){
-//       //accessToken이 있을 경우 진행
-//       return next();
-//     }
-//     if (isAuthRequired && VueCookies.get('accessToken')===null && VueCookies.get('refreshToken')===null){
-//       console.log(store)
-//       //2개 토큰이 모두 없을 경우 로그인페이지로
-//       alert('로그인을 해주세요!')
-//       return next({name: 'login'});
-//     }
-//     return next();
-// })
 
 export default router

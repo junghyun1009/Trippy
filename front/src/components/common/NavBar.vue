@@ -117,6 +117,10 @@ export default {
 </script>
 
 <style scoped>
+* {
+    max-width:500px;
+}
+
 .navbar {
   position: fixed;
   bottom: 0vh;
