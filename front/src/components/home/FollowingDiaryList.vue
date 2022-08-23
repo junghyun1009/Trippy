@@ -1,11 +1,22 @@
 <template>
   <div class="container">
     <div class="following-diaries">
-      <el-row>
-        <el-col :span="12" v-for="diary in followingDiaries.slice().reverse()" :key="diary.id">
-          <following-diary-list-item :diary="diary"></following-diary-list-item>
-        </el-col>
-      </el-row>
+        <div class="single-diary" v-if="followingDiaries.length === 1">
+          <el-row>
+            <el-col :span="24" v-for="diary in followingDiaries.slice().reverse()" :key="diary.id">
+              <following-diary-list-item :diary="diary"></following-diary-list-item>
+            </el-col>
+          </el-row>
+        </div>
+
+        <div class="multiple-diaries" v-else >
+          <el-row>
+            <el-col :span="12" v-for="diary in followingDiaries.slice().reverse()" :key="diary.id">
+              <following-diary-list-item :diary="diary"></following-diary-list-item>
+            </el-col>
+          </el-row>
+        </div>
+
     </div>
   </div>
 </template>

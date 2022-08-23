@@ -108,13 +108,13 @@ export default {
 
 body{
 	font-family:Verdana, Geneva, sans-serif;
-	font-size:18px;
+	font-size: 18px;
 	background-color:#CCC;
 }
 
 .logo {
   font-family: 'Alfa Slab One', cursive;
-  font-size: 1.3rem;
+  font-size: 1.5em;
   margin-right: 0.1rem;
 }
 
@@ -123,13 +123,13 @@ body{
 }
 
 .regional-menu h3 {
-	font-size: 2.5vh;
+	font-size: 1rem;
 	font-weight: bold;
 }
 
 .regional-menu span {
 	color: #F16B51;
-	font-size: 2.5vh;
+	font-size: 1.2rem;
 	font-weight: bold;
 }
 
@@ -139,13 +139,13 @@ body{
 }
 
 .recommend-menu h3 {
-	font-size: 2.5vh;
+	font-size: 1rem;
 	font-weight: bold;
 }
 
 .recommend-menu span {
 	color: #F16B51;
-	font-size: 2.5vh;
+	font-size: 1rem;
 	font-weight: bold;
 }
 
@@ -159,13 +159,13 @@ body{
 }
 
 .following-diary-description h3 {
-	font-size: 2.5vh;
+	font-size: 1.2rem;
 	font-weight: bold;
 }
 
 .following-diary-description span {
   color: #F16B51;
-	font-size: 2.5vh;
+	font-size: 1.2rem;
 	font-weight: bold;
 }
 
