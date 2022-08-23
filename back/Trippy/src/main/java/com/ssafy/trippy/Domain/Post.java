@@ -49,8 +49,11 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy="post", cascade = CascadeType.REMOVE)
     private List<DetailLocation> detailLocations = new ArrayList<>();
 
-    @OneToMany(mappedBy="post")
+    @OneToMany(mappedBy="post", cascade = CascadeType.REMOVE)
     private List<PostComment> postComments = new ArrayList<>();
+
+    @OneToMany(mappedBy="post", cascade = CascadeType.REMOVE)
+    private List<LikePost> likePosts = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LOCATION_ID")
