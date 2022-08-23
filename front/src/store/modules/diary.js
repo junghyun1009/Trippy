@@ -238,7 +238,7 @@ export default ({
         const authorId = res.data.memberId
         commit('SET_AUTHOR_ID', authorId)
         dispatch('fetchLikeCount', diaryPk)
-        dispatch('checkFollowingStatus', authorId)
+        dispatch('checkFollowingStatus', res.data.memberId)
         dispatch('checkLike', diaryPk)
         // const diary = res.data
         // diary.detailLocations.forEach((location) => {
