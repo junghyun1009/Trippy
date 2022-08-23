@@ -526,6 +526,15 @@ a {
   --el-button-text-color: var(--el-color-primary);
   --el-button-bg-color: white;
   --el-button-border-color: var(--el-color-primary);
+  --el-button-hover-bg-color: white;
+  --el-button-hover-text-color: #F16B51;
 }
 
+.el-button--primary {
+  --el-button-hover-bg-color: #F16B51;
+  --el-button-hover-border-color: #F16B51;
+  --el-button-active-color: #F16B51;
+  --el-button-active-bg-color: #F16B51;
+  --el-button-active-border-color: #F16B51;
+}
 </style>
