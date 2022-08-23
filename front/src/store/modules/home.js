@@ -83,14 +83,17 @@ export default ({
 			// },
 
 			SET_SEARCH_DIARIES (state, searchDiaries) {
-				searchDiaries.forEach((diary) => {
-					diary.detailLocations.forEach((location) => {
-						if (location.filename != null) {
-							diary.representativeImg = location.filepath
-							return false
+				console.log(searchDiaries)
+				for(let i=0; i<searchDiaries.length; i++) {
+					for(let j=0; j<searchDiaries[i].detailLocations.length; j++) {
+						searchDiaries[i].representativeImg = require('@/assets/Trippy.png')
+						if ((searchDiaries[i].detailLocations[j].filename!=null) && 
+						(typeof searchDiaries[i].detailLocations[j].filename === 'string' && searchDiaries[i].detailLocations[j].filename.slice(-3) != 'txt')){
+							searchDiaries[i].representativeImg = searchDiaries[i].detailLocations[j].filepath
+							break;
 						}
-					})
-				})
+					}
+				}
 				state.searchDiaries = searchDiaries
 			},
 
@@ -172,7 +175,8 @@ export default ({
 				})
 			},
 
-			searchDiary({ commit }, searchInput){
+			searchDiary({ dispatch }, searchInput){
+				console.log(searchInput)
 				const title = searchInput.title
 				const company = searchInput.company
 				const transport = searchInput.transportId
@@ -187,18 +191,77 @@ export default ({
 					params: title, company, transport
 				})
 				.then( res => {
-					console.log(res.data)
-					var searchResult = res.data
+					const payload = {
+						result: res.data,
+						query: {
+							title: title,
+							company: company,
+							transport: transport
+						}
+					}
+					dispatch('searchCountry', payload)
+					// console.log(res.data)
+					// var searchResult = res.data
+					// if ( searchResult.length === 0 ){
+					// 	console.log('검색결과가 없습니다')
+					// }
+					// commit('SET_SEARCH_DIARIES', res.data),
+					// console.log('search completed')
+					// router.push({ name: 'search'})
+					}
+				)
+			},
+
+			searchCountry({ dispatch }, searchInput) {
+				console.log(searchInput)
+				const country = searchInput.query.title
+				const company = searchInput.query.company
+				const transport = searchInput.query.transport
+				axios({
+					url: `https://i7a506.p.ssafy.io/api/search?company=${company}&transportId=${transport}&countryName=${country}`,
+					method: 'get',
+					params: country, company, transport
+				})
+				.then( res => {
+					const payload = {
+						result: [...searchInput.result, ...res.data],
+						query: {
+							title: country,
+							company: company,
+							transport: transport
+						}
+					}
+					dispatch('searchCity', payload)
+				})
+			},
+
+			searchCity({ commit }, searchInput) {
+				const city = searchInput.query.title
+				const company = searchInput.query.company
+				const transport = searchInput.query.transport
+				axios({
+					url: `https://i7a506.p.ssafy.io/api/search?company=${company}&transportId=${transport}&cityName=${city}`,
+					method: 'get',
+					params: city, company, transport
+				})
+				.then( res => {
+					const payload = {
+						result: [...searchInput.result, ...res.data],
+						query: searchInput
+					}
+					console.log(payload.result)
+					var searchResult = payload.result
 					if ( searchResult.length === 0 ){
 						console.log('검색결과가 없습니다')
 					}
-					commit('SET_SEARCH_DIARIES', res.data),
+					commit('SET_SEARCH_DIARIES', payload.result),
 					console.log('search completed')
 					router.push({ name: 'search'})
-					}
-				)
-			}
+				})
+			},
+
     },
+
     modules: {
     }
   })

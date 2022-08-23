@@ -6,7 +6,7 @@
         <el-tag type="dark" size="small" class="tag">{{ diary.countryName}}</el-tag>
         <el-tag type="dark" size="small" class="tag">{{ diary.cityName}}</el-tag>
         <div style="padding: 0.3rem">
-          <p class="title">{{ diary.title.length > 13 ? ''+diary.title.slice(0, 11) + '...' : diary.title }}</p>
+          <p class="card-title">{{ diary.title.length > 13 ? ''+diary.title.slice(0, 11) + '...' : diary.title }}</p>
             <!-- <img> -->
             <p class="name">{{ diary.name }}</p>
         </div>
@@ -48,7 +48,7 @@ export default {
   margin:0 0.1rem;
 }
 
-.title {
+.card-title {
   position: relative;
   bottom: 1.3rem;
   font-size: 1.1rem;
@@ -58,7 +58,7 @@ export default {
 
 .name {
   position: relative;
-  bottom: -0.5rem;
+  bottom: 0.8rem;
   font-size: 0.8rem;
 }
 
