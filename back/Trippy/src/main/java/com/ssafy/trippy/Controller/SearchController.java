@@ -1,6 +1,8 @@
 package com.ssafy.trippy.Controller;
 
+import com.ssafy.trippy.Dto.Request.CommunityPostSearchRequestDto;
 import com.ssafy.trippy.Dto.Request.SearchRequestDto;
+import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Service.Impl.PostSearchServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +25,16 @@ public class SearchController {
     @GetMapping("/search")
     public ResponseEntity<?> search(@RequestParam(value="title", required = false) String title,
                                     @RequestParam(value="company", required = false) Integer company,
-                                    @RequestParam(value="transportId", required = false) Long transportId){
+                                    @RequestParam(value="transportId", required = false) Long transportId,
+                                    @RequestParam(value="countryName", required = false) String countryName,
+                                    @RequestParam(value="cityName", required = false) String cityName){
         if(company==null) company = 0;
         if(transportId==null) transportId = 0L;
 
         SearchRequestDto searchRequestDto = SearchRequestDto.builder()
                 .company(company)
+                .countryName(countryName)
+                .cityName(cityName)
                 .title(title)
                 .transportId(transportId)
                 .build();
@@ -40,5 +46,22 @@ public class SearchController {
             return new ResponseEntity<>("해당 게시물을 찾을 수 없습니다.",HttpStatus.BAD_REQUEST );
         }
         return new ResponseEntity<List<ResponsePostDto>>(post, HttpStatus.OK);
+    }
+    @GetMapping("/search/communityPost")
+    public ResponseEntity<?> Communitysearch(@RequestParam(value="countryName", required = false) String countryName,
+                                    @RequestParam(value="cityName", required = false) String cityName){
+
+        CommunityPostSearchRequestDto searchRequestDto = CommunityPostSearchRequestDto.builder()
+                .countryName(countryName)
+                .cityName(cityName)
+                .build();
+        List<ResponseCommunityPostDto> communityPostDtos;
+        try{
+            communityPostDtos =  postSearchService.searchCommunityPost(searchRequestDto);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("해당 게시물을 찾을 수 없습니다.",HttpStatus.BAD_REQUEST );
+        }
+        return new ResponseEntity<>(communityPostDtos, HttpStatus.OK);
     }
 }
