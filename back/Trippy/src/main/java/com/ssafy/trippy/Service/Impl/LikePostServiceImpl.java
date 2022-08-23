@@ -34,7 +34,7 @@ public class LikePostServiceImpl implements LikePostService {
         List<LikePost> likePosts = likePostRepository.findAllByMemberId(memberId);
         List<ResponsePostDto> postDtos = new ArrayList<>();
         for (LikePost likePost:likePosts){
-            Post post = postRepository.findById(likePost.getId()).orElseThrow();
+            Post post = postRepository.findById(likePost.getPost().getId()).orElseThrow();
             postDtos.add(new ResponsePostDto(post));
         }
         return postDtos;
@@ -54,5 +54,11 @@ public class LikePostServiceImpl implements LikePostService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int getLikeCount(Long postId) {
+        return likePostRepository.countByPostId(postId);
+
     }
 }

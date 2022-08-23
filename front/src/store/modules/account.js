@@ -1,6 +1,7 @@
 import router from '@/router/index.js'
 import axios from 'axios'
 import VueCookies from 'vue-cookies'
+import { ElMessageBox } from 'element-plus'
 // import jwt_decode from "jwt-decode"
 
 export default {
@@ -16,6 +17,7 @@ export default {
     fromPasswordFindView: true,
     verificationCode: '',
     emailInfo: '',
+    isDuplicate: true,
   },
   getters: {
     isLoggedIn: () => !!VueCookies.get('accessToken'),
@@ -28,6 +30,7 @@ export default {
     fromPasswordFindView: state => state.fromPasswordFindView,
     verificationCode: state => state.verificationCode,
     emailInfo: state => state.emailInfo,
+    isDuplicate: state => state.isDuplicate,
   },
   mutations: {
     // SET_ACCESS_TOKEN:(state, accessToken) => state.accessToken = accessToken,
@@ -39,6 +42,7 @@ export default {
     FROM_PASSWORD_FIND_VIEW: (state) => state.fromPasswordFindView = true,
     SET_EMAIL_AUTH_CODE: (state, verificationCode) => state.verificationCode = verificationCode,
     SET_EMAIL_INFO: (state, emailInfo) => state.emailInfo = emailInfo,
+    SET_IS_DUPLICATE: (state, isDuplicate) => state.isDuplicate = isDuplicate,
   },
   actions: {
     // saveToken({ commit }, accessToken ) {
@@ -53,15 +57,20 @@ export default {
       VueCookies.remove('accessToken')
       VueCookies.remove('refreshToken')
       localStorage.removeItem('email')
+      ElMessageBox.alert('성공적으로 로그아웃 되었습니다', '알림', {
+        confirmButtonText: 'OK',
+      })
+      router.push({ name: 'home' })
     },
 
     reissueToken({ dispatch, }) {
       // const data = { "email": localStorage.getItem('email') , "refreshToken": VueCookies.get('refreshToken') }
       // console.log(data)
+      console.log('coming?')
       const email = localStorage.getItem('email')
       const refreshToken = VueCookies.get('refreshToken')
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/members/re-issue?email=${email}&refreshToken=${refreshToken}`,
+        url: `https://i7a506.p.ssafy.io/api/members/re-issue?email=${email}&refreshToken=${refreshToken}`,
         method: 'get',
         params: email
       })
@@ -83,7 +92,7 @@ export default {
 
     login({ dispatch }, userinfo) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/login',
+        url: 'https://i7a506.p.ssafy.io/api/members/login',
         method: 'post',
         data: userinfo,
       })
@@ -100,7 +109,11 @@ export default {
           router.push({ name: 'home' })
         })
         .catch(err => {
-          console.error(err)
+          if ( err.response.status === 400 || err.response.status === 500) {
+            ElMessageBox.alert('아이디 혹은 비밀번호를 확인하세요', '알림', {
+              confirmButtonText: 'OK',
+            })
+          }
         })
     },
 
@@ -111,15 +124,20 @@ export default {
     
     signupTwo({commit,}, userData) {
       commit('SET_USER_DATA', userData)
-      console.log(this.getters.userData.password)
-      console.log(this.getters.userData.description)
         axios({
-          url: 'http://i7a506.p.ssafy.io:8080/api/members/join',
+          url: 'https://i7a506.p.ssafy.io/api/members/join',
           method: 'post',
           data: this.getters.userData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          }
         })
           .then( () => {
             console.log('successfully created an account')
+            ElMessageBox.alert('여행의 시작 뱃지를 획득하셨어요! 로그인 후 획득한 뱃지를 확인하실 수 있어요', 
+            '회원가입을 축하합니다!', {
+              confirmButtonText: 'OK'
+            })
             router.push({ name: 'login' })
           })
           .catch(err => {
@@ -129,33 +147,63 @@ export default {
     },
 
     // 이메일 중복확인
-    checkEmailDuplicate({ getters }, userData) {
-      console.log(getters)
-      const email = userData.email
+    checkEmailDuplicate({ commit }, userData) {
+      if ( !userData.email ) { 
+        ElMessageBox.alert('이메일을 입력해주세요', '알림', {
+          confirmButtonText: 'OK',
+        }) 
+      } else {
+        const email = userData.email
+        axios({
+          url: `https://i7a506.p.ssafy.io/api/members/duplicate?email=${email}`,
+          method: 'get',
+          param: email
+        })
+        .then(res => {
+          if (res.data === true) {
+            commit('SET_IS_DUPLICATE', res.data)
+            ElMessageBox.alert('이메일이 중복되었습니다', '알림', {
+              confirmButtonText: 'OK',
+            })
+          } else {
+            commit('SET_IS_DUPLICATE', res.data)
+            ElMessageBox.alert('이메일을 사용하셔도 좋습니다', '알림', {
+              confirmButtonText: 'OK',
+            })
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
+      }
+    },
+
+    // PasswordFind 이메일 인증 코드 요청하기
+    emailCode({commit}, userinfo) {
+      console.log(userinfo)
       axios({
-        url: `http://i7a506.p.ssafy.io:8080/api/members/duplicate?email=${email}`,
-        method: 'get',
-        param: email
+        url: 'https://i7a506.p.ssafy.io/api/members/join/authmail',
+        method: 'post',
+        data: userinfo
       })
-      .then(res => {
-        if (res.data === true) {
-          alert('이메일이 중복되었습니다')
-        } else {
-          alert('이메일을 사용하셔도 좋습니다')
-        }
+      .then( res => {
+        console.log(res)
+        commit('SET_EMAIL_AUTH_CODE', res.data)
       })
       .catch(err => {
         console.error(err)
       })
     },
 
-    // 인증 코드 요청하기
-    emailCode({commit}, userinfo) {
-      console.log(userinfo)
+    // signup이랑 passwordchange랑 형식이 좀 달라서 
+    // SingUpView 이메일 인증 코드 요청하기
+    emailCodeSignUp({commit}, userData) {
+      console.log(userData)
+      const data = { 'email': userData }
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/join/authmail',
+        url: 'https://i7a506.p.ssafy.io/api/members/join/authmail',
         method: 'post',
-        data: userinfo
+        data: data
       })
       .then( res => {
         console.log(res)
@@ -170,20 +218,26 @@ export default {
     emailAuth() {
       console.log(this.verificationCode)
       if ( !this.verificationCode ) {
-        alert('인증번호를 입력하세요') }
+        ElMessageBox.alert('인증번호를 입력하세요', '알림', {
+          confirmButtonText: 'OK',
+        }) }
       else if ( this.$store.getters.verificationCode === this.verificationCode ){
-        alert('인증이 완료되었습니다')
+        ElMessageBox.alert('인증이 완료되었습니다', '알림', {
+          confirmButtonText: 'OK',
+        })
         this.verified = true
         this.fromPasswordFindView()
       } else {
-        alert('인증번호가 일치하지 않습니다')
+        ElMessageBox.alert('인증번호가 일치하지 않습니다', '알림', {
+          confirmButtonText: 'OK',
+        })
       }
     },
 
     fetchCurrentUser({ getters, dispatch, commit }, ) {
       if (getters.isLoggedIn) {
         axios({
-          url: 'http://i7a506.p.ssafy.io:8080/api/auth/members',
+          url: 'https://i7a506.p.ssafy.io/api/auth/members',
           method: 'get',
           headers: getters.authHeader,
         })
@@ -199,8 +253,11 @@ export default {
           commit('SET_CURRENT_USER', res.data)})
         .catch(err => {
           if (err.response.status === 400) {
+            console.log('failed to fetch current user info')
             dispatch('removeToken')
             router.push({ name: 'login' })
+          } else {
+            console.log('user not logged in')
           }
         })
       }
@@ -208,20 +265,21 @@ export default {
 
     logout({ getters, dispatch }) {
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/logout',
+        url: 'https://i7a506.p.ssafy.io/api/members/logout',
         method: 'get',
         headers: getters.authHeader,
       })
       .then((res) => {
         dispatch('removeToken')
         localStorage.revmoveItem('email')
-        console.log(getters.isLoggedIn)
-        router.push({ name: 'home' })
-        console.log(res.data)
-        alert('성공적으로 로그아웃 되었습니다')
+        console.log(res)
       })
       .catch( err => {
+        console.error(err)
         console.error(err.response)
+        if (err.response.status === 400) {
+          dispatch('removeToken')
+        }
       })
     },
 
@@ -233,9 +291,13 @@ export default {
     },
 
     changePassword({ commit, dispatch }, userinfo) {
-      console.log(userinfo)
+      if ( userinfo.email === null ) {
+        ElMessageBox.alert('잘못된 접근입니다', '알림', {
+          confirmButtonText: 'OK',
+        } )
+      }
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/members/change_pw',
+        url: 'https://i7a506.p.ssafy.io/api/members/change_pw',
         method: 'post',
         data: userinfo
       })
@@ -243,7 +305,9 @@ export default {
         console.log(res)
         dispatch('fetchCurrentUser')
         commit('SET_USER_DATA')
-        alert('비밀번호가 변경되었습니다')
+        ElMessageBox.alert('비밀번호가 변경되었습니다', '알림', {
+          confirmButtonText: 'OK',
+        })
         router.push({ name: 'login' })
       })
       .catch( err => {
@@ -254,18 +318,24 @@ export default {
     deleteAccount({ getters }) {
       console.log(getters.authHeader)
       axios({
-        url: 'http://i7a506.p.ssafy.io:8080/api/auth/members/remove',
+        url: 'https://i7a506.p.ssafy.io/api/auth/members/remove',
         method: 'delete',
         headers: getters.authHeader,
       })
       .then( () => {
         VueCookies.remove('accessToken')
         VueCookies.remove('refreshToken')
+        localStorage.removeItem('email')
         console.log('successfully deleted account')
         router.push({ name: 'login' })
       })
       .catch(err => {
         console.error(err)
+        if ( err.response.status === 500 ) {
+          ElMessageBox.alert('다시 시도해주세요', '알림', {
+            confirmButtonText: 'OK',
+          })
+        }
       })
     }
 

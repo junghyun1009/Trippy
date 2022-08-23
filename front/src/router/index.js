@@ -1,5 +1,6 @@
 import store from '../store'
 import VueCookies from 'vue-cookies'
+import { ElMessageBox } from 'element-plus'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
 import SearchView from '@/views/home/SearchView.vue'
@@ -17,6 +18,7 @@ import SettingView from '@/views/account/SettingView.vue'
 import PasswordFindView from '@/views/account/PasswordFindView.vue'
 import PasswordChangeView from '@/views/account/PasswordChangeView.vue'
 
+// import MyProfileView from '@/views/profile/MyProfileView.vue'
 import ProfileView from '@/views/profile/ProfileView.vue'
 import ProfileEditView from '@/views/profile/ProfileEditView.vue'
 
@@ -91,13 +93,11 @@ const routes = [
   },
   {
     path: '/diary/:diaryPk',
-    // 나중에 pk 추가하기
     name: 'diaryDetail',
     component: DiaryDetailView
   },
   {
     path: '/diary/edit/:diaryPk',
-    // 나중에 pk 추가하기
     name: 'diaryEdit',
     component: DiaryEditView
   },
@@ -115,53 +115,51 @@ const routes = [
 
 
   {
-    path: '/profile',
-    // 나중에 pk 추가하기
+    path: '/profile/:authorId',
     name: 'profile',
-    component: ProfileView
+    component: ProfileView,
   },
+  
   {
     path: '/profile/edit',
-    // 나중에 pk 추가하기
     name: 'profileEdit',
-    component: ProfileEditView
+    component: ProfileEditView,
   },
 
 
   {
     path: '/community',
     name: 'community',
-    component: CommunityView
+    component: CommunityView,
   },
 
   {
     path: '/community/:postPk',
-        // 나중에 pk 추가하기
     name: 'communityDetail',
-    component: CommunityDetailView
+    component: CommunityDetailView,
   },
   {
     path: '/community/create',
     name: 'communityCreate',
-    component: CommunityCreateView
+    component: CommunityCreateView,
   },
   {
     path: '/community/edit/:postPk',
     name: 'communityEdit',
-    component: CommunityEditView
+    component: CommunityEditView,
   },
 
   
   {
     path: '/badge',
     name: 'badgeList',
-    component: BadgeListView
+    component: BadgeListView,
   },
   
   {
     path: '/chat',
     name: 'chatList',
-    component: ChatListView
+    component: ChatListView,
   },
   
 
@@ -175,35 +173,64 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
-  // const { isLoggedIn } = store.getters
-  const refreshToken = VueCookies.get('refreshToken')
-  const accessToken = VueCookies.get('accessToken')
+router.beforeEach( async(to, from, next) => {
 
-  const authPages = [
-    'diaryCreate', 'diaryEdit', 'diaryDetail', 'diaryComment',
-    'profile', 'profileEdit', 
-    'community', 'communityEdit', 'communityDetail', 'communityCreate',
-    'badgeList'
-  ]
-
-  const isAuthRequired = authPages.includes(to.name)
+      const authPages = [
+      'diaryCreate', 'diaryEdit', 'diaryDetail',
+      'profile', 'profileEdit', 
+      'community', 'communityEdit', 'communityDetail', 'communityCreate',
+      'badgeList', 'chatList'
+    ]
+    const isAuthRequired = authPages.includes(to.name)
   
-    if (isAuthRequired && !accessToken && refreshToken){
+    if (VueCookies.get('accessToken')===null && VueCookies.get('refreshToken') !== null){
       //refreshToken은 있고 accessToken이 없을 경우 토큰 재발급 요청
-      store.dispatch('reissueToken');
+      console.log('passed')
+      await store.dispatch('reissueToken')
     }
-    if (isAuthRequired && accessToken){
+    if (VueCookies.get('accessToken')!==null){
       //accessToken이 있을 경우 진행
       return next();
     }
-    if (isAuthRequired && !accessToken && !refreshToken){
-      console.log(store)
+    if (isAuthRequired && VueCookies.get('accessToken')===null && VueCookies.get('refreshToken')===null){
       //2개 토큰이 모두 없을 경우 로그인페이지로
-      alert('로그인을 해주세요!')
-      return next({name: 'login'});
+      ElMessageBox.alert('로그인을 해주세요!', '알림', {
+        confirmButtonText: 'OK',
+      })
+      return next('/login');
     }
     return next();
 })
+
+// router.beforeEach( async(to, from, next) => {
+//   // const refreshToken = VueCookies.get('refreshToken')
+//   // const accessToken = VueCookies.get('accessToken')
+
+//   const authPages = [
+//     'diaryCreate', 'diaryEdit', 'diaryDetail',
+//     'profile', 'profileEdit', 
+//     'community', 'communityEdit', 'communityDetail', 'communityCreate',
+//     'badgeList', 'chatList'
+//   ]
+
+//   const isAuthRequired = authPages.includes(to.name)
+  
+//     if (isAuthRequired && VueCookies.get('accessToken')===null && VueCookies.get('refreshToken') !== null){
+//       //refreshToken은 있고 accessToken이 없을 경우 토큰 재발급 요청
+//       console.log('passed')
+//       await store.dispatch('reissueToken')
+//     }
+//     if (isAuthRequired && VueCookies.get('accessToken')!==null){
+//       //accessToken이 있을 경우 진행
+//       return next();
+//     }
+//     if (isAuthRequired && VueCookies.get('accessToken')===null && VueCookies.get('refreshToken')===null){
+//       console.log(store)
+//       //2개 토큰이 모두 없을 경우 로그인페이지로
+//       alert('로그인을 해주세요!')
+//       return next({name: 'login'});
+//     }
+//     return next();
+// })
 
 export default router

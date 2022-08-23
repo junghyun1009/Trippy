@@ -50,13 +50,13 @@ public class FollowController {
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 
-    @GetMapping("/follower")
-    public ResponseEntity<?> getFollowers(HttpServletRequest request) {
+    @GetMapping("/following")
+    public ResponseEntity<?> getFollowings(HttpServletRequest request) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         try {
             List<ResponseMemberDto> responseMemberDtos = followService.getFollowers(memberId);
             if (responseMemberDtos.size() == 0) {
-                return new ResponseEntity<>("팔로워한 유저가 없습니다.", HttpStatus.OK);
+                return new ResponseEntity<>("팔로우한 유저가 없습니다.", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(responseMemberDtos, HttpStatus.OK);
             }
@@ -65,8 +65,8 @@ public class FollowController {
         }
     }
 
-    @GetMapping("/following")
-    public ResponseEntity<?> getFollowings(HttpServletRequest request) {
+    @GetMapping("/follower")
+    public ResponseEntity<?> getFollowers(HttpServletRequest request) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
         try {
             List<ResponseMemberDto> responseMemberDtos = followService.getFollowings(memberId);
@@ -80,29 +80,63 @@ public class FollowController {
         }
     }
 
-    @GetMapping("/follower/cnt")
-    public ResponseEntity<?> getFollowersCnt(HttpServletRequest request) {
-        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        Long responseCnt = followService.getFollowersCnt(memberId);
-        return new ResponseEntity<>(responseCnt, HttpStatus.OK);
+    @GetMapping("/following/{memberId}")
+    public ResponseEntity<?> getFollowingsByMemberId(@PathVariable Long memberId) {
+        try {
+            List<ResponseMemberDto> responseMemberDtos = followService.getFollowers(memberId);
+            if (responseMemberDtos.size() == 0) {
+                return new ResponseEntity<>("팔로워한 유저가 없습니다.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(responseMemberDtos, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/follower/{memberId}")
+    public ResponseEntity<?> getFollowersByMemberId(@PathVariable Long memberId) {
+        try {
+            List<ResponseMemberDto> responseMemberDtos = followService.getFollowings(memberId);
+            if (responseMemberDtos.size() == 0) {
+                return new ResponseEntity<>("본인을 팔로우한 유저가 없습니다", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(responseMemberDtos, HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(FAIL,HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/following/cnt")
     public ResponseEntity<?> getFollowingsCnt(HttpServletRequest request) {
         Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
-        Long responseCnt = followService.getFollowingsCnt(memberId);
+        Long responseCnt = followService.getFollowersCnt(memberId);
         return new ResponseEntity<>(responseCnt, HttpStatus.OK);
     }
 
-    @GetMapping("/follower/cnt/{memberId}")
-    public ResponseEntity<?> getFollowersCntByMemeberId(@PathVariable Long memberId){
-        Long responseCnt = followService.getFollowersCnt(memberId);
+    @GetMapping("/follower/cnt")
+    public ResponseEntity<?> getFollowersCnt(HttpServletRequest request) {
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
+        Long responseCnt = followService.getFollowingsCnt(memberId);
         return new ResponseEntity<>(responseCnt, HttpStatus.OK);
     }
 
     @GetMapping("/following/cnt/{memberId}")
     public ResponseEntity<?> getFollowingsCntByMemeberId(@PathVariable Long memberId){
+        Long responseCnt = followService.getFollowersCnt(memberId);
+        return new ResponseEntity<>(responseCnt, HttpStatus.OK);
+    }
+
+    @GetMapping("/follower/cnt/{memberId}")
+    public ResponseEntity<?> getFollowersCntByMemeberId(@PathVariable Long memberId){
         Long responseCnt = followService.getFollowingsCnt(memberId);
         return new ResponseEntity<>(responseCnt, HttpStatus.OK);
+    }
+
+    @GetMapping("/chk/{following_id}")
+    public ResponseEntity<?> chkFollowing(HttpServletRequest request,@PathVariable("following_id") Long followingId){
+        Long memberId = memberService.getIdByToken(request.getHeader("X-AUTH-TOKEN"));
+        return new ResponseEntity<>(followService.existsByFollowerIdAndFollowingId(memberId,followingId),HttpStatus.OK);
     }
 }

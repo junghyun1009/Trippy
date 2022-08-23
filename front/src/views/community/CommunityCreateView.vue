@@ -25,14 +25,15 @@ export default {
         meetingTime: '',
         recruitCurrentVolume: 0,
         recruitVolume: 0,
-        countryName: '대한민국',
-        cityName: '서울특별시',
+        countryName: '',
+        cityName: '',
         gender: '누구나',
         startAge: 0,
         endAge: 70,
         // isLocal: true,
         local: true,
         place: '',
+        openKakaoUrl: '',
       }
     }
   }

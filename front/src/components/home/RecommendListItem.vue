@@ -3,7 +3,9 @@
     <router-link :to="{ name: 'diaryDetail', params: { diaryPk: diary.id } }">
       <el-card class="grid-content" :body-style="{ padding: 0 }" shadow="hover">
         <img :src="diary.representativeImg" class="image"/>
-        <span class="title-span">{{ diary.title }}</span>
+        <div style="padding: 1rem">
+          <span class="title-span">{{ diary.title }}</span>
+        </div>
       </el-card>
     </router-link>
     <br>
@@ -23,9 +25,10 @@ export default {
 <style scoped>
 .image {
   width: 100%;
-  height: 100px;
+  overflow: hidden;
+  /* height: 10rem; */
   display: block;
-  border-radius: 5%;
+  border-radius: 0.25rem 0.25rem 0 0;
 }
 
 .title-span {
@@ -54,8 +57,11 @@ a {
 }
 
 .grid-content {
-  border-radius: 4px;
-  min-height: 10vh;
+  display: flex;
+  border-radius: 0.25rem;
+  height: 15rem;
+  /* width: 100%; */
+  /* padding-bottom: 75%; */
 }
 
 .el-card__body:hover {

@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -53,7 +50,7 @@ public class PostTransportRepositoryImpl implements PostTransportRepositoryCusto
             postId.add(postTransport.getPost().getId());
         }
         for (Long aLong : postId) {
-            Post post1 = postRepository.findById(aLong).get();
+            Post post1 = postRepository.findById(aLong).orElseThrow();
             ResponsePostDto dto = ResponsePostDto.builder()
                     .post(post1).build();
             responsePostDtos.add(dto);

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <el-form @submit.prevent="onSubmit" method="POST">
       <el-form-item label="제목">
         <el-input v-model="newPost.title" placeholder="제목을 입력하세요." />
@@ -24,21 +24,26 @@
       <el-form-item label="시간">
         <el-time-picker v-model="newPost.meetingTime" value-format="YYYY-MM-DD HH:mm:ss" :disabled-seconds="disabledSeconds"/>
       </el-form-item>
-      <el-form-item label="인원">
+      <!-- <el-form-item label="인원">
         <el-input-number v-model="newPost.recruitVolume" :min="1" :max="10"/>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-collapse class="collapse">
           <el-collapse-item title="장소">
-            <div>
-              {{ newPost.countryName }}, {{ newPost.cityName }}
-            </div>
+            <template #title>
+              <span>장소</span>
+                <el-tag v-if="select[0]" type="dark" class="option-tag">{{ select[0] }}</el-tag>
+                <el-tag v-if="select[1]" type="dark" class="option-tag">{{ select[1] }}</el-tag>
+            </template>
+            <el-form-item>
+               <el-cascader :options="locationTable" v-model="select" clearable placeholder="나라와 도시를 선택해주세요."/>
+            </el-form-item>
           </el-collapse-item>
           <el-collapse-item>
             <template #title>
               <div>
                 <span>모집 조건</span>
-                <el-tag class="option-tag" v-for="option in optionTag" :key="option" >{{ option }}</el-tag>
+                <el-tag type="dark" class="option-tag" v-for="option in optionTag" :key="option" >{{ option }}</el-tag>
               </div>
             </template>
             <el-form-item label="성별">
@@ -61,18 +66,22 @@
       <el-form-item label="모임 장소">
         <el-input v-model="newPost.place" placeholder="모임 장소를 입력하세요." />
       </el-form-item>
+      <el-form-item label="오픈채팅">
+        <el-input v-model="newPost.openKakaoUrl" placeholder="오픈채팅 주소를 입력하세요." />
+      </el-form-item>
       <el-form-item v-if="action==='create'">
-        <el-button @click="onSubmit">작성하기</el-button>
+        <el-button type="primary" class="button" @click="onSubmit">작성하기</el-button>
       </el-form-item>
       <el-form-item v-else-if="action==='update'">
-        <el-button @click="onSubmit">수정하기</el-button>
+        <el-button type="primary" class="button" @click="onSubmit">수정하기</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import ElMessageBox from 'element-plus'
 
 export default {
   name: 'CommunityForm',
@@ -117,21 +126,31 @@ export default {
         meetingTime: this.post.meetingTime,
         recruitCurrentVolume: this.post.recruitCurrentVolume,
         recruitVolume: this.post.recruitVolume,
-        countryName: this.post.countryName,
-        cityName: this.post.cityName,
+        // countryName: this.post.countryName,
+        // cityName: this.post.cityName,
         gender: this.post.gender,
         // isLocal: this.post.isLocal,
         local: this.post.local,
         place: this.post.place,
+        openKakaoUrl: this.post.openKakaoUrl,
         // locationId: this.post.locationId,
-      }
+      },
+      select: [this.post.countryName, this.post.cityName],
     }
   },
   computed: {
+    ...mapGetters(['location']),
     optionTag() {
       const gender = this.newPost.gender
-      const startAge = this.newPost.startAge
-      const endAge = this.newPost.endAge
+      let startAge = 0
+      let endAge = 0
+      if (this.action === 'create') {
+        startAge = this.newPost.startAge
+        endAge = this.newPost.endAge
+      } else {
+        startAge = this.post.startAge
+        endAge = this.post.endAge
+      }
       let age = startAge + '~' + endAge + '살'
       if (startAge === undefined && endAge === undefined || startAge === 19 && endAge === 70) {
         age = '누구나'
@@ -156,18 +175,47 @@ export default {
       }
       return [gender, age, isLocal]
     },
+    locationTable() {
+      const options = []
+      let countryName = ''
+      let j = -1
+      for (let i=0 ; i<this.location.length ; i++) {
+        const country = {}
+        if (countryName != this.location[i].countryName) {
+          country.value = this.location[i].countryName
+          country.label = this.location[i].countryName
+          country.children = []
+          const city = {}
+          city.value = this.location[i].cityName
+          city.label = this.location[i].cityName
+          country.children.push(city)
+          options.push(country)
+          countryName = this.location[i].countryName
+          j = j + 1
+        } else {
+          const citySec = {}
+          citySec.value = this.location[i].cityName
+          citySec.label = this.location[i].cityName
+          options[j].children.push(citySec)
+        }
+      }
+      return options  
+    }
   },
   methods: {
-    ...mapActions(['createPost', 'updatePost']),
+    ...mapActions(['createPost', 'updatePost', 'fetchLocation']),
     onInput() {
       this.newPost.startAge = this.age[0]
       this.newPost.endAge = this.age[1]
     },
     onSubmit() {
+      this.newPost.countryName = this.select[0]
+      this.newPost.cityName = this.select[1]
       const post = this.newPost
       // if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.isDay || post.endDate)) {
-      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && (post.day || post.endDate)) {
+      if (post.title && post.category && post.description && post.startDate && post.meetingTime && post.place && post.countryName && post.cityName && post.openKakaoUrl && (post.day || post.endDate)) {
         // console.log(this.newPost)
+        console.log(post)
         if (this.action === 'create') {
           this.createPost(this.newPost)
         } else if (this.action === 'update') {
@@ -180,7 +228,9 @@ export default {
           this.updatePost(payload)
         }
       } else {
-        alert('빈 칸 없이 모든 필드를 채워주세요!')
+        ElMessageBox.alert('빈 칸 없이 모든 필드를 채워주세요!', '알림', {
+          confirmButtonText: 'OK',
+        })
       }
     },
     clearEndDate() {
@@ -205,10 +255,20 @@ export default {
       return this.makeRange(1, 59)
     },
   },
+  created() {
+    console.log(this.newPost)
+  },
+  mounted() {
+    this.fetchLocation()
+  }
 }
 </script>
 
 <style scoped>
+.container {
+  padding: 1rem;
+}
+
 .switch {
   margin-left: 0.3rem;
 }
@@ -229,5 +289,12 @@ export default {
   position: relative;
   left: 0.5rem;
   width: 90%;
+}
+
+.button {
+  position: fixed;
+  width: 90%;
+  bottom: 5rem;
+  --el-button-active-color: #F16B51;
 }
 </style>

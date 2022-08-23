@@ -15,18 +15,14 @@ public class ResponseImageDto {
 
     private String fileUrl;
 
-    private Long detailLocationId;
-
     @Builder
-    public ResponseImageDto(String fileName, String fileUrl, Long detailLocationId) {
+    public ResponseImageDto(String fileName, String fileUrl) {
         this.fileName = fileName;
         this.fileUrl = fileUrl;
-        this.detailLocationId = detailLocationId;
     }
 
     public ResponseImageDto(Image image){
         this.fileName = image.getFileName();
         this.fileUrl = image.getFileUrl();
-        this.detailLocationId = image.getDetailLocationId();
     }
 }
