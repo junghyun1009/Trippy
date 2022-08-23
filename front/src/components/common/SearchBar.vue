@@ -187,4 +187,12 @@ export default {
 	.search-detail {
 		padding: 5%;
 	}
+
+	.el-button--primary {
+		--el-button-hover-bg-color: #F16B51;
+		--el-button-hover-border-color: #F16B51;
+		--el-button-active-color: #F16B51;
+		--el-button-active-bg-color: #F16B51;
+		--el-button-active-border-color: #F16B51;
+	}
 </style>

@@ -4,6 +4,7 @@ import { ElMessageBox } from 'element-plus'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
 import SearchView from '@/views/home/SearchView.vue'
+import StartView from '@/views/home/StartView.vue'
 
 import DiaryCreateView from '../views/diary/DiaryCreateView.vue'
 import DiaryDetailView from '../views/diary/DiaryDetailView.vue'
@@ -46,6 +47,11 @@ const routes = [
   },
   {
     path: '/',
+    name: 'start',
+    component: StartView
+  },
+  {
+    path: '/login',
     name: 'login',
     component: LoginView
   },
