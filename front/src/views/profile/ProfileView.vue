@@ -558,7 +558,9 @@ export default {
     --el-button-bg-color: white;
     --el-button-border-color: var(--el-color-primary);
     --el-button-hover-bg-color: white;
+    --el-button-active-bg-color: white;
     --el-button-hover-text-color: #F16B51;
+    --el-button-active-text-color: #F16B51;
   }
 
   .el-button--primary {
