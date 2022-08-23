@@ -35,7 +35,7 @@ import NotFound404View from '@/views/handler/NotFound404View.vue'
 const routes = [
   // 모두가 접근 가능한 route
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: HomeView
   },
@@ -45,7 +45,7 @@ const routes = [
     component: SearchView
   },
   {
-    path: '/login',
+    path: '/',
     name: 'login',
     component: LoginView
   },
