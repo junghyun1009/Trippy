@@ -27,8 +27,8 @@
 
     <div class="description">
       <p>소개</p>
-      <el-input v-model="userinfo.description" placeholder="자신을 소개해주세요! 최대 50자 (선택)" maxlength="50"></el-input>
-      <el-button type="primary" @click="mergeObjects()">완료</el-button>
+      <el-input v-model="userinfo.description" placeholder="자신을 소개해주세요! 최대 50자 (선택)" maxlength="50" id="description"></el-input>
+      <el-button type="primary" @click="checkBlank()">완료</el-button>
     </div>
     <!-- 완료하면 로그인 페이지로 이동 -->
   
@@ -39,6 +39,7 @@
 <script>
 import { ElMessageBox } from 'element-plus'
 import { mapActions } from 'vuex'
+import _ from 'lodash'
 
 export default {
   name: "SignUpOptionView",
@@ -57,6 +58,18 @@ export default {
 
   methods: {
     ...mapActions(['signupTwo', 'sendPhoto']),
+
+      checkBlank() {
+        var descriptionBlank = document.getElementById('description').value
+        if ( _.isEmpty(this.profilePhoto) | descriptionBlank === '') {
+          ElMessageBox.alert("빈 칸 없이 모든 필드를 채워주세요!", '알림', {
+          confirmButtonText: 'OK',
+        }) 
+        } else {
+          console.log('you shall pass')
+          this.mergeObjects()
+        } 
+      },
 
     mergeObjects(){
       // 첫번째 signup 페이지에서의 data(객체)와 

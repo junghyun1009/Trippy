@@ -188,6 +188,10 @@ export default ({
 				})
 				.then( res => {
 					console.log(res.data)
+					var searchResult = res.data
+					if ( searchResult.length === 0 ){
+						console.log('검색결과가 없습니다')
+					}
 					commit('SET_SEARCH_DIARIES', res.data),
 					console.log('search completed')
 					router.push({ name: 'search'})

@@ -109,7 +109,7 @@
             <!-- 지도 -->
             <div>
               <div class="route-div">
-                <el-input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0 && newDiary.routes.length < 10" />
+                <input id="pac-input" class="route-input" type="text" placeholder="루트를 추가해주세요." v-show="flag === 0 && newDiary.routes.length < 10" />
                 <el-button-group class="route-btn-group">
                   <el-button type="primary" class="route-btn" @click="addMarkers" :disabled="newDiary.routes.length === 0">
                     <span class="material-symbols-outlined">push_pin</span>
@@ -939,7 +939,7 @@ export default {
   text-align: center;
 }
 .button {
-  width: 90%;
+  width: 100%;
 }
 
 .el-button--primary {

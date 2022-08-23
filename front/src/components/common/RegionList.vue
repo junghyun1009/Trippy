@@ -1,10 +1,6 @@
 <template>
-  <div>
-		<div class="regional-menu">
-			<p>지금 <span>트리피</span>에서 핫한 여행코스</p>
-		</div>
+  <div class="container">
 			<region-list-item></region-list-item>
-			<br>
   </div>
 </template>
 
@@ -21,21 +17,13 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  padding: 0 1rem;
+}
+
 .regional-menu {
 	display: flex;
 	margin-left: 2%;
 }
-
-.regional-menu p {
-	font-size: 2.5vh;
-	font-weight: 500;
-}
-
-.regional-menu span {
-	color: #F16B51;
-	font-size: 2.5vh;
-	font-weight: 500;
-}
-
 
 </style>
