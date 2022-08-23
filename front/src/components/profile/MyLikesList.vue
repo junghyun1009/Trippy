@@ -2,7 +2,7 @@
   <div class="container">
     <!-- {{myLikes}} -->
     <el-row>
-      <el-col :span="8" v-for="like in myLikes" :key="like.id">
+      <el-col :span="8" v-for="like in myLikes.slice().reverse()" :key="like.id">
         <my-likes-list-item :like="like"></my-likes-list-item>
       </el-col>
     </el-row>
