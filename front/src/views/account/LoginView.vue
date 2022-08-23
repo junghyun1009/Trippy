@@ -131,9 +131,4 @@ export default {
     color: white;
     }
 
-  h1 span {
-    margin: 0;
-    font-size: 5vh;
-    font-weight: 500;
-  }
 </style>

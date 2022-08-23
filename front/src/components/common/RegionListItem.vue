@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="regions"
-			data-flickity='{ "pageDots": false, "cellAlign": "left" }'>
+			data-flickity='{ "pageDots": false, "cellAlign": "left", "prevNextButtons": false }'>
 			<!-- <div class="region">
 				<div class="image" id="all" ><span @click="diaryFilter(this)">전체</span></div>
 			</div> -->
@@ -108,44 +108,12 @@ export default {
 </script>
 
 <style scoped>
-/* 
-  * { 
-    box-sizing: border-box; 
-  } */
 
-  /* .flickity-enabled { 
-    margin: 0 60px;
-  } */
 
   * { box-sizing: border-box; }
 
   body { font-family: sans-serif; }
 
-  /* .regions {
-    margin: 0 60px;
-  } */
-
-  /* smaller, dark, rounded square */
-  .flickity-prev-next-button {
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-    background: transparent !important;
-  }
-
-  .flickity-button {
-    background: transparent;
-    fill: #F16B51 !important;
-    color: #F16B51 !important;
-  }
-
-  /* position outside */
-  .flickity-prev-next-button.previous {
-    left: -40px !important;
-  }
-  .flickity-prev-next-button.next {
-    right: -40px !important;
-  }
 
   .region {
     width: 60px;
