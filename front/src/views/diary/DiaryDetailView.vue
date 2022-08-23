@@ -19,7 +19,7 @@
           </div>
           <div v-else class="icon-cnt">
             <span class="material-symbols-outlined filled-heart" @click="isLiked=0, goUnlike()">favorite</span>
-            <span class="cnt">{{ likeCount+1 }}</span>
+            <span class="cnt">{{ likeCount }}</span>
           </div>
           <!-- <router-link :to="{ name: 'diaryComment' }" class="icon-cnt">
             <span class="material-symbols-outlined">chat_bubble</span>
@@ -86,8 +86,9 @@
           </div>
             <!-- 작성자와 로그인 유저가 다른 경우 -->
           <div v-if="!isAuthor" class="follow-button">
-            <el-button v-if="!isFollow" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
-            <el-button v-else type="primary" plain @click="unfollowNow(), unfollow(followId)">팔로잉</el-button>
+            <el-button v-if="!isFollowing||(isfollow==1)" type="primary" @click="followNow(), follow(followId)">팔로우</el-button>
+            <el-button v-else-if="isFollowing||(isfollow==0)" type="primary" plain @click="unfollowNow(), unfollow(followId)">팔로잉</el-button>
+            <el-button v-else>뭐야</el-button>
           </div>
         </div>
 
@@ -176,7 +177,7 @@ export default {
   },
   data() {
     return {
-      isLiked: 0,
+      isLiked: 2,
       commentClicked: false,
       diaryPk: this.$route.params.diaryPk,
       // isFollow: false,
@@ -184,13 +185,13 @@ export default {
         follower_id: null,
         following_id: null,
       },
-      isFollow: this.followingStatus
+      isFollow: 2
     }
   },
   // diaryTemp 얘는 내가 만든 데이터. 나중에 diary로 바꿔
   computed: {
     ...mapGetters(['isAuthor', 'diary', 'isChild', 'parentComment', 'currentUser', 'commentToEdit', 'isEditing', 'authorId', 
-    'authorInfo', 'followingStatus', 'likeCount']),
+    'authorInfo', 'isFollowing', 'likeCount']),
     partyTag() {
       const party = this.diary.company
       const partyList = ['가족', '커플', '친구', '개인']
@@ -202,17 +203,14 @@ export default {
     }
   },
   watch: {
-    followingStatus(newVal) {
-      // 팔로우 여부 바뀌면
-      this.isFollow = newVal
-      // 팔로워 숫자 다시 받아오기
-      // this.yourFollowersCount(this.currentProfile)
-      // 팔로워 정보 다시 받아오기
-      // this.yourFollowers(this.currentProfile)
-    },
-    likeStatus(newVal) {
-      this.isLiked = newVal
-      // this.fetchLikeCount(this.diaryPk)
+    // isFollowing(newVal) {
+    //   console.log(newVal)
+    //   setTimeout(() => this.setFollowingStatus(this.diary.memberId), 100)
+    // },
+    isLiked(newVal) {
+      console.log(newVal)
+      console.log('바뀌었당')
+      setTimeout(() => this.fetchLikeCount(this.diaryPk), 100)
     }
   },
   methods: {
@@ -258,32 +256,37 @@ export default {
     },
 
     followNow() {
-      this.isFollow = !this.isFollow
+      this.isFollow = 0
       // follower_id - 내 아이디
       // following_id - 내가 팔로우하는 사람 아이디
       this.followId.follower_id = this.currentUser.id
       this.followId.following_id = this.diary.memberId
+      console.log(this.isFollow, '팔로우')
+      this.fetchDiary(this.diaryPk)
     },
 
     unfollowNow() {
-      this.isFollow = !this.isFollow
+      this.isFollow = 1
       // follower_id - 내 아이디
       // following_id - 내가 언팔로우할 사람 아이디
       this.followId.follower_id = this.currentUser.id
       this.followId.following_id = this.diary.memberId
+      console.log(this.isFollow, '언팔로우')
+      this.fetchDiary(this.diaryPk)
     },
   },
   created() {
     this.fetchDiary(this.diaryPk)
     this.fetchCurrentUser()
-    this.fetchLikeCount(this.diaryPk)
+    // this.fetchLikeCount(this.diaryPk)
   },
   mounted() {
     setTimeout(() => this.addMarkers(), 500),
     this.fetchDiaryUser(this.authorId)
     setTimeout(() => this.checkLike(this.diaryPk), 10)
+    console.log(this.isFollow, '뭐야')
     // this.addMarkers()
-    this.setFollowingStatus(this.diary.memberId)
+    // this.setFollowingStatus(this.diary.memberId)
   }
 }
 </script>

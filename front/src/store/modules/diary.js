@@ -23,7 +23,8 @@ export default ({
     location: [],
     authorInfo: {},
     childInfo: {},
-    likeCount: 0
+    likeCount: 0,
+    isFollowing: true
   },
   getters: {
     diaries: state => state.diaries,
@@ -47,7 +48,8 @@ export default ({
     // isDiary: state => !_.isEmpty(state.diary)
     authorInfo: state => state.authorInfo,
     childInfo: state => state.childInfo,
-    likeCount: state => state.likeCount
+    likeCount: state => state.likeCount,
+    isFollowing: state => state.isFollowing
   },
   mutations: {
     // 일지 저장
@@ -163,6 +165,12 @@ export default ({
     // 일지 좋아요 개수
     SET_LIKE_COUNT(state, cnt) {
       state.likeCount = cnt
+    },
+
+    // 팔로우 여부 확인
+    CHECK_FOLLOWING_STATUS(state, check) {
+      state.isFollowing = check
+      console.log('팔로우하고 있나', state.isFollowing)
     }
 
   },
@@ -217,7 +225,7 @@ export default ({
 
     // 일지 READ
     // 단일 일지
-    fetchDiary({ commit, getters }, diaryPk) {
+    fetchDiary({ commit, getters, dispatch }, diaryPk) {
       axios({
         url: `https://i7a506.p.ssafy.io/api/posts/detail/${diaryPk}`,
         method: 'get',
@@ -229,6 +237,9 @@ export default ({
         console.log(res.data)
         const authorId = res.data.memberId
         commit('SET_AUTHOR_ID', authorId)
+        dispatch('fetchLikeCount', diaryPk)
+        dispatch('checkFollowingStatus', authorId)
+        dispatch('checkLike', diaryPk)
         // const diary = res.data
         // diary.detailLocations.forEach((location) => {
         //   const imagePk = location.id
@@ -240,6 +251,23 @@ export default ({
         if (err.response.status === 404) {
           router.push({ name: 'notFound404' }) 
         }
+      })
+    },
+
+    // 일지 쓴 유저 팔로우 여부 확인
+    checkFollowingStatus({ getters, commit }, following_id) {
+      console.log(following_id)
+      axios({
+        url: `https://i7a506.p.ssafy.io/api/auth/follow/chk/${following_id}`,
+        method: 'get',
+        headers: getters.authHeader,
+      })
+      .then( res => {
+        console.log(res.data)
+        commit('CHECK_FOLLOWING_STATUS', res.data)
+      })
+      .catch( err => {
+        console.log(err)
       })
     },
 
@@ -478,6 +506,7 @@ export default ({
       })
       .catch(err => console.err(err.response))
     },
+
     checkLike({ commit, getters }, diaryPk) {
       axios({
         url: `https://i7a506.p.ssafy.io/api/auth/likepost/chk/${diaryPk}`,
