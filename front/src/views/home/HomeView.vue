@@ -17,7 +17,7 @@
 
     <div class="following-diary-list">
       <div v-if="isLoggedIn" class="following-diary-description">
-        <h3>{{ currentUser.name }}님이 팔로우 하고 있는</h3>
+        <p>{{ currentUser.name }}님이 팔로우 하고 있는</p>
         <h3><span>{{ this.followingName.name }}</span>님이 추천하는 코스</h3>
         <following-diary-list v-if="this.followingIdforDiary" :followingIdforDiary="followingIdforDiary"></following-diary-list>
       </div>

@@ -27,6 +27,10 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  height: 230px;
+}
+
 .image {
   /* position: absolute; */
   width: 100%;
@@ -44,16 +48,16 @@ export default {
 
 .title {
   position: relative;
-  bottom: 1.45rem;
-  font-size: 0.9rem;
+  bottom: 1.3rem;
+  font-size: 1.1rem;
   margin-left: 0%;
   font-weight: 400;
 }
 
 .name {
   position: relative;
-  bottom: 1.3rem;
-  font-size: 0.7rem;
+  bottom: -0.5rem;
+  font-size: 0.8rem;
 }
 
 a {
@@ -82,7 +86,9 @@ a {
   /* padding-bottom: 75%; */
 }
 
-.grid-content
+.el-card {
+  height: 100%;
+}
 
 .el-card__body:hover {
   opacity: 0.2;

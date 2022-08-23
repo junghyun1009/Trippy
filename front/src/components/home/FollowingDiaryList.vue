@@ -69,7 +69,7 @@ export default {
 .container {
   display: flex;
   justify-content: center;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .el-row {
@@ -80,6 +80,8 @@ export default {
 }
 .el-col {
   border-radius: 4px;
+  height: 230px;
+  margin-bottom: 3rem;
 }
 
 </style>

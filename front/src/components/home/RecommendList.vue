@@ -73,13 +73,15 @@ export default {
   /* bottom: 1rem; */
 }
 .el-row {
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
-.el-row:last-child {
+/* .el-row:last-child {
   margin-bottom: 0;
-}
+} */
 .el-col {
   border-radius: 4px;
+  height: 230px;
+  margin-bottom: 3rem;
 }
 
 </style>
