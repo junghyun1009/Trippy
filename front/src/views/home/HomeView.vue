@@ -15,6 +15,7 @@
 
     <el-divider />
 
+    <br>
     <div class="following-diary-list">
       <div v-if="isLoggedIn" class="following-diary-description">
         <p>{{ currentUser.name }}님이 팔로우 하고 있는</p>
@@ -24,11 +25,7 @@
 
     </div>
 
-    <br>
-    <br>
-    <br>
 
-    <br>
 
   </div>
 </template>
