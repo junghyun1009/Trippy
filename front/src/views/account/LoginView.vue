@@ -89,7 +89,7 @@ export default {
   }
 
   .input-box {
-    position: absolute;
+    position: relative;
     margin: 0 5%;
     padding-top: 50%
   }

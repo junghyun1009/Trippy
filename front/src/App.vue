@@ -49,6 +49,7 @@ export default ({
 * {
   box-sizing: border-box;
   margin: 0;
+  max-width: 500px;
 }
 
 body {
