@@ -2,7 +2,8 @@
   <div id="app">
     <the-header></the-header>
     <router-view/>
-    <nav-bar v-if="this.$route.name !== 'login' && this.$route.name !== 'signUp' && this.$route.name !== 'signUpOption'"></nav-bar>
+    <nav-bar v-if="this.$route.name !== 'login' && this.$route.name !== 'signUp' && this.$route.name !== 'signUpOption'
+    && this.$route.name !== 'start'"></nav-bar>
   </div>
 </template>
 

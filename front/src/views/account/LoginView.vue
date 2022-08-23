@@ -110,6 +110,15 @@ export default {
     margin-top: 2%;
   }
 
+  .el-button--primary {
+    --el-button-hover-bg-color: #ffd3cb;
+    --el-button-hover-text-color: #F16B51;
+    --el-button-hover-border-color: #ffd3cb;
+    --el-button-active-color: #F16B51;
+    --el-button-active-bg-color: #ffd3cb;
+    --el-button-active-border-color: #ffd3cb;
+  }
+
   a {
     text-decoration: none;
     color: white;
