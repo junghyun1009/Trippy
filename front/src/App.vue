@@ -50,6 +50,7 @@ export default ({
   box-sizing: border-box;
   margin: 0;
   max-width: 500px;
+  /* max-height: 740px; */
 }
 
 body {

@@ -477,7 +477,8 @@ export default {
   }
 
   .profile-picture {
-    display: absolute;
+    position: relative;
+    /* top: 7rem; */
     margin-top: 8%;
     margin-right: 65%;
   }
@@ -491,12 +492,13 @@ export default {
   }
 
   .my-page-username h3 {
+    font-size: 1.3rem;
     font-weight: 500;
     margin-right: 0.5rem;
   }
 
   .material-symbols-outlined {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     color: #F16B51;
   }
 
@@ -527,7 +529,7 @@ export default {
   .description {
     display: flex;
     margin-left: 1rem;
-    margin-top: 0;
+    margin: 0 1rem;
   }
 
   .follow {
@@ -535,6 +537,15 @@ export default {
     flex-direction: column;
     margin-left: 7.5rem;
     margin-top: 0;
+  }
+
+  .badge {
+    margin-top: 0;
+  }
+  
+  .el-col {
+    margin: 0;
+    padding: 0.5rem;
   }
 
   .badge-image {
