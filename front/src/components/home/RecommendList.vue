@@ -41,7 +41,9 @@
           </div>
         </el-col>
       </el-row>
-          <el-button type="primary" round @click="diariesToShow += 6">더보기</el-button>
+
+      <el-button type="primary" round size="small" @click="diariesToShow += 6">전체 다이어리 더보기</el-button>
+      <br>
     </div>
   </div>
 </template>
@@ -85,7 +87,7 @@ export default {
   /* bottom: 1rem; */
 }
 .el-row {
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 /* .el-row:last-child {
   margin-bottom: 0;
@@ -93,7 +95,7 @@ export default {
 .el-col {
   border-radius: 4px;
   height: 230px;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 .el-button {

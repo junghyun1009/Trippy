@@ -51,7 +51,7 @@ export default {
 .card-title {
   position: relative;
   bottom: 1.3rem;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   margin-left: 0%;
   font-weight: 400;
 }
