@@ -1,7 +1,7 @@
 <template>
   <header>
     <div>
-      <div v-if="this.$route.name === 'home'" class="logo">Trippy</div>
+      <div v-if="this.$route.name === 'home' || this.$route.name === 'start'" class="logo">Trippy</div>
       <div v-else class="view-name-group">
         <div class="menu-icon" @click="goBack()">
           <span v-if="this.$route.name === 'diaryCreate' || this.$route.name === 'diaryEdit' || this.$route.name === 'communityCreate' || this.$route.name === 'communityEdit'" class="material-symbols-outlined icon">close</span>
