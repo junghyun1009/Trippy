@@ -82,7 +82,15 @@ export default ({
 			// 	state.followingDiaries = followingDiaries
 			// },
 
-			SET_SEARCH_DIARIES (state, searchDiaries) {
+			SET_SEARCH_DIARIES (state, result) {
+				const searchDiaries = []
+				const searchDiariesId = []
+				result.forEach((each) => {
+					if (!searchDiariesId.includes(each.id)) {
+						searchDiaries.push(each)
+						searchDiariesId.push(each.id)
+					}
+				})
 				console.log(searchDiaries)
 				for(let i=0; i<searchDiaries.length; i++) {
 					for(let j=0; j<searchDiaries[i].detailLocations.length; j++) {
