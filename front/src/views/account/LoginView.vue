@@ -126,7 +126,7 @@ export default {
     bottom: 3rem;
     font-family: 'Alfa Slab One', cursive;
     font-weight: 300;
-    font-size: 8vh;
+    font-size: 5em;
     text-decoration: none;
     color: white;
     }
