@@ -17,7 +17,7 @@
 
     <div class="following-diary-list">
       <div v-if="isLoggedIn" class="following-diary-description">
-        <h3>{{ currentUser.name }}님이 팔로우 하고 있는</h3>
+        <p>{{ currentUser.name }}님이 팔로우 하고 있는</p>
         <h3><span>{{ this.followingName.name }}</span>님이 추천하는 코스</h3>
         <following-diary-list v-if="this.followingIdforDiary" :followingIdforDiary="followingIdforDiary"></following-diary-list>
       </div>
@@ -123,13 +123,13 @@ body{
 }
 
 .regional-menu h3 {
-	font-size: 2.5vh;
+	font-size: 1.5rem;
 	font-weight: bold;
 }
 
 .regional-menu span {
 	color: #F16B51;
-	font-size: 2.5vh;
+	font-size: 1.5rem;
 	font-weight: bold;
 }
 
@@ -139,13 +139,13 @@ body{
 }
 
 .recommend-menu h3 {
-	font-size: 2.5vh;
+	font-size: 1.5rem;
 	font-weight: bold;
 }
 
 .recommend-menu span {
 	color: #F16B51;
-	font-size: 2.5vh;
+	font-size: 1.5rem;
 	font-weight: bold;
 }
 
@@ -158,14 +158,18 @@ body{
   margin-bottom: 3%;;
 }
 
-.following-diary-description h3 {
-	font-size: 2.5vh;
+.following-diary-description p{
+	font-size: 1.2rem;
+}
+
+.following-diary-description h3{
+	font-size: 1.5rem;
 	font-weight: bold;
 }
 
 .following-diary-description span {
   color: #F16B51;
-	font-size: 2.5vh;
+	font-size: 1.5rem;
 	font-weight: bold;
 }
 

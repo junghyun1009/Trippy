@@ -192,6 +192,10 @@ export default {
   margin-bottom: 0.5rem;
 }
 
+.title > h4 {
+  font-size: 1.3rem;
+}
+
 .state {
   font-weight: bold;
   color: #F16B51;
