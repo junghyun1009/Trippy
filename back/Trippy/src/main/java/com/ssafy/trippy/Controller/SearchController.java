@@ -48,7 +48,7 @@ public class SearchController {
         return new ResponseEntity<List<ResponsePostDto>>(post, HttpStatus.OK);
     }
     @GetMapping("/search/communityPost")
-    public ResponseEntity<?> search(@RequestParam(value="countryName", required = false) String countryName,
+    public ResponseEntity<?> Communitysearch(@RequestParam(value="countryName", required = false) String countryName,
                                     @RequestParam(value="cityName", required = false) String cityName){
 
         CommunityPostSearchRequestDto searchRequestDto = CommunityPostSearchRequestDto.builder()
