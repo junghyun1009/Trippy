@@ -83,6 +83,12 @@ public class MemberController {
         return new ResponseEntity<>("회원삭제성공", HttpStatus.OK);
     }
 
+    @DeleteMapping("/auth/members/remove/{memberId}")
+    public ResponseEntity<?> removeMember(@PathVariable Long memberId) {
+        memberService.deleteMember(memberId);
+        return new ResponseEntity<>("회원삭제성공", HttpStatus.OK);
+    }
+
     /**
      * 회원 수정
      */

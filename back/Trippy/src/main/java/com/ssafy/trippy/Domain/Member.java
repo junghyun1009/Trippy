@@ -61,8 +61,8 @@ public class Member extends BaseEntity implements UserDetails{
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberBadge> badges = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<MemberBadge> posts = new ArrayList<>();
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//    private List<MemberBadge> posts = new ArrayList<>();
 
     @Builder
     public Member(Long id, String name, String password, String email, String phone, int gender, LocalDateTime birth, String img_path, String description, List<Bookmark> bookmarks, List<LikePost> likePosts) {
