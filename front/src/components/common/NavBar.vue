@@ -123,7 +123,7 @@ export default {
 
 .navbar {
   position: fixed;
-  bottom: 0vh;
+  bottom: 0;
   width: 100%;
   /* height: 3rem; */
   border-top: 1px solid #d9d9d9;

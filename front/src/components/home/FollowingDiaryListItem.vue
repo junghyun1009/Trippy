@@ -28,7 +28,9 @@ export default {
 
 <style scoped>
 .container {
-  margin: 0 3%;
+  height: 230px;
+  width: 235px;
+  /* margin: 0 3%; */
 }
 
 .image {
@@ -48,16 +50,16 @@ export default {
 
 .title {
   position: relative;
-  bottom: 1.45rem;
-  font-size: 0.9rem;
+  bottom: 1.3rem;
+  font-size: 1.1rem;
   margin-left: 0%;
   font-weight: 400;
 }
 
 .name {
   position: relative;
-  bottom: 1.3rem;
-  font-size: 0.7rem;
+  bottom: -0.5rem;
+  font-size: 0.8rem;
 }
 
 a {
@@ -84,6 +86,11 @@ a {
   height: 28vh;
   width: 100%;
   /* padding-bottom: 75%; */
+}
+
+.el-card {
+  width: 220px;
+  height: 100%;
 }
 
 .el-card__body:hover {
