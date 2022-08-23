@@ -68,16 +68,16 @@
       <el-form-item label="오픈채팅" class="openchat">
         <el-input v-model="newPost.openKakaoUrl" placeholder="오픈채팅 주소를 입력해주세요." />
       </el-form-item>
-      <el-popover width="245px" placement="right" show-arrow="false">
+      <el-popover width="235px" placement="right" show-arrow="false">
         <template #reference>
           <span class="material-symbols-outlined info">info</span>
         </template>
         <template #default>
-          <p>카카오톡 오픈채팅을 개설하고 <br> 
+          <p class="popover">
+          카카오톡 오픈채팅을 개설하고 <br> 
           오픈채팅 링크를 입력해주세요 <br> 
-          참가자가 바로 오픈채팅에 입장하게 <br>
-          됩니다.</p>
-          <p>예 https://open.kakao.com/o/trippy</p>
+          <span>예 https://open.kakao.com/o/trippy</span> <br><br>
+          참가자가 바로 오픈채팅에 입장합니다!</p>
         </template>
       </el-popover>
       <el-form-item v-if="action==='create'">
@@ -306,6 +306,15 @@ export default {
   bottom: 3.7rem;
   font-size: 1rem;
   color: #FFD2C9;
+}
+
+.popover {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.popover > span {
+  color: #b9b9b9;
 }
 
 .button {
