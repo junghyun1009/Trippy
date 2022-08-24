@@ -77,6 +77,6 @@ button {
 }
 .comment-form {
   display: flex;
-  width: 90vw;
+  width: 85vw;
 }
 </style>

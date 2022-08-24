@@ -20,9 +20,8 @@
       <div v-if="isLoggedIn" class="following-diary-description">
         <p>{{ currentUser.name }}님이 팔로우 하고 있는</p>
         <h3><span>{{ this.followingName.name }}</span>님이 추천하는 코스</h3>
-        <following-diary-list v-if="this.followingIdforDiary" :followingIdforDiary="followingIdforDiary"></following-diary-list>
       </div>
-
+      <following-diary-list v-if="this.followingIdforDiary" :followingIdforDiary="followingIdforDiary"></following-diary-list>
     </div>
 
 
@@ -143,7 +142,7 @@ body{
 
 .recommend-menu span {
 	color: #F16B51;
-	font-size: 1rem;
+	font-size: 1.2em;
 	font-weight: bold;
 }
 
@@ -152,7 +151,7 @@ body{
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin: 0 2%;
+  margin: 0 4%;
   margin-bottom: 3%;;
 }
 
@@ -169,7 +168,7 @@ body{
 
 .following-diary-list {
   /* display: flex; */
-  margin: 0 2%;
+  /* margin: 0 2%; */
 }
 
 </style>

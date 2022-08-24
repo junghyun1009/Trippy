@@ -3,13 +3,13 @@
     <div class="following-diaries">
         <div class="single-diary" v-if="followingDiaries.length === 1">
           <el-row>
-            <el-col :span="24" v-for="diary in followingDiaries.slice().reverse()" :key="diary.id">
+            <el-col :span="12" v-for="diary in followingDiaries.slice().reverse()" :key="diary.id">
               <following-diary-list-item :diary="diary"></following-diary-list-item>
             </el-col>
           </el-row>
         </div>
 
-        <div class="multiple-diaries" v-else >
+        <div class="multiple-diaries" v-else>
           <el-row>
             <el-col :span="12" v-for="diary in followingDiaries.slice().reverse()" :key="diary.id">
               <following-diary-list-item :diary="diary"></following-diary-list-item>
@@ -69,7 +69,7 @@ export default {
 .container {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  margin: 6% 3%;
 }
 
 .el-row {
@@ -81,7 +81,7 @@ export default {
 .el-col {
   border-radius: 4px;
   height: 230px;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 </style>

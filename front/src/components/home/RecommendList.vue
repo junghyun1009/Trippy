@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="regionDiaries" class="region-diaries">
+    <div v-if="regionDiaries && this.$route.name != 'search'" class="region-diaries">
       <el-row>
         <el-col :span="12" v-for="diary in regionDiaries.slice().reverse()" :key="diary.id">
           <recommend-list-item :diary="diary"></recommend-list-item>
@@ -19,15 +19,16 @@
           </el-col>
         </el-row>
       </div>
-      <div v-else-if="searchDiaries.length === 0 && this.$route.path === '/search'" class="search-dairy">
+      <el-divider v-if="searchDiaries.length > 0"></el-divider>
+
+      <!-- <div v-else-if="searchDiaries.length === 0 && this.$route.path === '/search'" class="search-dairy">
         <br>
-        <!-- <p>검색결과가 없습니다</p> -->
-        <el-divider></el-divider>
-        <p>전체글보기</p>
+        <el-divider v-if="searchDiaries.length > 0"></el-divider>
         <br>
-      </div>
+      </div> -->
     </div>
 
+    <h3 v-if="(regionDiaries.length > 0 && searchDiaries.length === 0)">전체 글 보기</h3>
     <div v-if="allDiaries.length > 0 && searchDiaries.length === 0" class="all-diaries">
       <!-- <el-row>
         <el-col :span="12" v-for="diary in allDiaries[diariesToShow-1]" :key="diary.id">
@@ -82,7 +83,7 @@ export default {
 .container {
   display: flex;
   justify-content: center;
-  margin: 0 3%;
+  margin: 0 3% 10% 3%;
   position: relative;
   /* bottom: 1rem; */
 }
@@ -104,7 +105,16 @@ export default {
 
 .el-button--primary {
   --el-button-active-bg-color: var(--el-color-primary);
-  --el-button-hover-bg-color: #FFD2C9;
-  --el-button-hover-border-color: #FFD2C9;
+  --el-button-hover-bg-color: var(--el-color-primary);
+  --el-button-hover-border-color: var(--el-color-primary);
+}
+
+.all-diaries {
+  margin-top: 1.5rem;
+}
+
+h3 {
+  font-size: 1rem;
+	font-weight: bold;
 }
 </style>

@@ -32,7 +32,7 @@ export default {
 <style scoped>
 .container {
   height: 230px;
-  width: 235px;
+  /* width: 235px; */
   /* margin: 0 3%; */
 }
 
@@ -93,7 +93,7 @@ a {
 }
 
 .el-card {
-  width: 220px;
+  /* width: 220px; */
   height: 100%;
 }
 
