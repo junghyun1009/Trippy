@@ -30,7 +30,7 @@ export default {
 .container {
   display: flex;
   justify-content: center;
-  margin: 0 3%;
+  margin: 0 3% 20% 3%;
 }
 .el-row {
   margin-bottom: 20px;

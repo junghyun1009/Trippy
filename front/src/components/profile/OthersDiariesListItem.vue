@@ -3,7 +3,7 @@
     <router-link :to="{ name: 'diaryDetail', params: { diaryPk: diary.id } }">
       <el-card class="grid-content" :body-style="{ padding: 0 }" shadow="hover">
         <img :src="diary.representativeImg" class="image"/>
-        <span class="title-span">{{ diary.title }}</span>
+        <span class="title-span">{{ diary.title.length > 13 ? ''+diary.title.slice(0, 11) + '...' : diary.title }}</span>
       </el-card>
     </router-link>
     <br>
@@ -20,15 +20,23 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  width: 27vw;
+  height: 27vw;
+  margin: 0 0 0.5rem 0;
+}
+
 .image {
-  width: 100%;
-  height: 100px;
+  /* width: 100%; */
+  /* height: 100px; */
+  width: 27vw;
+  height: 27vw;
   display: block;
   border-radius: 5%;
 }
 
 .title-span {
-  font-size: 1em;
+  font-size: 0.9em;
   margin-left: 0%;
 }
 

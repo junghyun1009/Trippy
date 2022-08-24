@@ -54,7 +54,7 @@ export default {
   bottom: 1.1rem;
   font-size: 0.9rem;
   margin-left: 0%;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .name {
