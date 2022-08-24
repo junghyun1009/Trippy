@@ -50,6 +50,8 @@ public class PostServiceImpl implements PostService {
         // 1) 직접 responsePostDto에 set을 해주자!
         for (Post post : all) {
             ResponsePostDto dto = new ResponsePostDto(post);
+            Member member = memberRepository.findById(dto.getMemberId()).orElseThrow();
+            dto.setMemberImg(s3Uploader.getS3(member.getImg_path()));
             responsePostDtoList.add(dto);
         }
         return responsePostDtoList;
