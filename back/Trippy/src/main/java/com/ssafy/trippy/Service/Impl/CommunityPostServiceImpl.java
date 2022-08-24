@@ -12,6 +12,7 @@ import com.ssafy.trippy.Repository.CommunityPostRepository;
 import com.ssafy.trippy.Repository.LocationRepository;
 import com.ssafy.trippy.Repository.MemberRepository;
 import com.ssafy.trippy.Service.CommunityPostService;
+import com.ssafy.trippy.Service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class CommunityPostServiceImpl implements CommunityPostService {
     private final LocationRepository locationRepository;
     private final BookmarkRepository bookmarkRepository;
     private final MemberRepository memberRepository;
+    private final S3Uploader s3Uploader;
 
 
     @Transactional
@@ -120,7 +122,9 @@ public class CommunityPostServiceImpl implements CommunityPostService {
         Optional<CommunityPost> communityPost = communityPostRepository.findById(id);
         Member member = memberRepository.findByEmail(communityPost.orElseThrow().getMember().getEmail()).orElseThrow();
         ResponseCommunityPostDto responseCommunityPostDto = new ResponseCommunityPostDto(communityPost.get());
-        responseCommunityPostDto.builder().memberId(member.getId()).name(member.getName()).build();
+        responseCommunityPostDto.setMemberId(member.getId());
+        responseCommunityPostDto.setMemberImg(s3Uploader.getS3(member.getImg_path()));
+        responseCommunityPostDto.setName(member.getName());
         return responseCommunityPostDto;
 
     }

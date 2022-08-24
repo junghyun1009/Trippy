@@ -271,6 +271,8 @@ public class PostServiceImpl implements PostService {
         List<Post> post = postRepository.findAllByLocationId(location1.get().getId()).orElseThrow();
         for (Post post1 : post) {
             ResponsePostDto dto = new ResponsePostDto(post1);
+            Member member = memberRepository.findById(dto.getMemberId()).orElseThrow();
+            dto.setMemberImg(s3Uploader.getS3(member.getImg_path()));
             postDtos.add(dto);
         }
         return postDtos;
@@ -287,6 +289,9 @@ public class PostServiceImpl implements PostService {
         List<ResponsePostDto> responsePostDtos = new ArrayList<>();
         for (Post post : posts){
             responsePostDtos.add(new ResponsePostDto(post));
+        }
+        for (ResponsePostDto responsePostDto : responsePostDtos) {
+            responsePostDto.setMemberImg(s3Uploader.getS3(memberRepository.findById(memberId).get().getImg_path()));
         }
         return responsePostDtos;
     }
