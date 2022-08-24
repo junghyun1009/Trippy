@@ -270,9 +270,8 @@ public class PostServiceImpl implements PostService {
         // detailLocationId로 Post찾기
         List<Post> post = postRepository.findAllByLocationId(location1.get().getId()).orElseThrow();
         for (Post post1 : post) {
-            Member member = memberRepository.findByEmail(post1.getMember().getEmail()).orElseThrow();
             ResponsePostDto dto = new ResponsePostDto(post1);
-            dto.setMemberId(member.getId());
+            Member member = memberRepository.findById(dto.getMemberId()).orElseThrow();
             dto.setMemberImg(s3Uploader.getS3(member.getImg_path()));
             postDtos.add(dto);
         }
