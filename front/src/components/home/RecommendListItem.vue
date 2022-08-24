@@ -5,10 +5,13 @@
         <img :src="diary.representativeImg" class="image"/>
         <el-tag type="dark" size="small" class="tag">{{ diary.countryName}}</el-tag>
         <el-tag type="dark" size="small" class="tag">{{ diary.cityName}}</el-tag>
-        <div style="padding: 0.3rem">
+        <div style="padding: 0.5rem">
           <p class="card-title">{{ diary.title.length > 13 ? ''+diary.title.slice(0, 11) + '...' : diary.title }}</p>
             <!-- <img> -->
-          <p class="name">{{ diary.name }}</p>
+          <div class="profile">
+            <el-avatar :size="30" :src="diary.memberImg" />
+            <p class="name">{{ diary.name }}</p>
+          </div>
         </div>
       </el-card>
     </router-link>
@@ -48,7 +51,7 @@ export default {
 
 .card-title {
   position: relative;
-  bottom: 1.3rem;
+  bottom: 1.1rem;
   font-size: 0.9rem;
   margin-left: 0%;
   font-weight: 400;
@@ -56,7 +59,8 @@ export default {
 
 .name {
   position: relative;
-  bottom: 0.8rem;
+  bottom: 0rem;
+  left: 0.5rem;
   font-size: 0.8rem;
 }
 
@@ -92,6 +96,11 @@ a {
 
 .el-card__body:hover {
   opacity: 0.2;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
 }
 
 </style>
