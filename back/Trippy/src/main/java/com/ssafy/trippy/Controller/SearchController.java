@@ -47,7 +47,7 @@ public class SearchController {
             post = postSearchService.searchPost(searchRequestDto);
             for (ResponsePostDto responsePostDto : post) {
                 ResponseMemberDto member = memberService.selectMember(responsePostDto.getMemberId());
-                responsePostDto.setMemberImg(member.getImg_path());
+                responsePostDto.setMemberImg(member.getImg_link());
                 responsePostDto.setMemberId(member.getId());
             }
             return new ResponseEntity<List<ResponsePostDto>>(post, HttpStatus.OK);
