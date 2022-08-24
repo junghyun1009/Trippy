@@ -1,6 +1,6 @@
 <template>
   <div class="start">
-    <video src="@/assets/ucc.mp4" autoplay loop muted></video>
+    <video src="@/assets/ucc.mp4" type="video/mp4" autoplay loop muted></video>
     <div class="box">
       <span class="not-logo">Trip</span>
       <span class="not-logo">with</span>
@@ -26,13 +26,21 @@ export default {
     width: 100%;
   }
 
+  .start {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .box {
     display: flex;
     flex-direction: column;
     align-items: center;
     position: absolute;
-    top: 35%;
-    left: 35%;
+    padding-bottom: 10vw;
+    /* top: 35vw; */
+    /* left: 35vw; */
   }
 
   .box span {

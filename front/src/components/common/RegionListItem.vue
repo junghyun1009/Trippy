@@ -2,9 +2,9 @@
   <div>
     <div class="regions"
 			data-flickity='{ "pageDots": false, "cellAlign": "left", "prevNextButtons": false }'>
-			<!-- <div class="region">
+			<div class="region">
 				<div class="image" id="all" ><span @click="diaryFilter(this)">전체</span></div>
-			</div> -->
+			</div>
 
 			<div class="region">
 				<div class="image" id="seoul" ><span @click="diaryFilter(this)">서울</span></div>
@@ -57,7 +57,8 @@ export default {
       console.log(event.currentTarget.innerText)
       if ( event.currentTarget.innerText == '전체') {
         console.log('all')
-        this.fetchAllDiaries()
+        // this.fetchAllDiaries()
+        location.reload()
       } 
       else if ( event.currentTarget.innerText == '서울') {
         console.log('seoul')
@@ -139,35 +140,35 @@ export default {
   }
   
   
-  .region:nth-child(0) .image{
-      background-image: url("@/assets/seoul.jpg");
-      background-size: 100px 100px;
-    }
   .region:nth-child(1) .image{
-      background-image: url("@/assets/seoul.jpg");
+      background-image: url("@/assets/tour.jpg");
       background-size: 100px 100px;
     }
-    .region:nth-child(2) .image{
-      background-image: url("@/assets/jeju.jpg");
+  .region:nth-child(2) .image{
+      background-image: url("@/assets/seoul.jpg");
       background-size: 100px 100px;
     }
     .region:nth-child(3) .image{
-      background-image: url("@/assets/busan.jpg");
+      background-image: url("@/assets/jeju.jpg");
       background-size: 100px 100px;
     }
     .region:nth-child(4) .image{
+      background-image: url("@/assets/busan.jpg");
+      background-size: 100px 100px;
+    }
+    .region:nth-child(5) .image{
       background-image: url("@/assets/tokyo.jpg");
       background-size: 100px 60px;
     }
-    .region:nth-child(5) .image{
+    .region:nth-child(6) .image{
       background-image: url("@/assets/barcelona.jpg");
       background-size: 100px 60px;
     }
-    .region:nth-child(6) .image{
+    .region:nth-child(7) .image{
       background-image: url("@/assets/madrid.png");
       background-size: 100px 60px;
     }
-    .region:nth-child(7) .image{
+    .region:nth-child(8) .image{
       background-image: url("@/assets/paris.jpg");
       background-size: 100px 60px;
     }

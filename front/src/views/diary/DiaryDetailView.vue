@@ -316,8 +316,9 @@ a {
 } */
 
 .title-location > h3 {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 500;
+  padding-left: 0.1rem;
   padding-top: 0.5rem;
   /* margin-left: 1rem; */
 }
@@ -467,8 +468,8 @@ a {
 
 .story-title h3 {
   background-color: #EFDFDE;
-  padding-left: 0.3rem;
-  font-size: 1.3rem;
+  padding: 0.2rem 0 0.2rem 0.3rem;
+  font-size: 1.2rem;
   font-weight: 500;
   margin-top: 0.5rem;
   margin-bottom: 0;

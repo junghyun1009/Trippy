@@ -21,14 +21,16 @@ export default {
 
 <style scoped>
 .container {
-  width: 100px;
-  height: 100px;
-  margin-bottom: 0.5rem;
+  width: 27vw;
+  height: 27vw;
+  margin: 0 0 0.5rem 0;
 }
 
 .image {
-  width: 100%;
+  /* width: 100%; */
   /* height: 100px; */
+  width: 27vw;
+  height: 27vw;
   display: block;
   border-radius: 5%;
 }
