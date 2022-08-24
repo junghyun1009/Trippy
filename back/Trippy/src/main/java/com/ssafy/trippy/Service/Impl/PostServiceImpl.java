@@ -289,6 +289,9 @@ public class PostServiceImpl implements PostService {
         for (Post post : posts){
             responsePostDtos.add(new ResponsePostDto(post));
         }
+        for (ResponsePostDto responsePostDto : responsePostDtos) {
+            responsePostDto.setMemberImg(s3Uploader.getS3(memberRepository.findById(memberId).get().getImg_path()));
+        }
         return responsePostDtos;
     }
 
