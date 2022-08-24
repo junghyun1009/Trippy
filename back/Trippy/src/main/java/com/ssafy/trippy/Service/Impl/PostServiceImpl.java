@@ -50,6 +50,8 @@ public class PostServiceImpl implements PostService {
         // 1) 직접 responsePostDto에 set을 해주자!
         for (Post post : all) {
             ResponsePostDto dto = new ResponsePostDto(post);
+            Member member = memberRepository.findById(dto.getMemberId()).orElseThrow();
+            dto.setMemberImg(s3Uploader.getS3(member.getImg_path()));
             responsePostDtoList.add(dto);
         }
         return responsePostDtoList;
@@ -269,6 +271,8 @@ public class PostServiceImpl implements PostService {
         List<Post> post = postRepository.findAllByLocationId(location1.get().getId()).orElseThrow();
         for (Post post1 : post) {
             ResponsePostDto dto = new ResponsePostDto(post1);
+            Member member = memberRepository.findById(dto.getMemberId()).orElseThrow();
+            dto.setMemberImg(s3Uploader.getS3(member.getImg_path()));
             postDtos.add(dto);
         }
         return postDtos;
