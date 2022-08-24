@@ -10,7 +10,7 @@
       </div>
       <div class="header">
         <div class="profile" @click="goProfile">
-          <el-avatar class="profile-image" :size="40" src="" />
+          <el-avatar class="profile-image" :size="40" :src="post.memberImg" />
           <span class="username">{{ post.name }}</span>
         </div>
         <div v-if="!isPostAuthor" class="bookmark">

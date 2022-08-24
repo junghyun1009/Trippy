@@ -21,6 +21,7 @@
 
     <!-- 팔로워 / 팔로잉 -->
     <div class="follow">
+      <!-- {{ theirProfile }} -->
       <!-- 내 프로필 페이지라면 팔로우 버튼 안뜸 -->
       <!-- 만약 fetchCurrentUser의 id와 profile param의 id가 같다면 -->
       <div class="my-page-username" v-if="isMyProfile">
