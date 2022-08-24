@@ -16,6 +16,7 @@ public class ResponseCommunityPostDto {
     private Long id;
     private String title;
     private String description;
+    private String memberImg;
     private int category;
     private String countryName;
     private String cityName;
@@ -62,10 +63,11 @@ public class ResponseCommunityPostDto {
         this.memberId = communityPost.getMember().getId();
         this.name = communityPost.getMember().getName();
         this.openKakaoUrl = communityPost.getOpenKakaoUrl();
+        this.memberImg = communityPost.getMember().getImg_path();
     }
 
     @Builder
-    public ResponseCommunityPostDto(Long id, String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, String place, boolean Day, Long memberId, String name,String openKakaoUrl) {
+    public ResponseCommunityPostDto(Long id, String memberImg, String title, String description, int category, String countryName, String cityName, LocalDateTime meetingTime, LocalDateTime startDate, LocalDateTime endDate, int recruitVolume, int recruitCurrentVolume, int startAge, int endAge, String gender, boolean Local, String place, boolean Day, Long memberId, String name,String openKakaoUrl) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -86,5 +88,6 @@ public class ResponseCommunityPostDto {
         this.memberId = memberId;
         this.name = name;
         this.openKakaoUrl = openKakaoUrl;
+        this.memberImg = memberImg;
     }
 }
