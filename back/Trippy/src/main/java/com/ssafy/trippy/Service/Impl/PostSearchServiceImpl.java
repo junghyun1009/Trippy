@@ -1,7 +1,9 @@
 package com.ssafy.trippy.Service.Impl;
 
 import com.ssafy.trippy.Domain.PostTransport;
+import com.ssafy.trippy.Dto.Request.CommunityPostSearchRequestDto;
 import com.ssafy.trippy.Dto.Request.SearchRequestDto;
+import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Repository.PostRepository;
 import com.ssafy.trippy.Repository.PostTransportRepository;
@@ -18,6 +20,9 @@ public class PostSearchServiceImpl {
     private final PostTransportRepository postTransportRepository;
 
     public List<ResponsePostDto> searchPost(SearchRequestDto searchRequestDto){
-        return postTransportRepository.findAllBySearch(searchRequestDto.getTitle(), searchRequestDto.getCompany(), searchRequestDto.getTransportId());
+        return postTransportRepository.findAllBySearch(searchRequestDto.getTitle(), searchRequestDto.getCompany(), searchRequestDto.getTransportId(), searchRequestDto.getCountryName(),searchRequestDto.getCityName());
+    }
+    public List<ResponseCommunityPostDto> searchCommunityPost(CommunityPostSearchRequestDto communityPostSearchRequestDto){
+        return postTransportRepository.findAllByCommunitySearch(communityPostSearchRequestDto.getCountryName(), communityPostSearchRequestDto.getCityName());
     }
 }

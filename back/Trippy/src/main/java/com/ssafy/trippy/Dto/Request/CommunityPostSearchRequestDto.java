@@ -8,20 +8,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SearchRequestDto {
-
-    private String title;
-    private int company;
-    private Long transportId;
+public class CommunityPostSearchRequestDto {
 
     private String countryName;
     private String cityName;
 
     @Builder
-    public SearchRequestDto(String title, int company, Long transportId,String countryName,String cityName) {
-        this.title = title;
-        this.company = company;
-        this.transportId = transportId;
+    public CommunityPostSearchRequestDto(String countryName, String cityName) {
         this.countryName = countryName;
         this.cityName = cityName;
     }
