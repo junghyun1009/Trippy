@@ -14,15 +14,10 @@ public class SearchRequestDto {
     private int company;
     private Long transportId;
 
-    private String countryName;
-    private String cityName;
-
     @Builder
-    public SearchRequestDto(String title, int company, Long transportId,String countryName,String cityName) {
+    public SearchRequestDto(String title, int company, Long transportId) {
         this.title = title;
         this.company = company;
         this.transportId = transportId;
-        this.countryName = countryName;
-        this.cityName = cityName;
     }
 }
