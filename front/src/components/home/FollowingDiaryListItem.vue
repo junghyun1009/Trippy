@@ -5,10 +5,13 @@
         <img :src="diary.representativeImg" class="image"/>
         <el-tag type="dark" size="small" class="tag">{{ diary.countryName}}</el-tag>
         <el-tag type="dark" size="small" class="tag">{{ diary.cityName}}</el-tag>
-        <div style="padding: 0.3rem">
-          <p class="title">{{ diary.title.length > 13 ? ''+diary.title.slice(0, 11) + '...' : diary.title }}</p>
+        <div style="padding: 0.5rem">
+          <p class="card-title">{{ diary.title.length > 13 ? ''+diary.title.slice(0, 11) + '...' : diary.title }}</p>
             <!-- <img> -->
+          <div class="profile">
+            <el-avatar :size="30" :src="diary.memberImg" />
             <p class="name">{{ diary.name }}</p>
+          </div>
         </div>
       </el-card>
     </router-link>
@@ -28,7 +31,9 @@ export default {
 
 <style scoped>
 .container {
-  margin: 0 3%;
+  height: 230px;
+  width: 235px;
+  /* margin: 0 3%; */
 }
 
 .image {
@@ -46,9 +51,9 @@ export default {
   margin:0 0.1rem;
 }
 
-.title {
+.card-title {
   position: relative;
-  bottom: 1.45rem;
+  bottom: 1.1rem;
   font-size: 0.9rem;
   margin-left: 0%;
   font-weight: 400;
@@ -56,8 +61,9 @@ export default {
 
 .name {
   position: relative;
-  bottom: 1.3rem;
-  font-size: 0.7rem;
+  bottom: 0rem;
+  left: 0.5rem;
+  font-size: 0.8rem;
 }
 
 a {
@@ -86,8 +92,18 @@ a {
   /* padding-bottom: 75%; */
 }
 
+.el-card {
+  width: 220px;
+  height: 100%;
+}
+
 .el-card__body:hover {
   opacity: 0.2;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
 }
 
 </style>

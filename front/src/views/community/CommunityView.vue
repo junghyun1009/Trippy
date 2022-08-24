@@ -2,6 +2,11 @@
   <div class="container">
     <!-- <span class="material-symbols-outlined location" @click="getLocation">my_location</span> -->
     <!-- <region-list></region-list> -->
+    <search-community></search-community>
+    <searched-list></searched-list>
+    <div class="recommend-menu">
+      <h3><span class="logo">Trippy</span>여행자들과의 설레는 동행</h3>
+    </div>
     <div v-for="post in posts.slice().reverse()" :key="post.id">
        <router-link :to="{ name: 'communityDetail', params: { postPk: post.id } }">
         <el-card class="card">
@@ -49,6 +54,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import SearchCommunity from '@/components/common/SearchCommunity.vue'
+import SearchedList from '@/components/community/SearchedList.vue'
 // import { ElMessageBox } from 'element-plus'
 // import RegionList from '@/components/common/RegionList.vue'
 
@@ -56,6 +63,8 @@ export default {
     name: 'CommunityView',
     components: {
       // RegionList
+      SearchCommunity,
+      SearchedList
     },
     data() {
       return {
@@ -192,6 +201,10 @@ export default {
   margin-bottom: 0.5rem;
 }
 
+.title > h4 {
+  font-size: 1.3rem;
+}
+
 .state {
   font-weight: bold;
   color: #F16B51;
@@ -237,5 +250,26 @@ export default {
   border-radius: 50%;
   background-color: #F16B51;
   color: #fff;
+}
+
+.logo {
+  font-family: 'Alfa Slab One', cursive;
+  font-size: 1.5em;
+  margin-right: 0.1rem;
+}
+
+.recommend-menu {
+  padding: 0rem 1rem 1rem 1rem;
+}
+
+.recommend-menu h3 {
+	font-size: 1rem;
+	font-weight: bold;
+}
+
+.recommend-menu span {
+	color: #F16B51;
+	font-size: 1rem;
+	font-weight: bold;
 }
 </style>

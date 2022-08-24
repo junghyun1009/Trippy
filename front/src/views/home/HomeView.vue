@@ -15,20 +15,17 @@
 
     <el-divider />
 
+    <br>
     <div class="following-diary-list">
       <div v-if="isLoggedIn" class="following-diary-description">
-        <h3>{{ currentUser.name }}님이 팔로우 하고 있는</h3>
+        <p>{{ currentUser.name }}님이 팔로우 하고 있는</p>
         <h3><span>{{ this.followingName.name }}</span>님이 추천하는 코스</h3>
         <following-diary-list v-if="this.followingIdforDiary" :followingIdforDiary="followingIdforDiary"></following-diary-list>
       </div>
 
     </div>
 
-    <br>
-    <br>
-    <br>
 
-    <br>
 
   </div>
 </template>
@@ -108,13 +105,13 @@ export default {
 
 body{
 	font-family:Verdana, Geneva, sans-serif;
-	font-size:18px;
+	font-size: 18px;
 	background-color:#CCC;
 }
 
 .logo {
   font-family: 'Alfa Slab One', cursive;
-  font-size: 1.3rem;
+  font-size: 1.5em;
   margin-right: 0.1rem;
 }
 
@@ -123,29 +120,30 @@ body{
 }
 
 .regional-menu h3 {
-	font-size: 2.5vh;
+	font-size: 1rem;
 	font-weight: bold;
 }
 
 .regional-menu span {
 	color: #F16B51;
-	font-size: 2.5vh;
+	font-size: 1.2rem;
 	font-weight: bold;
 }
 
 .recommend-menu {
   padding: 1.5rem 1rem 1rem 1rem;
   margin-top: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .recommend-menu h3 {
-	font-size: 2.5vh;
+	font-size: 1rem;
 	font-weight: bold;
 }
 
 .recommend-menu span {
 	color: #F16B51;
-	font-size: 2.5vh;
+	font-size: 1rem;
 	font-weight: bold;
 }
 
@@ -159,13 +157,13 @@ body{
 }
 
 .following-diary-description h3 {
-	font-size: 2.5vh;
+	font-size: 1.2rem;
 	font-weight: bold;
 }
 
 .following-diary-description span {
   color: #F16B51;
-	font-size: 2.5vh;
+	font-size: 1.2rem;
 	font-weight: bold;
 }
 

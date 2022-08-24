@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-row>
-      <el-col :span="8" v-for="diary in myDiaries" :key="diary.id">
+      <el-col :span="8" v-for="diary in myDiaries.slice().reverse()" :key="diary.id">
         <my-diaries-list-item :diary="diary"></my-diaries-list-item>
       </el-col>
     </el-row>

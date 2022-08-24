@@ -100,13 +100,13 @@
     class="demo-tabs"
     >
       <el-tab-pane label="My Diary" name="1">
-        <my-diaries-list></my-diaries-list>
+        <my-diaries-list v-if="myDiaries"></my-diaries-list>
       </el-tab-pane>
       <el-tab-pane label="My Likes" name="2">
-        <my-likes-list></my-likes-list>
+        <my-likes-list v-if="myLikes"></my-likes-list>
       </el-tab-pane>
       <el-tab-pane label="My Companions" name="3">
-        <my-bookmark-list></my-bookmark-list>
+        <my-bookmark-list v-if="myBookmarks"></my-bookmark-list>
       </el-tab-pane>
     </el-tabs>
 
@@ -187,6 +187,15 @@ export default {
     }
   },
   watch: {
+    $route(to, from) {
+      // 프로필 페이지 간 이동 => 내용을 새로 가져와야 해서 새로고침이 불가피함
+      if ((to.path !== from.path) && (to.name == from.name)) {
+        console.log(to)
+        console.log(from)
+        location.reload()
+      }
+    },
+
     followingStatus(newVal) {
       // 팔로우 여부 바뀌면
       this.isFollow = newVal
@@ -200,22 +209,22 @@ export default {
     //   this.currentProfile = newVal
     //   this.myProfile()
     // },
-    fetchAuthorId(newVal) {
-      // 다른 사람 프로필 페이지로 이동하면
-      console.log(newVal)
-      this.currentProfile = newVal
-      // 현재 유저 확인
-      this.fetchCurrentUser()
-      // 프로필 유저 확인
-      this.fetchTheirProfile(this.currentProfile)
-      console.log('프로필 이동', this.currentProfile)
-      // 내 프로필인지 검증
-      this.myProfile()
-      // 팔로우 여부 확인
-      this.setFollowingStatus(this.currentProfile)
-      setTimeout(() => this.pickRandom(this.myDiaries), 100)
-      setTimeout(() => this.pickRandom(this.othersDiary), 100)
-    },
+    // fetchAuthorId(newVal) {
+    //   // 다른 사람 프로필 페이지로 이동하면
+    //   console.log(newVal)
+    //   this.currentProfile = newVal
+    //   // 현재 유저 확인
+    //   this.fetchCurrentUser()
+    //   // 프로필 유저 확인
+    //   this.fetchTheirProfile(this.currentProfile)
+    //   console.log('프로필 이동', this.currentProfile)
+    //   // 내 프로필인지 검증
+    //   this.myProfile()
+    //   // 팔로우 여부 확인
+    //   this.setFollowingStatus(this.currentProfile)
+    //   setTimeout(() => this.pickRandom(this.myDiaries), 100)
+    //   setTimeout(() => this.pickRandom(this.othersDiary), 100)
+    // },
     badgeList(newValue) {
       console.log('new value:', newValue)
       this.isBadgeUnlocked()
@@ -366,9 +375,12 @@ export default {
       this.randomImage = _.sample(images)
     }
   },
+  created() {
+  },
   mounted() {
     // 현재 로그인한 유저 정보 저장
     this.fetchCurrentUser()
+    console.log(this.currentProfile)
     // 현재 들어간 프로필 유저 정보 저장
     this.fetchTheirProfile(this.currentProfile)
     // 내 프로필인지 확인 => 정보 저장하는 시간이 필요함
@@ -465,7 +477,8 @@ export default {
   }
 
   .profile-picture {
-    display: absolute;
+    position: relative;
+    /* top: 7rem; */
     margin-top: 8%;
     margin-right: 65%;
   }
@@ -479,12 +492,13 @@ export default {
   }
 
   .my-page-username h3 {
+    font-size: 1.3rem;
     font-weight: 500;
     margin-right: 0.5rem;
   }
 
   .material-symbols-outlined {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     color: #F16B51;
   }
 
@@ -515,7 +529,7 @@ export default {
   .description {
     display: flex;
     margin-left: 1rem;
-    margin-top: 0;
+    margin: 0 1rem;
   }
 
   .follow {
@@ -523,6 +537,15 @@ export default {
     flex-direction: column;
     margin-left: 7.5rem;
     margin-top: 0;
+  }
+
+  .badge {
+    margin-top: 0;
+  }
+  
+  .el-col {
+    margin: 0;
+    padding: 0.5rem;
   }
 
   .badge-image {
@@ -534,6 +557,18 @@ export default {
     --el-button-text-color: var(--el-color-primary);
     --el-button-bg-color: white;
     --el-button-border-color: var(--el-color-primary);
+    --el-button-hover-bg-color: white;
+    --el-button-active-bg-color: white;
+    --el-button-hover-text-color: #F16B51;
+    --el-button-active-text-color: #F16B51;
+  }
+
+  .el-button--primary {
+    --el-button-hover-bg-color: #F16B51;
+    --el-button-hover-border-color: #F16B51;
+    --el-button-active-color: #F16B51;
+    --el-button-active-bg-color: #F16B51;
+    --el-button-active-border-color: #F16B51;
   }
 
   .drawer {

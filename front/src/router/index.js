@@ -4,6 +4,7 @@ import { ElMessageBox } from 'element-plus'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
 import SearchView from '@/views/home/SearchView.vue'
+import StartView from '@/views/home/StartView.vue'
 
 import DiaryCreateView from '../views/diary/DiaryCreateView.vue'
 import DiaryDetailView from '../views/diary/DiaryDetailView.vue'
@@ -35,7 +36,7 @@ import NotFound404View from '@/views/handler/NotFound404View.vue'
 const routes = [
   // 모두가 접근 가능한 route
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: HomeView
   },
@@ -43,6 +44,11 @@ const routes = [
     path: '/search',
     name: 'search',
     component: SearchView
+  },
+  {
+    path: '/',
+    name: 'start',
+    component: StartView
   },
   {
     path: '/login',

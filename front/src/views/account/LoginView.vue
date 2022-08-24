@@ -89,7 +89,7 @@ export default {
   }
 
   .input-box {
-    position: absolute;
+    position: relative;
     margin: 0 5%;
     padding-top: 50%
   }
@@ -110,6 +110,15 @@ export default {
     margin-top: 2%;
   }
 
+  .el-button--primary {
+    --el-button-hover-bg-color: #ffd3cb;
+    --el-button-hover-text-color: #F16B51;
+    --el-button-hover-border-color: #ffd3cb;
+    --el-button-active-color: #F16B51;
+    --el-button-active-bg-color: #ffd3cb;
+    --el-button-active-border-color: #ffd3cb;
+  }
+
   a {
     text-decoration: none;
     color: white;
@@ -126,14 +135,9 @@ export default {
     bottom: 3rem;
     font-family: 'Alfa Slab One', cursive;
     font-weight: 300;
-    font-size: 8vh;
+    font-size: 4em;
     text-decoration: none;
     color: white;
     }
 
-  h1 span {
-    margin: 0;
-    font-size: 5vh;
-    font-weight: 500;
-  }
 </style>

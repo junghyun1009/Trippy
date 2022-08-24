@@ -231,7 +231,10 @@ hr {
   display: flex;
   align-items: center;
   padding: 0.5rem;
-  font-size: 1.2rem;
+}
+
+.title h4 {
+  font-size: 1.3rem;
 }
 
 .state {

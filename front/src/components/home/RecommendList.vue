@@ -29,13 +29,21 @@
     </div>
 
     <div v-if="allDiaries.length > 0 && searchDiaries.length === 0" class="all-diaries">
-      <el-row>
-        <!-- infinite scroll -->
-        <!-- 아니면 더 보기? -->
-        <el-col :span="12" v-for="diary in allDiaries.slice(-10).reverse()" :key="diary.id">
+      <!-- <el-row>
+        <el-col :span="12" v-for="diary in allDiaries[diariesToShow-1]" :key="diary.id">
           <recommend-list-item :diary="diary"></recommend-list-item>
         </el-col>
+      </el-row> -->
+      <el-row>
+        <el-col :span="12" v-for="(diary, index) in allDiaries.slice(-[diariesToShow+1]).reverse()" :key="(diary.id, index)">
+          <div v-if="index <= diariesToShow">
+          <recommend-list-item :diary="diary"></recommend-list-item>
+          </div>
+        </el-col>
       </el-row>
+
+      <el-button type="primary" round size="small" @click="diariesToShow += 6">전체 다이어리 더보기</el-button>
+      <br>
     </div>
   </div>
 </template>
@@ -48,6 +56,12 @@ export default {
   name: "RecommendList",
   components: { 
       RecommendListItem 
+  },
+
+  data() {
+    return {
+      diariesToShow: 7
+    }
   },
 
   created() {
@@ -73,13 +87,24 @@ export default {
   /* bottom: 1rem; */
 }
 .el-row {
-  margin-bottom: 20px;
-}
-.el-row:last-child {
   margin-bottom: 0;
 }
+/* .el-row:last-child {
+  margin-bottom: 0;
+} */
 .el-col {
   border-radius: 4px;
+  height: 230px;
+  margin-bottom: 1rem;
 }
 
+.el-button {
+  width: 100%;
+}
+
+.el-button--primary {
+  --el-button-active-bg-color: var(--el-color-primary);
+  --el-button-hover-bg-color: #FFD2C9;
+  --el-button-hover-border-color: #FFD2C9;
+}
 </style>
