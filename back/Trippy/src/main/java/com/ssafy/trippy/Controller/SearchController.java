@@ -1,10 +1,13 @@
 package com.ssafy.trippy.Controller;
 
+import com.ssafy.trippy.Domain.Member;
 import com.ssafy.trippy.Dto.Request.CommunityPostSearchRequestDto;
 import com.ssafy.trippy.Dto.Request.SearchRequestDto;
 import com.ssafy.trippy.Dto.Response.ResponseCommunityPostDto;
+import com.ssafy.trippy.Dto.Response.ResponseMemberDto;
 import com.ssafy.trippy.Dto.Response.ResponsePostDto;
 import com.ssafy.trippy.Service.Impl.PostSearchServiceImpl;
+import com.ssafy.trippy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchController {
     private final PostSearchServiceImpl postSearchService;
+    private final MemberService memberService;
     private static final String SUCCESS = "OK";
     private static final String FAIL = "ERROR";
 
@@ -41,6 +45,10 @@ public class SearchController {
         List<ResponsePostDto> post;
         try{
             post =  postSearchService.searchPost(searchRequestDto);
+            for (ResponsePostDto responsePostDto : post) {
+                ResponseMemberDto member = memberService.selectMember(responsePostDto.getMemberId());
+                responsePostDto.setMemberImg(member.getImg_path());
+            }
         }catch(Exception e){
             e.printStackTrace();
             return new ResponseEntity<>("해당 게시물을 찾을 수 없습니다.",HttpStatus.BAD_REQUEST );
